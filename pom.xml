@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.ghgande</groupId>
-    <artifactId>j2mod</artifactId>
+    <groupId>com.j2mod</groupId>
+    <artifactId>modbus</artifactId>
     <name>j2mod</name>
     <version>2.0</version>
     <description>A fork of the j2mod library to support the jSerialComm connector</description>
@@ -17,47 +17,47 @@
     </properties>
 
     <developers>
-      <developer>
-        <id>wimpi</id>
-        <name>Dieter Wimberger</name>
-        <email>wimpi@user.sourceforge.com</email>
-        <organization>SourceForge</organization>
-        <organizationUrl>http://jamod.sourceforge.net</organizationUrl>
-        <roles>
-          <role>architect</role>
-          <role>developer</role>
-        </roles>
-      </developer>
-      <developer>
-        <id>jdcharlton</id>
-        <name>John Charlton</name>
-        <email>jdcharlton@user.sourceforge.com</email>
-        <organization>SourceForge</organization>
-        <organizationUrl>http://jamod.sourceforge.net</organizationUrl>
-        <roles>
-          <role>developer</role>
-        </roles>
-      </developer>
-      <developer>
-        <id>jhaugh</id>
-        <name>Julie Haugh</name>
-        <email>http://www.ghgande.com</email>
-        <organization>greenHouse Gas and Electric</organization>
-        <organizationUrl>http://www.ghgande.com</organizationUrl>
-        <roles>
-          <role>developer</role>
-        </roles>
-      </developer>
-      <developer>
-        <id>sohara</id>
-        <name>Steve O'Hara</name>
-        <email>steve.ohara@4energy.co.uk</email>
-        <organization>4energy</organization>
-        <organizationUrl>http://www.4energy.co.uk</organizationUrl>
-        <roles>
-          <role>developer</role>
-        </roles>
-      </developer>
+        <developer>
+            <id>wimpi</id>
+            <name>Dieter Wimberger</name>
+            <email>wimpi@user.sourceforge.com</email>
+            <organization>SourceForge</organization>
+            <organizationUrl>http://jamod.sourceforge.net</organizationUrl>
+            <roles>
+                <role>architect</role>
+                <role>developer</role>
+            </roles>
+        </developer>
+        <developer>
+            <id>jdcharlton</id>
+            <name>John Charlton</name>
+            <email>jdcharlton@user.sourceforge.com</email>
+            <organization>SourceForge</organization>
+            <organizationUrl>http://jamod.sourceforge.net</organizationUrl>
+            <roles>
+                <role>developer</role>
+            </roles>
+        </developer>
+        <developer>
+            <id>jhaugh</id>
+            <name>Julie Haugh</name>
+            <email>http://www.ghgande.com</email>
+            <organization>greenHouse Gas and Electric</organization>
+            <organizationUrl>http://www.ghgande.com</organizationUrl>
+            <roles>
+                <role>developer</role>
+            </roles>
+        </developer>
+        <developer>
+            <id>sohara</id>
+            <name>Steve O'Hara</name>
+            <email>steve.ohara@4energy.co.uk</email>
+            <organization>4energy</organization>
+            <organizationUrl>http://www.4energy.co.uk</organizationUrl>
+            <roles>
+                <role>developer</role>
+            </roles>
+        </developer>
     </developers>
 
     <dependencies>
