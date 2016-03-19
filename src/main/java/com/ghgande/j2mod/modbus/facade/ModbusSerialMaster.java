@@ -38,7 +38,6 @@ public class ModbusSerialMaster {
 
     private static final Logger logger = Logger.getLogger(ModbusSerialMaster.class);
 
-    private SerialParameters m_CommParameters;
     private SerialConnection m_Connection;
     private ModbusSerialTransaction m_Transaction;
     private ReadCoilsRequest m_ReadCoilsRequest;
@@ -59,8 +58,7 @@ public class ModbusSerialMaster {
      */
     public ModbusSerialMaster(SerialParameters param) {
         try {
-            m_CommParameters = param;
-            m_Connection = new SerialConnection(m_CommParameters);
+            m_Connection = new SerialConnection(param);
             m_ReadCoilsRequest = new ReadCoilsRequest();
             m_ReadInputDiscretesRequest = new ReadInputDiscretesRequest();
             m_WriteCoilRequest = new WriteCoilRequest();

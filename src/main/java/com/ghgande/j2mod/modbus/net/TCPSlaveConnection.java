@@ -54,7 +54,7 @@ public class TCPSlaveConnection {
         }
         catch (IOException ex) {
             if (Modbus.debug) {
-                System.out.println("TCPSlaveConnection::Socket invalid.");
+                logger.debug("TCPSlaveConnection::Socket invalid.");
             }
 
             throw new IllegalStateException("Socket invalid.");
@@ -76,7 +76,7 @@ public class TCPSlaveConnection {
         }
         catch (IOException ex) {
             if (Modbus.debug) {
-                System.out.println("TCPSlaveConnection::Socket invalid.");
+                logger.debug("TCPSlaveConnection::Socket invalid.");
             }
 
             throw new IllegalStateException("Socket invalid.");

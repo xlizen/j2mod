@@ -47,7 +47,7 @@ public class UDPWriteRecordTest {
      * usage -- Print command line arguments and exit.
      */
     private static void usage() {
-        System.out.println("Usage: UDPWriteRecordTest address[:port[:unit]] file record registers [count]");
+        logger.debug("Usage: UDPWriteRecordTest address[:port[:unit]] file record registers [count]");
 
         System.exit(1);
     }
@@ -132,7 +132,7 @@ public class UDPWriteRecordTest {
             connection.setTimeout(500);
 
             if (Modbus.debug) {
-                System.out.println("Connected to " + ipAddress.toString() + ":" + connection.getPort());
+                logger.debug("Connected to " + ipAddress.toString() + ":" + connection.getPort());
             }
 
             for (int i = 0; i < requestCount; i++) {
@@ -147,7 +147,7 @@ public class UDPWriteRecordTest {
                 rdRequest.addRequest(recordRequest);
 
                 if (Modbus.debug) {
-                    System.out.println("Request: " + rdRequest.getHexMessage());
+                    logger.debug("Request: " + rdRequest.getHexMessage());
                 }
 
 				/*
@@ -196,7 +196,7 @@ public class UDPWriteRecordTest {
                     rdResponse = (ReadFileRecordResponse)dummy;
 
                     if (Modbus.debug) {
-                        System.out.println("Response: " + rdResponse.getHexMessage());
+                        logger.debug("Response: " + rdResponse.getHexMessage());
                     }
 
                     int count = rdResponse.getRecordCount();
@@ -207,7 +207,7 @@ public class UDPWriteRecordTest {
                             values[k] = data.getRegister(k).toShort();
                         }
 
-                        System.out.println("read data[" + j + "] = " + Arrays.toString(values));
+                        logger.debug("read data[" + j + "] = " + Arrays.toString(values));
 
                         WriteFileRecordRequest.RecordRequest wrData = new WriteFileRecordRequest.RecordRequest(file, record + i, values);
                         wrRequest.addRequest(wrData);
@@ -217,7 +217,7 @@ public class UDPWriteRecordTest {
 					/*
 					 * Unknown message.
 					 */
-                    System.out.println("Unknown Response: " + dummy.getHexMessage());
+                    logger.debug("Unknown Response: " + dummy.getHexMessage());
                 }
 				
 				/*
@@ -260,7 +260,7 @@ public class UDPWriteRecordTest {
                     wrResponse = (WriteFileRecordResponse)dummy;
 
                     if (Modbus.debug) {
-                        System.out.println("Response: " + wrResponse.getHexMessage());
+                        logger.debug("Response: " + wrResponse.getHexMessage());
                     }
 
                     int count = wrResponse.getRequestCount();
@@ -271,14 +271,14 @@ public class UDPWriteRecordTest {
                             values[k] = data.getRegister(k).toShort();
                         }
 
-                        System.out.println("write response data[" + j + "] = " + Arrays.toString(values));
+                        logger.debug("write response data[" + j + "] = " + Arrays.toString(values));
                     }
                 }
                 else {
 					/*
 					 * Unknown message.
 					 */
-                    System.out.println("Unknown Response: " + dummy.getHexMessage());
+                    logger.debug("Unknown Response: " + dummy.getHexMessage());
                 }
             }
 			

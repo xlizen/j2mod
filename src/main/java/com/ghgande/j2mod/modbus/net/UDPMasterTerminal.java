@@ -18,6 +18,7 @@ package com.ghgande.j2mod.modbus.net;
 
 import com.ghgande.j2mod.modbus.Modbus;
 import com.ghgande.j2mod.modbus.io.ModbusUDPTransport;
+import com.ghgande.j2mod.modbus.util.Logger;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -30,6 +31,8 @@ import java.net.InetAddress;
  * @version 1.2rc1 (09/11/2004)
  */
 class UDPMasterTerminal implements UDPTerminal {
+
+    private static final Logger logger = Logger.getLogger(UDPMasterTerminal.class);
 
     private DatagramSocket m_Socket;
     private int m_Timeout = Modbus.DEFAULT_TIMEOUT;
@@ -112,7 +115,7 @@ class UDPMasterTerminal implements UDPTerminal {
     public synchronized void activate() throws Exception {
         if (!isActive()) {
             if (Modbus.debug) {
-                System.out.println("UDPMasterTerminal::activate()::laddr=:" + m_LocalAddress + ":lport=" + m_LocalPort);
+                logger.debug("UDPMasterTerminal::activate()::laddr=:" + m_LocalAddress + ":lport=" + m_LocalPort);
             }
 
             if (m_Socket == null) {
@@ -126,13 +129,13 @@ class UDPMasterTerminal implements UDPTerminal {
                 }
             }
             if (Modbus.debug) {
-                System.out.println("UDPMasterTerminal::haveSocket():" + m_Socket.toString());
+                logger.debug("UDPMasterTerminal::haveSocket():" + m_Socket.toString());
             }
             if (Modbus.debug) {
-                System.out.println("UDPMasterTerminal::laddr=:" + m_LocalAddress.toString() + ":lport=" + m_LocalPort);
+                logger.debug("UDPMasterTerminal::laddr=:" + m_LocalAddress.toString() + ":lport=" + m_LocalPort);
             }
             if (Modbus.debug) {
-                System.out.println("UDPMasterTerminal::raddr=:" + m_RemoteAddress.toString() + ":rport=" + m_RemotePort);
+                logger.debug("UDPMasterTerminal::raddr=:" + m_RemoteAddress.toString() + ":rport=" + m_RemotePort);
             }
 
             m_Socket.setReceiveBufferSize(1024);
@@ -142,7 +145,7 @@ class UDPMasterTerminal implements UDPTerminal {
             m_Active = true;
         }
         if (Modbus.debug) {
-            System.out.println("UDPMasterTerminal::activated");
+            logger.debug("UDPMasterTerminal::activated");
         }
     }
 
@@ -152,7 +155,7 @@ class UDPMasterTerminal implements UDPTerminal {
     public void deactivate() {
         try {
             if (Modbus.debug) {
-                System.out.println("UDPMasterTerminal::deactivate()");
+                logger.debug("UDPMasterTerminal::deactivate()");
             }
 
             m_Socket.close();

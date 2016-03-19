@@ -27,6 +27,8 @@ package com.ghgande.j2mod.modbus.util;
  */
 public final class BitVector {
 
+    private static final Logger logger = Logger.getLogger(BitVector.class);
+
     //instance attributes
     private int m_Size;
     private byte[] m_Data;
@@ -137,7 +139,7 @@ public final class BitVector {
      */
     public final boolean getBit(int index) throws IndexOutOfBoundsException {
         index = translateIndex(index);
-        //System.out.println("Get bit #" + index);
+        logger.debug("Get bit #" + index);
         return ((m_Data[byteIndex(index)]
                 & (0x01 << bitIndex(index))) != 0
         ) ? true : false;
@@ -155,7 +157,7 @@ public final class BitVector {
      */
     public final void setBit(int index, boolean b) throws IndexOutOfBoundsException {
         index = translateIndex(index);
-        //System.out.println("Set bit #"+index);
+        logger.debug("Set bit #"+index);
         int value = ((b) ? 1 : 0);
         int byteNum = byteIndex(index);
         int bitNum = bitIndex(index);
@@ -339,11 +341,11 @@ public final class BitVector {
 
     public static void main(String[] args) {
         BitVector test = new BitVector(24);
-        System.out.println(test.isLSBAccess());
+        logger.debug(test.isLSBAccess());
         test.setBit(7, true);
-        System.out.println(test.getBit(7));
+        logger.debug(test.getBit(7));
         test.toggleAccess(true);
-        System.out.println(test.getBit(7));
+        logger.debug(test.getBit(7));
 
         test.toggleAccess(true);
         test.setBit(6, true);
@@ -354,13 +356,13 @@ public final class BitVector {
         test.setBit(8, true);
         test.setBit(10, true);
 
-        System.out.println(test);
+        logger.debug(test);
         test.toggleAccess(true);
-        System.out.println(test);
+        logger.debug(test);
         test.toggleAccess(true);
-        System.out.println(test);
+        logger.debug(test);
 
-        System.out.println(ModbusUtil.toHex(test.getBytes()));
+        logger.debug(ModbusUtil.toHex(test.getBytes()));
     }
 
     private static final int[] ODD_OFFSETS = {-1, -3, -5, -7};

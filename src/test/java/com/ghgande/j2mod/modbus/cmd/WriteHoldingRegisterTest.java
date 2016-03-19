@@ -53,7 +53,7 @@ public class WriteHoldingRegisterTest {
     private static final Logger logger = Logger.getLogger(WriteHoldingRegisterTest.class);
 
     private static void printUsage() {
-        System.out.println("java com.ghgande.j2mod.modbus.cmd.WriteHoldingRegisterTest" + " <connection [String]>" + " <register [int]> <value [int]> {<repeat [int]>}");
+        logger.debug("java com.ghgande.j2mod.modbus.cmd.WriteHoldingRegisterTest" + " <connection [String]>" + " <register [int]> <value [int]> {<repeat [int]>}");
     }
 
     public static void main(String[] args) {
@@ -132,7 +132,7 @@ public class WriteHoldingRegisterTest {
             req.setHeadless(trans instanceof ModbusSerialTransaction);
 
             if (Modbus.debug) {
-                System.out.println("Request: " + req.getHexMessage());
+                logger.debug("Request: " + req.getHexMessage());
             }
 
             // 4. Execute the transaction repeat times
@@ -141,7 +141,7 @@ public class WriteHoldingRegisterTest {
                 trans.execute();
 
                 if (Modbus.debug) {
-                    System.out.println("Response: " + trans.getResponse().getHexMessage());
+                    logger.debug("Response: " + trans.getResponse().getHexMessage());
                 }
             }
         }

@@ -45,7 +45,7 @@ public class ReadFIFOTest {
      * usage -- Print command line arguments and exit.
      */
     private static void usage() {
-        System.out.println("Usage: ReadFIFOTest connection unit fifo [repeat]");
+        logger.debug("Usage: ReadFIFOTest connection unit fifo [repeat]");
 
         System.exit(1);
     }
@@ -107,7 +107,7 @@ public class ReadFIFOTest {
                 request.setReference(fifo);
 
                 if (Modbus.debug) {
-                    System.out.println("Request: " + request.getHexMessage());
+                    logger.debug("Request: " + request.getHexMessage());
                 }
 
 				/*
@@ -151,16 +151,16 @@ public class ReadFIFOTest {
                     response = (ReadFIFOQueueResponse)dummy;
 
                     if (Modbus.debug) {
-                        System.out.println("Response: " + response.getHexMessage());
+                        logger.debug("Response: " + response.getHexMessage());
                     }
 
                     int count = response.getWordCount();
-                    System.out.println(count + " values");
+                    logger.debug(count + " values");
 
                     for (int j = 0; j < count; j++) {
                         short value = (short)response.getRegister(j);
 
-                        System.out.println("data[" + j + "] = " + value);
+                        logger.debug("data[" + j + "] = " + value);
                     }
                     continue;
                 }
@@ -168,7 +168,7 @@ public class ReadFIFOTest {
 				/*
 				 * Unknown message.
 				 */
-                System.out.println("Unknown Response: " + dummy.getHexMessage());
+                logger.debug("Unknown Response: " + dummy.getHexMessage());
             }
 			
 			/*

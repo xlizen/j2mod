@@ -46,7 +46,7 @@ public class ReadFileRecordTest {
      * usage -- Print command line arguments and exit.
      */
     private static void usage() {
-        System.out.println("Usage: ReadFileRecord connection unit file record registers [repeat]");
+        logger.debug("Usage: ReadFileRecord connection unit file record registers [repeat]");
 
         System.exit(1);
     }
@@ -114,7 +114,7 @@ public class ReadFileRecordTest {
                 request.addRequest(recordRequest);
 
                 if (Modbus.debug) {
-                    System.out.println("Request: " + request.getHexMessage());
+                    logger.debug("Request: " + request.getHexMessage());
                 }
 
 				/*
@@ -156,7 +156,7 @@ public class ReadFileRecordTest {
                     response = (ReadFileRecordResponse)dummy;
 
                     if (Modbus.debug) {
-                        System.out.println("Response: " + response.getHexMessage());
+                        logger.debug("Response: " + response.getHexMessage());
                     }
 
                     int count = response.getRecordCount();
@@ -166,7 +166,7 @@ public class ReadFileRecordTest {
                         for (int k = 0; k < data.getWordCount(); k++) {
                             values[k] = data.getRegister(k).toShort();
                         }
-                        System.out.println("data[" + i + "][" + j + "] = " + Arrays.toString(values));
+                        logger.debug("data[" + i + "][" + j + "] = " + Arrays.toString(values));
                     }
                     continue;
                 }
@@ -174,7 +174,7 @@ public class ReadFileRecordTest {
 				/*
 				 * Unknown message.
 				 */
-                System.out.println("Unknown Response: " + dummy.getHexMessage());
+                logger.debug("Unknown Response: " + dummy.getHexMessage());
             }
 			
 			/*
@@ -200,7 +200,7 @@ public class ReadFileRecordTest {
 
                     if (dummy instanceof ReadCommEventCounterResponse) {
                         ReadCommEventCounterResponse eventResponse = (ReadCommEventCounterResponse)dummy;
-                        System.out.println("  Events: " + eventResponse.getEventCount());
+                        logger.debug("  Events: " + eventResponse.getEventCount());
                     }
                 }
                 catch (ModbusException x) {

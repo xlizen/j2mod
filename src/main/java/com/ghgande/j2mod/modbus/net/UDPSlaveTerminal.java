@@ -18,6 +18,7 @@ package com.ghgande.j2mod.modbus.net;
 
 import com.ghgande.j2mod.modbus.Modbus;
 import com.ghgande.j2mod.modbus.io.ModbusUDPTransport;
+import com.ghgande.j2mod.modbus.util.Logger;
 import com.ghgande.j2mod.modbus.util.ModbusUtil;
 
 import java.io.IOException;
@@ -34,8 +35,10 @@ import java.util.concurrent.LinkedBlockingQueue;
  * @version 1.2rc1 (09/11/2004)
  */
 class UDPSlaveTerminal implements UDPTerminal {
+
+    private static final Logger logger = Logger.getLogger(UDPSlaveTerminal.class);
+
     private DatagramSocket m_Socket;
-    private int m_Timeout = Modbus.DEFAULT_TIMEOUT;
     private boolean m_Active;
     protected InetAddress m_LocalAddress;
     private int m_LocalPort = Modbus.DEFAULT_PORT;
@@ -92,7 +95,7 @@ class UDPSlaveTerminal implements UDPTerminal {
     public synchronized void activate() throws Exception {
         if (!isActive()) {
             if (Modbus.debug) {
-                System.out.println("UDPSlaveTerminal.activate()");
+                logger.debug("UDPSlaveTerminal.activate()");
             }
             if (m_Socket == null) {
                 if (m_LocalAddress != null && m_LocalPort != -1) {
@@ -105,10 +108,10 @@ class UDPSlaveTerminal implements UDPTerminal {
                 }
             }
             if (Modbus.debug) {
-                System.out.println("UDPSlaveTerminal::haveSocket():" + m_Socket.toString());
+                logger.debug("UDPSlaveTerminal::haveSocket():" + m_Socket.toString());
             }
             if (Modbus.debug) {
-                System.out.println("UDPSlaveTerminal::addr=:" + m_LocalAddress.toString() + ":port=" + m_LocalPort);
+                logger.debug("UDPSlaveTerminal::addr=:" + m_LocalAddress.toString() + ":port=" + m_LocalPort);
             }
 
             m_Socket.setReceiveBufferSize(1024);
@@ -117,22 +120,22 @@ class UDPSlaveTerminal implements UDPTerminal {
             m_Receiver = new Thread(m_PacketReceiver);
             m_Receiver.start();
             if (Modbus.debug) {
-                System.out.println("UDPSlaveTerminal::receiver started()");
+                logger.debug("UDPSlaveTerminal::receiver started()");
             }
             m_PacketSender = new PacketSender();
             m_Sender = new Thread(m_PacketSender);
             m_Sender.start();
             if (Modbus.debug) {
-                System.out.println("UDPSlaveTerminal::sender started()");
+                logger.debug("UDPSlaveTerminal::sender started()");
             }
             m_ModbusTransport = new ModbusUDPTransport(this);
             if (Modbus.debug) {
-                System.out.println("UDPSlaveTerminal::transport created");
+                logger.debug("UDPSlaveTerminal::transport created");
             }
             m_Active = true;
         }
         if (Modbus.debug) {
-            System.out.println("UDPSlaveTerminal::activated");
+            logger.debug("UDPSlaveTerminal::activated");
         }
     }
 
@@ -185,10 +188,9 @@ class UDPSlaveTerminal implements UDPTerminal {
      * /** Sets the timeout for this <tt>UDPSlaveTerminal</tt>.
      */
     public void setTimeout(int timeout) {
-        m_Timeout = timeout;
 
         try {
-            m_Socket.setSoTimeout(m_Timeout);
+            m_Socket.setSoTimeout(timeout);
         }
         catch (IOException ex) {
             ex.printStackTrace(); // handle? }
@@ -239,7 +241,7 @@ class UDPSlaveTerminal implements UDPTerminal {
                     DatagramPacket res = new DatagramPacket(message, message.length, req.getAddress(), req.getPort());
                     m_Socket.send(res);
                     if (Modbus.debug) {
-                        System.out.println("Sent package from queue.");
+                        logger.debug("Sent package from queue.");
                     }
                 }
                 catch (Exception ex) {
@@ -275,7 +277,7 @@ class UDPSlaveTerminal implements UDPTerminal {
                     // 3. place the data buffer in the queue
                     m_ReceiveQueue.put(buffer);
                     if (Modbus.debug) {
-                        System.out.println("Received package to queue.");
+                        logger.debug("Received package to queue.");
                     }
                 }
                 catch (Exception ex) {

@@ -17,6 +17,7 @@
 package com.ghgande.j2mod.modbus.net;
 
 import com.ghgande.j2mod.modbus.Modbus;
+import com.ghgande.j2mod.modbus.util.Logger;
 import com.ghgande.j2mod.modbus.util.ThreadPool;
 
 import java.io.IOException;
@@ -36,12 +37,14 @@ import java.net.*;
  * @version 0.97 (8/11/2012)
  */
 public class ModbusTCPListener implements ModbusListener {
+
+    private static final Logger logger = Logger.getLogger(ModbusTCPListener.class);
+
     private ServerSocket m_ServerSocket = null;
     private ThreadPool m_ThreadPool;
     private Thread m_Listener;
     private int m_Port = Modbus.DEFAULT_PORT;
     private int m_Unit = 0;
-    private int m_FloodProtection = 5;
     private boolean m_Listening;
     private InetAddress m_Address;
 
@@ -129,9 +132,10 @@ public class ModbusTCPListener implements ModbusListener {
 			 * attacks via massive parallel program logins can probably be
 			 * prevented.
 			 */
+            int m_FloodProtection = 5;
             m_ServerSocket = new ServerSocket(m_Port, m_FloodProtection, m_Address);
             if (Modbus.debug) {
-                System.out.println("Listenening to " + m_ServerSocket.toString() + "(Port " + m_Port + ")");
+                logger.debug("Listenening to " + m_ServerSocket.toString() + "(Port " + m_Port + ")");
             }
 
 			/*
@@ -143,7 +147,7 @@ public class ModbusTCPListener implements ModbusListener {
             while (m_Listening) {
                 Socket incoming = m_ServerSocket.accept();
                 if (Modbus.debug) {
-                    System.out.println("Making new connection " + incoming.toString());
+                    logger.debug("Making new connection " + incoming.toString());
                 }
 
                 if (m_Listening) {

@@ -50,7 +50,7 @@ public class WriteFileRecordTest {
      * usage -- Print command line arguments and exit.
      */
     private static void usage() {
-        System.out.println("Usage: WriteFileRecordTest connection unit file record value [value ...]");
+        logger.debug("Usage: WriteFileRecordTest connection unit file record value [value ...]");
 
         System.exit(1);
     }
@@ -120,7 +120,7 @@ public class WriteFileRecordTest {
             request.addRequest(recordRequest);
 
             if (Modbus.debug) {
-                System.out.println("Request: " + request.getHexMessage());
+                logger.debug("Request: " + request.getHexMessage());
             }
 
 			/*
@@ -162,7 +162,7 @@ public class WriteFileRecordTest {
                 response = (WriteFileRecordResponse)dummy;
 
                 if (Modbus.debug) {
-                    System.out.println("Response: " + response.getHexMessage());
+                    logger.debug("Response: " + response.getHexMessage());
                 }
 
                 int count = response.getRequestCount();
@@ -173,7 +173,7 @@ public class WriteFileRecordTest {
                         values[k] = data.getRegister(k).toShort();
                     }
 
-                    System.out.println("data[" + j + "] = " + Arrays.toString(values));
+                    logger.debug("data[" + j + "] = " + Arrays.toString(values));
                 }
             }
         }

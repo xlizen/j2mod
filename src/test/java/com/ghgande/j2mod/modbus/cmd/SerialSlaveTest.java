@@ -88,7 +88,7 @@ public class SerialSlaveTest {
         }
 
         if (Modbus.debug) {
-            System.out.println("j2mod ModbusSerial Slave");
+            logger.debug("j2mod ModbusSerial Slave");
         }
 
         try {
@@ -112,7 +112,7 @@ public class SerialSlaveTest {
             }
 
             if (hasHoldings) {
-                System.out.println("Adding " + holdings + " holding registers");
+                logger.debug("Adding " + holdings + " holding registers");
 
                 for (int i = 0; i < holdings; i++) {
                     spi.addRegister(new SimpleRegister(i));
@@ -123,7 +123,7 @@ public class SerialSlaveTest {
             }
 
             if (hasInputs) {
-                System.out.println("Adding " + inputs + " input registers");
+                logger.debug("Adding " + inputs + " input registers");
 
                 for (int i = 0; i < inputs; i++) {
                     spi.addInputRegister(new SimpleInputRegister(i));
@@ -149,7 +149,7 @@ public class SerialSlaveTest {
             params.setEncoding("rtu");
             params.setEcho(false);
             if (Modbus.debug) {
-                System.out.println("Encoding [" + params.getEncoding() + "]");
+                logger.debug("Encoding [" + params.getEncoding() + "]");
             }
 
             // 4. Set up serial listener

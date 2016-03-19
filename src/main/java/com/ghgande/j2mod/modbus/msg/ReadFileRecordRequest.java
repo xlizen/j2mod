@@ -81,7 +81,6 @@ public final class ReadFileRecordRequest extends ModbusRequest {
         }
     }
 
-    private int m_ByteCount;
     private RecordRequest[] m_Records;
 
     /**
@@ -236,7 +235,7 @@ public final class ReadFileRecordRequest extends ModbusRequest {
      * readData -- read all the data for this request.
      */
     public void readData(DataInput din) throws IOException {
-        m_ByteCount = din.readUnsignedByte();
+        int m_ByteCount = din.readUnsignedByte();
 
         int recordCount = m_ByteCount / 7;
         m_Records = new RecordRequest[recordCount];

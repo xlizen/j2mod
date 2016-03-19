@@ -16,6 +16,7 @@
  */
 package com.ghgande.j2mod.modbus.io;
 
+import com.ghgande.j2mod.modbus.util.Logger;
 import com.ghgande.j2mod.modbus.util.ModbusUtil;
 
 import java.io.FilterOutputStream;
@@ -35,8 +36,9 @@ import java.io.OutputStream;
  * @see com.ghgande.j2mod.modbus.io.ModbusASCIITransport#FRAME_START
  * @see com.ghgande.j2mod.modbus.io.ModbusASCIITransport#FRAME_END
  */
-public class ASCIIOutputStream
-        extends FilterOutputStream {
+public class ASCIIOutputStream extends FilterOutputStream {
+
+    private static final Logger logger = Logger.getLogger(ASCIIOutputStream.class);
 
     /**
      * Constructs a new <tt>ASCIIOutputStream</tt> instance
@@ -59,16 +61,16 @@ public class ASCIIOutputStream
     public void write(int b) throws IOException {
         if (b == ModbusASCIITransport.FRAME_START) {
             out.write(58);
-            //System.out.println("Wrote FRAME_START");
+            logger.debug("Wrote FRAME_START");
         }
         else if (b == ModbusASCIITransport.FRAME_END) {
             out.write(13);
             out.write(10);
-            //System.out.println("Wrote FRAME_END");
+            logger.debug("Wrote FRAME_END");
         }
         else {
             out.write(ModbusUtil.toHex(b));
-            //System.out.println("Wrote byte "+b+"="+new String(ModbusUtil.toHex(b)));
+            logger.debug("Wrote byte "+b+"="+new String(ModbusUtil.toHex(b)));
         }
     }
 

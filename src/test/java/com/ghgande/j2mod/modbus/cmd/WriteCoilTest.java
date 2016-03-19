@@ -52,7 +52,7 @@ public class WriteCoilTest {
     private static final Logger logger = Logger.getLogger(WriteCoilTest.class);
 
     private static void printUsage() {
-        System.out.println("java com.ghgande.j2mod.modbus.cmd.WriteCoilTest" + " <connection [String]>" + " <unit [int8]>" + " <coil [int16]>" + " <state [boolean]>" + " {<repeat [int]>}");
+        logger.debug("java com.ghgande.j2mod.modbus.cmd.WriteCoilTest" + " <connection [String]>" + " <unit [int8]>" + " <coil [int16]>" + " <state [boolean]>" + " {<repeat [int]>}");
     }
 
     public static void main(String[] args) {
@@ -107,7 +107,7 @@ public class WriteCoilTest {
             req = new WriteCoilRequest(ref, value);
             req.setUnitID(unit);
             if (Modbus.debug) {
-                System.out.println("Request: " + req.getHexMessage());
+                logger.debug("Request: " + req.getHexMessage());
             }
 
             // 4. Prepare the transaction
@@ -119,12 +119,12 @@ public class WriteCoilTest {
                 trans.execute();
 
                 if (Modbus.debug) {
-                    System.out.println("Response: " + trans.getResponse().getHexMessage());
+                    logger.debug("Response: " + trans.getResponse().getHexMessage());
                 }
 
                 WriteCoilResponse data = (WriteCoilResponse)trans.getResponse();
                 if (data != null) {
-                    System.out.println("Coil = " + data.getCoil());
+                    logger.debug("Coil = " + data.getCoil());
                 }
             }
 

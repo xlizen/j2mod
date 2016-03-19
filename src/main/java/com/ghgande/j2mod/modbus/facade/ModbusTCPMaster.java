@@ -39,7 +39,6 @@ public class ModbusTCPMaster {
     private static final Logger logger = Logger.getLogger(ModbusTCPMaster.class);
 
     private TCPMasterConnection m_Connection;
-    private InetAddress m_SlaveAddress;
     private ModbusTCPTransaction m_Transaction;
     private ReadCoilsRequest m_ReadCoilsRequest;
     private ReadInputDiscretesRequest m_ReadInputDiscretesRequest;
@@ -60,7 +59,7 @@ public class ModbusTCPMaster {
      */
     public ModbusTCPMaster(String addr) {
         try {
-            m_SlaveAddress = InetAddress.getByName(addr);
+            InetAddress m_SlaveAddress = InetAddress.getByName(addr);
             m_Connection = new TCPMasterConnection(m_SlaveAddress);
             m_ReadCoilsRequest = new ReadCoilsRequest();
             m_ReadInputDiscretesRequest = new ReadInputDiscretesRequest();

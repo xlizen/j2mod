@@ -22,6 +22,7 @@ import com.ghgande.j2mod.modbus.msg.ModbusMessage;
 import com.ghgande.j2mod.modbus.msg.ModbusRequest;
 import com.ghgande.j2mod.modbus.msg.ModbusResponse;
 import com.ghgande.j2mod.modbus.net.TCPMasterConnection;
+import com.ghgande.j2mod.modbus.util.Logger;
 import com.ghgande.j2mod.modbus.util.ModbusUtil;
 
 import java.io.*;
@@ -37,6 +38,8 @@ import java.net.SocketTimeoutException;
  *          messages.
  */
 public class ModbusTCPTransport implements ModbusTransport {
+
+    private static final Logger logger = Logger.getLogger(ModbusTCPTransport.class);
 
     // instance attributes
     private DataInputStream m_Input; // input stream
@@ -374,7 +377,7 @@ public class ModbusTCPTransport implements ModbusTransport {
         }
         catch (IOException ex) {
             if (Modbus.debug) {
-                System.out.println("ModbusTCPTransport::Socket invalid.");
+                logger.debug("ModbusTCPTransport::Socket invalid.");
             }
 
             throw new IllegalStateException("Socket invalid.");

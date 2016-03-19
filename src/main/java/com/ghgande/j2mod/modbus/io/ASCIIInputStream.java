@@ -17,6 +17,7 @@
 package com.ghgande.j2mod.modbus.io;
 
 import com.ghgande.j2mod.modbus.Modbus;
+import com.ghgande.j2mod.modbus.util.Logger;
 
 import java.io.FilterInputStream;
 import java.io.IOException;
@@ -35,8 +36,9 @@ import java.io.InputStream;
  * @see com.ghgande.j2mod.modbus.io.ModbusASCIITransport#FRAME_START
  * @see com.ghgande.j2mod.modbus.io.ModbusASCIITransport#FRAME_END
  */
-public class ASCIIInputStream
-        extends FilterInputStream {
+public class ASCIIInputStream extends FilterInputStream {
+
+    private static final Logger logger = Logger.getLogger(ASCIIInputStream.class);
 
     /**
      * Constructs a new <tt>ASCIIInputStream</tt> instance
@@ -61,16 +63,16 @@ public class ASCIIInputStream
         if (ch == -1) {
             return -1;
         }
-        //System.out.println("Read "+ch+ "="+(char)ch);
+        logger.debug("Read "+ch+ "="+(char)ch);
         sbuf.append((char)ch);
         if (sbuf.charAt(0) == ':') {
-            //System.out.println("FRAME START");
+            logger.debug("FRAME START");
             return ModbusASCIITransport.FRAME_START;
         }
         else {
             if (sbuf.charAt(0) == '\r') {
                 if (in.read() == 10) {
-                    //System.out.println("FRAME END");
+                    logger.debug("FRAME END");
                     return ModbusASCIITransport.FRAME_END;
                 }
                 else {
@@ -81,13 +83,13 @@ public class ASCIIInputStream
             else {
                 try {
                     sbuf.append((char)in.read());
-                    //System.out.println("Read byte: " + sbuf.toString().toLowerCase());
+                    logger.debug("Read byte: " + sbuf.toString().toLowerCase());
                     return Integer.parseInt(sbuf.toString().toLowerCase(), 16);
                 }
                 catch (NumberFormatException ex) {
                     //malformed stream
                     if (Modbus.debug) {
-                        System.out.println(sbuf.toString());
+                        logger.debug(sbuf.toString());
                     }
                     throw new IOException("Malformed Stream - Wrong Characters");
                 }

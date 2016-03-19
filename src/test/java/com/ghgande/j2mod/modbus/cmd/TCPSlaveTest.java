@@ -45,7 +45,7 @@ public class TCPSlaveTest {
             if (args != null && args.length == 1) {
                 port = Integer.parseInt(args[0]);
             }
-            System.out.println("j2mod Modbus Slave (Server) v0.97");
+            logger.debug("j2mod Modbus Slave (Server) v0.97");
 
 			/*
              * Create the process image for this test.
@@ -110,7 +110,7 @@ public class TCPSlaveTest {
 
             // 3. create a listener with 3 threads in pool
             if (Modbus.debug) {
-                System.out.println("Listening...");
+                logger.debug("Listening...");
             }
 
             listener = new ModbusTCPListener(3, Inet4Address.getByName("0.0.0.0"));

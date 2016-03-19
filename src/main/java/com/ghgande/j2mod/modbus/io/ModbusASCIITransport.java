@@ -22,6 +22,7 @@ import com.ghgande.j2mod.modbus.ModbusIOException;
 import com.ghgande.j2mod.modbus.msg.ModbusMessage;
 import com.ghgande.j2mod.modbus.msg.ModbusRequest;
 import com.ghgande.j2mod.modbus.msg.ModbusResponse;
+import com.ghgande.j2mod.modbus.util.Logger;
 import com.ghgande.j2mod.modbus.util.ModbusUtil;
 
 import java.io.DataInputStream;
@@ -37,8 +38,9 @@ import java.io.OutputStream;
  * @author John Charlton
  * @version 1.2rc1 (09/11/2004)
  */
-public class ModbusASCIITransport
-        extends ModbusSerialTransport {
+public class ModbusASCIITransport extends ModbusSerialTransport {
+
+    private static final Logger logger = Logger.getLogger(ModbusASCIITransport.class);
 
     private DataInputStream m_InputStream;     //used to read from
     private ASCIIOutputStream m_OutputStream;   //used to write to
@@ -76,7 +78,7 @@ public class ModbusASCIITransport
                 //write message
                 m_OutputStream.write(FRAME_START);               //FRAMESTART
                 m_OutputStream.write(buf, 0, len);                 //PDU
-                System.out.println("Writing: " + ModbusUtil.toHex(buf, 0, len));
+                logger.debug("Writing: " + ModbusUtil.toHex(buf, 0, len));
                 m_OutputStream.write(calculateLRC(buf, 0, len)); //LRC
                 m_OutputStream.write(FRAME_END);                 //FRAMEEND
                 m_OutputStream.flush();
@@ -141,7 +143,7 @@ public class ModbusASCIITransport
         }
         catch (Exception ex) {
             if (Modbus.debug) {
-                System.out.println(ex.getMessage());
+                logger.debug(ex.getMessage());
             }
             throw new ModbusIOException("I/O exception - failed to read.");
         }
@@ -173,7 +175,7 @@ public class ModbusASCIITransport
                     }
                     int len = m_ByteInOut.size();
                     if (Modbus.debug) {
-                        System.out.println("Received: " + ModbusUtil.toHex(m_InBuffer, 0, len));
+                        logger.debug("Received: " + ModbusUtil.toHex(m_InBuffer, 0, len));
                     }
                     //check LRC
                     if (m_InBuffer[len - 1] != calculateLRC(m_InBuffer, 0, len, 1)) {
@@ -201,7 +203,7 @@ public class ModbusASCIITransport
         }
         catch (Exception ex) {
             if (Modbus.debug) {
-                System.out.println(ex.getMessage());
+                logger.debug(ex.getMessage());
             }
             throw new ModbusIOException("I/O exception - failed to read.");
         }

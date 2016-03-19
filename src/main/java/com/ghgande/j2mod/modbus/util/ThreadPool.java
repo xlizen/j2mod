@@ -84,10 +84,10 @@ public class ThreadPool {
          * up available tasks from the <tt>LinkedQueue</tt>.
          */
         public void run() {
-            //System.out.println("Running PoolThread");
+            logger.debug("Running PoolThread");
             do {
                 try {
-                    //System.out.println(this.toString());
+                    logger.debug(this.toString());
                     m_TaskPool.take().run();
                 }
                 catch (Exception ex) {

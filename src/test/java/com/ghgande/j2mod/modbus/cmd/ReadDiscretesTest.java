@@ -37,7 +37,7 @@ public class ReadDiscretesTest {
     private static final Logger logger = Logger.getLogger(ReadDiscretesTest.class);
 
     private static void printUsage() {
-        System.out.println("java com.ghgande.j2mod.modbus.cmd.ReadDiscretesTest <connection [String]> <unit [int8]> <register [int16]> <bitcount [int16]> {<repeat [int]>}");
+        logger.debug("java com.ghgande.j2mod.modbus.cmd.ReadDiscretesTest <connection [String]> <unit [int8]> <register [int16]> <bitcount [int16]> {<repeat [int]>}");
     }
 
     public static void main(String[] args) {
@@ -94,7 +94,7 @@ public class ReadDiscretesTest {
             req = new ReadInputDiscretesRequest(ref, count);
             req.setUnitID(unit);
             if (Modbus.debug) {
-                System.out.println("Request: " + req.getHexMessage());
+                logger.debug("Request: " + req.getHexMessage());
             }
 
             // 4. Prepare the transaction
@@ -113,10 +113,10 @@ public class ReadDiscretesTest {
                 res = (ReadInputDiscretesResponse)trans.getResponse();
 
                 if (Modbus.debug) {
-                    System.out.println("Response: " + res.getHexMessage());
+                    logger.debug("Response: " + res.getHexMessage());
                 }
 
-                System.out.println("Input Discretes Status=" + res.getDiscretes().toString());
+                logger.debug("Input Discretes Status=" + res.getDiscretes().toString());
 
                 k++;
             } while (k < repeat);

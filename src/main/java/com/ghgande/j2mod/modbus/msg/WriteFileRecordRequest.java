@@ -32,7 +32,6 @@ import java.io.IOException;
  * @version @version@ (@date@)
  */
 public final class WriteFileRecordRequest extends ModbusRequest {
-    private int m_ByteCount;
     private RecordRequest[] m_Records;
 
     public static class RecordRequest {
@@ -257,7 +256,7 @@ public final class WriteFileRecordRequest extends ModbusRequest {
      * readData -- convert the byte stream into a request.
      */
     public void readData(DataInput din) throws IOException {
-        m_ByteCount = din.readUnsignedByte();
+        int m_ByteCount = din.readUnsignedByte();
 
         m_Records = new RecordRequest[0];
 

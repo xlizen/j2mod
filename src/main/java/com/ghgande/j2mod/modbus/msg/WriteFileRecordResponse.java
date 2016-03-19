@@ -30,7 +30,6 @@ import java.io.IOException;
  * @version 0.96
  */
 public final class WriteFileRecordResponse extends ModbusResponse {
-    private int m_ByteCount;
     private RecordResponse[] m_Records;
 
     public static class RecordResponse {
@@ -167,7 +166,7 @@ public final class WriteFileRecordResponse extends ModbusResponse {
     }
 
     public void readData(DataInput din) throws IOException {
-        m_ByteCount = din.readUnsignedByte();
+        int m_ByteCount = din.readUnsignedByte();
 
         m_Records = new RecordResponse[0];
 

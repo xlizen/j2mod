@@ -22,6 +22,7 @@ import com.ghgande.j2mod.modbus.ModbusIOException;
 import com.ghgande.j2mod.modbus.msg.ModbusMessage;
 import com.ghgande.j2mod.modbus.msg.ModbusRequest;
 import com.ghgande.j2mod.modbus.msg.ModbusResponse;
+import com.ghgande.j2mod.modbus.util.Logger;
 import com.ghgande.j2mod.modbus.util.ModbusUtil;
 
 import java.io.IOException;
@@ -37,6 +38,9 @@ import java.io.OutputStream;
  * @version 1.2rc1 (09/11/2004)
  */
 abstract public class ModbusSerialTransport implements ModbusTransport {
+
+    private static final Logger logger = Logger.getLogger(ModbusSerialTransport.class);
+
     protected SerialPort m_CommPort;
     protected boolean m_Echo = false;     // require RS-485 echo processing
 
@@ -157,7 +161,7 @@ abstract public class ModbusSerialTransport implements ModbusTransport {
         byte echoBuf[] = new byte[len];
         int echoLen = m_CommPort.getInputStream().read(echoBuf, 0, len);
         if (Modbus.debug) {
-            System.out.println("Echo: " + ModbusUtil.toHex(echoBuf, 0, echoLen));
+            logger.debug("Echo: " + ModbusUtil.toHex(echoBuf, 0, echoLen));
         }
         if (echoLen != len) {
             if (Modbus.debug) {

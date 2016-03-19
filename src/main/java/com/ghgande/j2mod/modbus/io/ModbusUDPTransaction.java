@@ -46,7 +46,6 @@ public class ModbusUDPTransaction
     private ModbusResponse m_Response;
     private boolean m_ValidityCheck = Modbus.DEFAULT_VALIDITYCHECK;
     private int m_Retries = Modbus.DEFAULT_RETRIES;
-    private int m_RetryCounter = 0;
 
     /**
      * Constructs a new <tt>ModbusUDPTransaction</tt>
@@ -157,7 +156,7 @@ public class ModbusUDPTransaction
 
         //3. Retry transaction m_Retries times, in case of
         //I/O Exception problems.
-        m_RetryCounter = 0;
+        int m_RetryCounter = 0;
         while (m_RetryCounter <= m_Retries) {
             try {
                 //3. write request, and read response,

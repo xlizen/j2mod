@@ -56,7 +56,7 @@ public class AIAOTest {
     private static final Logger logger = Logger.getLogger(AIAOTest.class);
 
     private static void printUsage() {
-        System.out.println("java com.ghgande.j2mod.modbus.cmd.AIAOTest" + " <address{:<port>} [String]> <register a_in [int16]>" + " <register a_out [int16]>");
+        logger.debug("java com.ghgande.j2mod.modbus.cmd.AIAOTest" + " <address{:<port>} [String]> <register a_in [int16]>" + " <register a_out [int16]>");
     }
 
     public static void main(String[] args) {
@@ -111,7 +111,7 @@ public class AIAOTest {
             con.setPort(port);
             con.connect();
             if (Modbus.debug) {
-                System.out.println("Connected to " + addr.toString() + ":" + con.getPort());
+                logger.debug("Connected to " + addr.toString() + ":" + con.getPort());
             }
 
             // 3. Prepare the requests
@@ -144,7 +144,7 @@ public class AIAOTest {
                     ao_trans.execute();
                     last_out = new_in;
                     if (Modbus.debug) {
-                        System.out.println("Updated Output Register with value from Input Register.");
+                        logger.debug("Updated Output Register with value from Input Register.");
                     }
                 }
             } while (true);

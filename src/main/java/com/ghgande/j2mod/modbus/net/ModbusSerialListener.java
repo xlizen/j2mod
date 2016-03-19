@@ -22,6 +22,7 @@ import com.ghgande.j2mod.modbus.ModbusIOException;
 import com.ghgande.j2mod.modbus.io.ModbusTransport;
 import com.ghgande.j2mod.modbus.msg.ModbusRequest;
 import com.ghgande.j2mod.modbus.msg.ModbusResponse;
+import com.ghgande.j2mod.modbus.util.Logger;
 import com.ghgande.j2mod.modbus.util.SerialParameters;
 
 /**
@@ -35,6 +36,9 @@ import com.ghgande.j2mod.modbus.util.SerialParameters;
  *         interface
  */
 public class ModbusSerialListener implements ModbusListener {
+
+    private static final Logger logger = Logger.getLogger(ModbusSerialListener.class);
+
     private boolean m_Listening;
     private boolean m_Running = true;
     private SerialConnection m_SerialCon;
@@ -88,9 +92,9 @@ public class ModbusSerialListener implements ModbusListener {
 						 */
                         try {
                             if (Modbus.debug) {
-                                System.out.println("Request (" + request.getClass().getName() + "): " + request.getHexMessage());
+                                logger.debug("Request (" + request.getClass().getName() + "): " + request.getHexMessage());
 
-                                System.out.println("Response (" + response.getClass().getName() + "): " + response.getHexMessage());
+                                logger.debug("Response (" + response.getClass().getName() + "): " + response.getHexMessage());
                             }
                         }
                         catch (RuntimeException x) {

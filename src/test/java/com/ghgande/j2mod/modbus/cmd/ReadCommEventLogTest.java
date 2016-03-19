@@ -55,7 +55,7 @@ public class ReadCommEventLogTest {
     private static final Logger logger = Logger.getLogger(ReadCommEventLogTest.class);
 
     private static void printUsage() {
-        System.out.println("java com.ghgande.j2mod.modbus.cmd.ReadCommEventLogTest" + " <address{:port} [String]>" + " <unit [int]>" + " {<repeat [int]>}");
+        logger.debug("java com.ghgande.j2mod.modbus.cmd.ReadCommEventLogTest" + " <address{:port} [String]>" + " <unit [int]>" + " {<repeat [int]>}");
     }
 
     public static void main(String[] args) {
@@ -121,7 +121,7 @@ public class ReadCommEventLogTest {
                 req.setHeadless(trans instanceof ModbusSerialTransaction);
 
                 if (Modbus.debug) {
-                    System.out.println("Request: " + req.getHexMessage());
+                    logger.debug("Request: " + req.getHexMessage());
                 }
 
                 // 4. Prepare the transaction
@@ -147,7 +147,7 @@ public class ReadCommEventLogTest {
 
                 if (Modbus.debug) {
                     if (res != null) {
-                        System.out.println("Response: " + res.getHexMessage());
+                        logger.debug("Response: " + res.getHexMessage());
                     }
                     else {
                         System.err.println("No response to GET COMM EVENT LOG request.");
@@ -155,7 +155,7 @@ public class ReadCommEventLogTest {
                 }
                 if (res instanceof ExceptionResponse) {
                     ExceptionResponse exception = (ExceptionResponse)res;
-                    System.out.println(exception);
+                    logger.debug(exception);
                     continue;
                 }
 
@@ -164,9 +164,9 @@ public class ReadCommEventLogTest {
                 }
 
                 ReadCommEventLogResponse data = (ReadCommEventLogResponse)res;
-                System.out.println("Status: " + data.getStatus() + ", Events " + data.getEventCount() + ", Messages " + data.getMessageCount() + ", Entries " + data.getEvents().length);
-                System.out.println("Entries:");
-                System.out.println(Arrays.toString(data.getEvents()));
+                logger.debug("Status: " + data.getStatus() + ", Events " + data.getEventCount() + ", Messages " + data.getMessageCount() + ", Entries " + data.getEvents().length);
+                logger.debug("Entries:");
+                logger.debug(Arrays.toString(data.getEvents()));
             }
         }
         catch (Exception ex) {

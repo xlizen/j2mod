@@ -21,6 +21,7 @@ import com.fazecast.jSerialComm.SerialPortDataListener;
 import com.fazecast.jSerialComm.SerialPortEvent;
 import com.ghgande.j2mod.modbus.Modbus;
 import com.ghgande.j2mod.modbus.io.*;
+import com.ghgande.j2mod.modbus.util.Logger;
 import com.ghgande.j2mod.modbus.util.SerialParameters;
 
 import java.io.IOException;
@@ -35,6 +36,8 @@ import java.io.InputStream;
  * @version 1.2rc1 (09/11/2004)
  */
 public class SerialConnection implements SerialPortDataListener {
+
+    private static final Logger logger = Logger.getLogger(SerialConnection.class);
 
     private SerialParameters m_Parameters;
     private ModbusSerialTransport m_Transport;
@@ -143,7 +146,7 @@ public class SerialConnection implements SerialPortDataListener {
                 break;
             default:
                 if (Modbus.debug) {
-                    System.out.println("Serial port event: " + e.getEventType());
+                    logger.debug("Serial port event: " + e.getEventType());
                 }
         }
     }

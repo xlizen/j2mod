@@ -32,8 +32,7 @@ import com.ghgande.j2mod.modbus.net.SerialConnection;
  * @author Dieter Wimberger
  * @version 1.2rc1 (09/11/2004)
  */
-public class ModbusSerialTransaction
-        implements ModbusTransaction {
+public class ModbusSerialTransaction implements ModbusTransaction {
 
     //class attributes
     private static int c_TransactionID = Modbus.DEFAULT_TRANSACTION_ID;
@@ -45,8 +44,6 @@ public class ModbusSerialTransaction
     private boolean m_ValidityCheck = Modbus.DEFAULT_VALIDITYCHECK;
     private int m_Retries = Modbus.DEFAULT_RETRIES;
     private int m_TransDelayMS = Modbus.DEFAULT_TRANSMIT_DELAY;
-    private SerialConnection m_SerialCon;
-    private final Object MUTEX = new Object();
 
     /**
      * Constructs a new <tt>ModbusSerialTransaction</tt>
@@ -87,8 +84,7 @@ public class ModbusSerialTransaction
      * @param con a <tt>SerialConnection</tt>.
      */
     public void setSerialConnection(SerialConnection con) {
-        m_SerialCon = con;
-        m_IO = m_SerialCon.getModbusTransport();
+        m_IO = con.getModbusTransport();
     }
 
     public void setTransport(ModbusSerialTransport transport) {

@@ -39,7 +39,6 @@ public class ModbusUDPMaster {
     private static final Logger logger = Logger.getLogger(ModbusUDPMaster.class);
 
     private UDPMasterConnection m_Connection;
-    private InetAddress m_SlaveAddress;
     private ModbusUDPTransaction m_Transaction;
     private ReadCoilsRequest m_ReadCoilsRequest;
     private ReadInputDiscretesRequest m_ReadInputDiscretesRequest;
@@ -59,7 +58,7 @@ public class ModbusUDPMaster {
      */
     public ModbusUDPMaster(String addr) {
         try {
-            m_SlaveAddress = InetAddress.getByName(addr);
+            InetAddress m_SlaveAddress = InetAddress.getByName(addr);
             m_Connection = new UDPMasterConnection(m_SlaveAddress);
             m_ReadCoilsRequest = new ReadCoilsRequest();
             m_ReadInputDiscretesRequest = new ReadInputDiscretesRequest();

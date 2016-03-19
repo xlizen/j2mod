@@ -43,7 +43,6 @@ public class ModbusUDPListener implements ModbusListener {
     private boolean m_Continue = false;
     private InetAddress m_Interface;
     private UDPSlaveTerminal m_Terminal;
-    private ModbusTransport m_Transport;
     private int m_Unit = 0;
 
     public int getUnit() {
@@ -79,6 +78,7 @@ public class ModbusUDPListener implements ModbusListener {
      * Starts this <tt>ModbusUDPListener</tt>.
      */
     public void run() {
+        ModbusTransport m_Transport;
         try {
             if (m_Interface == null) {
                 m_Terminal = new UDPSlaveTerminal(InetAddress.getByName("0.0.0.0"));

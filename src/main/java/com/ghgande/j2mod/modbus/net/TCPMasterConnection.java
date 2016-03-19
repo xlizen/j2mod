@@ -78,7 +78,7 @@ public class TCPMasterConnection {
     public synchronized void connect() throws Exception {
         if (!isConnected()) {
             if (Modbus.debug) {
-                System.out.println("connect()");
+                logger.debug("connect()");
             }
 
             m_Socket = new Socket(m_Address, m_Port);
@@ -160,7 +160,7 @@ public class TCPMasterConnection {
             }
             catch (IOException ex) {
                 if (Modbus.debug) {
-                    System.out.println("close()");
+                    logger.debug("close()");
                 }
             }
             m_Connected = false;

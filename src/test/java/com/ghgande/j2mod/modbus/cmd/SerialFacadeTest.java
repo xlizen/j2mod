@@ -53,7 +53,7 @@ public class SerialFacadeTest {
     private static final Logger logger = Logger.getLogger(SerialFacadeTest.class);
 
     private static void printUsage() {
-        System.out.println("java com.ghgande.j2mod.modbus.cmd.SerialAITest" + " <portname [String]>" + " <Unit Address [int8]>");
+        logger.debug("java com.ghgande.j2mod.modbus.cmd.SerialAITest" + " <portname [String]>" + " <Unit Address [int8]>");
     }
 
     public static void main(String[] args) {
@@ -82,13 +82,13 @@ public class SerialFacadeTest {
         }
 
         try {
-            System.out.println("Sending test messages to slave: " + slaveId);
-            System.out.println("com.ghgande.j2mod.modbus.debug set to: " + System.getProperty("com.ghgande.j2mod.modbus.debug"));
+            logger.debug("Sending test messages to slave: " + slaveId);
+            logger.debug("com.ghgande.j2mod.modbus.debug set to: " + System.getProperty("com.ghgande.j2mod.modbus.debug"));
 
-            System.out.println("Hit enter to start and <s enter> to terminate the test.");
+            logger.debug("Hit enter to start and <s enter> to terminate the test.");
             inChar = System.in.read();
             if ((inChar == 's') || (inChar == 'S')) {
-                System.out.println("Exiting");
+                logger.debug("Exiting");
                 System.exit(0);
             }
 
@@ -103,7 +103,7 @@ public class SerialFacadeTest {
             params.setEcho(false);
 
             if (Modbus.debug) {
-                System.out.println("Encoding [" + params.getEncoding() + "]");
+                logger.debug("Encoding [" + params.getEncoding() + "]");
             }
 
             // 3. Create the master facade
@@ -112,28 +112,27 @@ public class SerialFacadeTest {
 
             do {
                 if (msm.writeCoil(slaveId, 4, true) == true) {
-                    System.out.println("Set output 5 to true");
+                    logger.debug("Set output 5 to true");
                 }
                 else {
                     System.err.println("Error setting slave " + slaveId + " output 5");
                 }
                 BitVector coils = msm.readCoils(slaveId, 0, 8);
                 if (coils != null) {
-                    System.out.print("Coils:");
+                    logger.debug("Coils:");
                     for (int i = 0; i < coils.size(); i++) {
-                        System.out.print(" " + i + ": " + coils.getBit(i));
+                        logger.debug(" " + i + ": " + coils.getBit(i));
                     }
-                    System.out.println();
 
                     try {
                         msm.writeMultipleCoils(slaveId, 0, coils);
                     }
                     catch (ModbusException ex) {
-                        System.out.println("Error writing coils: " + result);
+                        logger.debug("Error writing coils: " + result);
                     }
                 }
                 else {
-                    System.out.println("Outputs: null");
+                    logger.debug("Outputs: null");
                     msm.disconnect();
                     System.exit(-1);
                 }
@@ -141,15 +140,14 @@ public class SerialFacadeTest {
                 BitVector digInp = msm.readInputDiscretes(slaveId, 0, 8);
 
                 if (digInp != null) {
-                    System.out.print("Digital Inputs:");
+                    logger.debug("Digital Inputs:");
                     for (int i = 0; i < digInp.size(); i++) {
-                        System.out.print(" " + i + ": " + digInp.getBit(i));
+                        logger.debug(" " + i + ": " + digInp.getBit(i));
                     }
-                    System.out.println();
-                    System.out.println("Inputs: " + ModbusUtil.toHex(digInp.getBytes()));
+                    logger.debug("Inputs: " + ModbusUtil.toHex(digInp.getBytes()));
                 }
                 else {
-                    System.out.println("Inputs: null");
+                    logger.debug("Inputs: null");
                     msm.disconnect();
                     System.exit(-1);
                 }
@@ -158,14 +156,13 @@ public class SerialFacadeTest {
                 for (int i = 1000; i < 1010; i++) {
                     ai = msm.readInputRegisters(slaveId, i, 1);
                     if (ai != null) {
-                        System.out.print("Tag " + i + ": ");
+                        logger.debug("Tag " + i + ": ");
                         for (InputRegister anAi : ai) {
-                            System.out.print(" " + anAi.getValue());
+                            logger.debug(" " + anAi.getValue());
                         }
-                        System.out.println();
                     }
                     else {
-                        System.out.println("Tag: " + i + " null");
+                        logger.debug("Tag: " + i + " null");
                         msm.disconnect();
                         System.exit(-1);
                     }
@@ -175,29 +172,27 @@ public class SerialFacadeTest {
                 for (int i = 1000; i < 1005; i++) {
                     regs = msm.readMultipleRegisters(slaveId, i, 1);
                     if (regs != null) {
-                        System.out.print("RWRegisters " + i + " length: " + regs.length);
+                        logger.debug("RWRegisters " + i + " length: " + regs.length);
                         for (Register reg : regs) {
-                            System.out.print(" " + reg.getValue());
+                            logger.debug(" " + reg.getValue());
                         }
-                        System.out.println();
                     }
                     else {
-                        System.out.println("RWRegisters " + i + ": null");
+                        logger.debug("RWRegisters " + i + ": null");
                         msm.disconnect();
                         System.exit(-1);
                     }
                 }
                 regs = msm.readMultipleRegisters(slaveId, 0, 10);
-                System.out.println("Registers: ");
+                logger.debug("Registers: ");
                 if (regs != null) {
-                    System.out.print("regs :");
+                    logger.debug("regs :");
                     for (int n = 0; n < regs.length; n++) {
-                        System.out.print("  " + n + "= " + regs[n]);
+                        logger.debug("  " + n + "= " + regs[n]);
                     }
-                    System.out.println();
                 }
                 else {
-                    System.out.println("Registers: null");
+                    logger.debug("Registers: null");
                     msm.disconnect();
                     System.exit(-1);
                 }

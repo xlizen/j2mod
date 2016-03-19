@@ -56,7 +56,7 @@ public class ReadInputRegistersTest {
     private static final Logger logger = Logger.getLogger(ReadInputRegistersTest.class);
 
     private static void printUsage() {
-        System.out.println("java com.ghgande.j2mod.modbus.cmd.ReadInputRegistersTest" + " <address{:port{:unit}} [String]>" + " <base [int]> <count [int]> {<repeat [int]>}");
+        logger.debug("java com.ghgande.j2mod.modbus.cmd.ReadInputRegistersTest" + " <address{:port{:unit}} [String]>" + " <base [int]> <count [int]> {<repeat [int]>}");
     }
 
     public static void main(String[] args) {
@@ -141,7 +141,7 @@ public class ReadInputRegistersTest {
                 req.setHeadless(trans instanceof ModbusSerialTransaction);
 
                 if (Modbus.debug) {
-                    System.out.println("Request: " + req.getHexMessage());
+                    logger.debug("Request: " + req.getHexMessage());
                 }
 
                 if (trans instanceof ModbusSerialTransaction) {
@@ -166,7 +166,7 @@ public class ReadInputRegistersTest {
 
                 if (Modbus.debug) {
                     if (res != null) {
-                        System.out.println("Response: " + res.getHexMessage());
+                        logger.debug("Response: " + res.getHexMessage());
                     }
                     else {
                         System.err.println("No response to READ INPUT request.");
@@ -179,7 +179,7 @@ public class ReadInputRegistersTest {
 
                 if (res instanceof ExceptionResponse) {
                     ExceptionResponse exception = (ExceptionResponse)res;
-                    System.out.println(exception);
+                    logger.debug(exception);
                     continue;
                 }
 
@@ -190,7 +190,7 @@ public class ReadInputRegistersTest {
                 ReadInputRegistersResponse data = (ReadInputRegistersResponse)res;
                 InputRegister values[] = data.getRegisters();
 
-                System.out.println("Data: " + Arrays.toString(values));
+                logger.debug("Data: " + Arrays.toString(values));
             }
         }
         catch (Exception ex) {

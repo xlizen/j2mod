@@ -94,7 +94,7 @@ public class DIDOTest {
             con.setPort(port);
             con.connect();
             if (Modbus.debug) {
-                System.out.println("Connected to " + addr.toString() + ":" + con.getPort());
+                logger.debug("Connected to " + addr.toString() + ":" + con.getPort());
             }
 
             // 3. Prepare the requests
@@ -130,7 +130,7 @@ public class DIDOTest {
                     do_trans.execute();
                     last_out = new_in;
                     if (Modbus.debug) {
-                        System.out.println("Updated coil with state from DI.");
+                        logger.debug("Updated coil with state from DI.");
                     }
                 }
             } while (true);
@@ -150,6 +150,6 @@ public class DIDOTest {
     }
 
     private static void printUsage() {
-        System.out.println("java com.ghgande.j2mod.modbus.cmd.DIDOTest <address{:<port>} [String]> <register d_in [int16]> <register d_out [int16]>");
+        logger.debug("java com.ghgande.j2mod.modbus.cmd.DIDOTest <address{:<port>} [String]> <register d_in [int16]> <register d_out [int16]>");
     }
 }

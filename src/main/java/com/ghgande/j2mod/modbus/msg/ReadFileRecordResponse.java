@@ -93,7 +93,6 @@ public final class ReadFileRecordResponse extends ModbusResponse {
         }
     }
 
-    private int m_ByteCount;
     private RecordResponse[] m_Records = null;
 
     /**
@@ -166,7 +165,7 @@ public final class ReadFileRecordResponse extends ModbusResponse {
     }
 
     public void readData(DataInput din) throws IOException {
-        m_ByteCount = (din.readUnsignedByte() & 0xFF);
+        int m_ByteCount = (din.readUnsignedByte() & 0xFF);
 
         int remainder = m_ByteCount;
         while (remainder > 0) {

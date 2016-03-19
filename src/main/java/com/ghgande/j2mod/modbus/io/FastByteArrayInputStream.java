@@ -86,15 +86,15 @@ public class FastByteArrayInputStream extends InputStream {
     }
 
     public void mark(int readlimit) {
-        // System.out.println("mark()");
+        // logger.debug("mark()");
         mark = pos;
-        // System.out.println("mark=" + mark + " pos=" + pos);
+        // logger.debug("mark=" + mark + " pos=" + pos);
     }
 
     public void reset() {
-        // System.out.println("reset()");
+        // logger.debug("reset()");
         pos = mark;
-        // System.out.println("mark=" + mark + " pos=" + pos);
+        // logger.debug("mark=" + mark + " pos=" + pos);
     }
 
     public long skip(long count) {
@@ -107,18 +107,18 @@ public class FastByteArrayInputStream extends InputStream {
     }
 
     public int read() throws IOException {
-        // System.out.println("read()");
-        // System.out.println("count=" + count + " pos=" + pos);
+        // logger.debug("read()");
+        // logger.debug("count=" + count + " pos=" + pos);
         return (pos < count) ? (buf[pos++] & 0xff) : (-1);
     }
 
     public int read(byte[] toBuf) throws IOException {
-        // System.out.println("read(byte[])");
+        // logger.debug("read(byte[])");
         return read(toBuf, 0, toBuf.length);
     }
 
     public int read(byte[] toBuf, int offset, int length) throws IOException {
-        // System.out.println("read(byte[],int,int)");
+        // logger.debug("read(byte[],int,int)");
         int avail = count - pos;
         if (avail <= 0) {
             return -1;

@@ -400,7 +400,7 @@ public final class ModbusUtil {
         sbuf.append('.');
       }
     }
-    //DEBUG:System.out.println(sbuf.toString());
+    //DEBUG:logger.debug(sbuf.toString());
     return InetAddress.getByName(sbuf.toString());
   }
   */
