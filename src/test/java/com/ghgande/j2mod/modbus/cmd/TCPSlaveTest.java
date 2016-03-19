@@ -20,6 +20,7 @@ import com.ghgande.j2mod.modbus.Modbus;
 import com.ghgande.j2mod.modbus.ModbusCoupler;
 import com.ghgande.j2mod.modbus.net.ModbusTCPListener;
 import com.ghgande.j2mod.modbus.procimg.*;
+import com.ghgande.j2mod.modbus.util.Logger;
 
 import java.net.Inet4Address;
 
@@ -32,7 +33,7 @@ import java.net.Inet4Address;
  */
 public class TCPSlaveTest {
 
-    private static final Logger logger = Logger.getLogger(PortChangeNotificationsMonitor.class);
+    private static final Logger logger = Logger.getLogger(TCPSlaveTest.class);
     public static void main(String[] args) {
 
         ModbusTCPListener listener;

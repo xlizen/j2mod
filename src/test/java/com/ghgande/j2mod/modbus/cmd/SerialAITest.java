@@ -34,7 +34,7 @@ import com.ghgande.j2mod.modbus.util.SerialParameters;
  */
 public class SerialAITest {
 
-    private static final Logger logger = Logger.getLogger(PortChangeNotificationsMonitor.class);
+    private static final Logger logger = Logger.getLogger(SerialAITest.class);
 
     public static void main(String[] args) {
 

@@ -20,6 +20,7 @@ import com.ghgande.j2mod.modbus.Modbus;
 import com.ghgande.j2mod.modbus.ModbusCoupler;
 import com.ghgande.j2mod.modbus.net.ModbusSerialListener;
 import com.ghgande.j2mod.modbus.procimg.*;
+import com.ghgande.j2mod.modbus.util.Logger;
 import com.ghgande.j2mod.modbus.util.SerialParameters;
 
 /**
@@ -34,7 +35,7 @@ import com.ghgande.j2mod.modbus.util.SerialParameters;
  */
 public class SerialSlaveTest {
 
-    private static final Logger logger = Logger.getLogger(PortChangeNotificationsMonitor.class);
+    private static final Logger logger = Logger.getLogger(SerialSlaveTest.class);
 
     public static void main(String[] args) {
 

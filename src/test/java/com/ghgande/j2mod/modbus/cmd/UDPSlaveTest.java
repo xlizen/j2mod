@@ -20,6 +20,7 @@ import com.ghgande.j2mod.modbus.Modbus;
 import com.ghgande.j2mod.modbus.ModbusCoupler;
 import com.ghgande.j2mod.modbus.net.ModbusUDPListener;
 import com.ghgande.j2mod.modbus.procimg.*;
+import com.ghgande.j2mod.modbus.util.Logger;
 
 /**
  * Class implementing a simple Modbus/UDP slave. A simple process image is
@@ -35,7 +36,7 @@ import com.ghgande.j2mod.modbus.procimg.*;
  */
 public class UDPSlaveTest {
 
-    private static final Logger logger = Logger.getLogger(PortChangeNotificationsMonitor.class);
+    private static final Logger logger = Logger.getLogger(UDPSlaveTest.class);
 
     public static void main(String[] args) {
 

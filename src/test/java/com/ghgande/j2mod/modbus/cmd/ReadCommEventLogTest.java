@@ -24,6 +24,7 @@ import com.ghgande.j2mod.modbus.io.ModbusTransaction;
 import com.ghgande.j2mod.modbus.io.ModbusTransport;
 import com.ghgande.j2mod.modbus.msg.*;
 import com.ghgande.j2mod.modbus.net.ModbusMasterFactory;
+import com.ghgande.j2mod.modbus.util.Logger;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -51,7 +52,7 @@ import java.util.Arrays;
  */
 public class ReadCommEventLogTest {
 
-    private static final Logger logger = Logger.getLogger(PortChangeNotificationsMonitor.class);
+    private static final Logger logger = Logger.getLogger(ReadCommEventLogTest.class);
 
     private static void printUsage() {
         System.out.println("java com.ghgande.j2mod.modbus.cmd.ReadCommEventLogTest" + " <address{:port} [String]>" + " <unit [int]>" + " {<repeat [int]>}");

@@ -34,7 +34,7 @@ import com.ghgande.j2mod.modbus.util.Logger;
  */
 public class ReadCoilsTest {
 
-    private static final Logger logger = Logger.getLogger(PortChangeNotificationsMonitor.class);
+    private static final Logger logger = Logger.getLogger(ReadCoilsTest.class);
 
     private static void printUsage() {
         System.out.println("java com.ghgande.j2mod.modbus.cmd.ReadDiscretesTest <connection [String]> <unit [int8]> <register [int16]> <bitcount [int16]> {<repeat [int]>}");

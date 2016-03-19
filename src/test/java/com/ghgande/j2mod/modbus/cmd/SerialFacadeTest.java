@@ -44,12 +44,13 @@ import com.ghgande.j2mod.modbus.facade.ModbusSerialMaster;
 import com.ghgande.j2mod.modbus.procimg.InputRegister;
 import com.ghgande.j2mod.modbus.procimg.Register;
 import com.ghgande.j2mod.modbus.util.BitVector;
+import com.ghgande.j2mod.modbus.util.Logger;
 import com.ghgande.j2mod.modbus.util.ModbusUtil;
 import com.ghgande.j2mod.modbus.util.SerialParameters;
 
 public class SerialFacadeTest {
 
-    private static final Logger logger = Logger.getLogger(PortChangeNotificationsMonitor.class);
+    private static final Logger logger = Logger.getLogger(SerialFacadeTest.class);
 
     private static void printUsage() {
         System.out.println("java com.ghgande.j2mod.modbus.cmd.SerialAITest" + " <portname [String]>" + " <Unit Address [int8]>");

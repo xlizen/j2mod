@@ -41,7 +41,7 @@ import java.util.Arrays;
  */
 public class UDPWriteRecordTest {
 
-    private static final Logger logger = Logger.getLogger(PortChangeNotificationsMonitor.class);
+    private static final Logger logger = Logger.getLogger(UDPWriteRecordTest.class);
 
     /**
      * usage -- Print command line arguments and exit.

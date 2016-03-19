@@ -26,6 +26,7 @@ import com.ghgande.j2mod.modbus.msg.*;
 import com.ghgande.j2mod.modbus.msg.ReadFileRecordRequest.RecordRequest;
 import com.ghgande.j2mod.modbus.msg.ReadFileRecordResponse.RecordResponse;
 import com.ghgande.j2mod.modbus.net.TCPMasterConnection;
+import com.ghgande.j2mod.modbus.util.Logger;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -40,7 +41,7 @@ import java.util.Arrays;
  */
 public class TCPWriteRecordTest {
 
-    private static final Logger logger = Logger.getLogger(PortChangeNotificationsMonitor.class);
+    private static final Logger logger = Logger.getLogger(TCPWriteRecordTest.class);
 
     /**
      * usage -- Print command line arguments and exit.

@@ -50,7 +50,7 @@ import java.io.IOException;
  */
 public class MaskWriteRegisterTest {
 
-    private static final Logger logger = Logger.getLogger(PortChangeNotificationsMonitor.class);
+    private static final Logger logger = Logger.getLogger(MaskWriteRegisterTest.class);
 
     private static void printUsage() {
         System.out.println("java com.ghgande.j2mod.modbus.cmd.WriteHoldingRegisterTest" + " <address{:<port>{:<unit>}} [String]>" + " <register [int]> <andMask [int]> <orMask [int]> {<repeat [int]>}");

@@ -23,6 +23,7 @@ import com.ghgande.j2mod.modbus.io.ModbusTransport;
 import com.ghgande.j2mod.modbus.msg.WriteCoilRequest;
 import com.ghgande.j2mod.modbus.msg.WriteCoilResponse;
 import com.ghgande.j2mod.modbus.net.ModbusMasterFactory;
+import com.ghgande.j2mod.modbus.util.Logger;
 
 /**
  * <p>
@@ -48,7 +49,7 @@ import com.ghgande.j2mod.modbus.net.ModbusMasterFactory;
  */
 public class WriteCoilTest {
 
-    private static final Logger logger = Logger.getLogger(PortChangeNotificationsMonitor.class);
+    private static final Logger logger = Logger.getLogger(WriteCoilTest.class);
 
     private static void printUsage() {
         System.out.println("java com.ghgande.j2mod.modbus.cmd.WriteCoilTest" + " <connection [String]>" + " <unit [int8]>" + " <coil [int16]>" + " <state [boolean]>" + " {<repeat [int]>}");

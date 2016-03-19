@@ -39,7 +39,7 @@ import com.ghgande.j2mod.modbus.util.Logger;
  */
 public class ReadFIFOTest {
 
-    private static final Logger logger = Logger.getLogger(PortChangeNotificationsMonitor.class);
+    private static final Logger logger = Logger.getLogger(ReadFIFOTest.class);
 
     /**
      * usage -- Print command line arguments and exit.

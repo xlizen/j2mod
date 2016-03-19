@@ -53,7 +53,7 @@ import java.util.Arrays;
  */
 public class ReadInputRegistersTest {
 
-    private static final Logger logger = Logger.getLogger(PortChangeNotificationsMonitor.class);
+    private static final Logger logger = Logger.getLogger(ReadInputRegistersTest.class);
 
     private static void printUsage() {
         System.out.println("java com.ghgande.j2mod.modbus.cmd.ReadInputRegistersTest" + " <address{:port{:unit}} [String]>" + " <base [int]> <count [int]> {<repeat [int]>}");

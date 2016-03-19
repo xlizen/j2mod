@@ -23,6 +23,7 @@ import com.ghgande.j2mod.modbus.msg.ReadInputDiscretesRequest;
 import com.ghgande.j2mod.modbus.msg.ReadInputDiscretesResponse;
 import com.ghgande.j2mod.modbus.msg.WriteCoilRequest;
 import com.ghgande.j2mod.modbus.net.TCPMasterConnection;
+import com.ghgande.j2mod.modbus.util.Logger;
 
 import java.net.InetAddress;
 
@@ -46,7 +47,7 @@ import java.net.InetAddress;
  */
 public class DIDOTest {
 
-    private static final Logger logger = Logger.getLogger(PortChangeNotificationsMonitor.class);
+    private static final Logger logger = Logger.getLogger(DIDOTest.class);
 
     public static void main(String[] args) {
 

@@ -44,7 +44,7 @@ import java.util.Arrays;
  */
 public class WriteFileRecordTest {
 
-    private static final Logger logger = Logger.getLogger(PortChangeNotificationsMonitor.class);
+    private static final Logger logger = Logger.getLogger(WriteFileRecordTest.class);
 
     /**
      * usage -- Print command line arguments and exit.

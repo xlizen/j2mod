@@ -32,7 +32,7 @@ import com.ghgande.j2mod.modbus.util.Logger;
  */
 public class ModbusSlaveTest {
 
-    private static final Logger logger = Logger.getLogger(PortChangeNotificationsMonitor.class);
+    private static final Logger logger = Logger.getLogger(ModbusSlaveTest.class);
     public static void main(String[] args) {
         ModbusListener listener = null;
         SimpleProcessImage spi;

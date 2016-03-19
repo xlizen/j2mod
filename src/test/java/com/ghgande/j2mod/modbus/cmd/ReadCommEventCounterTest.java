@@ -51,7 +51,7 @@ import java.io.IOException;
  */
 public class ReadCommEventCounterTest {
 
-    private static final Logger logger = Logger.getLogger(PortChangeNotificationsMonitor.class);
+    private static final Logger logger = Logger.getLogger(ReadCommEventCounterTest.class);
 
     private static void printUsage() {
         System.out.println("java com.ghgande.j2mod.modbus.cmd.ReadCommEventCounterTest" + " <address{:port} [String]>" + " <unit [int]>" + " {<repeat [int]>}");

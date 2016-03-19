@@ -25,6 +25,7 @@ import com.ghgande.j2mod.modbus.msg.ReadInputRegistersResponse;
 import com.ghgande.j2mod.modbus.msg.WriteSingleRegisterRequest;
 import com.ghgande.j2mod.modbus.net.TCPMasterConnection;
 import com.ghgande.j2mod.modbus.procimg.SimpleRegister;
+import com.ghgande.j2mod.modbus.util.Logger;
 
 import java.net.InetAddress;
 
@@ -52,7 +53,7 @@ import java.net.InetAddress;
  */
 public class AIAOTest {
 
-    private static final Logger logger = Logger.getLogger(PortChangeNotificationsMonitor.class);
+    private static final Logger logger = Logger.getLogger(AIAOTest.class);
 
     private static void printUsage() {
         System.out.println("java com.ghgande.j2mod.modbus.cmd.AIAOTest" + " <address{:<port>} [String]> <register a_in [int16]>" + " <register a_out [int16]>");
