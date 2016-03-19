@@ -8,7 +8,7 @@
     <artifactId>j2mod</artifactId>
     <name>j2mod</name>
     <version>2.0</version>
-    <description>A fork of the j2mod library to support the jssc connector</description>
+    <description>A fork of the j2mod library to support the jSerialComm connector</description>
 
     <packaging>jar</packaging>
     <properties>
@@ -16,11 +16,68 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
 
+    <developers>
+      <developer>
+        <id>wimpi</id>
+        <name>Dieter Wimberger</name>
+        <email>wimpi@user.sourceforge.com</email>
+        <organization>SourceForge</organization>
+        <organizationUrl>http://jamod.sourceforge.net</organizationUrl>
+        <roles>
+          <role>architect</role>
+          <role>developer</role>
+        </roles>
+      </developer>
+      <developer>
+        <id>jdcharlton</id>
+        <name>John Charlton</name>
+        <email>jdcharlton@user.sourceforge.com</email>
+        <organization>SourceForge</organization>
+        <organizationUrl>http://jamod.sourceforge.net</organizationUrl>
+        <roles>
+          <role>developer</role>
+        </roles>
+      </developer>
+      <developer>
+        <id>jhaugh</id>
+        <name>Julie Haugh</name>
+        <email>http://www.ghgande.com</email>
+        <organization>greenHouse Gas and Electric</organization>
+        <organizationUrl>http://www.ghgande.com</organizationUrl>
+        <roles>
+          <role>developer</role>
+        </roles>
+      </developer>
+      <developer>
+        <id>sohara</id>
+        <name>Steve O'Hara</name>
+        <email>steve.ohara@4energy.co.uk</email>
+        <organization>4energy</organization>
+        <organizationUrl>http://www.4energy.co.uk</organizationUrl>
+        <roles>
+          <role>developer</role>
+        </roles>
+      </developer>
+    </developers>
+
     <dependencies>
         <dependency>
             <groupId>com.fazecast</groupId>
             <artifactId>jSerialComm</artifactId>
             <version>1.3.11</version>
+        </dependency>
+
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.17</version>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.8</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
@@ -46,7 +103,6 @@
                         <manifestEntries>
                             <Implementation-Title>${project.name}</Implementation-Title>
                             <Implementation-Version>${project.version}</Implementation-Version>
-                            <Implementation-Build>${vcs.revision.number}</Implementation-Build>
                             <Implemenation-Vendor>${project.organization.name}</Implemenation-Vendor>
                         </manifestEntries>
                     </archive>
