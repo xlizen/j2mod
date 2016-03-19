@@ -1,10 +1,6 @@
 /*
  * This file is part of j2mod.
  *
- * j2mod is a fork of the jamod library written by Dieter Wimberger
- * and then further enhanced by Julie Haugh with a new LGPL license
- * and upgraded to Java 1.6
- *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -20,6 +16,8 @@
  */
 package com.ghgande.j2mod.modbus.procimg;
 
+import com.ghgande.j2mod.modbus.util.Logger;
+
 import java.util.Vector;
 
 /**
@@ -33,6 +31,9 @@ import java.util.Vector;
  *         actual Modbus device, the FIFO is mapped within a fixed address.
  */
 public class FIFO {
+
+    private static final Logger logger = Logger.getLogger(FIFO.class);
+
     private int m_Address;
     private int m_Register_Count;
     private Vector<Register> m_Registers;

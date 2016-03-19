@@ -1,10 +1,6 @@
 /*
  * This file is part of j2mod.
  *
- * j2mod is a fork of the jamod library written by Dieter Wimberger
- * and then further enhanced by Julie Haugh with a new LGPL license
- * and upgraded to Java 1.6
- *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -28,6 +24,7 @@ import com.ghgande.j2mod.modbus.net.SerialConnection;
 import com.ghgande.j2mod.modbus.procimg.InputRegister;
 import com.ghgande.j2mod.modbus.procimg.Register;
 import com.ghgande.j2mod.modbus.util.BitVector;
+import com.ghgande.j2mod.modbus.util.Logger;
 import com.ghgande.j2mod.modbus.util.SerialParameters;
 
 /**
@@ -38,6 +35,8 @@ import com.ghgande.j2mod.modbus.util.SerialParameters;
  * @version 1.2rc1 (09/11/2004)
  */
 public class ModbusSerialMaster {
+
+    private static final Logger logger = Logger.getLogger(ModbusSerialMaster.class);
 
     private SerialParameters m_CommParameters;
     private SerialConnection m_Connection;

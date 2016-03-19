@@ -1,10 +1,6 @@
 /*
  * This file is part of j2mod.
  *
- * j2mod is a fork of the jamod library written by Dieter Wimberger
- * and then further enhanced by Julie Haugh with a new LGPL license
- * and upgraded to Java 1.6
- *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -26,6 +22,7 @@ import com.ghgande.j2mod.modbus.io.ModbusTransport;
 import com.ghgande.j2mod.modbus.msg.MaskWriteRegisterRequest;
 import com.ghgande.j2mod.modbus.msg.ModbusRequest;
 import com.ghgande.j2mod.modbus.net.ModbusMasterFactory;
+import com.ghgande.j2mod.modbus.util.Logger;
 
 import java.io.IOException;
 
@@ -52,6 +49,8 @@ import java.io.IOException;
  * @version @version@ (@date@)
  */
 public class MaskWriteRegisterTest {
+
+    private static final Logger logger = Logger.getLogger(PortChangeNotificationsMonitor.class);
 
     private static void printUsage() {
         System.out.println("java com.ghgande.j2mod.modbus.cmd.WriteHoldingRegisterTest" + " <address{:<port>{:<unit>}} [String]>" + " <register [int]> <andMask [int]> <orMask [int]> {<repeat [int]>}");

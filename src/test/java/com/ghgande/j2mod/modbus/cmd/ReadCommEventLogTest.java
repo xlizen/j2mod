@@ -1,10 +1,6 @@
 /*
  * This file is part of j2mod.
  *
- * j2mod is a fork of the jamod library written by Dieter Wimberger
- * and then further enhanced by Julie Haugh with a new LGPL license
- * and upgraded to Java 1.6
- *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -54,6 +50,8 @@ import java.util.Arrays;
  * @version 1.04 (1/18/2014)
  */
 public class ReadCommEventLogTest {
+
+    private static final Logger logger = Logger.getLogger(PortChangeNotificationsMonitor.class);
 
     private static void printUsage() {
         System.out.println("java com.ghgande.j2mod.modbus.cmd.ReadCommEventLogTest" + " <address{:port} [String]>" + " <unit [int]>" + " {<repeat [int]>}");

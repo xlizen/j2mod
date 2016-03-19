@@ -1,10 +1,6 @@
 /*
  * This file is part of j2mod.
  *
- * j2mod is a fork of the jamod library written by Dieter Wimberger
- * and then further enhanced by Julie Haugh with a new LGPL license
- * and upgraded to Java 1.6
- *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -23,6 +19,7 @@ package com.ghgande.j2mod.modbus;
 import com.ghgande.j2mod.modbus.procimg.DefaultProcessImageFactory;
 import com.ghgande.j2mod.modbus.procimg.ProcessImage;
 import com.ghgande.j2mod.modbus.procimg.ProcessImageFactory;
+import com.ghgande.j2mod.modbus.util.Logger;
 
 /**
  * Class implemented following a Singleton pattern, to couple the slave side
@@ -36,6 +33,8 @@ import com.ghgande.j2mod.modbus.procimg.ProcessImageFactory;
  * @version 1.2rc1 (09/11/2004)
  */
 public class ModbusCoupler {
+
+    private static final Logger logger = Logger.getLogger(ModbusCoupler.class);
 
     // class attributes
     private static ModbusCoupler c_Self; // Singleton reference

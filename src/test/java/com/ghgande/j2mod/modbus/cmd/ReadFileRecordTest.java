@@ -1,10 +1,6 @@
 /*
  * This file is part of j2mod.
  *
- * j2mod is a fork of the jamod library written by Dieter Wimberger
- * and then further enhanced by Julie Haugh with a new LGPL license
- * and upgraded to Java 1.6
- *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -31,6 +27,7 @@ import com.ghgande.j2mod.modbus.msg.*;
 import com.ghgande.j2mod.modbus.msg.ReadFileRecordRequest.RecordRequest;
 import com.ghgande.j2mod.modbus.msg.ReadFileRecordResponse.RecordResponse;
 import com.ghgande.j2mod.modbus.net.ModbusMasterFactory;
+import com.ghgande.j2mod.modbus.util.Logger;
 
 import java.util.Arrays;
 
@@ -42,6 +39,8 @@ import java.util.Arrays;
  * @version 0.96
  */
 public class ReadFileRecordTest {
+
+    private static final Logger logger = Logger.getLogger(PortChangeNotificationsMonitor.class);
 
     /**
      * usage -- Print command line arguments and exit.

@@ -1,10 +1,6 @@
 /*
  * This file is part of j2mod.
  *
- * j2mod is a fork of the jamod library written by Dieter Wimberger
- * and then further enhanced by Julie Haugh with a new LGPL license
- * and upgraded to Java 1.6
- *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -25,6 +21,7 @@ import com.ghgande.j2mod.modbus.ModbusCoupler;
 import com.ghgande.j2mod.modbus.net.ModbusListener;
 import com.ghgande.j2mod.modbus.net.ModbusListenerFactory;
 import com.ghgande.j2mod.modbus.procimg.*;
+import com.ghgande.j2mod.modbus.util.Logger;
 
 /**
  * Class implementing a simple Modbus/TCP slave. A simple process image is
@@ -34,6 +31,8 @@ import com.ghgande.j2mod.modbus.procimg.*;
  * @version 0.97 (8/12/12)
  */
 public class ModbusSlaveTest {
+
+    private static final Logger logger = Logger.getLogger(PortChangeNotificationsMonitor.class);
     public static void main(String[] args) {
         ModbusListener listener = null;
         SimpleProcessImage spi;

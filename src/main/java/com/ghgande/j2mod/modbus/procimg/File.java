@@ -1,10 +1,6 @@
 /*
  * This file is part of j2mod.
  *
- * j2mod is a fork of the jamod library written by Dieter Wimberger
- * and then further enhanced by Julie Haugh with a new LGPL license
- * and upgraded to Java 1.6
- *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -20,6 +16,8 @@
  */
 package com.ghgande.j2mod.modbus.procimg;
 
+import com.ghgande.j2mod.modbus.util.Logger;
+
 /**
  * @author Julie
  *
@@ -27,6 +25,9 @@ package com.ghgande.j2mod.modbus.procimg;
  *         READ FILE RECORD and WRITE FILE RECORD commands.
  */
 public class File {
+
+    private static final Logger logger = Logger.getLogger(File.class);
+
     private int m_File_Number;
     private int m_Record_Count;
     private Record m_Records[];
