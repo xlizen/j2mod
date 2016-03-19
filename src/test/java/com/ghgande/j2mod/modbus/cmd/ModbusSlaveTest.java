@@ -16,7 +16,6 @@
  */
 package com.ghgande.j2mod.modbus.cmd;
 
-import com.ghgande.j2mod.modbus.Modbus;
 import com.ghgande.j2mod.modbus.ModbusCoupler;
 import com.ghgande.j2mod.modbus.net.ModbusListener;
 import com.ghgande.j2mod.modbus.net.ModbusListenerFactory;
@@ -73,11 +72,11 @@ public class ModbusSlaveTest {
             ModbusCoupler.getReference().setUnitID(15);
 
             // 3. create a listener with 3 threads in pool
-            logger.debug("Creating.");
+            logger.debug("Creating");
 
             listener = ModbusListenerFactory.createModbusListener(args[0]);
 
-            logger.debug("Listening.");
+            logger.debug("Listening");
 
             while (listener.isListening()) {
                 try {
@@ -88,14 +87,10 @@ public class ModbusSlaveTest {
                     break;
                 }
             }
-
-            logger.debug("Done.");
+            logger.debug("Done");
         }
         catch (Exception x) {
-            if (Modbus.debug) {
-                x.printStackTrace();
-            }
-
+            logger.debug(x);
             if (listener != null) {
                 listener.stop();
             }

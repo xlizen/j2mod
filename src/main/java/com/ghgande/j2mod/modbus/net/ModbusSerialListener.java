@@ -101,11 +101,8 @@ public class ModbusSerialListener implements ModbusListener {
                          * Log the Request and Response messages.
 						 */
                         try {
-                            if (Modbus.debug) {
-                                logger.debug("Request (" + request.getClass().getName() + "): " + request.getHexMessage());
-
-                                logger.debug("Response (" + response.getClass().getName() + "): " + response.getHexMessage());
-                            }
+                            logger.debug("Request (" + request.getClass().getName() + "): " + request.getHexMessage());
+                            logger.debug("Response (" + response.getClass().getName() + "): " + response.getHexMessage());
                         }
                         catch (RuntimeException x) {
                             // Ignore.
@@ -117,10 +114,7 @@ public class ModbusSerialListener implements ModbusListener {
                         transport.writeMessage(response);
                     }
                     catch (ModbusIOException ex) {
-                        if (Modbus.debug) {
-                            ex.printStackTrace();
-                        }
-
+                        logger.debug(ex);
                     }
                 }
                 else {

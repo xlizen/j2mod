@@ -28,8 +28,7 @@ import java.io.IOException;
  * @version 1.2rc1 (09/11/2004)
  */
 public class BytesInputStream
-        extends FastByteArrayInputStream
-        implements DataInput {
+        extends FastByteArrayInputStream implements DataInput {
 
     DataInputStream m_Din;
 
@@ -175,7 +174,7 @@ public class BytesInputStream
     }
 
     public String readLine() throws IOException {
-        throw new IOException("Not supported.");
+        throw new IOException("Not supported");
     }
 
     public String readUTF() throws IOException {

@@ -16,7 +16,6 @@
  */
 package com.ghgande.j2mod.modbus.cmd;
 
-import com.ghgande.j2mod.modbus.Modbus;
 import com.ghgande.j2mod.modbus.ModbusCoupler;
 import com.ghgande.j2mod.modbus.net.ModbusSerialListener;
 import com.ghgande.j2mod.modbus.procimg.*;
@@ -87,9 +86,7 @@ public class SerialSlaveTest {
             unit = Integer.parseInt(args[arg++]);
         }
 
-        if (Modbus.debug) {
-            logger.debug("j2mod ModbusSerial Slave");
-        }
+        logger.debug("j2mod ModbusSerial Slave");
 
         try {
 
@@ -148,9 +145,7 @@ public class SerialSlaveTest {
             params.setStopbits(1);
             params.setEncoding("rtu");
             params.setEcho(false);
-            if (Modbus.debug) {
-                logger.debug("Encoding [" + params.getEncoding() + "]");
-            }
+            logger.debug("Encoding [" + params.getEncoding() + "]");
 
             // 4. Set up serial listener
             listener = new ModbusSerialListener(params);

@@ -34,8 +34,7 @@ import java.util.Arrays;
  * @author Dieter Wimberger
  * @version 1.0 (29/04/2002)
  */
-public class ModbusUDPTransport
-        implements ModbusTransport {
+public class ModbusUDPTransport implements ModbusTransport {
 
     //instance attributes
     private UDPTerminal m_Terminal;
@@ -78,7 +77,7 @@ public class ModbusUDPTransport
             }
         }
         catch (Exception ex) {
-            throw new ModbusIOException("I/O exception - failed to write.");
+            throw new ModbusIOException("I/O exception - failed to write");
         }
     }
 
@@ -96,7 +95,7 @@ public class ModbusUDPTransport
             return req;
         }
         catch (Exception ex) {
-            throw new ModbusIOException("I/O exception - failed to read.");
+            throw new ModbusIOException("I/O exception - failed to read");
         }
     }
 
@@ -115,11 +114,11 @@ public class ModbusUDPTransport
             return res;
         }
         catch (InterruptedIOException ioex) {
-            throw new ModbusIOException("Socket timed out.");
+            throw new ModbusIOException("Socket timed out");
         }
         catch (Exception ex) {
             ex.printStackTrace();
-            throw new ModbusIOException("I/O exception - failed to read.");
+            throw new ModbusIOException("I/O exception - failed to read");
         }
     }
 

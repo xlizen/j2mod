@@ -24,8 +24,7 @@ package com.ghgande.j2mod.modbus.procimg;
  * @author Dieter Wimberger
  * @version 1.2rc1 (09/11/2004)
  */
-public class SimpleInputRegister extends SynchronizedAbstractRegister implements
-        InputRegister {
+public class SimpleInputRegister extends SynchronizedAbstractRegister implements InputRegister {
 
     /**
      * Constructs a new <tt>SimpleInputRegister</tt> instance. It's state will

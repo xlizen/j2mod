@@ -16,7 +16,6 @@
  */
 package com.ghgande.j2mod.modbus.cmd;
 
-import com.ghgande.j2mod.modbus.Modbus;
 import com.ghgande.j2mod.modbus.ModbusException;
 import com.ghgande.j2mod.modbus.facade.ModbusSerialMaster;
 import com.ghgande.j2mod.modbus.procimg.InputRegister;
@@ -85,7 +84,7 @@ public class SerialFacadeTest {
             logger.debug("Sending test messages to slave: " + slaveId);
             logger.debug("com.ghgande.j2mod.modbus.debug set to: " + System.getProperty("com.ghgande.j2mod.modbus.debug"));
 
-            logger.debug("Hit enter to start and <s enter> to terminate the test.");
+            logger.debug("Hit enter to start and <s enter> to terminate the test");
             inChar = System.in.read();
             if ((inChar == 's') || (inChar == 'S')) {
                 logger.debug("Exiting");
@@ -102,9 +101,7 @@ public class SerialFacadeTest {
             params.setEncoding("rtu");
             params.setEcho(false);
 
-            if (Modbus.debug) {
-                logger.debug("Encoding [" + params.getEncoding() + "]");
-            }
+            logger.debug("Encoding [" + params.getEncoding() + "]");
 
             // 3. Create the master facade
             msm = new ModbusSerialMaster(params);
@@ -115,7 +112,7 @@ public class SerialFacadeTest {
                     logger.debug("Set output 5 to true");
                 }
                 else {
-                    System.err.println("Error setting slave " + slaveId + " output 5");
+                    logger.debug("Error setting slave " + slaveId + " output 5");
                 }
                 BitVector coils = msm.readCoils(slaveId, 0, 8);
                 if (coils != null) {
@@ -205,7 +202,7 @@ public class SerialFacadeTest {
             } while (!finished);
         }
         catch (Exception e) {
-            System.err.println("SerialFacadeTest driver: " + e);
+            logger.debug("SerialFacadeTest driver: " + e);
             e.printStackTrace();
         }
         if (msm != null) {

@@ -41,7 +41,7 @@ public class BINInputStream
     public BINInputStream(InputStream in) {
         super(in);
         if (!in.markSupported()) {
-            throw new RuntimeException("Accepts only input streams that support marking.");
+            throw new RuntimeException("Accepts only input streams that support marking");
         }
     }
 

@@ -16,7 +16,6 @@
  */
 package com.ghgande.j2mod.modbus.cmd;
 
-import com.ghgande.j2mod.modbus.Modbus;
 import com.ghgande.j2mod.modbus.ModbusException;
 import com.ghgande.j2mod.modbus.io.ModbusSerialTransaction;
 import com.ghgande.j2mod.modbus.io.ModbusSerialTransport;
@@ -75,7 +74,7 @@ public class ReadCommEventCounterTest {
                 // 2. Open the connection.
                 transport = ModbusMasterFactory.createModbusMaster(args[0]);
                 if (transport == null) {
-                    System.err.println("Cannot open " + args[0]);
+                    logger.debug("Cannot open " + args[0]);
                     System.exit(1);
                 }
 
@@ -118,9 +117,7 @@ public class ReadCommEventCounterTest {
                 req.setUnitID(unit);
                 req.setHeadless(trans instanceof ModbusSerialTransaction);
 
-                if (Modbus.debug) {
-                    logger.debug("Request: " + req.getHexMessage());
-                }
+                logger.debug("Request: " + req.getHexMessage());
 
                 // 4. Prepare the transaction
                 trans = transport.createTransaction();
@@ -138,18 +135,15 @@ public class ReadCommEventCounterTest {
                     trans.execute();
                 }
                 catch (ModbusException x) {
-                    System.err.println(x.getMessage());
+                    logger.debug(x.getMessage());
                     continue;
                 }
                 ModbusResponse res = trans.getResponse();
-
-                if (Modbus.debug) {
-                    if (res != null) {
-                        logger.debug("Response: " + res.getHexMessage());
-                    }
-                    else {
-                        System.err.println("No response to READ INPUT request.");
-                    }
+                if (res != null) {
+                    logger.debug("Response: " + res.getHexMessage());
+                }
+                else {
+                    logger.debug("No response to READ INPUT request");
                 }
                 if (res instanceof ExceptionResponse) {
                     ExceptionResponse exception = (ExceptionResponse)res;

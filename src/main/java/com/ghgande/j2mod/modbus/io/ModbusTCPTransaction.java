@@ -24,6 +24,7 @@ import com.ghgande.j2mod.modbus.msg.ExceptionResponse;
 import com.ghgande.j2mod.modbus.msg.ModbusRequest;
 import com.ghgande.j2mod.modbus.msg.ModbusResponse;
 import com.ghgande.j2mod.modbus.net.TCPMasterConnection;
+import com.ghgande.j2mod.modbus.util.Logger;
 
 /**
  * Class implementing the <tt>ModbusTransaction</tt> interface.
@@ -33,6 +34,8 @@ import com.ghgande.j2mod.modbus.net.TCPMasterConnection;
  *          if the transaction IDs have gotten out of sync.
  */
 public class ModbusTCPTransaction implements ModbusTransaction {
+
+    private static final Logger logger = Logger.getLogger(ModbusTCPTransaction.class);
 
     // class attributes
     private static int c_TransactionID = Modbus.DEFAULT_TRANSACTION_ID;
@@ -174,7 +177,7 @@ public void setRequest(ModbusRequest req) {
                 m_Connection.connect();
             }
             catch (Exception ex) {
-                throw new ModbusIOException("Connection failed.");
+                throw new ModbusIOException("Connection failed");
             }
         }
 
@@ -188,25 +191,22 @@ public void setRequest(ModbusRequest req) {
         while (retryCounter < retryLimit) {
             try {
                 synchronized (m_IO) {
-                    if (Modbus.debug) {
-                        System.err.println("request transaction ID = " + m_Request.getTransactionID());
-                    }
+                    logger.debug("request transaction ID = " + m_Request.getTransactionID());
 
                     m_IO.writeMessage(m_Request);
                     m_Response = null;
                     do {
                         m_Response = m_IO.readResponse();
-                        if (Modbus.debug) {
-                            System.err.println("response transaction ID = " + m_Response.getTransactionID());
-
+                        if (logger.isDebugEnabled()) {
+                            logger.debug("response transaction ID = " + m_Response.getTransactionID());
                             if (m_Response.getTransactionID() != m_Request.getTransactionID()) {
-                                System.err.println("expected " + m_Request.getTransactionID() + ", got " + m_Response.getTransactionID());
+                                logger.debug("expected " + m_Request.getTransactionID() + ", got " + m_Response.getTransactionID());
                             }
                         }
-                    } while (m_Response != null
-                            && (!isCheckingValidity() ||
-                            (m_Request.getTransactionID() != 0 && m_Request.getTransactionID() != m_Response.getTransactionID()))
-                            && ++retryCounter < retryLimit);
+                    } while (m_Response != null &&
+                            (!isCheckingValidity() ||
+                            (m_Request.getTransactionID() != 0 && m_Request.getTransactionID() != m_Response.getTransactionID())) &&
+                            ++retryCounter < retryLimit);
 
                     if (retryCounter >= retryLimit) {
                         throw new ModbusIOException("Executing transaction failed (tried " + m_Retries + " times)");
@@ -228,7 +228,7 @@ public void setRequest(ModbusRequest req) {
 						/*
 						 * Nope, fail this transaction.
 						 */
-                        throw new ModbusIOException("Connection lost.");
+                        throw new ModbusIOException("Connection lost");
                     }
                 }
                 if (retryCounter >= retryLimit) {

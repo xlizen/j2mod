@@ -124,7 +124,7 @@ public class SerialConnection implements SerialPortDataListener {
                 m_SerialIn.close();
             }
             catch (IOException e) {
-                System.err.println(e.getMessage());
+                logger.debug(e.getMessage());
             }
             finally {
                 // Close the port.
@@ -156,9 +156,7 @@ public class SerialConnection implements SerialPortDataListener {
                 // the serial input stream
                 break;
             default:
-                if (Modbus.debug) {
-                    logger.debug("Serial port event: " + e.getEventType());
-                }
+                logger.debug("Serial port event: " + e.getEventType());
         }
     }
 }

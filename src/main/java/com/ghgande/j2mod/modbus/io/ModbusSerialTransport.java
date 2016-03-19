@@ -17,7 +17,6 @@
 package com.ghgande.j2mod.modbus.io;
 
 import com.fazecast.jSerialComm.SerialPort;
-import com.ghgande.j2mod.modbus.Modbus;
 import com.ghgande.j2mod.modbus.ModbusIOException;
 import com.ghgande.j2mod.modbus.msg.ModbusMessage;
 import com.ghgande.j2mod.modbus.msg.ModbusRequest;
@@ -142,9 +141,7 @@ abstract public class ModbusSerialTransport implements ModbusTransport {
      */
     public void setBaudRate(int baud) {
         m_CommPort.setBaudRate(baud);
-        if (Modbus.debug) {
-            System.err.println("baud rate is now " + m_CommPort.getBaudRate());
-        }
+        logger.debug("baud rate is now " + m_CommPort.getBaudRate());
     }
 
     /**
@@ -160,14 +157,10 @@ abstract public class ModbusSerialTransport implements ModbusTransport {
 
         byte echoBuf[] = new byte[len];
         int echoLen = m_CommPort.getInputStream().read(echoBuf, 0, len);
-        if (Modbus.debug) {
-            logger.debug("Echo: " + ModbusUtil.toHex(echoBuf, 0, echoLen));
-        }
+        logger.debug("Echo: " + ModbusUtil.toHex(echoBuf, 0, echoLen));
         if (echoLen != len) {
-            if (Modbus.debug) {
-                System.err.println("Error: Transmit echo not received.");
-            }
-            throw new IOException("Echo not received.");
+            logger.debug("Error: Transmit echo not received");
+            throw new IOException("Echo not received");
         }
     }
 }

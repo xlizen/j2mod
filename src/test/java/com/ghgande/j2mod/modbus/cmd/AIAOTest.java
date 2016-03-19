@@ -110,9 +110,7 @@ public class AIAOTest {
             con = new TCPMasterConnection(addr);
             con.setPort(port);
             con.connect();
-            if (Modbus.debug) {
-                logger.debug("Connected to " + addr.toString() + ":" + con.getPort());
-            }
+            logger.debug("Connected to " + addr.toString() + ":" + con.getPort());
 
             // 3. Prepare the requests
             ai_req = new ReadInputRegistersRequest(ai_ref, 1);
@@ -143,9 +141,7 @@ public class AIAOTest {
                     new_out.setValue(new_in); // update register
                     ao_trans.execute();
                     last_out = new_in;
-                    if (Modbus.debug) {
-                        logger.debug("Updated Output Register with value from Input Register.");
-                    }
+                    logger.debug("Updated Output Register with value from Input Register");
                 }
             } while (true);
 

@@ -16,7 +16,6 @@
  */
 package com.ghgande.j2mod.modbus.cmd;
 
-import com.ghgande.j2mod.modbus.Modbus;
 import com.ghgande.j2mod.modbus.ModbusException;
 import com.ghgande.j2mod.modbus.io.*;
 import com.ghgande.j2mod.modbus.msg.*;
@@ -79,7 +78,7 @@ public class ReadInputRegistersTest {
                 // 2. Open the connection.
                 transport = ModbusMasterFactory.createModbusMaster(args[0]);
                 if (transport == null) {
-                    System.err.println("Cannot open " + args[0]);
+                    logger.debug("Cannot open " + args[0]);
                     System.exit(1);
                 }
 
@@ -128,7 +127,7 @@ public class ReadInputRegistersTest {
             // 5. Execute the transaction repeat times
 
             for (int k = 0; k < repeat; k++) {
-                System.err.println("Request " + k);
+                logger.debug("Request " + k);
 
                 // 3. Create the command.
                 req = new ReadInputRegistersRequest(ref, count);
@@ -140,9 +139,7 @@ public class ReadInputRegistersTest {
                 trans.setRetries(1);
                 req.setHeadless(trans instanceof ModbusSerialTransaction);
 
-                if (Modbus.debug) {
-                    logger.debug("Request: " + req.getHexMessage());
-                }
+                logger.debug("Request: " + req.getHexMessage());
 
                 if (trans instanceof ModbusSerialTransaction) {
                     /*
@@ -159,18 +156,15 @@ public class ReadInputRegistersTest {
                     trans.execute();
                 }
                 catch (ModbusException x) {
-                    System.err.println(x.getMessage());
+                    logger.debug(x.getMessage());
                     continue;
                 }
                 ModbusResponse res = trans.getResponse();
-
-                if (Modbus.debug) {
-                    if (res != null) {
-                        logger.debug("Response: " + res.getHexMessage());
-                    }
-                    else {
-                        System.err.println("No response to READ INPUT request.");
-                    }
+                if (res != null) {
+                    logger.debug("Response: " + res.getHexMessage());
+                }
+                else {
+                    logger.debug("No response to READ INPUT request");
                 }
 
                 if (res == null) {

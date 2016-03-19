@@ -93,9 +93,7 @@ public class DIDOTest {
             con = new TCPMasterConnection(addr);
             con.setPort(port);
             con.connect();
-            if (Modbus.debug) {
-                logger.debug("Connected to " + addr.toString() + ":" + con.getPort());
-            }
+            logger.debug("Connected to " + addr.toString() + ":" + con.getPort());
 
             // 3. Prepare the requests
             di_req = new ReadInputDiscretesRequest(di_ref, 1);
@@ -129,9 +127,7 @@ public class DIDOTest {
                     do_req.setCoil(new_in);
                     do_trans.execute();
                     last_out = new_in;
-                    if (Modbus.debug) {
-                        logger.debug("Updated coil with state from DI.");
-                    }
+                    logger.debug("Updated coil with state from DI");
                 }
             } while (true);
 

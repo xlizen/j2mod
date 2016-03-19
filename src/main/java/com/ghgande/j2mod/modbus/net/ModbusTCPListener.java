@@ -131,9 +131,7 @@ public class ModbusTCPListener implements ModbusListener {
 			 */
             int m_FloodProtection = 5;
             m_ServerSocket = new ServerSocket(m_Port, m_FloodProtection, m_Address);
-            if (Modbus.debug) {
-                logger.debug("Listenening to " + m_ServerSocket.toString() + "(Port " + m_Port + ")");
-            }
+            logger.debug("Listenening to " + m_ServerSocket.toString() + "(Port " + m_Port + ")");
 
 			/*
              * Infinite loop, taking care of resources in case of a lot of
@@ -143,9 +141,7 @@ public class ModbusTCPListener implements ModbusListener {
             m_Listening = true;
             while (m_Listening) {
                 Socket incoming = m_ServerSocket.accept();
-                if (Modbus.debug) {
-                    logger.debug("Making new connection " + incoming.toString());
-                }
+                logger.debug("Making new connection " + incoming.toString());
 
                 if (m_Listening) {
                     // FIXME: Replace with object pool due to resource issues
@@ -157,12 +153,8 @@ public class ModbusTCPListener implements ModbusListener {
             }
         }
         catch (SocketException iex) {
-            if (!m_Listening) {
-            }
-            else {
-                if (Modbus.debug) {
-                    iex.printStackTrace();
-                }
+            if (m_Listening) {
+                logger.debug(iex);
             }
         }
         catch (IOException e) {

@@ -64,11 +64,9 @@ public class ModbusTCPTransport implements ModbusTransport {
             socket.setSoTimeout(m_Timeout);
         }
         catch (IOException ex) {
-            if (Modbus.debug) {
-                logger.debug("ModbusTCPTransport::Socket invalid.");
-            }
+            logger.debug("ModbusTCPTransport::Socket invalid");
 
-            throw new IllegalStateException("Socket invalid.");
+            throw new IllegalStateException("Socket invalid");
         }
     }
 
@@ -141,9 +139,7 @@ public class ModbusTCPTransport implements ModbusTransport {
 
             m_Output.write(m_ByteOut.toByteArray());
             m_Output.flush();
-            if (Modbus.debug) {
-                System.err.println("Sent: " + ModbusUtil.toHex(m_ByteOut.toByteArray()));
-            }
+            logger.debug("Sent: " + ModbusUtil.toHex(m_ByteOut.toByteArray()));
             // write more sophisticated exception handling
         }
         catch (SocketException ex) {
@@ -155,10 +151,10 @@ public class ModbusTCPTransport implements ModbusTransport {
                     // Do nothing.
                 }
             }
-            throw new ModbusIOException("I/O exception - failed to write.");
+            throw new ModbusIOException("I/O exception - failed to write");
         }
         catch (Exception ex) {
-            throw new ModbusIOException("I/O exception - failed to write.");
+            throw new ModbusIOException("I/O exception - failed to write");
         }
     }
 
@@ -181,7 +177,7 @@ public class ModbusTCPTransport implements ModbusTransport {
 
                 if (!headless) {
                     if (m_Input.read(buffer, 0, 6) == -1) {
-                        throw new EOFException("Premature end of stream (Header truncated).");
+                        throw new EOFException("Premature end of stream (Header truncated)");
                     }
 
 					/*
@@ -193,12 +189,10 @@ public class ModbusTCPTransport implements ModbusTransport {
                     int count = ModbusUtil.registerToShort(buffer, 4);
 
                     if (m_Input.read(buffer, 6, count) == -1) {
-                        throw new ModbusIOException("Premature end of stream (Message truncated).");
+                        throw new ModbusIOException("Premature end of stream (Message truncated)");
                     }
 
-                    if (Modbus.debug) {
-                        System.err.println("Read: " + ModbusUtil.toHex(buffer, 0, count + 6));
-                    }
+                    logger.debug("Read: " + ModbusUtil.toHex(buffer, 0, count + 6));
 
                     m_ByteIn.reset(buffer, (6 + count));
                     m_ByteIn.skip(6);
@@ -236,9 +230,7 @@ public class ModbusTCPTransport implements ModbusTransport {
 					 * proper error correction and recovery.
 					 */
                     m_Input.readShort();
-                    if (Modbus.debug) {
-                        System.err.println("Read: " + req.getHexMessage());
-                    }
+                    logger.debug("Read: " + req.getHexMessage());
                 }
             }
             return req;
@@ -253,7 +245,7 @@ public class ModbusTCPTransport implements ModbusTransport {
             throw new ModbusIOException("Socket Exception", true);
         }
         catch (Exception ex) {
-            throw new ModbusIOException("I/O exception - failed to read.");
+            throw new ModbusIOException("I/O exception - failed to read");
         }
     }
 
@@ -266,16 +258,14 @@ public class ModbusTCPTransport implements ModbusTransport {
             synchronized (m_ByteIn) {
                 // use same buffer
                 byte[] buffer = m_ByteIn.getBuffer();
-                if (Modbus.debug) {
-                    System.err.println("Read: " + ModbusUtil.toHex(buffer, 0, m_ByteIn.count));
-                }
+                logger.debug("Read: " + ModbusUtil.toHex(buffer, 0, m_ByteIn.count));
 
                 if (!headless) {
 					/*
 					 * All Modbus TCP transactions start with 6 bytes. Get them.
 					 */
                     if (m_Input.read(buffer, 0, 6) == -1) {
-                        throw new ModbusIOException("Premature end of stream (Header truncated).");
+                        throw new ModbusIOException("Premature end of stream (Header truncated)");
                     }
 
 					/*
@@ -295,7 +285,7 @@ public class ModbusTCPTransport implements ModbusTransport {
                     int count = ModbusUtil.registerToShort(buffer, 4);
 
                     if (m_Input.read(buffer, 6, count) == -1) {
-                        throw new ModbusIOException("Premature end of stream (Message truncated).");
+                        throw new ModbusIOException("Premature end of stream (Message truncated)");
                     }
 
                     m_ByteIn.reset(buffer, (6 + count));
@@ -341,7 +331,7 @@ public class ModbusTCPTransport implements ModbusTransport {
             throw new ModbusIOException("Timeout reading response");
         }
         catch (Exception ex) {
-            throw new ModbusIOException("I/O exception - failed to read.");
+            throw new ModbusIOException("I/O exception - failed to read");
         }
     }
 

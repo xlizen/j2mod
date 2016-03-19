@@ -16,7 +16,6 @@
  */
 package com.ghgande.j2mod.modbus.io;
 
-import com.ghgande.j2mod.modbus.Modbus;
 import com.ghgande.j2mod.modbus.util.Logger;
 
 import java.io.FilterInputStream;
@@ -88,9 +87,7 @@ public class ASCIIInputStream extends FilterInputStream {
                 }
                 catch (NumberFormatException ex) {
                     //malformed stream
-                    if (Modbus.debug) {
-                        logger.debug(sbuf.toString());
-                    }
+                    logger.debug(sbuf.toString());
                     throw new IOException("Malformed Stream - Wrong Characters");
                 }
             }

@@ -16,7 +16,6 @@
  */
 package com.ghgande.j2mod.modbus.cmd;
 
-import com.ghgande.j2mod.modbus.Modbus;
 import com.ghgande.j2mod.modbus.ModbusException;
 import com.ghgande.j2mod.modbus.ModbusIOException;
 import com.ghgande.j2mod.modbus.ModbusSlaveException;
@@ -87,7 +86,7 @@ public class ReadFIFOTest {
             }
         }
         catch (NumberFormatException x) {
-            System.err.println("Invalid parameter");
+            logger.debug("Invalid parameter");
             usage();
         }
         catch (Exception ex) {
@@ -106,9 +105,7 @@ public class ReadFIFOTest {
                 request.setUnitID(unit);
                 request.setReference(fifo);
 
-                if (Modbus.debug) {
-                    logger.debug("Request: " + request.getHexMessage());
-                }
+                logger.debug("Request: " + request.getHexMessage());
 
 				/*
 				 * Setup the transaction.
@@ -123,36 +120,34 @@ public class ReadFIFOTest {
                     trans.execute();
                 }
                 catch (ModbusSlaveException x) {
-                    System.err.println("Slave Exception: " + x.getLocalizedMessage());
+                    logger.debug("Slave Exception: " + x.getLocalizedMessage());
                     continue;
                 }
                 catch (ModbusIOException x) {
-                    System.err.println("I/O Exception: " + x.getLocalizedMessage());
+                    logger.debug("I/O Exception: " + x.getLocalizedMessage());
                     continue;
                 }
                 catch (ModbusException x) {
-                    System.err.println("Modbus Exception: " + x.getLocalizedMessage());
+                    logger.debug("Modbus Exception: " + x.getLocalizedMessage());
                     continue;
                 }
 
                 ModbusResponse dummy = trans.getResponse();
                 if (dummy == null) {
-                    System.err.println("No response for transaction " + i);
+                    logger.debug("No response for transaction " + i);
                     continue;
                 }
                 if (dummy instanceof ExceptionResponse) {
                     ExceptionResponse exception = (ExceptionResponse)dummy;
 
-                    System.err.println(exception);
+                    logger.debug(exception);
 
                     continue;
                 }
                 else if (dummy instanceof ReadFIFOQueueResponse) {
                     response = (ReadFIFOQueueResponse)dummy;
 
-                    if (Modbus.debug) {
-                        logger.debug("Response: " + response.getHexMessage());
-                    }
+                    logger.debug("Response: " + response.getHexMessage());
 
                     int count = response.getWordCount();
                     logger.debug(count + " values");

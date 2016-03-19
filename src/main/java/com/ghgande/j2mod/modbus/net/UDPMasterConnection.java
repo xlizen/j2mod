@@ -77,9 +77,7 @@ public class UDPMasterConnection {
                 m_Terminal.deactivate();
             }
             catch (Exception ex) {
-                if (Modbus.debug) {
-                    ex.printStackTrace();
-                }
+                logger.debug(ex);
             }
             m_Connected = false;
         }

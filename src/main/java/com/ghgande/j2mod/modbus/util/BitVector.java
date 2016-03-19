@@ -258,7 +258,7 @@ public final class BitVector {
      */
     public final void forceSize(int size) {
         if (size > m_Data.length * 8) {
-            throw new IllegalArgumentException("Size exceeds byte[] store.");
+            throw new IllegalArgumentException("Size exceeds byte[] store");
         }
         else {
             m_Size = size;

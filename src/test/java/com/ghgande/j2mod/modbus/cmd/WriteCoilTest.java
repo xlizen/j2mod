@@ -16,7 +16,6 @@
  */
 package com.ghgande.j2mod.modbus.cmd;
 
-import com.ghgande.j2mod.modbus.Modbus;
 import com.ghgande.j2mod.modbus.io.ModbusSerialTransport;
 import com.ghgande.j2mod.modbus.io.ModbusTransaction;
 import com.ghgande.j2mod.modbus.io.ModbusTransport;
@@ -106,9 +105,7 @@ public class WriteCoilTest {
             // 3. Prepare the request
             req = new WriteCoilRequest(ref, value);
             req.setUnitID(unit);
-            if (Modbus.debug) {
-                logger.debug("Request: " + req.getHexMessage());
-            }
+            logger.debug("Request: " + req.getHexMessage());
 
             // 4. Prepare the transaction
             trans = transport.createTransaction();
@@ -118,9 +115,7 @@ public class WriteCoilTest {
             for (int count = 0; count < repeat; count++) {
                 trans.execute();
 
-                if (Modbus.debug) {
-                    logger.debug("Response: " + trans.getResponse().getHexMessage());
-                }
+                logger.debug("Response: " + trans.getResponse().getHexMessage());
 
                 WriteCoilResponse data = (WriteCoilResponse)trans.getResponse();
                 if (data != null) {

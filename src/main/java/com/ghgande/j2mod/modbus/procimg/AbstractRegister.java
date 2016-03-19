@@ -22,8 +22,7 @@ package com.ghgande.j2mod.modbus.procimg;
  * @author Dieter Wimberger
  * @version 1.2rc1 (09/11/2004)
  */
-public abstract class AbstractRegister
-        implements Register {
+public abstract class AbstractRegister implements Register {
 
     /**
      * The word (<tt>byte[2]</tt>) holding the register content.

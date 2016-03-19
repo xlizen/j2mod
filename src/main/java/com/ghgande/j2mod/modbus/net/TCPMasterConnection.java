@@ -87,9 +87,7 @@ public class TCPMasterConnection {
      */
     public synchronized void connect() throws Exception {
         if (!isConnected()) {
-            if (Modbus.debug) {
-                logger.debug("connect()");
-            }
+            logger.debug("connect()");
 
             m_Socket = new Socket(m_Address, m_Port);
             m_Socket.setReuseAddress(true);
@@ -169,9 +167,7 @@ public class TCPMasterConnection {
                 m_ModbusTransport.close();
             }
             catch (IOException ex) {
-                if (Modbus.debug) {
-                    logger.debug("close()");
-                }
+                logger.debug("close()");
             }
             m_Connected = false;
         }

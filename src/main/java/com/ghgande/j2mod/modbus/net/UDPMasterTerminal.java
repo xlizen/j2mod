@@ -89,9 +89,7 @@ class UDPMasterTerminal implements UDPTerminal {
      */
     public synchronized void activate() throws Exception {
         if (!isActive()) {
-            if (Modbus.debug) {
-                logger.debug("UDPMasterTerminal::activate()::laddr=:" + m_LocalAddress + ":lport=" + m_LocalPort);
-            }
+            logger.debug("UDPMasterTerminal::activate()::laddr=:" + m_LocalAddress + ":lport=" + m_LocalPort);
 
             if (m_Socket == null) {
                 if (m_LocalAddress != null && m_LocalPort != -1) {
@@ -103,15 +101,9 @@ class UDPMasterTerminal implements UDPTerminal {
                     m_LocalAddress = m_Socket.getLocalAddress();
                 }
             }
-            if (Modbus.debug) {
-                logger.debug("UDPMasterTerminal::haveSocket():" + m_Socket.toString());
-            }
-            if (Modbus.debug) {
-                logger.debug("UDPMasterTerminal::laddr=:" + m_LocalAddress.toString() + ":lport=" + m_LocalPort);
-            }
-            if (Modbus.debug) {
-                logger.debug("UDPMasterTerminal::raddr=:" + m_RemoteAddress.toString() + ":rport=" + m_RemotePort);
-            }
+            logger.debug("UDPMasterTerminal::haveSocket():" + m_Socket.toString());
+            logger.debug("UDPMasterTerminal::laddr=:" + m_LocalAddress.toString() + ":lport=" + m_LocalPort);
+            logger.debug("UDPMasterTerminal::raddr=:" + m_RemoteAddress.toString() + ":rport=" + m_RemotePort);
 
             m_Socket.setReceiveBufferSize(1024);
             m_Socket.setSendBufferSize(1024);
@@ -119,9 +111,7 @@ class UDPMasterTerminal implements UDPTerminal {
             m_ModbusTransport = new ModbusUDPTransport(this);
             m_Active = true;
         }
-        if (Modbus.debug) {
-            logger.debug("UDPMasterTerminal::activated");
-        }
+        logger.debug("UDPMasterTerminal::activated");
     }
 
     /**
@@ -129,9 +119,7 @@ class UDPMasterTerminal implements UDPTerminal {
      */
     public void deactivate() {
         try {
-            if (Modbus.debug) {
-                logger.debug("UDPMasterTerminal::deactivate()");
-            }
+            logger.debug("UDPMasterTerminal::deactivate()");
 
             m_Socket.close();
             m_ModbusTransport = null;

@@ -16,7 +16,6 @@
  */
 package com.ghgande.j2mod.modbus.cmd;
 
-import com.ghgande.j2mod.modbus.Modbus;
 import com.ghgande.j2mod.modbus.io.ModbusSerialTransport;
 import com.ghgande.j2mod.modbus.io.ModbusTCPTransaction;
 import com.ghgande.j2mod.modbus.io.ModbusTransaction;
@@ -93,9 +92,7 @@ public class ReadCoilsTest {
 
             req = new ReadCoilsRequest(ref, count);
             req.setUnitID(unit);
-            if (Modbus.debug) {
-                logger.debug("Request: " + req.getHexMessage());
-            }
+            logger.debug("Request: " + req.getHexMessage());
 
             // 4. Prepare the transaction
             trans = transport.createTransaction();
@@ -112,9 +109,7 @@ public class ReadCoilsTest {
 
                 res = (ReadCoilsResponse)trans.getResponse();
 
-                if (Modbus.debug) {
-                    logger.debug("Response: " + res.getHexMessage());
-                }
+                logger.debug("Response: " + res.getHexMessage());
 
                 logger.debug("Digital Inputs Status=" + res.getCoils().toString());
 

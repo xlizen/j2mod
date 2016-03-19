@@ -23,6 +23,7 @@ import com.ghgande.j2mod.modbus.io.ModbusTransport;
 import com.ghgande.j2mod.modbus.io.ModbusUDPTransport;
 import com.ghgande.j2mod.modbus.msg.ModbusRequest;
 import com.ghgande.j2mod.modbus.msg.ModbusResponse;
+import com.ghgande.j2mod.modbus.util.Logger;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -38,6 +39,9 @@ import java.net.UnknownHostException;
  *          address.
  */
 public class ModbusUDPListener implements ModbusListener {
+
+    private static final Logger logger = Logger.getLogger(ModbusUDPListener.class);
+
     private int m_Port = Modbus.DEFAULT_PORT;
     private boolean m_Listening = false;
     private boolean m_Continue = false;
@@ -113,10 +117,7 @@ public class ModbusUDPListener implements ModbusListener {
              * TODO -- Make sure the methods in the try block are throwing
 			 * reasonable exemptions and not just "Exception".
 			 */
-            if (Modbus.debug) {
-                e.printStackTrace();
-            }
-
+            logger.debug(e);
             m_Listening = false;
             return;
         }
@@ -143,12 +144,8 @@ public class ModbusUDPListener implements ModbusListener {
                 else {
                     response = request.createResponse();
                 }
-				/* DEBUG */
-                if (Modbus.debug) {
-                    System.err.println("Request:" + request.getHexMessage());
-
-                    System.err.println("Response:" + response.getHexMessage());
-                }
+                logger.debug("Request:" + request.getHexMessage());
+                 logger.debug("Response:" + response.getHexMessage());
                 m_Transport.writeMessage(response);
             }
         }

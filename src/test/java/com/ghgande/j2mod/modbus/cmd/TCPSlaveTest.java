@@ -109,9 +109,7 @@ public class TCPSlaveTest {
             ModbusCoupler.getReference().setUnitID(15);
 
             // 3. create a listener with 3 threads in pool
-            if (Modbus.debug) {
-                logger.debug("Listening...");
-            }
+            logger.debug("Listening..");
 
             listener = new ModbusTCPListener(3, Inet4Address.getByName("0.0.0.0"));
             listener.setPort(port);

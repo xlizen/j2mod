@@ -16,7 +16,6 @@
  */
 package com.ghgande.j2mod.modbus.cmd;
 
-import com.ghgande.j2mod.modbus.Modbus;
 import com.ghgande.j2mod.modbus.ModbusCoupler;
 import com.ghgande.j2mod.modbus.io.ModbusSerialTransaction;
 import com.ghgande.j2mod.modbus.msg.ReadInputRegistersRequest;
@@ -87,9 +86,7 @@ public class SerialAITest {
             params.setStopbits(1);
             params.setEncoding("ascii");
             params.setEcho(false);
-            if (Modbus.debug) {
-                logger.debug("Encoding [" + params.getEncoding() + "]");
-            }
+            logger.debug("Encoding [" + params.getEncoding() + "]");
 
             //4. Open the connection
             con = new SerialConnection(params);
@@ -99,9 +96,7 @@ public class SerialAITest {
             req = new ReadInputRegistersRequest(ref, count);
             req.setUnitID(unitid);
             req.setHeadless();
-            if (Modbus.debug) {
-                logger.debug("Request: " + req.getHexMessage());
-            }
+            logger.debug("Request: " + req.getHexMessage());
 
             //6. Prepare the transaction
             trans = new ModbusSerialTransaction(con);
@@ -113,9 +108,7 @@ public class SerialAITest {
                 trans.execute();
 
                 res = (ReadInputRegistersResponse)trans.getResponse();
-                if (Modbus.debug) {
-                    logger.debug("Response: " + res.getHexMessage());
-                }
+                logger.debug("Response: " + res.getHexMessage());
                 for (int n = 0; n < res.getWordCount(); n++) {
                     logger.debug("Word " + n + "=" + res.getRegisterValue(n));
                 }

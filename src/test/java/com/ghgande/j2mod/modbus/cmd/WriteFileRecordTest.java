@@ -16,7 +16,6 @@
  */
 package com.ghgande.j2mod.modbus.cmd;
 
-import com.ghgande.j2mod.modbus.Modbus;
 import com.ghgande.j2mod.modbus.ModbusException;
 import com.ghgande.j2mod.modbus.ModbusIOException;
 import com.ghgande.j2mod.modbus.ModbusSlaveException;
@@ -97,7 +96,7 @@ public class WriteFileRecordTest {
             }
         }
         catch (NumberFormatException x) {
-            System.err.println("Invalid parameter");
+            logger.debug("Invalid parameter");
             usage();
         }
         catch (Exception ex) {
@@ -119,9 +118,7 @@ public class WriteFileRecordTest {
             RecordRequest recordRequest = new RecordRequest(file, record, values);
             request.addRequest(recordRequest);
 
-            if (Modbus.debug) {
-                logger.debug("Request: " + request.getHexMessage());
-            }
+            logger.debug("Request: " + request.getHexMessage());
 
 			/*
 			 * Setup the transaction.
@@ -136,34 +133,32 @@ public class WriteFileRecordTest {
                 trans.execute();
             }
             catch (ModbusSlaveException x) {
-                System.err.println("Slave Exception: " + x.getLocalizedMessage());
+                logger.debug("Slave Exception: " + x.getLocalizedMessage());
                 System.exit(1);
             }
             catch (ModbusIOException x) {
-                System.err.println("I/O Exception: " + x.getLocalizedMessage());
+                logger.debug("I/O Exception: " + x.getLocalizedMessage());
                 System.exit(1);
             }
             catch (ModbusException x) {
-                System.err.println("Modbus Exception: " + x.getLocalizedMessage());
+                logger.debug("Modbus Exception: " + x.getLocalizedMessage());
                 System.exit(1);
             }
 
             ModbusResponse dummy = trans.getResponse();
             if (dummy == null) {
-                System.err.println("No response for transaction ");
+                logger.debug("No response for transaction ");
                 System.exit(1);
             }
             if (dummy instanceof ExceptionResponse) {
                 ExceptionResponse exception = (ExceptionResponse)dummy;
 
-                System.err.println(exception);
+                logger.debug(exception);
             }
             else if (dummy instanceof WriteFileRecordResponse) {
                 response = (WriteFileRecordResponse)dummy;
 
-                if (Modbus.debug) {
-                    logger.debug("Response: " + response.getHexMessage());
-                }
+                logger.debug("Response: " + response.getHexMessage());
 
                 int count = response.getRequestCount();
                 for (int j = 0; j < count; j++) {

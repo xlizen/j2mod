@@ -161,7 +161,7 @@ public final class ReadCoilsRequest extends ModbusRequest {
      */
     public void setBitCount(int count) {
         if (count > Modbus.MAX_BITS) {
-            throw new IllegalArgumentException("Maximum bitcount exceeded.");
+            throw new IllegalArgumentException("Maximum bitcount exceeded");
         }
         else {
             m_BitCount = count;

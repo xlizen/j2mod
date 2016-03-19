@@ -149,7 +149,7 @@ public class ModbusASCIITransport extends ModbusSerialTransport {
                     m_ByteInOut.reset();
                     while ((in = m_InputStream.read()) != FRAME_END) {
                         if (in == -1) {
-                            throw new IOException("I/O exception - Serial port timeout.");
+                            throw new IOException("I/O exception - Serial port timeout");
                         }
                         m_ByteInOut.writeByte(in);
                     }
@@ -176,10 +176,8 @@ public class ModbusASCIITransport extends ModbusSerialTransport {
             return request;
         }
         catch (Exception ex) {
-            if (Modbus.debug) {
-                logger.debug(ex.getMessage());
-            }
-            throw new ModbusIOException("I/O exception - failed to read.");
+            logger.debug(ex.getMessage());
+            throw new ModbusIOException("I/O exception - failed to read");
         }
 
     }
@@ -195,7 +193,7 @@ public class ModbusASCIITransport extends ModbusSerialTransport {
                 //1. Skip to FRAME_START
                 while ((in = m_InputStream.read()) != FRAME_START) {
                     if (in == -1) {
-                        throw new IOException("I/O exception - Serial port timeout.");
+                        throw new IOException("I/O exception - Serial port timeout");
                     }
                 }
                 //2. Read to FRAME_END
@@ -203,14 +201,12 @@ public class ModbusASCIITransport extends ModbusSerialTransport {
                     m_ByteInOut.reset();
                     while ((in = m_InputStream.read()) != FRAME_END) {
                         if (in == -1) {
-                            throw new IOException("I/O exception - Serial port timeout.");
+                            throw new IOException("I/O exception - Serial port timeout");
                         }
                         m_ByteInOut.writeByte(in);
                     }
                     int len = m_ByteInOut.size();
-                    if (Modbus.debug) {
-                        logger.debug("Received: " + ModbusUtil.toHex(m_InBuffer, 0, len));
-                    }
+                    logger.debug("Received: " + ModbusUtil.toHex(m_InBuffer, 0, len));
                     //check LRC
                     if (m_InBuffer[len - 1] != calculateLRC(m_InBuffer, 0, len, 1)) {
                         continue;
@@ -236,10 +232,8 @@ public class ModbusASCIITransport extends ModbusSerialTransport {
             return response;
         }
         catch (Exception ex) {
-            if (Modbus.debug) {
-                logger.debug(ex.getMessage());
-            }
-            throw new ModbusIOException("I/O exception - failed to read.");
+            logger.debug(ex.getMessage());
+            throw new ModbusIOException("I/O exception - failed to read");
         }
     }
 

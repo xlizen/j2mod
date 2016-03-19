@@ -108,11 +108,11 @@ public class TCPWriteRecordTest {
             }
         }
         catch (NumberFormatException x) {
-            System.err.println("Invalid parameter");
+            logger.debug("Invalid parameter");
             usage();
         }
         catch (UnknownHostException x) {
-            System.err.println("Unknown host: " + hostName);
+            logger.debug("Unknown host: " + hostName);
             System.exit(1);
         }
         catch (Exception ex) {
@@ -131,9 +131,7 @@ public class TCPWriteRecordTest {
             connection.connect();
             connection.setTimeout(500);
 
-            if (Modbus.debug) {
-                logger.debug("Connected to " + ipAddress.toString() + ":" + connection.getPort());
-            }
+            logger.debug("Connected to " + ipAddress.toString() + ":" + connection.getPort());
 
             for (int i = 0; i < requestCount; i++) {
 				/*
@@ -146,9 +144,7 @@ public class TCPWriteRecordTest {
                 RecordRequest recordRequest = new ReadFileRecordRequest.RecordRequest(file, record + i, registers);
                 rdRequest.addRequest(recordRequest);
 
-                if (Modbus.debug) {
-                    logger.debug("Request: " + rdRequest.getHexMessage());
-                }
+                logger.debug("Request: " + rdRequest.getHexMessage());
 
 				/*
 				 * Setup the transaction.
@@ -163,15 +159,15 @@ public class TCPWriteRecordTest {
                     trans.execute();
                 }
                 catch (ModbusSlaveException x) {
-                    System.err.println("Slave Exception: " + x.getLocalizedMessage());
+                    logger.debug("Slave Exception: " + x.getLocalizedMessage());
                     continue;
                 }
                 catch (ModbusIOException x) {
-                    System.err.println("I/O Exception: " + x.getLocalizedMessage());
+                    logger.debug("I/O Exception: " + x.getLocalizedMessage());
                     continue;
                 }
                 catch (ModbusException x) {
-                    System.err.println("Modbus Exception: " + x.getLocalizedMessage());
+                    logger.debug("Modbus Exception: " + x.getLocalizedMessage());
                     continue;
                 }
 
@@ -182,22 +178,20 @@ public class TCPWriteRecordTest {
 
                 ModbusResponse dummy = trans.getResponse();
                 if (dummy == null) {
-                    System.err.println("No response for transaction " + i);
+                    logger.debug("No response for transaction " + i);
                     continue;
                 }
                 if (dummy instanceof ExceptionResponse) {
                     ExceptionResponse exception = (ExceptionResponse)dummy;
 
-                    System.err.println(exception);
+                    logger.debug(exception);
 
                     continue;
                 }
                 else if (dummy instanceof ReadFileRecordResponse) {
                     rdResponse = (ReadFileRecordResponse)dummy;
 
-                    if (Modbus.debug) {
-                        logger.debug("Response: " + rdResponse.getHexMessage());
-                    }
+                    logger.debug("Response: " + rdResponse.getHexMessage());
 
                     int count = rdResponse.getRecordCount();
                     for (int j = 0; j < count; j++) {
@@ -233,35 +227,33 @@ public class TCPWriteRecordTest {
                     trans.execute();
                 }
                 catch (ModbusSlaveException x) {
-                    System.err.println("Slave Exception: " + x.getLocalizedMessage());
+                    logger.debug("Slave Exception: " + x.getLocalizedMessage());
                     continue;
                 }
                 catch (ModbusIOException x) {
-                    System.err.println("I/O Exception: " + x.getLocalizedMessage());
+                    logger.debug("I/O Exception: " + x.getLocalizedMessage());
                     continue;
                 }
                 catch (ModbusException x) {
-                    System.err.println("Modbus Exception: " + x.getLocalizedMessage());
+                    logger.debug("Modbus Exception: " + x.getLocalizedMessage());
                     continue;
                 }
 
                 dummy = trans.getResponse();
                 if (dummy == null) {
-                    System.err.println("No response for transaction " + i);
+                    logger.debug("No response for transaction " + i);
                     continue;
                 }
                 if (dummy instanceof ExceptionResponse) {
                     ExceptionResponse exception = (ExceptionResponse)dummy;
 
-                    System.err.println(exception);
+                    logger.debug(exception);
 
                 }
                 else if (dummy instanceof WriteFileRecordResponse) {
                     wrResponse = (WriteFileRecordResponse)dummy;
 
-                    if (Modbus.debug) {
-                        logger.debug("Response: " + wrResponse.getHexMessage());
-                    }
+                    logger.debug("Response: " + wrResponse.getHexMessage());
 
                     int count = wrResponse.getRequestCount();
                     for (int j = 0; j < count; j++) {

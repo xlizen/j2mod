@@ -91,9 +91,7 @@ class UDPSlaveTerminal implements UDPTerminal {
      */
     public synchronized void activate() throws Exception {
         if (!isActive()) {
-            if (Modbus.debug) {
-                logger.debug("UDPSlaveTerminal.activate()");
-            }
+            logger.debug("UDPSlaveTerminal.activate()");
             if (m_Socket == null) {
                 if (m_LocalAddress != null && m_LocalPort != -1) {
                     m_Socket = new DatagramSocket(m_LocalPort, m_LocalAddress);
@@ -104,36 +102,24 @@ class UDPSlaveTerminal implements UDPTerminal {
                     m_LocalAddress = m_Socket.getLocalAddress();
                 }
             }
-            if (Modbus.debug) {
-                logger.debug("UDPSlaveTerminal::haveSocket():" + m_Socket.toString());
-            }
-            if (Modbus.debug) {
-                logger.debug("UDPSlaveTerminal::addr=:" + m_LocalAddress.toString() + ":port=" + m_LocalPort);
-            }
+            logger.debug("UDPSlaveTerminal::haveSocket():" + m_Socket.toString());
+            logger.debug("UDPSlaveTerminal::addr=:" + m_LocalAddress.toString() + ":port=" + m_LocalPort);
 
             m_Socket.setReceiveBufferSize(1024);
             m_Socket.setSendBufferSize(1024);
             m_PacketReceiver = new PacketReceiver();
             m_Receiver = new Thread(m_PacketReceiver);
             m_Receiver.start();
-            if (Modbus.debug) {
-                logger.debug("UDPSlaveTerminal::receiver started()");
-            }
+            logger.debug("UDPSlaveTerminal::receiver started()");
             m_PacketSender = new PacketSender();
             m_Sender = new Thread(m_PacketSender);
             m_Sender.start();
-            if (Modbus.debug) {
-                logger.debug("UDPSlaveTerminal::sender started()");
-            }
+            logger.debug("UDPSlaveTerminal::sender started()");
             m_ModbusTransport = new ModbusUDPTransport(this);
-            if (Modbus.debug) {
-                logger.debug("UDPSlaveTerminal::transport created");
-            }
+            logger.debug("UDPSlaveTerminal::transport created");
             m_Active = true;
         }
-        if (Modbus.debug) {
-            logger.debug("UDPSlaveTerminal::activated");
-        }
+        logger.debug("UDPSlaveTerminal::activated");
     }
 
     /**
@@ -237,9 +223,7 @@ class UDPSlaveTerminal implements UDPTerminal {
                     // 2. create new Package with corresponding address and port
                     DatagramPacket res = new DatagramPacket(message, message.length, req.getAddress(), req.getPort());
                     m_Socket.send(res);
-                    if (Modbus.debug) {
-                        logger.debug("Sent package from queue.");
-                    }
+                    logger.debug("Sent package from queue");
                 }
                 catch (Exception ex) {
                     ex.printStackTrace();
@@ -275,9 +259,7 @@ class UDPSlaveTerminal implements UDPTerminal {
                     m_Requests.put(tid, packet);
                     // 3. place the data buffer in the queue
                     m_ReceiveQueue.put(buffer);
-                    if (Modbus.debug) {
-                        logger.debug("Received package to queue.");
-                    }
+                    logger.debug("Received package to queue");
                 }
                 catch (Exception ex) {
                     ex.printStackTrace();

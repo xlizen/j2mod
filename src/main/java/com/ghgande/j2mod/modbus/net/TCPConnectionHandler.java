@@ -16,7 +16,6 @@
  */
 package com.ghgande.j2mod.modbus.net;
 
-import com.ghgande.j2mod.modbus.Modbus;
 import com.ghgande.j2mod.modbus.ModbusCoupler;
 import com.ghgande.j2mod.modbus.ModbusIOException;
 import com.ghgande.j2mod.modbus.io.ModbusTransport;
@@ -92,19 +91,16 @@ public class TCPConnectionHandler implements Runnable {
 
                 // 2. create the response.
                 response = request.createResponse();
-
-                if (Modbus.debug) {
-                    logger.debug("Request:" + request.getHexMessage());
-                    logger.debug("Response:" + response.getHexMessage());
-                }
+                logger.debug("Request:" + request.getHexMessage());
+                logger.debug("Response:" + response.getHexMessage());
 
                 // 3. write the response message.
                 m_Transport.writeMessage(response);
             } while (true);
         }
         catch (ModbusIOException ex) {
-            if (!ex.isEOF() && Modbus.debug) {
-                ex.printStackTrace();
+            if (!ex.isEOF()) {
+                logger.debug(ex);
             }
         }
         finally {

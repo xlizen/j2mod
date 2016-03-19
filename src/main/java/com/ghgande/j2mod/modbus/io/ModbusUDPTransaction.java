@@ -33,8 +33,7 @@ import com.ghgande.j2mod.modbus.net.UDPTerminal;
  * @author Dieter Wimberger
  * @version 1.2rc1 (09/11/2004)
  */
-public class ModbusUDPTransaction
-        implements ModbusTransaction {
+public class ModbusUDPTransaction implements ModbusTransaction {
 
     //class attributes
     private static int c_TransactionID = Modbus.DEFAULT_TRANSACTION_ID;
@@ -149,7 +148,7 @@ public class ModbusUDPTransaction
             }
             catch (Exception ex) {
                 ex.printStackTrace();
-                throw new ModbusIOException("Activation failed.");
+                throw new ModbusIOException("Activation failed");
 
             }
         }

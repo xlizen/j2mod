@@ -24,6 +24,7 @@ import com.ghgande.j2mod.modbus.msg.ExceptionResponse;
 import com.ghgande.j2mod.modbus.msg.ModbusRequest;
 import com.ghgande.j2mod.modbus.msg.ModbusResponse;
 import com.ghgande.j2mod.modbus.net.SerialConnection;
+import com.ghgande.j2mod.modbus.util.Logger;
 
 /**
  * Class implementing the <tt>ModbusTransaction</tt>
@@ -33,6 +34,8 @@ import com.ghgande.j2mod.modbus.net.SerialConnection;
  * @version 1.2rc1 (09/11/2004)
  */
 public class ModbusSerialTransaction implements ModbusTransaction {
+
+    private static final Logger logger = Logger.getLogger(ModbusSerialTransaction.class);
 
     //class attributes
     private static int c_TransactionID = Modbus.DEFAULT_TRANSACTION_ID;
@@ -168,9 +171,7 @@ public void setCheckingValidity(boolean b) {
                             Thread.sleep(m_TransDelayMS);
                         }
                         catch (InterruptedException ex) {
-                            if (Modbus.debug) {
-                                System.err.println("InterruptedException: " + ex.getMessage());
-                            }
+                            logger.debug("InterruptedException: " + ex.getMessage());
                         }
                     }
                     //write request message
@@ -183,9 +184,7 @@ public void setCheckingValidity(boolean b) {
                     if (++tries >= m_Retries) {
                         throw e;
                     }
-                    if (Modbus.debug) {
-                        System.err.println("Execute try " + tries + " error: " + e.getMessage());
-                    }
+                    logger.debug("Execute try " + tries + " error: " + e.getMessage());
                 }
             } while (!finished);
         }

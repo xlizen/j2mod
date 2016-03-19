@@ -176,10 +176,8 @@ public class ModbusBINTransport extends ModbusSerialTransport {
             return request;
         }
         catch (Exception ex) {
-            if (Modbus.debug) {
-                logger.debug(ex.getMessage());
-            }
-            throw new ModbusIOException("I/O exception - failed to read.");
+            logger.debug(ex.getMessage());
+            throw new ModbusIOException("I/O exception - failed to read");
         }
 
     }
@@ -233,10 +231,8 @@ public class ModbusBINTransport extends ModbusSerialTransport {
             return response;
         }
         catch (Exception ex) {
-            if (Modbus.debug) {
-                logger.debug(ex.getMessage());
-            }
-            throw new ModbusIOException("I/O exception - failed to read.");
+            logger.debug(ex.getMessage());
+            throw new ModbusIOException("I/O exception - failed to read");
         }
     }
 

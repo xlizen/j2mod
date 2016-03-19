@@ -16,7 +16,6 @@
  */
 package com.ghgande.j2mod.modbus.cmd;
 
-import com.ghgande.j2mod.modbus.Modbus;
 import com.ghgande.j2mod.modbus.io.ModbusTransaction;
 import com.ghgande.j2mod.modbus.io.ModbusTransport;
 import com.ghgande.j2mod.modbus.msg.MaskWriteRegisterRequest;
@@ -92,16 +91,12 @@ public class MaskWriteRegisterTest {
             // 2. Open the connection
             transport = ModbusMasterFactory.createModbusMaster(args[0]);
 
-            if (Modbus.debug) {
-                logger.debug("Connected to " + transport);
-            }
+            logger.debug("Connected to " + transport);
 
             req = new MaskWriteRegisterRequest(ref, andMask, orMask);
 
             req.setUnitID(unit);
-            if (Modbus.debug) {
-                logger.debug("Request: " + req.getHexMessage());
-            }
+            logger.debug("Request: " + req.getHexMessage());
 
             // 3. Prepare the transaction
             trans = transport.createTransaction();
@@ -111,14 +106,11 @@ public class MaskWriteRegisterTest {
 
             for (int count = 0; count < repeat; count++) {
                 trans.execute();
-
-                if (Modbus.debug) {
-                    if (trans.getResponse() != null) {
-                        logger.debug("Response: " + trans.getResponse().getHexMessage());
-                    }
-                    else {
-                        logger.debug("No response.");
-                    }
+                if (trans.getResponse() != null) {
+                    logger.debug("Response: " + trans.getResponse().getHexMessage());
+                }
+                else {
+                    logger.debug("No response");
                 }
             }
         }

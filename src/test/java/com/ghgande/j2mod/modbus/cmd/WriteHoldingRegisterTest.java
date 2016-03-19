@@ -16,7 +16,6 @@
  */
 package com.ghgande.j2mod.modbus.cmd;
 
-import com.ghgande.j2mod.modbus.Modbus;
 import com.ghgande.j2mod.modbus.io.*;
 import com.ghgande.j2mod.modbus.msg.ModbusRequest;
 import com.ghgande.j2mod.modbus.msg.WriteSingleRegisterRequest;
@@ -131,18 +130,14 @@ public class WriteHoldingRegisterTest {
             trans.setRequest(req);
             req.setHeadless(trans instanceof ModbusSerialTransaction);
 
-            if (Modbus.debug) {
-                logger.debug("Request: " + req.getHexMessage());
-            }
+            logger.debug("Request: " + req.getHexMessage());
 
             // 4. Execute the transaction repeat times
 
             for (int count = 0; count < repeat; count++) {
                 trans.execute();
 
-                if (Modbus.debug) {
-                    logger.debug("Response: " + trans.getResponse().getHexMessage());
-                }
+                logger.debug("Response: " + trans.getResponse().getHexMessage());
             }
         }
         catch (Exception ex) {

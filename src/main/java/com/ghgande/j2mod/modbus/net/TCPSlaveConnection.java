@@ -53,11 +53,9 @@ public class TCPSlaveConnection {
             setSocket(socket);
         }
         catch (IOException ex) {
-            if (Modbus.debug) {
-                logger.debug("TCPSlaveConnection::Socket invalid.");
-            }
+            logger.debug("TCPSlaveConnection::Socket invalid");
 
-            throw new IllegalStateException("Socket invalid.");
+            throw new IllegalStateException("Socket invalid");
         }
     }
 
@@ -75,11 +73,9 @@ public class TCPSlaveConnection {
             setSocket(socket);
         }
         catch (IOException ex) {
-            if (Modbus.debug) {
-                logger.debug("TCPSlaveConnection::Socket invalid.");
-            }
+            logger.debug("TCPSlaveConnection::Socket invalid");
 
-            throw new IllegalStateException("Socket invalid.");
+            throw new IllegalStateException("Socket invalid");
         }
     }
 
@@ -93,9 +89,7 @@ public class TCPSlaveConnection {
                 m_Socket.close();
             }
             catch (IOException ex) {
-                if (Modbus.debug) {
-                    ex.printStackTrace();
-                }
+                logger.debug(ex);
             }
             m_Connected = false;
         }
