@@ -39,11 +39,25 @@ import java.io.OutputStream;
  */
 public class ModbusBINTransport extends ModbusSerialTransport {
 
+    /**
+     * Defines a virtual number for the FRAME START token (COLON).
+     */
+    public static final int FRAME_START = 1000;
+    /**
+     * Defines a virtual number for the FRAME_END token (CR LF).
+     */
+    public static final int FRAME_END = 2000;
+    /**
+     * Defines the frame start token <tt>{</tt>.
+     */
+    public static final int FRAME_START_TOKEN = 123;
+    /**
+     * Defines the frame end token <tt>}</tt>.
+     */
+    public static final int FRAME_END_TOKEN = 125;
     private static final Logger logger = Logger.getLogger(ModbusBINTransport.class);
-
     private DataInputStream m_InputStream;     //used to read from
     private ASCIIOutputStream m_OutputStream;   //used to write to
-
     private byte[] m_InBuffer;
     private BytesInputStream m_ByteIn;         //to read message from
     private BytesOutputStream m_ByteInOut;     //to buffer message to
@@ -55,13 +69,33 @@ public class ModbusBINTransport extends ModbusSerialTransport {
     public ModbusBINTransport() {
     }
 
+    public ModbusTransaction createTransaction() {
+        return new ModbusSerialTransaction();
+    }
+
+    /**
+     * Prepares the input and output streams of this
+     * <tt>ModbusASCIITransport</tt> instance.
+     * The raw input stream will be wrapped into a
+     * filtered <tt>DataInputStream</tt>.
+     *
+     * @param in  the input stream to be used for reading.
+     * @param out the output stream to be used for writing.
+     *
+     * @throws java.io.IOException if an I\O related error occurs.
+     */
+    public void prepareStreams(InputStream in, OutputStream out) throws IOException {
+        m_InputStream = new DataInputStream(new ASCIIInputStream(in));
+        m_OutputStream = new ASCIIOutputStream(out);
+        m_ByteOut = new BytesOutputStream(Modbus.MAX_MESSAGE_LENGTH);
+        m_InBuffer = new byte[Modbus.MAX_MESSAGE_LENGTH];
+        m_ByteIn = new BytesInputStream(m_InBuffer);
+        m_ByteInOut = new BytesOutputStream(m_InBuffer);
+    }
+
     public void close() throws IOException {
         m_InputStream.close();
         m_OutputStream.close();
-    }
-
-    public ModbusTransaction createTransaction() {
-        return new ModbusSerialTransaction();
     }
 
     public void writeMessage(ModbusMessage msg) throws ModbusIOException {
@@ -205,45 +239,5 @@ public class ModbusBINTransport extends ModbusSerialTransport {
             throw new ModbusIOException("I/O exception - failed to read.");
         }
     }
-
-    /**
-     * Prepares the input and output streams of this
-     * <tt>ModbusASCIITransport</tt> instance.
-     * The raw input stream will be wrapped into a
-     * filtered <tt>DataInputStream</tt>.
-     *
-     * @param in  the input stream to be used for reading.
-     * @param out the output stream to be used for writing.
-     *
-     * @throws java.io.IOException if an I\O related error occurs.
-     */
-    public void prepareStreams(InputStream in, OutputStream out) throws IOException {
-        m_InputStream = new DataInputStream(new ASCIIInputStream(in));
-        m_OutputStream = new ASCIIOutputStream(out);
-        m_ByteOut = new BytesOutputStream(Modbus.MAX_MESSAGE_LENGTH);
-        m_InBuffer = new byte[Modbus.MAX_MESSAGE_LENGTH];
-        m_ByteIn = new BytesInputStream(m_InBuffer);
-        m_ByteInOut = new BytesOutputStream(m_InBuffer);
-    }
-
-    /**
-     * Defines a virtual number for the FRAME START token (COLON).
-     */
-    public static final int FRAME_START = 1000;
-
-    /**
-     * Defines a virtual number for the FRAME_END token (CR LF).
-     */
-    public static final int FRAME_END = 2000;
-
-    /**
-     * Defines the frame start token <tt>{</tt>.
-     */
-    public static final int FRAME_START_TOKEN = 123;
-
-    /**
-     * Defines the frame end token <tt>}</tt>.
-     */
-    public static final int FRAME_END_TOKEN = 125;
 
 }

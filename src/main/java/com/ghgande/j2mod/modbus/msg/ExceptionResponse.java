@@ -34,42 +34,6 @@ public class ExceptionResponse extends ModbusResponse {
     private int m_ExceptionCode = -1;
 
     /**
-     * Returns the Modbus exception code of this <tt>ExceptionResponse</tt>.
-     * <p>
-     *
-     * @return the exception code as <tt>int</tt>.
-     */
-    public int getExceptionCode() {
-        return m_ExceptionCode;
-    }
-
-    public void writeData(DataOutput dout) throws IOException {
-        dout.writeByte(getExceptionCode());
-    }
-
-    /**
-     * readData()
-     *
-     * read the single byte of data, which is the exception code.
-     */
-    public void readData(DataInput din) throws IOException {
-        m_ExceptionCode = din.readUnsignedByte();
-    }
-
-    /**
-     * getMessage()
-     *
-     * return the exception type, which is the "message" for this response.
-     *
-     * @return -- byte array containing the 1 byte exception code.
-     */
-    public byte[] getMessage() {
-        byte result[] = new byte[1];
-        result[0] = (byte)getExceptionCode();
-        return result;
-    }
-
-    /**
      * Constructs a new <tt>ExceptionResponse</tt> instance with a given
      * function code and an exception code. The function code will be
      * automatically increased with the exception offset.
@@ -113,5 +77,41 @@ public class ExceptionResponse extends ModbusResponse {
          * One byte of data.
 		 */
         setDataLength(1);
+    }
+
+    /**
+     * Returns the Modbus exception code of this <tt>ExceptionResponse</tt>.
+     * <p>
+     *
+     * @return the exception code as <tt>int</tt>.
+     */
+    public int getExceptionCode() {
+        return m_ExceptionCode;
+    }
+
+    public void writeData(DataOutput dout) throws IOException {
+        dout.writeByte(getExceptionCode());
+    }
+
+    /**
+     * readData()
+     *
+     * read the single byte of data, which is the exception code.
+     */
+    public void readData(DataInput din) throws IOException {
+        m_ExceptionCode = din.readUnsignedByte();
+    }
+
+    /**
+     * getMessage()
+     *
+     * return the exception type, which is the "message" for this response.
+     *
+     * @return -- byte array containing the 1 byte exception code.
+     */
+    public byte[] getMessage() {
+        byte result[] = new byte[1];
+        result[0] = (byte)getExceptionCode();
+        return result;
     }
 }

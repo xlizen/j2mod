@@ -1,5 +1,5 @@
 /*
- * This file is part of j2mod-steve.
+ * This file is part of j2mod.
  *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -146,16 +146,7 @@ public class ModbusSerialListener implements ModbusListener {
                 m_SerialCon.close();
             }
         }
-    }    /**
-     * Sets the Modbus unit number for this <tt>ModbusSerialListener</tt>
-     *
-     * @param unit
-     *            Modbus unit number
-     */
-    public void setUnit(int unit) {
-        m_Unit = unit;
     }
-
     /**
      * Gets the Modbus unit number for this <tt>ModbusSerialListener</tt>
      *
@@ -165,15 +156,14 @@ public class ModbusSerialListener implements ModbusListener {
         return m_Unit;
     }
 
-    /**
-     * Sets the listening flag of this <tt>ModbusTCPListener</tt>.
+/**
+     * Sets the Modbus unit number for this <tt>ModbusSerialListener</tt>
      *
-     * @param b
-     *            true if listening (and accepting incoming connections), false
-     *            otherwise.
+     * @param unit
+     *            Modbus unit number
      */
-    public void setListening(boolean b) {
-        m_Listening = b;
+    public void setUnit(int unit) {
+        m_Unit = unit;
     }
 
     /**
@@ -188,11 +178,14 @@ public class ModbusSerialListener implements ModbusListener {
     }
 
     /**
-     * Stops this interface.
+     * Sets the listening flag of this <tt>ModbusTCPListener</tt>.
+     *
+     * @param b
+     *            true if listening (and accepting incoming connections), false
+     *            otherwise.
      */
-    public void stop() {
-        m_Listening = false;
-        m_Running = false;
+    public void setListening(boolean b) {
+        m_Listening = b;
     }
 
     /**
@@ -204,6 +197,14 @@ public class ModbusSerialListener implements ModbusListener {
         result.start();
 
         return result;
+    }
+
+    /**
+     * Stops this interface.
+     */
+    public void stop() {
+        m_Listening = false;
+        m_Running = false;
     }
 
 

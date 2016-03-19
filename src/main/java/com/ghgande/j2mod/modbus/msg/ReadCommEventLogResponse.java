@@ -1,5 +1,5 @@
 /*
- * This file is part of j2mod-steve.
+ * This file is part of j2mod.
  *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -118,6 +118,17 @@ public final class ReadCommEventLogResponse extends ModbusResponse {
         return result;
     }
 
+    public void setEvents(byte[] events) {
+        if (events.length > 64) {
+            throw new IllegalArgumentException("events list too big (> 64 bytes)");
+        }
+
+        m_Events = new byte[events.length];
+        if (m_Events.length > 0) {
+            System.arraycopy(events, 0, m_Events, 0, events.length);
+        }
+    }
+
     public void setEvents(int count) {
         if (count < 0 || count > 64) {
             throw new IllegalArgumentException("invalid event list size (0 <= count <= 64)");
@@ -135,17 +146,6 @@ public final class ReadCommEventLogResponse extends ModbusResponse {
         }
 
         m_Events[index] = (byte)event;
-    }
-
-    public void setEvents(byte[] events) {
-        if (events.length > 64) {
-            throw new IllegalArgumentException("events list too big (> 64 bytes)");
-        }
-
-        m_Events = new byte[events.length];
-        if (m_Events.length > 0) {
-            System.arraycopy(events, 0, m_Events, 0, events.length);
-        }
     }
 
     /**

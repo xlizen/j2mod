@@ -1,5 +1,5 @@
 /*
- * This file is part of j2mod-steve.
+ * This file is part of j2mod.
  *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -62,6 +62,15 @@ public abstract class SynchronizedAbstractRegister implements Register {
         return dest;
     }
 
+    public final synchronized void setValue(short s) {
+        if (m_Register == null) {
+            throw new IllegalAddressException();
+        }
+
+        m_Register[0] = (byte)(0xff & (s >> 8));
+        m_Register[1] = (byte)(0xff & s);
+    }
+
     public final synchronized void setValue(byte[] bytes) {
         if (bytes.length < 2) {
             throw new IllegalArgumentException();
@@ -83,15 +92,6 @@ public abstract class SynchronizedAbstractRegister implements Register {
 
         m_Register[0] = (byte)(0xff & (v >> 8));
         m_Register[1] = (byte)(0xff & v);
-    }
-
-    public final synchronized void setValue(short s) {
-        if (m_Register == null) {
-            throw new IllegalAddressException();
-        }
-
-        m_Register[0] = (byte)(0xff & (s >> 8));
-        m_Register[1] = (byte)(0xff & s);
     }
 
 }

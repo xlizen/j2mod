@@ -1,5 +1,5 @@
 /*
- * This file is part of j2mod-steve.
+ * This file is part of j2mod.
  *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -94,62 +94,39 @@ public class ModbusASCIITransport extends ModbusSerialTransport {
         m_ByteInOut = new BytesOutputStream(m_InBuffer);
     }
 
-    public ModbusResponse readResponse() throws ModbusIOException {
+    public void close() throws IOException {
+        m_InputStream.close();
+        m_OutputStream.close();
+    }
 
-        boolean done = false;
-        ModbusResponse response = null;
-        int in;
+    public void writeMessage(ModbusMessage msg) throws ModbusIOException {
 
         try {
-            do {
-                //1. Skip to FRAME_START
-                while ((in = m_InputStream.read()) != FRAME_START) {
-                    if (in == -1) {
-                        throw new IOException("I/O exception - Serial port timeout.");
-                    }
-                }
-                //2. Read to FRAME_END
-                synchronized (m_InBuffer) {
-                    m_ByteInOut.reset();
-                    while ((in = m_InputStream.read()) != FRAME_END) {
-                        if (in == -1) {
-                            throw new IOException("I/O exception - Serial port timeout.");
-                        }
-                        m_ByteInOut.writeByte(in);
-                    }
-                    int len = m_ByteInOut.size();
-                    if (Modbus.debug) {
-                        logger.debug("Received: " + ModbusUtil.toHex(m_InBuffer, 0, len));
-                    }
-                    //check LRC
-                    if (m_InBuffer[len - 1] != calculateLRC(m_InBuffer, 0, len, 1)) {
-                        continue;
-                    }
+            synchronized (m_ByteOut) {
+                //write message to byte out
+                msg.setHeadless();
+                msg.writeTo(m_ByteOut);
+                byte[] buf = m_ByteOut.getBuffer();
+                int len = m_ByteOut.size();
 
-                    m_ByteIn.reset(m_InBuffer, m_ByteInOut.size());
-                    m_ByteIn.readUnsignedByte();
-                    // JDC: To check slave unit identifier in a response we need to know
-                    // the slave id in the request.  This is not tracked since slaves
-                    // only respond when a master request is made and there is only one
-                    // master.  We are the only master, so we can assume that this
-                    // response message is from the slave responding to the last request.
-                    in = m_ByteIn.readUnsignedByte();
-                    //create request
-                    response = ModbusResponse.createModbusResponse(in);
-                    response.setHeadless();
-                    //read message
-                    m_ByteIn.reset(m_InBuffer, m_ByteInOut.size());
-                    response.readFrom(m_ByteIn);
+                //write message
+                m_OutputStream.write(FRAME_START);               //FRAMESTART
+                m_OutputStream.write(buf, 0, len);                 //PDU
+                logger.debug("Writing: " + ModbusUtil.toHex(buf, 0, len));
+                m_OutputStream.write(calculateLRC(buf, 0, len)); //LRC
+                m_OutputStream.write(FRAME_END);                 //FRAMEEND
+                m_OutputStream.flush();
+                m_ByteOut.reset();
+                // clears out the echoed message
+                // for RS485
+                if (m_Echo) {
+                    // read back the echoed message
+                    readEcho(len + 3);
                 }
-                done = true;
-            } while (!done);
-            return response;
+            }
         }
         catch (Exception ex) {
-            if (Modbus.debug) {
-                logger.debug(ex.getMessage());
-            }
-            throw new ModbusIOException("I/O exception - failed to read.");
+            throw new ModbusIOException("I/O failed to write");
         }
     }
 
@@ -207,40 +184,63 @@ public class ModbusASCIITransport extends ModbusSerialTransport {
 
     }
 
-    public void writeMessage(ModbusMessage msg) throws ModbusIOException {
+    public ModbusResponse readResponse() throws ModbusIOException {
+
+        boolean done = false;
+        ModbusResponse response = null;
+        int in;
 
         try {
-            synchronized (m_ByteOut) {
-                //write message to byte out
-                msg.setHeadless();
-                msg.writeTo(m_ByteOut);
-                byte[] buf = m_ByteOut.getBuffer();
-                int len = m_ByteOut.size();
-
-                //write message
-                m_OutputStream.write(FRAME_START);               //FRAMESTART
-                m_OutputStream.write(buf, 0, len);                 //PDU
-                logger.debug("Writing: " + ModbusUtil.toHex(buf, 0, len));
-                m_OutputStream.write(calculateLRC(buf, 0, len)); //LRC
-                m_OutputStream.write(FRAME_END);                 //FRAMEEND
-                m_OutputStream.flush();
-                m_ByteOut.reset();
-                // clears out the echoed message
-                // for RS485
-                if (m_Echo) {
-                    // read back the echoed message
-                    readEcho(len + 3);
+            do {
+                //1. Skip to FRAME_START
+                while ((in = m_InputStream.read()) != FRAME_START) {
+                    if (in == -1) {
+                        throw new IOException("I/O exception - Serial port timeout.");
+                    }
                 }
-            }
+                //2. Read to FRAME_END
+                synchronized (m_InBuffer) {
+                    m_ByteInOut.reset();
+                    while ((in = m_InputStream.read()) != FRAME_END) {
+                        if (in == -1) {
+                            throw new IOException("I/O exception - Serial port timeout.");
+                        }
+                        m_ByteInOut.writeByte(in);
+                    }
+                    int len = m_ByteInOut.size();
+                    if (Modbus.debug) {
+                        logger.debug("Received: " + ModbusUtil.toHex(m_InBuffer, 0, len));
+                    }
+                    //check LRC
+                    if (m_InBuffer[len - 1] != calculateLRC(m_InBuffer, 0, len, 1)) {
+                        continue;
+                    }
+
+                    m_ByteIn.reset(m_InBuffer, m_ByteInOut.size());
+                    m_ByteIn.readUnsignedByte();
+                    // JDC: To check slave unit identifier in a response we need to know
+                    // the slave id in the request.  This is not tracked since slaves
+                    // only respond when a master request is made and there is only one
+                    // master.  We are the only master, so we can assume that this
+                    // response message is from the slave responding to the last request.
+                    in = m_ByteIn.readUnsignedByte();
+                    //create request
+                    response = ModbusResponse.createModbusResponse(in);
+                    response.setHeadless();
+                    //read message
+                    m_ByteIn.reset(m_InBuffer, m_ByteInOut.size());
+                    response.readFrom(m_ByteIn);
+                }
+                done = true;
+            } while (!done);
+            return response;
         }
         catch (Exception ex) {
-            throw new ModbusIOException("I/O failed to write");
+            if (Modbus.debug) {
+                logger.debug(ex.getMessage());
+            }
+            throw new ModbusIOException("I/O exception - failed to read.");
         }
-    }
-
-    public void close() throws IOException {
-        m_InputStream.close();
-        m_OutputStream.close();
     }
 
     private byte calculateLRC(byte[] data, int off, int length, int tailskip) {

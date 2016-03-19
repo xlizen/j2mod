@@ -33,6 +33,15 @@ import com.ghgande.j2mod.modbus.msg.ModbusResponse;
 public interface ModbusTransaction {
 
     /**
+     * Returns the <tt>ModbusRequest</tt> instance
+     * associated with this <tt>ModbusTransaction</tt>.
+     * <p>
+     *
+     * @return the associated <tt>ModbusRequest</tt> instance.
+     */
+    ModbusRequest getRequest();
+
+    /**
      * Sets the <tt>ModbusRequest</tt> for this
      * <tt>ModbusTransaction</tt>.<p>
      * The related <tt>ModbusResponse</tt> is acquired
@@ -42,15 +51,6 @@ public interface ModbusTransaction {
      * @param req a <tt>ModbusRequest</tt>.
      */
     void setRequest(ModbusRequest req);
-
-    /**
-     * Returns the <tt>ModbusRequest</tt> instance
-     * associated with this <tt>ModbusTransaction</tt>.
-     * <p>
-     *
-     * @return the associated <tt>ModbusRequest</tt> instance.
-     */
-    ModbusRequest getRequest();
 
     /**
      * Returns the <tt>ModbusResponse</tt> instance
@@ -74,15 +74,6 @@ public interface ModbusTransaction {
     int getTransactionID();
 
     /**
-     * Set the amount of retries for opening
-     * the connection for executing the transaction.
-     * <p>
-     *
-     * @param retries the amount of retries as <tt>int</tt>.
-     */
-    void setRetries(int retries);
-
-    /**
      * Returns the amount of retries for opening
      * the connection for executing the transaction.
      * <p>
@@ -92,13 +83,13 @@ public interface ModbusTransaction {
     int getRetries();
 
     /**
-     * Sets the flag that controls whether the
-     * validity of a transaction will be checked.
+     * Set the amount of retries for opening
+     * the connection for executing the transaction.
      * <p>
      *
-     * @param b true if checking validity, false otherwise.
+     * @param retries the amount of retries as <tt>int</tt>.
      */
-    void setCheckingValidity(boolean b);
+    void setRetries(int retries);
 
     /**
      * Tests whether the validity of a transaction
@@ -108,6 +99,15 @@ public interface ModbusTransaction {
      * @return true if checking validity, false otherwise.
      */
     boolean isCheckingValidity();
+
+    /**
+     * Sets the flag that controls whether the
+     * validity of a transaction will be checked.
+     * <p>
+     *
+     * @param b true if checking validity, false otherwise.
+     */
+    void setCheckingValidity(boolean b);
 
     /**
      * Executes this <tt>ModbusTransaction</tt>.

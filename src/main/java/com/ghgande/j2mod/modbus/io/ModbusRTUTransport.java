@@ -1,5 +1,5 @@
 /*
- * This file is part of j2mod-steve.
+ * This file is part of j2mod.
  *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -290,73 +290,52 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
     }
 
     /**
-     * readResponse - Read the bytes for the response from the slave.
+     * Closes the comms port and any streams associated with it
      *
-     * @return a <tt>ModbusRespose</tt>
+     * @throws IOException
      */
-    public ModbusResponse readResponse() throws ModbusIOException {
-        boolean done;
-        ModbusResponse response;
-        int dlength;
+    public void close() throws IOException {
+        m_CommPort.closePort();
+    }
 
+    /**
+     * Writes the Modbus message to the comms port
+     *
+     * @param msg a <code>ModbusMessage</code> value
+     *
+     * @throws ModbusIOException If an error occurred bundling the message
+     */
+    public void writeMessage(ModbusMessage msg) throws ModbusIOException {
         try {
-            do {
-                // 1. read to function code, create request and read function
-                // specific bytes
-                synchronized (m_ByteIn) {
-                    int uid = m_InputStream.read();
-                    if (uid != -1) {
-                        int fc = m_InputStream.read();
-                        m_ByteInOut.reset();
-                        m_ByteInOut.writeByte(uid);
-                        m_ByteInOut.writeByte(fc);
-
-                        // create response to acquire length of message
-                        response = ModbusResponse.createModbusResponse(fc);
-                        response.setHeadless();
-
-						/*
-						 * With Modbus RTU, there is no end frame. Either we
-						 * assume the message is complete as is or we must do
-						 * function specific processing to know the correct
-						 * length. To avoid moving frame timing to the serial
-						 * input functions, we set the timeout and to message
-						 * specific parsing to read a response.
-						 */
-                        getResponse(fc, m_ByteInOut);
-                        dlength = m_ByteInOut.size() - 2; // less the crc
-                        if (Modbus.debug) {
-                            System.err.println("Response: " + ModbusUtil.toHex(m_ByteInOut.getBuffer(), 0, dlength + 2));
-                        }
-                        m_ByteIn.reset(m_InBuffer, dlength);
-
-                        // check CRC
-                        int[] crc = ModbusUtil.calculateCRC(m_InBuffer, 0, dlength); // does not include CRC
-                        if (ModbusUtil.unsignedByteToInt(m_InBuffer[dlength]) != crc[0] && ModbusUtil.unsignedByteToInt(m_InBuffer[dlength + 1]) != crc[1]) {
-                            if (Modbus.debug) {
-                                System.err.println("CRC should be " + crc[0] + ", " + crc[1]);
-                            }
-                            throw new IOException("CRC Error in received frame: " + dlength + " bytes: " + ModbusUtil.toHex(m_ByteIn.getBuffer(), 0, dlength));
-                        }
-                    }
-                    else {
-                        throw new IOException("Error reading response");
-                    }
-
-                    // read response
-                    m_ByteIn.reset(m_InBuffer, dlength);
-                    response.readFrom(m_ByteIn);
-                    done = true;
+            int len;
+            synchronized (m_ByteOut) {
+                // first clear any input from the receive buffer to prepare
+                // for the reply since RTU doesn't have message delimiters
+                clearInput();
+                // write message to byte out
+                m_ByteOut.reset();
+                msg.setHeadless();
+                msg.writeTo(m_ByteOut);
+                len = m_ByteOut.size();
+                int[] crc = ModbusUtil.calculateCRC(m_ByteOut.getBuffer(), 0, len);
+                m_ByteOut.writeByte(crc[0]);
+                m_ByteOut.writeByte(crc[1]);
+                // write message
+                m_CommPort.writeBytes(m_ByteOut.getBuffer(), m_ByteOut.size());
+                if (Modbus.debug) {
+                    System.err.println("Sent: " + ModbusUtil.toHex(m_ByteOut.getBuffer(), 0, m_ByteOut.size()));
                 }
-            } while (!done);
-            return response;
+                // clears out the echoed message
+                // for RS485
+                if (m_Echo) {
+                    readEcho(len);
+                }
+                lastRequest = new byte[len];
+                System.arraycopy(m_ByteOut.getBuffer(), 0, lastRequest, 0, m_ByteOut.size());
+            }
         }
         catch (Exception ex) {
-            if (Modbus.debug) {
-                System.err.println("Last request: " + ModbusUtil.toHex(lastRequest));
-                System.err.println(ex.getMessage());
-            }
-            throw new ModbusIOException("I/O exception - failed to read");
+            throw new ModbusIOException("I/O failed to write");
         }
     }
 
@@ -446,52 +425,73 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
     }
 
     /**
-     * Writes the Modbus message to the comms port
+     * readResponse - Read the bytes for the response from the slave.
      *
-     * @param msg a <code>ModbusMessage</code> value
-     *
-     * @throws ModbusIOException If an error occurred bundling the message
+     * @return a <tt>ModbusRespose</tt>
      */
-    public void writeMessage(ModbusMessage msg) throws ModbusIOException {
+    public ModbusResponse readResponse() throws ModbusIOException {
+        boolean done;
+        ModbusResponse response;
+        int dlength;
+
         try {
-            int len;
-            synchronized (m_ByteOut) {
-                // first clear any input from the receive buffer to prepare
-                // for the reply since RTU doesn't have message delimiters
-                clearInput();
-                // write message to byte out
-                m_ByteOut.reset();
-                msg.setHeadless();
-                msg.writeTo(m_ByteOut);
-                len = m_ByteOut.size();
-                int[] crc = ModbusUtil.calculateCRC(m_ByteOut.getBuffer(), 0, len);
-                m_ByteOut.writeByte(crc[0]);
-                m_ByteOut.writeByte(crc[1]);
-                // write message
-                m_CommPort.writeBytes(m_ByteOut.getBuffer(), m_ByteOut.size());
-                if (Modbus.debug) {
-                    System.err.println("Sent: " + ModbusUtil.toHex(m_ByteOut.getBuffer(), 0, m_ByteOut.size()));
+            do {
+                // 1. read to function code, create request and read function
+                // specific bytes
+                synchronized (m_ByteIn) {
+                    int uid = m_InputStream.read();
+                    if (uid != -1) {
+                        int fc = m_InputStream.read();
+                        m_ByteInOut.reset();
+                        m_ByteInOut.writeByte(uid);
+                        m_ByteInOut.writeByte(fc);
+
+                        // create response to acquire length of message
+                        response = ModbusResponse.createModbusResponse(fc);
+                        response.setHeadless();
+
+						/*
+						 * With Modbus RTU, there is no end frame. Either we
+						 * assume the message is complete as is or we must do
+						 * function specific processing to know the correct
+						 * length. To avoid moving frame timing to the serial
+						 * input functions, we set the timeout and to message
+						 * specific parsing to read a response.
+						 */
+                        getResponse(fc, m_ByteInOut);
+                        dlength = m_ByteInOut.size() - 2; // less the crc
+                        if (Modbus.debug) {
+                            System.err.println("Response: " + ModbusUtil.toHex(m_ByteInOut.getBuffer(), 0, dlength + 2));
+                        }
+                        m_ByteIn.reset(m_InBuffer, dlength);
+
+                        // check CRC
+                        int[] crc = ModbusUtil.calculateCRC(m_InBuffer, 0, dlength); // does not include CRC
+                        if (ModbusUtil.unsignedByteToInt(m_InBuffer[dlength]) != crc[0] && ModbusUtil.unsignedByteToInt(m_InBuffer[dlength + 1]) != crc[1]) {
+                            if (Modbus.debug) {
+                                System.err.println("CRC should be " + crc[0] + ", " + crc[1]);
+                            }
+                            throw new IOException("CRC Error in received frame: " + dlength + " bytes: " + ModbusUtil.toHex(m_ByteIn.getBuffer(), 0, dlength));
+                        }
+                    }
+                    else {
+                        throw new IOException("Error reading response");
+                    }
+
+                    // read response
+                    m_ByteIn.reset(m_InBuffer, dlength);
+                    response.readFrom(m_ByteIn);
+                    done = true;
                 }
-                // clears out the echoed message
-                // for RS485
-                if (m_Echo) {
-                    readEcho(len);
-                }
-                lastRequest = new byte[len];
-                System.arraycopy(m_ByteOut.getBuffer(), 0, lastRequest, 0, m_ByteOut.size());
-            }
+            } while (!done);
+            return response;
         }
         catch (Exception ex) {
-            throw new ModbusIOException("I/O failed to write");
+            if (Modbus.debug) {
+                System.err.println("Last request: " + ModbusUtil.toHex(lastRequest));
+                System.err.println(ex.getMessage());
+            }
+            throw new ModbusIOException("I/O exception - failed to read");
         }
-    }
-
-    /**
-     * Closes the comms port and any streams associated with it
-     *
-     * @throws IOException
-     */
-    public void close() throws IOException {
-        m_CommPort.closePort();
     }
 }

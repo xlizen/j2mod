@@ -1,5 +1,5 @@
 /*
- * This file is part of j2mod-steve.
+ * This file is part of j2mod.
  *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -48,6 +48,11 @@ public abstract class AbstractRegister
         return dest;
     }
 
+    public final void setValue(short s) {
+        m_Register[0] = (byte)(0xff & (s >> 8));
+        m_Register[1] = (byte)(0xff & s);
+    }
+
     public final void setValue(byte[] bytes) {
         if (bytes.length < 2) {
             throw new IllegalArgumentException();
@@ -61,11 +66,6 @@ public abstract class AbstractRegister
     public final void setValue(int v) {
         m_Register[0] = (byte)(0xff & (v >> 8));
         m_Register[1] = (byte)(0xff & v);
-    }
-
-    public final void setValue(short s) {
-        m_Register[0] = (byte)(0xff & (s >> 8));
-        m_Register[1] = (byte)(0xff & s);
     }
 
 }

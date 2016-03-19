@@ -1,5 +1,5 @@
 /*
- * This file is part of j2mod-steve.
+ * This file is part of j2mod.
  *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -84,20 +84,8 @@ public class ModbusTCPListener implements ModbusListener {
         catch (UnknownHostException ex) {
             // Can't happen -- size is fixed.
         }
-    }    /**
-     * Gets the unit number supported by this Modbus/TCP connection. A
-     * Modbus/TCP connection, by default, supports unit 0, but may also support
-     * a fixed unit number, or a range of unit numbers if the device is a
-     * Modbus/TCP gateway.  If the unit number is non-zero, all packets for
-     * any other unit number should be discarded.
-     *
-     * @return unit number supported by this interface.
-     */
-    public int getUnit() {
-        return m_Unit;
     }
-
-    /**
+/**
      * Sets the port to be listened to.
      *
      * @param port
@@ -105,19 +93,9 @@ public class ModbusTCPListener implements ModbusListener {
      */
     public void setPort(int port) {
         m_Port = port;
-    }    /**
-     * Sets the unit number to be listened for.  A Modbus/TCP connection, by
-     * default, supports unit 0, but may also support a fixed unit number, or a
-     * range of unit numbers if the device is a Modbus/TCP gateway.
-     *
-     * @param unit
-     *            the number of the Modbus unit as <tt>int</tt>.
-     */
-    public void setUnit(int unit) {
-        m_Unit = unit;
     }
 
-    /**
+        /**
      * Sets the address of the interface to be listened to.
      *
      * @param addr
@@ -126,7 +104,6 @@ public class ModbusTCPListener implements ModbusListener {
     public void setAddress(InetAddress addr) {
         m_Address = addr;
     }
-
     /**
      * Starts this <tt>ModbusTCPListener</tt>.
      *
@@ -139,7 +116,7 @@ public class ModbusTCPListener implements ModbusListener {
         m_Listener.start();
     }
 
-    /**
+/**
      * Accepts incoming connections and handles then with
      * <tt>TCPConnectionHandler</tt> instances.
      */
@@ -191,21 +168,42 @@ public class ModbusTCPListener implements ModbusListener {
         catch (IOException e) {
             // FIXME: this is a major failure, how do we handle this
         }
-    }    /**
-     * Stops this <tt>ModbusTCPListener</tt>.
-     */
-    public void stop() {
-        m_Listening = false;
-        try {
-            m_ServerSocket.close();
-            m_Listener.join();
-        }
-        catch (Exception ex) {
-            // ?
-        }
     }
 
+/**
+     * Gets the unit number supported by this Modbus/TCP connection. A
+     * Modbus/TCP connection, by default, supports unit 0, but may also support
+     * a fixed unit number, or a range of unit numbers if the device is a
+     * Modbus/TCP gateway.  If the unit number is non-zero, all packets for
+     * any other unit number should be discarded.
+     *
+     * @return unit number supported by this interface.
+     */
+    public int getUnit() {
+        return m_Unit;
+    }
 
+    /**
+     * Sets the unit number to be listened for.  A Modbus/TCP connection, by
+     * default, supports unit 0, but may also support a fixed unit number, or a
+     * range of unit numbers if the device is a Modbus/TCP gateway.
+     *
+     * @param unit
+     *            the number of the Modbus unit as <tt>int</tt>.
+     */
+    public void setUnit(int unit) {
+        m_Unit = unit;
+    }
+    /**
+     * Tests if this <tt>ModbusTCPListener</tt> is listening and accepting
+     * incoming connections.
+     *
+     * @return true if listening (and accepting incoming connections), false
+     *         otherwise.
+     */
+    public boolean isListening() {
+        return m_Listening;
+    }
 
     /**
      * Set the listening state of this <tt>ModbusTCPListener</tt> object.
@@ -219,17 +217,6 @@ public class ModbusTCPListener implements ModbusListener {
     }
 
     /**
-     * Tests if this <tt>ModbusTCPListener</tt> is listening and accepting
-     * incoming connections.
-     *
-     * @return true if listening (and accepting incoming connections), false
-     *         otherwise.
-     */
-    public boolean isListening() {
-        return m_Listening;
-    }
-
-    /**
      * Start the listener thread for this serial interface.
      */
     public Thread listen() {
@@ -238,6 +225,20 @@ public class ModbusTCPListener implements ModbusListener {
         result.start();
 
         return result;
+    }
+
+/**
+     * Stops this <tt>ModbusTCPListener</tt>.
+     */
+    public void stop() {
+        m_Listening = false;
+        try {
+            m_ServerSocket.close();
+            m_Listener.join();
+        }
+        catch (Exception ex) {
+            // ?
+        }
     }
 
 

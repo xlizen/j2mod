@@ -1,5 +1,5 @@
 /*
- * This file is part of j2mod-steve.
+ * This file is part of j2mod.
  *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -98,20 +98,14 @@ public class ModbusSerialTransaction implements ModbusTransaction {
      */
     public int getTransDelayMS() {
         return m_TransDelayMS;
-    }    public int getTransactionID() {
-        return c_TransactionID;
     }
-
-    /**
+/**
      * Set the TransDelayMS value.
      *
      * @param newTransDelayMS The new TransDelayMS value.
      */
     public void setTransDelayMS(int newTransDelayMS) {
         this.m_TransDelayMS = newTransDelayMS;
-    }    public void setRequest(ModbusRequest req) {
-        m_Request = req;
-        //m_Response = req.getResponse();
     }
 
     /**
@@ -126,59 +120,36 @@ public class ModbusSerialTransaction implements ModbusTransaction {
             throw new ModbusException("Assertion failed, transaction not executable"
             );
         }
-    }    public ModbusRequest getRequest() {
+    }
+public ModbusRequest getRequest() {
         return m_Request;
     }
 
-    /**
-     * Checks the validity of the transaction, by
-     * checking if the values of the response correspond
-     * to the values of the request.
-     *
-     * @throws ModbusException if the transaction is not valid.
-     */
-    private void checkValidity() throws ModbusException {
-
-    }    public ModbusResponse getResponse() {
+    public void setRequest(ModbusRequest req) {
+        m_Request = req;
+        //m_Response = req.getResponse();
+    }
+public ModbusResponse getResponse() {
         return m_Response;
     }
 
-    /**
-     * Toggles the transaction identifier, to ensure
-     * that each transaction has a distinctive
-     * identifier.<br>
-     * When the maximum value of 65535 has been reached,
-     * the identifiers will start from zero again.
-     */
-    private void toggleTransactionID() {
-        if (isCheckingValidity()) {
-            if (c_TransactionID == (Short.MAX_VALUE * 2)) {
-                c_TransactionID = 0;
-            }
-            else {
-                c_TransactionID++;
-            }
-        }
-        m_Request.setTransactionID(getTransactionID());
-    }    public void setCheckingValidity(boolean b) {
-        m_ValidityCheck = b;
+    public int getTransactionID() {
+        return c_TransactionID;
     }
-
-    public boolean isCheckingValidity() {
-        return m_ValidityCheck;
-    }
-
     public int getRetries() {
         return m_Retries;
     }
 
-    public void setRetries(int num) {
+        public void setRetries(int num) {
         m_Retries = num;
     }
+    public boolean isCheckingValidity() {
+        return m_ValidityCheck;
+    }
 
-
-
-
+public void setCheckingValidity(boolean b) {
+        m_ValidityCheck = b;
+    }
 
     public void execute() throws ModbusIOException, ModbusSlaveException,
             ModbusException {
@@ -230,6 +201,36 @@ public class ModbusSerialTransaction implements ModbusTransaction {
         }
         //toggle the id
         toggleTransactionID();
+    }
+
+/**
+     * Checks the validity of the transaction, by
+     * checking if the values of the response correspond
+     * to the values of the request.
+     *
+     * @throws ModbusException if the transaction is not valid.
+     */
+    private void checkValidity() throws ModbusException {
+
+    }
+
+/**
+     * Toggles the transaction identifier, to ensure
+     * that each transaction has a distinctive
+     * identifier.<br>
+     * When the maximum value of 65535 has been reached,
+     * the identifiers will start from zero again.
+     */
+    private void toggleTransactionID() {
+        if (isCheckingValidity()) {
+            if (c_TransactionID == (Short.MAX_VALUE * 2)) {
+                c_TransactionID = 0;
+            }
+            else {
+                c_TransactionID++;
+            }
+        }
+        m_Request.setTransactionID(getTransactionID());
     }
 
 
