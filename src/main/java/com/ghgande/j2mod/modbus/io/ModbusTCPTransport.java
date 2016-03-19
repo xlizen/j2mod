@@ -1,5 +1,5 @@
 /*
- * This file is part of j2mod.
+ * This file is part of j2mod-steve.
  *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -50,6 +50,27 @@ public class ModbusTCPTransport implements ModbusTransport {
     private Socket m_Socket = null;
     private TCPMasterConnection m_Master = null;
     private boolean headless = false; // Some TCP implementations are.
+
+    /**
+     * Constructs a new <tt>ModbusTransport</tt> instance, for a given
+     * <tt>Socket</tt>.
+     * <p>
+     *
+     * @param socket the <tt>Socket</tt> used for message transport.
+     */
+    public ModbusTCPTransport(Socket socket) {
+        try {
+            setSocket(socket);
+            socket.setSoTimeout(m_Timeout);
+        }
+        catch (IOException ex) {
+            if (Modbus.debug) {
+                logger.debug("ModbusTCPTransport::Socket invalid.");
+            }
+
+            throw new IllegalStateException("Socket invalid.");
+        }
+    }
 
     /**
      * Sets the <tt>Socket</tt> used for message transport and prepares the
@@ -261,10 +282,10 @@ public class ModbusTCPTransport implements ModbusTransport {
 					 * The transaction ID is the first word (offset 0) in the
 					 * data that was just read. It will be echoed back to the
 					 * requester.
-					 * 
+					 *
 					 * The protocol ID is the second word (offset 2) in the
 					 * data. It should always be 0, but I don't check.
-					 * 
+					 *
 					 * The length of the payload is the third word (offset 4) in
 					 * the data that was just read. That's what I need in order
 					 * to read the rest of the response.
@@ -361,26 +382,5 @@ public class ModbusTCPTransport implements ModbusTransport {
         m_ByteIn = new BytesInputStream(Modbus.MAX_MESSAGE_LENGTH + 6);
 
         m_ByteOut = new BytesOutputStream(Modbus.MAX_MESSAGE_LENGTH + 6);
-    }
-
-    /**
-     * Constructs a new <tt>ModbusTransport</tt> instance, for a given
-     * <tt>Socket</tt>.
-     * <p>
-     *
-     * @param socket the <tt>Socket</tt> used for message transport.
-     */
-    public ModbusTCPTransport(Socket socket) {
-        try {
-            setSocket(socket);
-            socket.setSoTimeout(m_Timeout);
-        }
-        catch (IOException ex) {
-            if (Modbus.debug) {
-                logger.debug("ModbusTCPTransport::Socket invalid.");
-            }
-
-            throw new IllegalStateException("Socket invalid.");
-        }
     }
 }

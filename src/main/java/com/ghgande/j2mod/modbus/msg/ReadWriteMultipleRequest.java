@@ -1,5 +1,5 @@
 /*
- * This file is part of j2mod.
+ * This file is part of j2mod-steve.
  *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -41,6 +41,59 @@ public final class ReadWriteMultipleRequest extends ModbusRequest {
     private int m_WriteReference;
     private int m_WriteCount;
     private Register m_Registers[];
+
+    /**
+     * Constructs a new <tt>Read/Write Multiple Registers Request</tt> instance.
+     */
+    public ReadWriteMultipleRequest(int unit, int readRef, int readCount, int writeRef, int writeCount) {
+        super();
+
+        setUnitID(unit);
+        setFunctionCode(Modbus.READ_WRITE_MULTIPLE);
+
+		/*
+         * There is no additional data in this request.
+		 */
+        setDataLength(9 + writeCount * 2);
+
+        m_ReadReference = readRef;
+        m_ReadCount = readCount;
+        m_WriteReference = writeRef;
+        m_WriteCount = writeCount;
+        m_Registers = new Register[writeCount];
+        for (int i = 0; i < writeCount; i++) {
+            m_Registers[i] = new SimpleRegister(0);
+        }
+    }
+
+    /**
+     * Constructs a new <tt>Read/Write Multiple Registers Request</tt> instance.
+     */
+    public ReadWriteMultipleRequest(int unit) {
+        super();
+
+        setUnitID(unit);
+        setFunctionCode(Modbus.READ_WRITE_MULTIPLE);
+
+		/*
+		 * There is no additional data in this request.
+		 */
+        setDataLength(9);
+    }
+
+    /**
+     * Constructs a new <tt>Read/Write Multiple Registers Request</tt> instance.
+     */
+    public ReadWriteMultipleRequest() {
+        super();
+
+        setFunctionCode(Modbus.READ_WRITE_MULTIPLE);
+
+		/*
+		 * There is no additional data in this request.
+		 */
+        setDataLength(9);
+    }
 
     /**
      * createResponse -- create an empty response for this request.
@@ -102,6 +155,18 @@ public final class ReadWriteMultipleRequest extends ModbusRequest {
     }
 
     /**
+     * getReadReference - Returns the reference of the register to start writing
+     * to with this <tt>ReadWriteMultipleRequest</tt>.
+     * <p>
+     *
+     * @return the reference of the register to start writing to as <tt>int</tt>
+     *         .
+     */
+    public int getReadReference() {
+        return m_ReadReference;
+    }
+
+    /**
      * setReadReference - Sets the reference of the register to writing to with
      * this <tt>ReadWriteMultipleRequest</tt>.
      * <p>
@@ -115,15 +180,15 @@ public final class ReadWriteMultipleRequest extends ModbusRequest {
     }
 
     /**
-     * getReadReference - Returns the reference of the register to start writing
-     * to with this <tt>ReadWriteMultipleRequest</tt>.
+     * getWriteReference - Returns the reference of the register to start
+     * writing to with this <tt>ReadWriteMultipleRequest</tt>.
      * <p>
      *
      * @return the reference of the register to start writing to as <tt>int</tt>
      *         .
      */
-    public int getReadReference() {
-        return m_ReadReference;
+    public int getWriteReference() {
+        return m_WriteReference;
     }
 
     /**
@@ -140,15 +205,16 @@ public final class ReadWriteMultipleRequest extends ModbusRequest {
     }
 
     /**
-     * getWriteReference - Returns the reference of the register to start
-     * writing to with this <tt>ReadWriteMultipleRequest</tt>.
+     * getRegisters - Returns the registers to be written with this
+     * <tt>ReadWriteMultipleRequest</tt>.
      * <p>
      *
-     * @return the reference of the register to start writing to as <tt>int</tt>
-     *         .
+     * @return the registers to be read as <tt>Register[]</tt>.
      */
-    public int getWriteReference() {
-        return m_WriteReference;
+    public synchronized Register[] getRegisters() {
+        Register[] dest = new Register[m_Registers.length];
+        System.arraycopy(m_Registers, 0, dest, 0, dest.length);
+        return dest;
     }
 
     /**
@@ -162,19 +228,6 @@ public final class ReadWriteMultipleRequest extends ModbusRequest {
     public void setRegisters(Register[] registers) {
         m_Registers = registers;
         m_WriteCount = registers != null ? registers.length : 0;
-    }
-
-    /**
-     * getRegisters - Returns the registers to be written with this
-     * <tt>ReadWriteMultipleRequest</tt>.
-     * <p>
-     *
-     * @return the registers to be read as <tt>Register[]</tt>.
-     */
-    public synchronized Register[] getRegisters() {
-        Register[] dest = new Register[m_Registers.length];
-        System.arraycopy(m_Registers, 0, dest, 0, dest.length);
-        return dest;
     }
 
     /**
@@ -266,6 +319,15 @@ public final class ReadWriteMultipleRequest extends ModbusRequest {
     }
 
     /**
+     * getNonWordDataHandler - Returns the actual non word data handler.
+     *
+     * @return the actual <tt>NonWordDataHandler</tt>.
+     */
+    public NonWordDataHandler getNonWordDataHandler() {
+        return m_NonWordDataHandler;
+    }
+
+    /**
      * setNonWordDataHandler - Sets a non word data handler. A non-word data
      * handler is responsible for converting words from a Modbus packet into the
      * non-word values associated with the actual device's registers.
@@ -275,15 +337,6 @@ public final class ReadWriteMultipleRequest extends ModbusRequest {
      */
     public void setNonWordDataHandler(NonWordDataHandler dhandler) {
         m_NonWordDataHandler = dhandler;
-    }
-
-    /**
-     * getNonWordDataHandler - Returns the actual non word data handler.
-     *
-     * @return the actual <tt>NonWordDataHandler</tt>.
-     */
-    public NonWordDataHandler getNonWordDataHandler() {
-        return m_NonWordDataHandler;
     }
 
     /**
@@ -346,58 +399,5 @@ public final class ReadWriteMultipleRequest extends ModbusRequest {
             results[offset++] = bytes[1];
         }
         return results;
-    }
-
-    /**
-     * Constructs a new <tt>Read/Write Multiple Registers Request</tt> instance.
-     */
-    public ReadWriteMultipleRequest(int unit, int readRef, int readCount, int writeRef, int writeCount) {
-        super();
-
-        setUnitID(unit);
-        setFunctionCode(Modbus.READ_WRITE_MULTIPLE);
-
-		/*
-         * There is no additional data in this request.
-		 */
-        setDataLength(9 + writeCount * 2);
-
-        m_ReadReference = readRef;
-        m_ReadCount = readCount;
-        m_WriteReference = writeRef;
-        m_WriteCount = writeCount;
-        m_Registers = new Register[writeCount];
-        for (int i = 0; i < writeCount; i++) {
-            m_Registers[i] = new SimpleRegister(0);
-        }
-    }
-
-    /**
-     * Constructs a new <tt>Read/Write Multiple Registers Request</tt> instance.
-     */
-    public ReadWriteMultipleRequest(int unit) {
-        super();
-
-        setUnitID(unit);
-        setFunctionCode(Modbus.READ_WRITE_MULTIPLE);
-
-		/*
-		 * There is no additional data in this request.
-		 */
-        setDataLength(9);
-    }
-
-    /**
-     * Constructs a new <tt>Read/Write Multiple Registers Request</tt> instance.
-     */
-    public ReadWriteMultipleRequest() {
-        super();
-
-        setFunctionCode(Modbus.READ_WRITE_MULTIPLE);
-
-		/*
-		 * There is no additional data in this request.
-		 */
-        setDataLength(9);
     }
 }

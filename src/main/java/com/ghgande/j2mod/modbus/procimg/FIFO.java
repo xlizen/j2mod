@@ -1,5 +1,5 @@
 /*
- * This file is part of j2mod.
+ * This file is part of j2mod-steve.
  *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -38,6 +38,12 @@ public class FIFO {
     private int m_Register_Count;
     private Vector<Register> m_Registers;
 
+    public FIFO(int address) {
+        m_Address = address;
+        m_Register_Count = 0;
+        m_Registers = new Vector<Register>();
+    }
+
     public synchronized int getRegisterCount() {
         return m_Register_Count;
     }
@@ -71,11 +77,5 @@ public class FIFO {
 
     public int getAddress() {
         return m_Address;
-    }
-
-    public FIFO(int address) {
-        m_Address = address;
-        m_Register_Count = 0;
-        m_Registers = new Vector<Register>();
     }
 }

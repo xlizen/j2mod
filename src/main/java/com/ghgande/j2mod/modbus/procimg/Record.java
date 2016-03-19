@@ -1,5 +1,5 @@
 /*
- * This file is part of j2mod.
+ * This file is part of j2mod-steve.
  *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -32,6 +32,16 @@ public class Record {
     private int m_Register_Count;
     private Register m_Registers[];
 
+    public Record(int recordNumber, int registers) {
+        m_Record_Number = recordNumber;
+        m_Register_Count = registers;
+        m_Registers = new Register[registers];
+
+        for (int i = 0; i < m_Register_Count; i++) {
+            m_Registers[i] = new SimpleRegister(0);
+        }
+    }
+
     public int getRecordNumber() {
         return m_Record_Number;
     }
@@ -56,15 +66,5 @@ public class Record {
         m_Registers[ref] = register;
 
         return this;
-    }
-
-    public Record(int recordNumber, int registers) {
-        m_Record_Number = recordNumber;
-        m_Register_Count = registers;
-        m_Registers = new Register[registers];
-
-        for (int i = 0; i < m_Register_Count; i++) {
-            m_Registers[i] = new SimpleRegister(0);
-        }
     }
 }

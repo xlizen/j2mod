@@ -1,5 +1,5 @@
 /*
- * This file is part of j2mod.
+ * This file is part of j2mod-steve.
  *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -40,10 +40,12 @@ public abstract class SynchronizedAbstractRegister implements Register {
         return ((m_Register[0] & 0xff) << 8 | (m_Register[1] & 0xff));
     }
 
-    public synchronized byte[] toBytes() {
-        byte[] dest = new byte[m_Register.length];
-        System.arraycopy(m_Register, 0, dest, 0, dest.length);
-        return dest;
+    public final int toUnsignedShort() {
+        if (m_Register == null) {
+            throw new IllegalAddressException();
+        }
+
+        return ((m_Register[0] & 0xff) << 8 | (m_Register[1] & 0xff));
     }
 
     public final short toShort() {
@@ -54,12 +56,24 @@ public abstract class SynchronizedAbstractRegister implements Register {
         return (short)((m_Register[0] << 8) | (m_Register[1] & 0xff));
     }
 
-    public final int toUnsignedShort() {
-        if (m_Register == null) {
-            throw new IllegalAddressException();
-        }
+    public synchronized byte[] toBytes() {
+        byte[] dest = new byte[m_Register.length];
+        System.arraycopy(m_Register, 0, dest, 0, dest.length);
+        return dest;
+    }
 
-        return ((m_Register[0] & 0xff) << 8 | (m_Register[1] & 0xff));
+    public final synchronized void setValue(byte[] bytes) {
+        if (bytes.length < 2) {
+            throw new IllegalArgumentException();
+        }
+        else {
+            if (m_Register == null) {
+                throw new IllegalAddressException();
+            }
+
+            m_Register[0] = bytes[0];
+            m_Register[1] = bytes[1];
+        }
     }
 
     public final synchronized void setValue(int v) {
@@ -78,20 +92,6 @@ public abstract class SynchronizedAbstractRegister implements Register {
 
         m_Register[0] = (byte)(0xff & (s >> 8));
         m_Register[1] = (byte)(0xff & s);
-    }
-
-    public final synchronized void setValue(byte[] bytes) {
-        if (bytes.length < 2) {
-            throw new IllegalArgumentException();
-        }
-        else {
-            if (m_Register == null) {
-                throw new IllegalAddressException();
-            }
-
-            m_Register[0] = bytes[0];
-            m_Register[1] = bytes[1];
-        }
     }
 
 }

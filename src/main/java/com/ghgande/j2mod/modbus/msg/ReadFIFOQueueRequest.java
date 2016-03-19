@@ -1,5 +1,5 @@
 /*
- * This file is part of j2mod.
+ * This file is part of j2mod-steve.
  *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -39,6 +39,16 @@ import java.io.IOException;
 public final class ReadFIFOQueueRequest extends ModbusRequest {
 
     private int m_Reference;
+
+    /**
+     * Constructs a new <tt>Read FIFO Queue</tt> request instance.
+     */
+    public ReadFIFOQueueRequest() {
+        super();
+
+        setFunctionCode(Modbus.READ_FIFO_QUEUE);
+        setDataLength(2);
+    }
 
     /**
      * getReference -- get the queue register number.
@@ -142,15 +152,5 @@ public final class ReadFIFOQueueRequest extends ModbusRequest {
         results[1] = (byte)(m_Reference & 0xFF);
 
         return results;
-    }
-
-    /**
-     * Constructs a new <tt>Read FIFO Queue</tt> request instance.
-     */
-    public ReadFIFOQueueRequest() {
-        super();
-
-        setFunctionCode(Modbus.READ_FIFO_QUEUE);
-        setDataLength(2);
     }
 }

@@ -1,5 +1,5 @@
 /*
- * This file is part of j2mod.
+ * This file is part of j2mod-steve.
  *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -87,17 +87,6 @@ public class DefaultProcessImageFactory implements ProcessImageFactory {
     /**
      * Returns a new InputRegister instance with a given value.
      *
-     * @param value the value of the register as an <tt>int</tt>
-     *
-     * @return an InputRegister instance.
-     */
-    public InputRegister createInputRegister(int value) {
-        return new SimpleInputRegister(value);
-    }
-
-    /**
-     * Returns a new InputRegister instance with a given value.
-     *
      * @param b1 the first <tt>byte</tt>.
      * @param b2 the second <tt>byte</tt>.
      *
@@ -117,15 +106,6 @@ public class DefaultProcessImageFactory implements ProcessImageFactory {
     }
 
     /**
-     * Creates a new SimpleRegister instance.
-     *
-     * @return a SimpleRegister instance.
-     */
-    public Register createRegister(int value) {
-        return new SimpleRegister(value);
-    }
-
-    /**
      * Returns a new Register instance with a given value.
      *
      * @param b1 the first <tt>byte</tt>.
@@ -135,5 +115,25 @@ public class DefaultProcessImageFactory implements ProcessImageFactory {
      */
     public Register createRegister(byte b1, byte b2) {
         return new SimpleRegister(b1, b2);
+    }
+
+    /**
+     * Returns a new InputRegister instance with a given value.
+     *
+     * @param value the value of the register as an <tt>int</tt>
+     *
+     * @return an InputRegister instance.
+     */
+    public InputRegister createInputRegister(int value) {
+        return new SimpleInputRegister(value);
+    }
+
+    /**
+     * Creates a new SimpleRegister instance.
+     *
+     * @return a SimpleRegister instance.
+     */
+    public Register createRegister(int value) {
+        return new SimpleRegister(value);
     }
 }

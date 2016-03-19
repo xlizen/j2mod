@@ -1,5 +1,5 @@
 /*
- * This file is part of j2mod.
+ * This file is part of j2mod-steve.
  *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -56,14 +56,21 @@ abstract public class ModbusSerialTransport implements ModbusTransport {
     abstract public void prepareStreams(InputStream in, OutputStream out) throws IOException;
 
     /**
-     * <code>readResponse</code> reads a response message from the slave
-     * responding to a master writeMessage request.
+     * The <code>close</code> method closes the serial input/output streams.
      *
-     * @return a <code>ModbusResponse</code> value
+     * @throws IOException if an error occurs
+     */
+    abstract public void close() throws IOException;
+
+    /**
+     * The <code>writeMessage</code> method writes a modbus serial message to
+     * its serial output stream to a specified slave unit ID.
+     *
+     * @param msg a <code>ModbusMessage</code> value
      *
      * @throws ModbusIOException if an error occurs
      */
-    abstract public ModbusResponse readResponse() throws ModbusIOException;
+    abstract public void writeMessage(ModbusMessage msg) throws ModbusIOException;
 
     /**
      * The <code>readRequest</code> method listens continuously on the serial
@@ -77,21 +84,14 @@ abstract public class ModbusSerialTransport implements ModbusTransport {
     abstract public ModbusRequest readRequest() throws ModbusIOException;
 
     /**
-     * The <code>writeMessage</code> method writes a modbus serial message to
-     * its serial output stream to a specified slave unit ID.
+     * <code>readResponse</code> reads a response message from the slave
+     * responding to a master writeMessage request.
      *
-     * @param msg a <code>ModbusMessage</code> value
+     * @return a <code>ModbusResponse</code> value
      *
      * @throws ModbusIOException if an error occurs
      */
-    abstract public void writeMessage(ModbusMessage msg) throws ModbusIOException;
-
-    /**
-     * The <code>close</code> method closes the serial input/output streams.
-     *
-     * @throws IOException if an error occurs
-     */
-    abstract public void close() throws IOException;
+    abstract public ModbusResponse readResponse() throws ModbusIOException;
 
     /**
      * <code>setCommPort</code> sets the comm port member and prepares the input

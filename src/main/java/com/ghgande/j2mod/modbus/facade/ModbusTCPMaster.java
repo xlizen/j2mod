@@ -1,5 +1,5 @@
 /*
- * This file is part of j2mod.
+ * This file is part of j2mod-steve.
  *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -113,6 +113,17 @@ public class ModbusTCPMaster {
     }
 
     /**
+     * Tests if a constant connection is maintained or if a new
+     * connection is established for every transaction.
+     *
+     * @return true if a new connection should be established for each
+     * transaction, false otherwise.
+     */
+    public boolean isReconnecting() {
+        return m_Reconnecting;
+    }
+
+    /**
      * Sets the flag that specifies whether to maintain a
      * constant connection or reconnect for every transaction.
      *
@@ -124,17 +135,6 @@ public class ModbusTCPMaster {
         if (m_Transaction != null) {
             m_Transaction.setReconnecting(b);
         }
-    }
-
-    /**
-     * Tests if a constant connection is maintained or if a new
-     * connection is established for every transaction.
-     *
-     * @return true if a new connection should be established for each
-     * transaction, false otherwise.
-     */
-    public boolean isReconnecting() {
-        return m_Reconnecting;
     }
 
     /**

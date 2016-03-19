@@ -1,5 +1,5 @@
 /*
- * This file is part of j2mod.
+ * This file is part of j2mod-steve.
  *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -47,16 +47,6 @@ public class ObservableRegister extends Observable implements Register {
         return new byte[]{(byte)(m_Register >> 8), (byte)(m_Register & 0xFF)};
     }
 
-    public final synchronized void setValue(int v) {
-        m_Register = (short)v;
-        notifyObservers("value");
-    }
-
-    public final synchronized void setValue(short s) {
-        m_Register = s;
-        notifyObservers("value");
-    }
-
     public final synchronized void setValue(byte[] bytes) {
         if (bytes.length < 2) {
             throw new IllegalArgumentException();
@@ -65,5 +55,15 @@ public class ObservableRegister extends Observable implements Register {
             m_Register = (short)(((short)((bytes[0] << 8))) | (((short)(bytes[1])) & 0xFF));
             notifyObservers("value");
         }
+    }
+
+    public final synchronized void setValue(int v) {
+        m_Register = (short)v;
+        notifyObservers("value");
+    }
+
+    public final synchronized void setValue(short s) {
+        m_Register = s;
+        notifyObservers("value");
     }
 }

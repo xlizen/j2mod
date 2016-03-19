@@ -1,5 +1,5 @@
 /*
- * This file is part of j2mod.
+ * This file is part of j2mod-steve.
  *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -39,6 +39,20 @@ public final class ReadFIFOQueueResponse extends ModbusResponse {
      */
     private int m_Count;
     private InputRegister m_Registers[];
+
+    /**
+     * Constructs a new <tt>ReadFIFOQueueResponse</tt> instance.
+     */
+    public ReadFIFOQueueResponse() {
+        super();
+
+        setFunctionCode(Modbus.READ_FIFO_QUEUE);
+
+        m_Count = 0;
+        m_Registers = new InputRegister[0];
+
+        setDataLength(7);
+    }
 
     /**
      * getWordCount -- get the queue size.
@@ -84,10 +98,6 @@ public final class ReadFIFOQueueResponse extends ModbusResponse {
         return values;
     }
 
-    public int getRegister(int index) {
-        return m_Registers[index].getValue();
-    }
-
     /**
      * setRegisters -- set the device's status.
      *
@@ -105,6 +115,10 @@ public final class ReadFIFOQueueResponse extends ModbusResponse {
         }
 
         m_Count = regs.length;
+    }
+
+    public int getRegister(int index) {
+        return m_Registers[index].getValue();
     }
 
     /**
@@ -157,19 +171,5 @@ public final class ReadFIFOQueueResponse extends ModbusResponse {
             result[i * 2 + 5] = value[1];
         }
         return result;
-    }
-
-    /**
-     * Constructs a new <tt>ReadFIFOQueueResponse</tt> instance.
-     */
-    public ReadFIFOQueueResponse() {
-        super();
-
-        setFunctionCode(Modbus.READ_FIFO_QUEUE);
-
-        m_Count = 0;
-        m_Registers = new InputRegister[0];
-
-        setDataLength(7);
     }
 }

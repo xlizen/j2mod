@@ -1,5 +1,5 @@
 /*
- * This file is part of j2mod.
+ * This file is part of j2mod-steve.
  *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -45,12 +45,29 @@ public class ModbusUDPListener implements ModbusListener {
     private UDPSlaveTerminal m_Terminal;
     private int m_Unit = 0;
 
-    public int getUnit() {
-        return m_Unit;
+    /**
+     * Create a new <tt>ModbusUDPListener</tt> instance listening to the given
+     * interface address.
+     *
+     * @param ifc
+     *            an <tt>InetAddress</tt> instance.
+     */
+    public ModbusUDPListener(InetAddress ifc) {
+        m_Interface = ifc;
+        m_Listening = true;
     }
 
-    public void setUnit(int unit) {
-        m_Unit = unit;
+    /**
+     * Constructs a new ModbusUDPListener instance. The address will be set to a
+     * default value of the wildcard local address and the default Modbus port.
+     */
+    public ModbusUDPListener() {
+        try {
+            m_Interface = InetAddress.getByAddress(new byte[]{0, 0, 0, 0});
+        }
+        catch (UnknownHostException e) {
+            // Can't happen -- length is fixed by code.
+        }
     }
 
     /**
@@ -152,13 +169,23 @@ public class ModbusUDPListener implements ModbusListener {
         }
     }
 
+    public int getUnit() {
+        return m_Unit;
+    }
+
+    public void setUnit(int unit) {
+        m_Unit = unit;
+    }
+
     /**
-     * Stops this <tt>ModbusUDPListener</tt>.
+     * Tests if this <tt>ModbusTCPListener</tt> is listening and accepting
+     * incoming connections.
+     *
+     * @return true if listening (and accepting incoming connections), false
+     *         otherwise.
      */
-    public void stop() {
-        m_Terminal.deactivate();
-        m_Listening = false;
-        m_Continue = false;
+    public boolean isListening() {
+        return m_Listening;
     }
 
     /**
@@ -174,17 +201,6 @@ public class ModbusUDPListener implements ModbusListener {
     }
 
     /**
-     * Tests if this <tt>ModbusTCPListener</tt> is listening and accepting
-     * incoming connections.
-     *
-     * @return true if listening (and accepting incoming connections), false
-     *         otherwise.
-     */
-    public boolean isListening() {
-        return m_Listening;
-    }
-
-    /**
      * Start the listener thread for this serial interface.
      */
     public Thread listen() {
@@ -196,27 +212,11 @@ public class ModbusUDPListener implements ModbusListener {
     }
 
     /**
-     * Create a new <tt>ModbusUDPListener</tt> instance listening to the given
-     * interface address.
-     *
-     * @param ifc
-     *            an <tt>InetAddress</tt> instance.
+     * Stops this <tt>ModbusUDPListener</tt>.
      */
-    public ModbusUDPListener(InetAddress ifc) {
-        m_Interface = ifc;
-        m_Listening = true;
-    }
-
-    /**
-     * Constructs a new ModbusUDPListener instance. The address will be set to a
-     * default value of the wildcard local address and the default Modbus port.
-     */
-    public ModbusUDPListener() {
-        try {
-            m_Interface = InetAddress.getByAddress(new byte[]{0, 0, 0, 0});
-        }
-        catch (UnknownHostException e) {
-            // Can't happen -- length is fixed by code.
-        }
+    public void stop() {
+        m_Terminal.deactivate();
+        m_Listening = false;
+        m_Continue = false;
     }
 }

@@ -1,5 +1,5 @@
 /*
- * This file is part of j2mod.
+ * This file is part of j2mod-steve.
  *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -54,6 +54,16 @@ public class TCPMasterConnection {
      * connection.
      */
     private boolean m_useUrgentData = false;
+
+    /**
+     * Constructs a <tt>TCPMasterConnection</tt> instance with a given
+     * destination address.
+     *
+     * @param adr the destination <tt>InetAddress</tt>.
+     */
+    public TCPMasterConnection(InetAddress adr) {
+        m_Address = adr;
+    }
 
     /**
      * Prepares the associated <tt>ModbusTransport</tt> of this
@@ -117,7 +127,7 @@ public class TCPMasterConnection {
 				 * will be sent to the server to test the connection. If
 				 * the connection is actually broken, an IException will
 				 * occur and the connection will be closed.
-				 * 
+				 *
 				 * Note: RFC 6093 has decreed that we stop using urgent
 				 * data.
 				 */
@@ -267,15 +277,5 @@ public class TCPMasterConnection {
      */
     public void setUseUrgentData(boolean useUrgentData) {
         m_useUrgentData = useUrgentData;
-    }
-
-    /**
-     * Constructs a <tt>TCPMasterConnection</tt> instance with a given
-     * destination address.
-     *
-     * @param adr the destination <tt>InetAddress</tt>.
-     */
-    public TCPMasterConnection(InetAddress adr) {
-        m_Address = adr;
     }
 }

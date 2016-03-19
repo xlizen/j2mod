@@ -1,5 +1,5 @@
 /*
- * This file is part of j2mod.
+ * This file is part of j2mod-steve.
  *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -46,6 +46,58 @@ public final class WriteMultipleCoilsRequest extends ModbusRequest {
     private int m_Reference;
     private BitVector m_Coils;
 
+    /**
+     * Constructs a new <tt>WriteMultipleCoilsRequest</tt> instance with the
+     * given reference and coil values.
+     *
+     * @param ref the index of the first coil to be written.
+     * @param bv  the coil values to be written.
+     */
+    public WriteMultipleCoilsRequest(int ref, BitVector bv) {
+        super();
+
+        setFunctionCode(Modbus.WRITE_MULTIPLE_COILS);
+        setDataLength(bv.byteSize() + 5);
+
+        setReference(ref);
+        m_Coils = bv;
+    }
+
+    /**
+     * Constructs a new <tt>WriteMultipleCoilsRequest</tt> instance with a given
+     * reference and count of coils to be written, followed by the actual byte
+     * count, and then <i>count<i> number of bytes.
+     *
+     * @param ref   the index of the first coil to be written.
+     * @param count the number of coils to be written.
+     */
+    public WriteMultipleCoilsRequest(int ref, int count) {
+        super();
+
+        setFunctionCode(Modbus.WRITE_MULTIPLE_COILS);
+        setDataLength((count + 7) / 8 + 5);
+
+        setReference(ref);
+        m_Coils = new BitVector(count);
+    }
+
+    /**
+     * Constructs a new <tt>WriteMultipleCoilsRequest</tt> instance.
+     *
+     * <p>
+     * A minimal message contains the reference to the first coil as a
+     * <tt>short</tt>, the number of coils as a <tt>short</tt>, and not less
+     * than one <tt>byte</tt> of coil data.
+     */
+    public WriteMultipleCoilsRequest() {
+        super();
+
+        setFunctionCode(Modbus.WRITE_MULTIPLE_COILS);
+        setDataLength(5);
+
+        m_Coils = new BitVector(1);
+    }
+
     public ModbusResponse getResponse() {
         WriteMultipleCoilsResponse response = new WriteMultipleCoilsResponse();
 
@@ -86,6 +138,16 @@ public final class WriteMultipleCoilsRequest extends ModbusRequest {
     }
 
     /**
+     * getReference - Returns the reference of the coil to to start writing to
+     * with this <tt>WriteMultipleCoilsRequest</tt>.
+     *
+     * @return the reference of the coil to start writing to as an <tt>int</tt>.
+     */
+    public int getReference() {
+        return m_Reference;
+    }
+
+    /**
      * setReference - Sets the reference of the coil to start writing to with
      * this <tt>WriteMultipleCoilsRequest</tt>.
      * <p/>
@@ -94,16 +156,6 @@ public final class WriteMultipleCoilsRequest extends ModbusRequest {
      */
     public void setReference(int ref) {
         m_Reference = ref;
-    }
-
-    /**
-     * getReference - Returns the reference of the coil to to start writing to
-     * with this <tt>WriteMultipleCoilsRequest</tt>.
-     *
-     * @return the reference of the coil to start writing to as an <tt>int</tt>.
-     */
-    public int getReference() {
-        return m_Reference;
     }
 
     /**
@@ -215,57 +267,5 @@ public final class WriteMultipleCoilsRequest extends ModbusRequest {
         System.arraycopy(m_Coils.getBytes(), 0, result, 5, m_Coils.byteSize());
 
         return result;
-    }
-
-    /**
-     * Constructs a new <tt>WriteMultipleCoilsRequest</tt> instance with the
-     * given reference and coil values.
-     *
-     * @param ref the index of the first coil to be written.
-     * @param bv  the coil values to be written.
-     */
-    public WriteMultipleCoilsRequest(int ref, BitVector bv) {
-        super();
-
-        setFunctionCode(Modbus.WRITE_MULTIPLE_COILS);
-        setDataLength(bv.byteSize() + 5);
-
-        setReference(ref);
-        m_Coils = bv;
-    }
-
-    /**
-     * Constructs a new <tt>WriteMultipleCoilsRequest</tt> instance with a given
-     * reference and count of coils to be written, followed by the actual byte
-     * count, and then <i>count<i> number of bytes.
-     *
-     * @param ref   the index of the first coil to be written.
-     * @param count the number of coils to be written.
-     */
-    public WriteMultipleCoilsRequest(int ref, int count) {
-        super();
-
-        setFunctionCode(Modbus.WRITE_MULTIPLE_COILS);
-        setDataLength((count + 7) / 8 + 5);
-
-        setReference(ref);
-        m_Coils = new BitVector(count);
-    }
-
-    /**
-     * Constructs a new <tt>WriteMultipleCoilsRequest</tt> instance.
-     *
-     * <p>
-     * A minimal message contains the reference to the first coil as a
-     * <tt>short</tt>, the number of coils as a <tt>short</tt>, and not less
-     * than one <tt>byte</tt> of coil data.
-     */
-    public WriteMultipleCoilsRequest() {
-        super();
-
-        setFunctionCode(Modbus.WRITE_MULTIPLE_COILS);
-        setDataLength(5);
-
-        m_Coils = new BitVector(1);
     }
 }

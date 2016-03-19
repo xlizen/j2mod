@@ -1,5 +1,5 @@
 /*
- * This file is part of j2mod.
+ * This file is part of j2mod-steve.
  *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -27,18 +27,18 @@ public class IllegalAddressExceptionResponse extends ExceptionResponse {
     /**
      *
      */
-    public void setFunctionCode(int fc) {
-        super.setFunctionCode(fc | Modbus.EXCEPTION_OFFSET);
-    }
-
-    /**
-     *
-     */
     public IllegalAddressExceptionResponse() {
         super(0, Modbus.ILLEGAL_ADDRESS_EXCEPTION);
     }
 
     public IllegalAddressExceptionResponse(int function) {
         super(function, Modbus.ILLEGAL_ADDRESS_EXCEPTION);
+    }
+
+    /**
+     *
+     */
+    public void setFunctionCode(int fc) {
+        super.setFunctionCode(fc | Modbus.EXCEPTION_OFFSET);
     }
 }

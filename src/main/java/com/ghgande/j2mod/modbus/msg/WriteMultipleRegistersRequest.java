@@ -1,5 +1,5 @@
 /*
- * This file is part of j2mod.
+ * This file is part of j2mod-steve.
  *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -46,6 +46,30 @@ public final class WriteMultipleRegistersRequest extends ModbusRequest {
     private int m_Reference;
     private Register[] m_Registers;
     private NonWordDataHandler m_NonWordDataHandler = null;
+
+    /**
+     * Constructs a new <tt>WriteMultipleRegistersRequest</tt> instance with a
+     * given starting reference and values to be written.
+     * <p>
+     *
+     * @param first
+     *            -- the address of the first register to write to.
+     * @param registers
+     *            -- the registers to be written.
+     */
+    public WriteMultipleRegistersRequest(int first, Register[] registers) {
+        setFunctionCode(Modbus.WRITE_MULTIPLE_REGISTERS);
+
+        setReference(first);
+        setRegisters(registers);
+    }
+
+    /**
+     * Constructs a new <tt>WriteMultipleRegistersRequest</tt> instance.
+     */
+    public WriteMultipleRegistersRequest() {
+        setFunctionCode(Modbus.WRITE_MULTIPLE_REGISTERS);
+    }
 
     public ModbusResponse getResponse() {
         WriteMultipleRegistersResponse response = new WriteMultipleRegistersResponse();
@@ -119,6 +143,18 @@ public final class WriteMultipleRegistersRequest extends ModbusRequest {
     }
 
     /**
+     * setReference - Returns the reference of the register to start writing to
+     * with this <tt>WriteMultipleRegistersRequest</tt>.
+     * <p>
+     *
+     * @return the reference of the register to start writing to as <tt>int</tt>
+     *         .
+     */
+    public int getReference() {
+        return m_Reference;
+    }
+
+    /**
      * setReference - Sets the reference of the register to write to with this
      * <tt>WriteMultipleRegistersRequest</tt>.
      * <p>
@@ -132,15 +168,16 @@ public final class WriteMultipleRegistersRequest extends ModbusRequest {
     }
 
     /**
-     * setReference - Returns the reference of the register to start writing to
-     * with this <tt>WriteMultipleRegistersRequest</tt>.
+     * getRegisters - Returns the registers to be written with this
+     * <tt>WriteMultipleRegistersRequest</tt>.
      * <p>
      *
-     * @return the reference of the register to start writing to as <tt>int</tt>
-     *         .
+     * @return the registers to be written as <tt>Register[]</tt>.
      */
-    public int getReference() {
-        return m_Reference;
+    public synchronized Register[] getRegisters() {
+        Register[] dest = new Register[m_Registers.length];
+        System.arraycopy(m_Registers, 0, dest, 0, dest.length);
+        return dest;
     }
 
     /**
@@ -153,19 +190,6 @@ public final class WriteMultipleRegistersRequest extends ModbusRequest {
      */
     public void setRegisters(Register[] registers) {
         m_Registers = registers;
-    }
-
-    /**
-     * getRegisters - Returns the registers to be written with this
-     * <tt>WriteMultipleRegistersRequest</tt>.
-     * <p>
-     *
-     * @return the registers to be written as <tt>Register[]</tt>.
-     */
-    public synchronized Register[] getRegisters() {
-        Register[] dest = new Register[m_Registers.length];
-        System.arraycopy(m_Registers, 0, dest, 0, dest.length);
-        return dest;
     }
 
     /**
@@ -232,6 +256,15 @@ public final class WriteMultipleRegistersRequest extends ModbusRequest {
     }
 
     /**
+     * getNonWordDataHandler - Returns the actual non word data handler.
+     *
+     * @return the actual <tt>NonWordDataHandler</tt>.
+     */
+    public NonWordDataHandler getNonWordDataHandler() {
+        return m_NonWordDataHandler;
+    }
+
+    /**
      * setNonWordHandler - Sets a non word data handler. A non-word data handler
      * is responsible for converting words from a Modbus packet into the
      * non-word values associated with the actual device's registers.
@@ -241,15 +274,6 @@ public final class WriteMultipleRegistersRequest extends ModbusRequest {
      */
     public void setNonWordDataHandler(NonWordDataHandler dhandler) {
         m_NonWordDataHandler = dhandler;
-    }
-
-    /**
-     * getNonWordDataHandler - Returns the actual non word data handler.
-     *
-     * @return the actual <tt>NonWordDataHandler</tt>.
-     */
-    public NonWordDataHandler getNonWordDataHandler() {
-        return m_NonWordDataHandler;
     }
 
     public void writeData(DataOutput output) throws IOException {
@@ -316,29 +340,5 @@ public final class WriteMultipleRegistersRequest extends ModbusRequest {
             }
         }
         return result;
-    }
-
-    /**
-     * Constructs a new <tt>WriteMultipleRegistersRequest</tt> instance with a
-     * given starting reference and values to be written.
-     * <p>
-     *
-     * @param first
-     *            -- the address of the first register to write to.
-     * @param registers
-     *            -- the registers to be written.
-     */
-    public WriteMultipleRegistersRequest(int first, Register[] registers) {
-        setFunctionCode(Modbus.WRITE_MULTIPLE_REGISTERS);
-
-        setReference(first);
-        setRegisters(registers);
-    }
-
-    /**
-     * Constructs a new <tt>WriteMultipleRegistersRequest</tt> instance.
-     */
-    public WriteMultipleRegistersRequest() {
-        setFunctionCode(Modbus.WRITE_MULTIPLE_REGISTERS);
     }
 }

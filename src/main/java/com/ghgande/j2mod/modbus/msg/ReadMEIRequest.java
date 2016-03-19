@@ -1,5 +1,5 @@
 /*
- * This file is part of j2mod.
+ * This file is part of j2mod-steve.
  *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -122,17 +122,6 @@ public final class ReadMEIRequest extends ModbusRequest {
     }
 
     /**
-     * Sets the reference of the register to start reading from with this
-     * <tt>ReadCoilsRequest</tt>.
-     * <p>
-     *
-     * @param level the reference of the register to start reading from.
-     */
-    public void setLevel(int level) {
-        m_FieldLevel = level;
-    }
-
-    /**
      * Returns the reference of the register to to start reading from with this
      * <tt>ReadCoilsRequest</tt>.
      * <p>
@@ -145,14 +134,14 @@ public final class ReadMEIRequest extends ModbusRequest {
     }
 
     /**
-     * Sets the number of bits (i.e. coils) to be read with this
+     * Sets the reference of the register to start reading from with this
      * <tt>ReadCoilsRequest</tt>.
      * <p>
      *
-     * @param id the number of bits to be read.
+     * @param level the reference of the register to start reading from.
      */
-    public void setFieldId(int id) {
-        m_FieldId = id;
+    public void setLevel(int level) {
+        m_FieldLevel = level;
     }
 
     /**
@@ -164,6 +153,17 @@ public final class ReadMEIRequest extends ModbusRequest {
      */
     public int getFieldId() {
         return m_FieldId;
+    }
+
+    /**
+     * Sets the number of bits (i.e. coils) to be read with this
+     * <tt>ReadCoilsRequest</tt>.
+     * <p>
+     *
+     * @param id the number of bits to be read.
+     */
+    public void setFieldId(int id) {
+        m_FieldId = id;
     }
 
     public void writeData(DataOutput dout) throws IOException {

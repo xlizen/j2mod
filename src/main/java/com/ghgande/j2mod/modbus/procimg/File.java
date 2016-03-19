@@ -1,5 +1,5 @@
 /*
- * This file is part of j2mod.
+ * This file is part of j2mod-steve.
  *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -32,6 +32,12 @@ public class File {
     private int m_Record_Count;
     private Record m_Records[];
 
+    public File(int fileNumber, int records) {
+        m_File_Number = fileNumber;
+        m_Record_Count = records;
+        m_Records = new Record[records];
+    }
+
     public int getFileNumber() {
         return m_File_Number;
     }
@@ -56,11 +62,5 @@ public class File {
         m_Records[i] = record;
 
         return this;
-    }
-
-    public File(int fileNumber, int records) {
-        m_File_Number = fileNumber;
-        m_Record_Count = records;
-        m_Records = new Record[records];
     }
 }

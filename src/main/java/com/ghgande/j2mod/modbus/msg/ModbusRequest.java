@@ -1,5 +1,5 @@
 /*
- * This file is part of j2mod.
+ * This file is part of j2mod-steve.
  *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -34,61 +34,6 @@ import com.ghgande.j2mod.modbus.Modbus;
  * 	Added new messages.
  */
 public abstract class ModbusRequest extends ModbusMessageImpl {
-
-    /**
-     * Returns the <tt>ModbusResponse</tt> that correlates with this
-     * <tt>ModbusRequest</tt>.
-     *
-     * <p>
-     * The response must include the unit number, function code, as well as any
-     * transport-specific header information.
-     *
-     * <p>
-     * This method is used to create an empty response which must be populated
-     * by the caller. It is commonly used to un-marshal responses from Modbus
-     * slaves.
-     *
-     * @return the corresponding <tt>ModbusResponse</tt>.
-     */
-    public abstract ModbusResponse getResponse();
-
-    /**
-     * Returns the <tt>ModbusResponse</tt> that represents the answer to this
-     * <tt>ModbusRequest</tt>.
-     *
-     * <p>
-     * The implementation should take care about assembling the reply to this
-     * <tt>ModbusRequest</tt>.
-     *
-     * <p>
-     * This method is used to create responses from the process image associated
-     * with the ModbusCoupler. It is commonly used to implement Modbus slave
-     * instances.
-     *
-     * @return the corresponding <tt>ModbusResponse</tt>.
-     */
-    public abstract ModbusResponse createResponse();
-
-    /**
-     * Factory method for creating exception responses with the given exception
-     * code.
-     *
-     * @param code
-     *            the code of the exception.
-     * @return a ModbusResponse instance representing the exception response.
-     */
-    public ModbusResponse createExceptionResponse(int code) {
-        ExceptionResponse response = new ExceptionResponse(getFunctionCode(), code);
-        if (!isHeadless()) {
-            response.setTransactionID(getTransactionID());
-            response.setProtocolID(getProtocolID());
-        }
-        else {
-            response.setHeadless();
-        }
-        response.setUnitID(getUnitID());
-        return response;
-    }
 
     /**
      * Factory method creating the required specialized <tt>ModbusRequest</tt>
@@ -164,5 +109,60 @@ public abstract class ModbusRequest extends ModbusMessageImpl {
                 break;
         }
         return request;
+    }
+
+    /**
+     * Returns the <tt>ModbusResponse</tt> that correlates with this
+     * <tt>ModbusRequest</tt>.
+     *
+     * <p>
+     * The response must include the unit number, function code, as well as any
+     * transport-specific header information.
+     *
+     * <p>
+     * This method is used to create an empty response which must be populated
+     * by the caller. It is commonly used to un-marshal responses from Modbus
+     * slaves.
+     *
+     * @return the corresponding <tt>ModbusResponse</tt>.
+     */
+    public abstract ModbusResponse getResponse();
+
+    /**
+     * Returns the <tt>ModbusResponse</tt> that represents the answer to this
+     * <tt>ModbusRequest</tt>.
+     *
+     * <p>
+     * The implementation should take care about assembling the reply to this
+     * <tt>ModbusRequest</tt>.
+     *
+     * <p>
+     * This method is used to create responses from the process image associated
+     * with the ModbusCoupler. It is commonly used to implement Modbus slave
+     * instances.
+     *
+     * @return the corresponding <tt>ModbusResponse</tt>.
+     */
+    public abstract ModbusResponse createResponse();
+
+    /**
+     * Factory method for creating exception responses with the given exception
+     * code.
+     *
+     * @param code
+     *            the code of the exception.
+     * @return a ModbusResponse instance representing the exception response.
+     */
+    public ModbusResponse createExceptionResponse(int code) {
+        ExceptionResponse response = new ExceptionResponse(getFunctionCode(), code);
+        if (!isHeadless()) {
+            response.setTransactionID(getTransactionID());
+            response.setProtocolID(getProtocolID());
+        }
+        else {
+            response.setHeadless();
+        }
+        response.setUnitID(getUnitID());
+        return response;
     }
 }

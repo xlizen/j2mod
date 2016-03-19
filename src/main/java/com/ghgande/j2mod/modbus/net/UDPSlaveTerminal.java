@@ -1,5 +1,5 @@
 /*
- * This file is part of j2mod.
+ * This file is part of j2mod-steve.
  *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -37,21 +37,18 @@ import java.util.concurrent.LinkedBlockingQueue;
 class UDPSlaveTerminal implements UDPTerminal {
 
     private static final Logger logger = Logger.getLogger(UDPSlaveTerminal.class);
-
+    protected InetAddress m_LocalAddress;
+    protected ModbusUDPTransport m_ModbusTransport;
+    protected Hashtable<Integer, DatagramPacket> m_Requests;
     private DatagramSocket m_Socket;
     private boolean m_Active;
-    protected InetAddress m_LocalAddress;
     private int m_LocalPort = Modbus.DEFAULT_PORT;
-    protected ModbusUDPTransport m_ModbusTransport;
-
     private LinkedBlockingQueue<byte[]> m_SendQueue;
     private LinkedBlockingQueue<byte[]> m_ReceiveQueue;
     private PacketSender m_PacketSender;
     private PacketReceiver m_PacketReceiver;
     private Thread m_Receiver;
     private Thread m_Sender;
-
-    protected Hashtable<Integer, DatagramPacket> m_Requests;
 
     protected UDPSlaveTerminal() {
         m_SendQueue = new LinkedBlockingQueue<byte[]>();
@@ -172,6 +169,14 @@ class UDPSlaveTerminal implements UDPTerminal {
         return m_ModbusTransport;
     }
 
+    public void sendMessage(byte[] msg) throws Exception {
+        m_SendQueue.add(msg);
+    }
+
+    public byte[] receiveMessage() throws Exception {
+        return m_ReceiveQueue.take();
+    }
+
     protected boolean hasResponse() {
         return !m_ReceiveQueue.isEmpty();
     }
@@ -215,14 +220,6 @@ class UDPSlaveTerminal implements UDPTerminal {
         m_Socket = sock;
     }
 
-    public void sendMessage(byte[] msg) throws Exception {
-        m_SendQueue.add(msg);
-    }
-
-    public byte[] receiveMessage() throws Exception {
-        return m_ReceiveQueue.take();
-    }
-
     class PacketSender implements Runnable {
 
         private boolean m_Continue;
@@ -264,7 +261,9 @@ class UDPSlaveTerminal implements UDPTerminal {
             m_Continue = true;
         }
 
-        public void run() {
+        public void stop() {
+            m_Continue = false;
+        }        public void run() {
             do {
                 try {
                     // 1. Prepare buffer and receive package
@@ -286,8 +285,6 @@ class UDPSlaveTerminal implements UDPTerminal {
             } while (m_Continue);
         }
 
-        public void stop() {
-            m_Continue = false;
-        }
+
     }
 }

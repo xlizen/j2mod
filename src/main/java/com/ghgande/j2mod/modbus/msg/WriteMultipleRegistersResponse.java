@@ -1,5 +1,5 @@
 /*
- * This file is part of j2mod.
+ * This file is part of j2mod-steve.
  *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -62,18 +62,6 @@ public final class WriteMultipleRegistersResponse extends ModbusResponse {
     }
 
     /**
-     * Sets the reference of the register to start writing to with this
-     * <tt>WriteMultipleRegistersResponse</tt>.
-     * <p>
-     *
-     * @param ref the reference of the register to start writing to as
-     *            <tt>int</tt>.
-     */
-    public void setReference(int ref) {
-        m_Reference = ref;
-    }
-
-    /**
      * Returns the reference of the register to start writing to with this
      * <tt>WriteMultipleRegistersResponse</tt>.
      * <p>
@@ -83,6 +71,18 @@ public final class WriteMultipleRegistersResponse extends ModbusResponse {
      */
     public int getReference() {
         return m_Reference;
+    }
+
+    /**
+     * Sets the reference of the register to start writing to with this
+     * <tt>WriteMultipleRegistersResponse</tt>.
+     * <p>
+     *
+     * @param ref the reference of the register to start writing to as
+     *            <tt>int</tt>.
+     */
+    public void setReference(int ref) {
+        m_Reference = ref;
     }
 
     /**

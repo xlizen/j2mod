@@ -1,5 +1,5 @@
 /*
- * This file is part of j2mod.
+ * This file is part of j2mod-steve.
  *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -26,14 +26,6 @@ package com.ghgande.j2mod.modbus.procimg;
  */
 public class SimpleInputRegister extends SynchronizedAbstractRegister implements
         InputRegister {
-
-    public String toString() {
-        if (m_Register == null) {
-            return "invalid";
-        }
-
-        return getValue() + "";
-    }
 
     /**
      * Constructs a new <tt>SimpleInputRegister</tt> instance. It's state will
@@ -66,5 +58,13 @@ public class SimpleInputRegister extends SynchronizedAbstractRegister implements
     public SimpleInputRegister(int value) {
         setValue(value);
     }// constructor(int)
+
+    public String toString() {
+        if (m_Register == null) {
+            return "invalid";
+        }
+
+        return getValue() + "";
+    }
 
 }

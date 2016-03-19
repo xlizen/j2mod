@@ -1,5 +1,5 @@
 /*
- * This file is part of j2mod.
+ * This file is part of j2mod-steve.
  *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -39,6 +39,16 @@ public final class ReadCommEventLogResponse extends ModbusResponse {
     private int m_EventCount;
     private int m_MessageCount;
     private byte[] m_Events;
+
+    /**
+     * Constructs a new <tt>ReadCommEventLogResponse</tt> instance.
+     */
+    public ReadCommEventLogResponse() {
+        super();
+
+        setFunctionCode(Modbus.READ_COMM_EVENT_LOG);
+        setDataLength(7);
+    }
 
     /**
      * getStatus -- get the device's status.
@@ -108,6 +118,14 @@ public final class ReadCommEventLogResponse extends ModbusResponse {
         return result;
     }
 
+    public void setEvents(int count) {
+        if (count < 0 || count > 64) {
+            throw new IllegalArgumentException("invalid event list size (0 <= count <= 64)");
+        }
+
+        m_Events = new byte[count];
+    }
+
     /**
      * setEvent -- store an event number in the event log
      */
@@ -128,14 +146,6 @@ public final class ReadCommEventLogResponse extends ModbusResponse {
         if (m_Events.length > 0) {
             System.arraycopy(events, 0, m_Events, 0, events.length);
         }
-    }
-
-    public void setEvents(int count) {
-        if (count < 0 || count > 64) {
-            throw new IllegalArgumentException("invalid event list size (0 <= count <= 64)");
-        }
-
-        m_Events = new byte[count];
     }
 
     /**
@@ -179,15 +189,5 @@ public final class ReadCommEventLogResponse extends ModbusResponse {
         System.arraycopy(m_Events, 0, result, 7, m_Events.length);
 
         return result;
-    }
-
-    /**
-     * Constructs a new <tt>ReadCommEventLogResponse</tt> instance.
-     */
-    public ReadCommEventLogResponse() {
-        super();
-
-        setFunctionCode(Modbus.READ_COMM_EVENT_LOG);
-        setDataLength(7);
     }
 }

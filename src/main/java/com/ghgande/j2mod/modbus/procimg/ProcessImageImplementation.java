@@ -1,5 +1,5 @@
 /*
- * This file is part of j2mod.
+ * This file is part of j2mod-steve.
  *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -25,6 +25,20 @@ package com.ghgande.j2mod.modbus.procimg;
  * @version 1.2rc1 (09/11/2004)
  */
 public interface ProcessImageImplementation extends ProcessImage {
+
+    /**
+     * Defines the set state (i.e. <b>true</b>) of a digital input or output.
+     */
+    byte DIG_TRUE = 1;
+    /**
+     * Defines the unset state (i.e. <b>false</b>) of a digital input or output.
+     */
+    byte DIG_FALSE = 0;
+    /**
+     * Defines the invalid (unset, neither true nor false) state of a digital
+     * input or output.
+     */
+    byte DIG_INVALID = -1;
 
     /**
      * Sets a new <tt>DigitalOut</tt> instance at the given reference.
@@ -222,20 +236,4 @@ public interface ProcessImageImplementation extends ProcessImage {
      * @param reg the <tt>FIFO</tt> instance to be removed.
      */
     void removeFIFO(FIFO reg);
-
-    /**
-     * Defines the set state (i.e. <b>true</b>) of a digital input or output.
-     */
-    byte DIG_TRUE = 1;
-
-    /**
-     * Defines the unset state (i.e. <b>false</b>) of a digital input or output.
-     */
-    byte DIG_FALSE = 0;
-
-    /**
-     * Defines the invalid (unset, neither true nor false) state of a digital
-     * input or output.
-     */
-    byte DIG_INVALID = -1;
 }

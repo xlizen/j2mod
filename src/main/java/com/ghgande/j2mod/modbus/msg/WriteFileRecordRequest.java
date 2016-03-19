@@ -1,5 +1,5 @@
 /*
- * This file is part of j2mod.
+ * This file is part of j2mod-steve.
  *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -34,73 +34,19 @@ import java.io.IOException;
 public final class WriteFileRecordRequest extends ModbusRequest {
     private RecordRequest[] m_Records;
 
-    public static class RecordRequest {
-        private int m_FileNumber;
-        private int m_RecordNumber;
-        private int m_WordCount;
-        private byte m_Data[];
+    /**
+     * Constructs a new <tt>Write File Record</tt> request
+     * instance.
+     */
+    public WriteFileRecordRequest() {
+        super();
 
-        public int getFileNumber() {
-            return m_FileNumber;
-        }
+        setFunctionCode(Modbus.WRITE_FILE_RECORD);
 
-        public int getRecordNumber() {
-            return m_RecordNumber;
-        }
-
-        public int getWordCount() {
-            return m_WordCount;
-        }
-
-        public SimpleRegister getRegister(int register) {
-            if (register < 0 || register >= m_WordCount) {
-                throw new IllegalAddressException("0 <= " + register + " < " + m_WordCount);
-            }
-            byte b1 = m_Data[register * 2];
-            byte b2 = m_Data[register * 2 + 1];
-
-            return new SimpleRegister(b1, b2);
-        }
-
-        /**
-         * getRequestSize -- return the size of the response in bytes.
-         */
-        public int getRequestSize() {
-            return 7 + m_WordCount * 2;
-        }
-
-        public void getRequest(byte[] request, int offset) {
-            request[offset++] = 6;
-            request[offset++] = (byte)(m_FileNumber >> 8);
-            request[offset++] = (byte)(m_FileNumber & 0xFF);
-            request[offset++] = (byte)(m_RecordNumber >> 8);
-            request[offset++] = (byte)(m_RecordNumber & 0xFF);
-            request[offset++] = (byte)(m_WordCount >> 8);
-            request[offset++] = (byte)(m_WordCount & 0xFF);
-
-            System.arraycopy(m_Data, 0, request, offset, m_Data.length);
-        }
-
-        public byte[] getRequest() {
-            byte[] request = new byte[7 + 2 * m_WordCount];
-
-            getRequest(request, 0);
-
-            return request;
-        }
-
-        public RecordRequest(int file, int record, short[] values) {
-            m_FileNumber = file;
-            m_RecordNumber = record;
-            m_WordCount = values.length;
-            m_Data = new byte[m_WordCount * 2];
-
-            int offset = 0;
-            for (int i = 0; i < m_WordCount; i++) {
-                m_Data[offset++] = (byte)(values[i] >> 8);
-                m_Data[offset++] = (byte)(values[i] & 0xFF);
-            }
-        }
+		/*
+		 * Set up space for the initial header.
+		 */
+        setDataLength(1);
     }
 
     /**
@@ -311,18 +257,72 @@ public final class WriteFileRecordRequest extends ModbusRequest {
         return results;
     }
 
-    /**
-     * Constructs a new <tt>Write File Record</tt> request
-     * instance.
-     */
-    public WriteFileRecordRequest() {
-        super();
+    public static class RecordRequest {
+        private int m_FileNumber;
+        private int m_RecordNumber;
+        private int m_WordCount;
+        private byte m_Data[];
 
-        setFunctionCode(Modbus.WRITE_FILE_RECORD);
-		
-		/*
-		 * Set up space for the initial header.
-		 */
-        setDataLength(1);
+        public RecordRequest(int file, int record, short[] values) {
+            m_FileNumber = file;
+            m_RecordNumber = record;
+            m_WordCount = values.length;
+            m_Data = new byte[m_WordCount * 2];
+
+            int offset = 0;
+            for (int i = 0; i < m_WordCount; i++) {
+                m_Data[offset++] = (byte)(values[i] >> 8);
+                m_Data[offset++] = (byte)(values[i] & 0xFF);
+            }
+        }
+
+        public int getFileNumber() {
+            return m_FileNumber;
+        }
+
+        public int getRecordNumber() {
+            return m_RecordNumber;
+        }
+
+        public int getWordCount() {
+            return m_WordCount;
+        }
+
+        public SimpleRegister getRegister(int register) {
+            if (register < 0 || register >= m_WordCount) {
+                throw new IllegalAddressException("0 <= " + register + " < " + m_WordCount);
+            }
+            byte b1 = m_Data[register * 2];
+            byte b2 = m_Data[register * 2 + 1];
+
+            return new SimpleRegister(b1, b2);
+        }
+
+        /**
+         * getRequestSize -- return the size of the response in bytes.
+         */
+        public int getRequestSize() {
+            return 7 + m_WordCount * 2;
+        }
+
+        public void getRequest(byte[] request, int offset) {
+            request[offset++] = 6;
+            request[offset++] = (byte)(m_FileNumber >> 8);
+            request[offset++] = (byte)(m_FileNumber & 0xFF);
+            request[offset++] = (byte)(m_RecordNumber >> 8);
+            request[offset++] = (byte)(m_RecordNumber & 0xFF);
+            request[offset++] = (byte)(m_WordCount >> 8);
+            request[offset++] = (byte)(m_WordCount & 0xFF);
+
+            System.arraycopy(m_Data, 0, request, offset, m_Data.length);
+        }
+
+        public byte[] getRequest() {
+            byte[] request = new byte[7 + 2 * m_WordCount];
+
+            getRequest(request, 0);
+
+            return request;
+        }
     }
 }

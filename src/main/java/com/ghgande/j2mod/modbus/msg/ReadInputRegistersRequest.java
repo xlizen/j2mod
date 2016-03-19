@@ -1,5 +1,5 @@
 /*
- * This file is part of j2mod.
+ * This file is part of j2mod-steve.
  *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -104,17 +104,6 @@ public final class ReadInputRegistersRequest extends ModbusRequest {
     }
 
     /**
-     * Sets the reference of the register to start reading from with this
-     * <tt>ReadInputRegistersRequest</tt>.
-     * <p>
-     *
-     * @param ref the reference of the register to start reading from.
-     */
-    public void setReference(int ref) {
-        m_Reference = ref;
-    }
-
-    /**
      * Returns the reference of the register to to start reading from with this
      * <tt>ReadInputRegistersRequest</tt>.
      * <p>
@@ -127,14 +116,14 @@ public final class ReadInputRegistersRequest extends ModbusRequest {
     }
 
     /**
-     * Sets the number of words to be read with this
+     * Sets the reference of the register to start reading from with this
      * <tt>ReadInputRegistersRequest</tt>.
      * <p>
      *
-     * @param count the number of words to be read.
+     * @param ref the reference of the register to start reading from.
      */
-    public void setWordCount(int count) {
-        m_WordCount = count;
+    public void setReference(int ref) {
+        m_Reference = ref;
     }
 
     /**
@@ -146,6 +135,17 @@ public final class ReadInputRegistersRequest extends ModbusRequest {
      */
     public int getWordCount() {
         return m_WordCount;
+    }
+
+    /**
+     * Sets the number of words to be read with this
+     * <tt>ReadInputRegistersRequest</tt>.
+     * <p>
+     *
+     * @param count the number of words to be read.
+     */
+    public void setWordCount(int count) {
+        m_WordCount = count;
     }
 
     public void writeData(DataOutput dout) throws IOException {

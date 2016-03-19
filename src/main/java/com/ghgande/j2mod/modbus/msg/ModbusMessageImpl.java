@@ -1,5 +1,5 @@
 /*
- * This file is part of j2mod.
+ * This file is part of j2mod-steve.
  *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -54,15 +54,6 @@ public abstract class ModbusMessageImpl implements ModbusMessage {
 
     public void setHeadless() {
         m_Headless = true;
-    }
-
-    /**
-     * Sets the headless flag of this message.
-     *
-     * @param b true if headless, false otherwise.
-     */
-    public void setHeadless(boolean b) {
-        m_Headless = b;
     }
 
     public int getTransactionID() {
@@ -161,27 +152,21 @@ public abstract class ModbusMessageImpl implements ModbusMessage {
     }
 
     /**
-     * Writes this message to the given <tt>DataOutput</tt>.
+     * Returns the this message as hexadecimal string.
      *
-     * <p>
-     * This method must be overridden for any message type which doesn't follow
-     * this simple structure.
-     *
-     * @param dout a <tt>DataOutput</tt> instance.
-     *
-     * @throws IOException if an I/O related error occurs.
+     * @return the message as hex encoded string.
      */
-    public void writeTo(DataOutput dout) throws IOException {
+    public String getHexMessage() {
+        return ModbusUtil.toHex(this);
+    }
 
-        if (!isHeadless()) {
-            dout.writeShort(getTransactionID());
-            dout.writeShort(getProtocolID());
-            dout.writeShort(getDataLength());
-        }
-        dout.writeByte(getUnitID());
-        dout.writeByte(getFunctionCode());
-
-        writeData(dout);
+    /**
+     * Sets the headless flag of this message.
+     *
+     * @param b true if headless, false otherwise.
+     */
+    public void setHeadless(boolean b) {
+        m_Headless = b;
     }
 
     /**
@@ -192,23 +177,6 @@ public abstract class ModbusMessageImpl implements ModbusMessage {
      * @throws IOException if an I/O related error occurs.
      */
     public abstract void writeData(DataOutput dout) throws IOException;
-
-    /**
-     * readFrom -- Read the headers and data for a message.  The sub-classes
-     * readData() method will then read in the rest of the message.
-     *
-     * @param din -- Input source
-     */
-    public void readFrom(DataInput din) throws IOException {
-        if (!isHeadless()) {
-            setTransactionID(din.readUnsignedShort());
-            setProtocolID(din.readUnsignedShort());
-            m_DataLength = din.readUnsignedShort();
-        }
-        setUnitID(din.readUnsignedByte());
-        setFunctionCode(din.readUnsignedByte());
-        readData(din);
-    }
 
     /**
      * Reads the subclass specific data from the given DataInput instance.
@@ -232,15 +200,47 @@ public abstract class ModbusMessageImpl implements ModbusMessage {
         return l;
     }
 
+    /**
+     * Writes this message to the given <tt>DataOutput</tt>.
+     *
+     * <p>
+     * This method must be overridden for any message type which doesn't follow
+     * this simple structure.
+     *
+     * @param dout a <tt>DataOutput</tt> instance.
+     *
+     * @throws IOException if an I/O related error occurs.
+     */
+    public void writeTo(DataOutput dout) throws IOException {
+
+        if (!isHeadless()) {
+            dout.writeShort(getTransactionID());
+            dout.writeShort(getProtocolID());
+            dout.writeShort(getDataLength());
+        }
+        dout.writeByte(getUnitID());
+        dout.writeByte(getFunctionCode());
+
+        writeData(dout);
+    }
+
     /*** END Transportable *******************************/
 
     /**
-     * Returns the this message as hexadecimal string.
+     * readFrom -- Read the headers and data for a message.  The sub-classes
+     * readData() method will then read in the rest of the message.
      *
-     * @return the message as hex encoded string.
+     * @param din -- Input source
      */
-    public String getHexMessage() {
-        return ModbusUtil.toHex(this);
+    public void readFrom(DataInput din) throws IOException {
+        if (!isHeadless()) {
+            setTransactionID(din.readUnsignedShort());
+            setProtocolID(din.readUnsignedShort());
+            m_DataLength = din.readUnsignedShort();
+        }
+        setUnitID(din.readUnsignedByte());
+        setFunctionCode(din.readUnsignedByte());
+        readData(din);
     }
 
 }

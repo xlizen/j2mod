@@ -1,5 +1,5 @@
 /*
- * This file is part of j2mod.
+ * This file is part of j2mod-steve.
  *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -35,6 +35,45 @@ public final class ReadWriteMultipleResponse extends ModbusResponse {
 
     private int m_ByteCount;
     private InputRegister[] m_Registers;
+
+    /**
+     * Constructs a new <tt>ReadWriteMultipleResponse</tt> instance.
+     *
+     * @param registers the Register[] holding response registers.
+     */
+    public ReadWriteMultipleResponse(InputRegister[] registers) {
+        super();
+
+        setFunctionCode(Modbus.READ_WRITE_MULTIPLE);
+        setDataLength(registers.length * 2 + 1);
+
+        m_Registers = registers;
+        m_ByteCount = registers.length * 2 + 1;
+    }
+
+    /**
+     * Constructs a new <tt>ReadWriteMultipleResponse</tt> instance.
+     *
+     * @param count the number of Register[] holding response registers.
+     */
+    public ReadWriteMultipleResponse(int count) {
+        super();
+
+        setFunctionCode(Modbus.READ_WRITE_MULTIPLE);
+        setDataLength(count * 2 + 1);
+
+        m_Registers = new InputRegister[count];
+        m_ByteCount = count * 2 + 1;
+    }
+
+    /**
+     * Constructs a new <tt>ReadWriteMultipleResponse</tt> instance.
+     */
+    public ReadWriteMultipleResponse() {
+        super();
+
+        setFunctionCode(Modbus.READ_WRITE_MULTIPLE);
+    }
 
     /**
      * Returns the number of bytes that have been read.
@@ -153,44 +192,5 @@ public final class ReadWriteMultipleResponse extends ModbusResponse {
             result[offset++] = data[1];
         }
         return result;
-    }
-
-    /**
-     * Constructs a new <tt>ReadWriteMultipleResponse</tt> instance.
-     *
-     * @param registers the Register[] holding response registers.
-     */
-    public ReadWriteMultipleResponse(InputRegister[] registers) {
-        super();
-
-        setFunctionCode(Modbus.READ_WRITE_MULTIPLE);
-        setDataLength(registers.length * 2 + 1);
-
-        m_Registers = registers;
-        m_ByteCount = registers.length * 2 + 1;
-    }
-
-    /**
-     * Constructs a new <tt>ReadWriteMultipleResponse</tt> instance.
-     *
-     * @param count the number of Register[] holding response registers.
-     */
-    public ReadWriteMultipleResponse(int count) {
-        super();
-
-        setFunctionCode(Modbus.READ_WRITE_MULTIPLE);
-        setDataLength(count * 2 + 1);
-
-        m_Registers = new InputRegister[count];
-        m_ByteCount = count * 2 + 1;
-    }
-
-    /**
-     * Constructs a new <tt>ReadWriteMultipleResponse</tt> instance.
-     */
-    public ReadWriteMultipleResponse() {
-        super();
-
-        setFunctionCode(Modbus.READ_WRITE_MULTIPLE);
     }
 }

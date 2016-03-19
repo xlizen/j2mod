@@ -1,5 +1,5 @@
 /*
- * This file is part of j2mod.
+ * This file is part of j2mod-steve.
  *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -90,19 +90,69 @@ public class ModbusTCPTransaction implements ModbusTransaction {
         m_IO = con.getModbusTransport();
     }
 
-    public void setRequest(ModbusRequest req) {
+    /**
+     * Tests if the connection will be opened and closed for <b>each</b>
+     * execution.
+     * <p>
+     *
+     * @return true if reconnecting, false otherwise.
+     */
+    public boolean isReconnecting() {
+        return m_Reconnecting;
+    }    public void setRequest(ModbusRequest req) {
         m_Request = req;
     }
 
-    public ModbusRequest getRequest() {
+    /**
+     * Sets the flag that controls whether a connection is opened and closed
+     * for <b>each</b> execution or not.
+     * <p>
+     *
+     * @param b true if reconnecting, false otherwise.
+     */
+    public void setReconnecting(boolean b) {
+        m_Reconnecting = b;
+    }    public ModbusRequest getRequest() {
         return m_Request;
     }
 
-    public ModbusResponse getResponse() {
+    /**
+     * checkValidity -- Verify the transaction IDs match or are zero.
+     *
+     * @throws ModbusException if the transaction was not valid.
+     */
+    private void checkValidity() throws ModbusException {
+        if (m_Request.getTransactionID() == 0
+                || m_Response.getTransactionID() == 0) {
+            return;
+        }
+
+        if (m_Request.getTransactionID() != m_Response.getTransactionID()) {
+            throw new ModbusException("Transaction ID mismatch");
+        }
+    }    public ModbusResponse getResponse() {
         return m_Response;
     }
 
     /**
+     * incrementTransactionID -- Increment the transaction ID for the next
+     * transaction. Note that the caller must get the new transaction ID with
+     * getTransactionID(). This is only done validity checking is enabled so
+     * that dumb slaves don't cause problems. The original request will have its
+     * transaction ID incremented as well so that sending the same transaction
+     * again won't cause problems.
+     */
+    private void incrementTransactionID() {
+        if (isCheckingValidity()) {
+            if (c_TransactionID >= Modbus.MAX_TRANSACTION_ID) {
+                c_TransactionID = 1;
+            }
+            else {
+                c_TransactionID++;
+            }
+        }
+        m_Request.setTransactionID(getTransactionID());
+    }    /**
      * getTransactionID -- get the next transaction ID to use.
      *
      * Note that this method is not synchronized. Callers should synchronize
@@ -134,27 +184,9 @@ public class ModbusTCPTransaction implements ModbusTransaction {
         return m_ValidityCheck;
     }
 
-    /**
-     * Sets the flag that controls whether a connection is opened and closed
-     * for <b>each</b> execution or not.
-     * <p>
-     *
-     * @param b true if reconnecting, false otherwise.
-     */
-    public void setReconnecting(boolean b) {
-        m_Reconnecting = b;
-    }
 
-    /**
-     * Tests if the connection will be opened and closed for <b>each</b>
-     * execution.
-     * <p>
-     *
-     * @return true if reconnecting, false otherwise.
-     */
-    public boolean isReconnecting() {
-        return m_Reconnecting;
-    }
+
+
 
     public int getRetries() {
         return m_Retries;
@@ -268,39 +300,7 @@ public class ModbusTCPTransaction implements ModbusTransaction {
         incrementTransactionID();
     }
 
-    /**
-     * checkValidity -- Verify the transaction IDs match or are zero.
-     *
-     * @throws ModbusException if the transaction was not valid.
-     */
-    private void checkValidity() throws ModbusException {
-        if (m_Request.getTransactionID() == 0
-                || m_Response.getTransactionID() == 0) {
-            return;
-        }
 
-        if (m_Request.getTransactionID() != m_Response.getTransactionID()) {
-            throw new ModbusException("Transaction ID mismatch");
-        }
-    }
 
-    /**
-     * incrementTransactionID -- Increment the transaction ID for the next
-     * transaction. Note that the caller must get the new transaction ID with
-     * getTransactionID(). This is only done validity checking is enabled so
-     * that dumb slaves don't cause problems. The original request will have its
-     * transaction ID incremented as well so that sending the same transaction
-     * again won't cause problems.
-     */
-    private void incrementTransactionID() {
-        if (isCheckingValidity()) {
-            if (c_TransactionID >= Modbus.MAX_TRANSACTION_ID) {
-                c_TransactionID = 1;
-            }
-            else {
-                c_TransactionID++;
-            }
-        }
-        m_Request.setTransactionID(getTransactionID());
-    }
+
 }

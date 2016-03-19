@@ -1,5 +1,5 @@
 /*
- * This file is part of j2mod.
+ * This file is part of j2mod-steve.
  *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -91,24 +91,76 @@ public class ModbusSerialTransaction implements ModbusTransaction {
         m_IO = transport;
     }
 
-    public int getTransactionID() {
+    /**
+     * Get the TransDelayMS value.
+     *
+     * @return the TransDelayMS value.
+     */
+    public int getTransDelayMS() {
+        return m_TransDelayMS;
+    }    public int getTransactionID() {
         return c_TransactionID;
     }
 
-    public void setRequest(ModbusRequest req) {
+    /**
+     * Set the TransDelayMS value.
+     *
+     * @param newTransDelayMS The new TransDelayMS value.
+     */
+    public void setTransDelayMS(int newTransDelayMS) {
+        this.m_TransDelayMS = newTransDelayMS;
+    }    public void setRequest(ModbusRequest req) {
         m_Request = req;
         //m_Response = req.getResponse();
     }
 
-    public ModbusRequest getRequest() {
+    /**
+     * Asserts if this <tt>ModbusTCPTransaction</tt> is
+     * executable.
+     *
+     * @throws ModbusException if the transaction cannot be asserted.
+     */
+    private void assertExecutable() throws ModbusException {
+        if (m_Request == null ||
+                m_IO == null) {
+            throw new ModbusException("Assertion failed, transaction not executable"
+            );
+        }
+    }    public ModbusRequest getRequest() {
         return m_Request;
     }
 
-    public ModbusResponse getResponse() {
+    /**
+     * Checks the validity of the transaction, by
+     * checking if the values of the response correspond
+     * to the values of the request.
+     *
+     * @throws ModbusException if the transaction is not valid.
+     */
+    private void checkValidity() throws ModbusException {
+
+    }    public ModbusResponse getResponse() {
         return m_Response;
     }
 
-    public void setCheckingValidity(boolean b) {
+    /**
+     * Toggles the transaction identifier, to ensure
+     * that each transaction has a distinctive
+     * identifier.<br>
+     * When the maximum value of 65535 has been reached,
+     * the identifiers will start from zero again.
+     */
+    private void toggleTransactionID() {
+        if (isCheckingValidity()) {
+            if (c_TransactionID == (Short.MAX_VALUE * 2)) {
+                c_TransactionID = 0;
+            }
+            else {
+                c_TransactionID++;
+            }
+        }
+        m_Request.setTransactionID(getTransactionID());
+    }    public void setCheckingValidity(boolean b) {
         m_ValidityCheck = b;
     }
 
@@ -124,23 +176,9 @@ public class ModbusSerialTransaction implements ModbusTransaction {
         m_Retries = num;
     }
 
-    /**
-     * Get the TransDelayMS value.
-     *
-     * @return the TransDelayMS value.
-     */
-    public int getTransDelayMS() {
-        return m_TransDelayMS;
-    }
 
-    /**
-     * Set the TransDelayMS value.
-     *
-     * @param newTransDelayMS The new TransDelayMS value.
-     */
-    public void setTransDelayMS(int newTransDelayMS) {
-        this.m_TransDelayMS = newTransDelayMS;
-    }
+
+
 
     public void execute() throws ModbusIOException, ModbusSlaveException,
             ModbusException {
@@ -194,48 +232,10 @@ public class ModbusSerialTransaction implements ModbusTransaction {
         toggleTransactionID();
     }
 
-    /**
-     * Asserts if this <tt>ModbusTCPTransaction</tt> is
-     * executable.
-     *
-     * @throws ModbusException if the transaction cannot be asserted.
-     */
-    private void assertExecutable() throws ModbusException {
-        if (m_Request == null ||
-                m_IO == null) {
-            throw new ModbusException("Assertion failed, transaction not executable"
-            );
-        }
-    }
 
-    /**
-     * Checks the validity of the transaction, by
-     * checking if the values of the response correspond
-     * to the values of the request.
-     *
-     * @throws ModbusException if the transaction is not valid.
-     */
-    private void checkValidity() throws ModbusException {
 
-    }
 
-    /**
-     * Toggles the transaction identifier, to ensure
-     * that each transaction has a distinctive
-     * identifier.<br>
-     * When the maximum value of 65535 has been reached,
-     * the identifiers will start from zero again.
-     */
-    private void toggleTransactionID() {
-        if (isCheckingValidity()) {
-            if (c_TransactionID == (Short.MAX_VALUE * 2)) {
-                c_TransactionID = 0;
-            }
-            else {
-                c_TransactionID++;
-            }
-        }
-        m_Request.setTransactionID(getTransactionID());
-    }
+
+
 
 }

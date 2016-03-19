@@ -1,5 +1,5 @@
 /*
- * This file is part of j2mod.
+ * This file is part of j2mod-steve.
  *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -114,21 +114,21 @@ public class SerialParameters {
     }
 
     /**
-     * Sets the port name.
-     *
-     * @param name the new port name.
-     */
-    public void setPortName(String name) {
-        m_PortName = name;
-    }
-
-    /**
      * Returns the port name.
      *
      * @return the port name.
      */
     public String getPortName() {
         return m_PortName;
+    }
+
+    /**
+     * Sets the port name.
+     *
+     * @param name the new port name.
+     */
+    public void setPortName(String name) {
+        m_PortName = name;
     }
 
     /**
@@ -141,21 +141,21 @@ public class SerialParameters {
     }
 
     /**
-     * Sets the baud rate.
-     *
-     * @param rate the new baud rate.
-     */
-    public void setBaudRate(String rate) {
-        m_BaudRate = Integer.parseInt(rate);
-    }
-
-    /**
      * Return the baud rate as <tt>int</tt>.
      *
      * @return the baud rate as <tt>int</tt>.
      */
     public int getBaudRate() {
         return m_BaudRate;
+    }
+
+    /**
+     * Sets the baud rate.
+     *
+     * @param rate the new baud rate.
+     */
+    public void setBaudRate(String rate) {
+        m_BaudRate = Integer.parseInt(rate);
     }
 
     /**
@@ -178,6 +178,15 @@ public class SerialParameters {
     }
 
     /**
+     * Returns the input flow control type as <tt>int</tt>.
+     *
+     * @return the input flow control type as <tt>int</tt>.
+     */
+    public int getFlowControlIn() {
+        return m_FlowControlIn;
+    }
+
+    /**
      * Sets the type of flow control for the input
      * as given by the passed in <tt>String</tt>.
      *
@@ -185,15 +194,6 @@ public class SerialParameters {
      */
     public void setFlowControlIn(String flowcontrol) {
         m_FlowControlIn = stringToFlow(flowcontrol);
-    }
-
-    /**
-     * Returns the input flow control type as <tt>int</tt>.
-     *
-     * @return the input flow control type as <tt>int</tt>.
-     */
-    public int getFlowControlIn() {
-        return m_FlowControlIn;
     }
 
     /**
@@ -216,6 +216,15 @@ public class SerialParameters {
     }
 
     /**
+     * Returns the output flow control type as <tt>int</tt>.
+     *
+     * @return the output flow control type as <tt>int</tt>.
+     */
+    public int getFlowControlOut() {
+        return m_FlowControlOut;
+    }
+
+    /**
      * Sets the output flow control type as given
      * by the passed in <tt>String</tt>.
      *
@@ -223,15 +232,6 @@ public class SerialParameters {
      */
     public void setFlowControlOut(String flowControlOut) {
         m_FlowControlOut = stringToFlow(flowControlOut);
-    }
-
-    /**
-     * Returns the output flow control type as <tt>int</tt>.
-     *
-     * @return the output flow control type as <tt>int</tt>.
-     */
-    public int getFlowControlOut() {
-        return m_FlowControlOut;
     }
 
     /**
@@ -253,6 +253,15 @@ public class SerialParameters {
     }
 
     /**
+     * Returns the number of data bits as <tt>int</tt>.
+     *
+     * @return the number of data bits as <tt>int</tt>.
+     */
+    public int getDatabits() {
+        return m_Databits;
+    }
+
+    /**
      * Sets the number of data bits from the given <tt>String</tt>.
      *
      * @param databits the new number of data bits as <tt>String</tt>.
@@ -264,15 +273,6 @@ public class SerialParameters {
         else {
             m_Databits = 8;
         }
-    }
-
-    /**
-     * Returns the number of data bits as <tt>int</tt>.
-     *
-     * @return the number of data bits as <tt>int</tt>.
-     */
-    public int getDatabits() {
-        return m_Databits;
     }
 
     /**
@@ -294,6 +294,15 @@ public class SerialParameters {
     }
 
     /**
+     * Returns the number of stop bits as <tt>int</tt>.
+     *
+     * @return the number of stop bits as <tt>int</tt>.
+     */
+    public int getStopbits() {
+        return m_Stopbits;
+    }
+
+    /**
      * Sets the number of stop bits from the given <tt>String</tt>.
      *
      * @param stopbits the number of stop bits as <tt>String</tt>.
@@ -308,15 +317,6 @@ public class SerialParameters {
         if (stopbits.equals("2")) {
             m_Stopbits = SerialPort.TWO_STOP_BITS;
         }
-    }
-
-    /**
-     * Returns the number of stop bits as <tt>int</tt>.
-     *
-     * @return the number of stop bits as <tt>int</tt>.
-     */
-    public int getStopbits() {
-        return m_Stopbits;
     }
 
     /**
@@ -347,6 +347,15 @@ public class SerialParameters {
     }
 
     /**
+     * Returns the parity schema as <tt>int</tt>.
+     *
+     * @return the parity schema as <tt>int</tt>.
+     */
+    public int getParity() {
+        return m_Parity;
+    }
+
+    /**
      * Sets the parity schema from the given
      * <tt>String</tt>.
      *
@@ -372,15 +381,6 @@ public class SerialParameters {
     }
 
     /**
-     * Returns the parity schema as <tt>int</tt>.
-     *
-     * @return the parity schema as <tt>int</tt>.
-     */
-    public int getParity() {
-        return m_Parity;
-    }
-
-    /**
      * Returns the parity schema as <tt>String</tt>.
      *
      * @return the parity schema as <tt>String</tt>.
@@ -403,6 +403,19 @@ public class SerialParameters {
     }
 
     /**
+     * Returns the encoding to be used.
+     *
+     * @return the encoding as string.
+     *
+     * @see Modbus#SERIAL_ENCODING_ASCII
+     * @see Modbus#SERIAL_ENCODING_RTU
+     * @see Modbus#SERIAL_ENCODING_BIN
+     */
+    public String getEncoding() {
+        return m_Encoding;
+    }
+
+    /**
      * Sets the encoding to be used.
      *
      * @param enc the encoding as string.
@@ -422,19 +435,6 @@ public class SerialParameters {
         else {
             m_Encoding = Modbus.DEFAULT_SERIAL_ENCODING;
         }
-    }
-
-    /**
-     * Returns the encoding to be used.
-     *
-     * @return the encoding as string.
-     *
-     * @see Modbus#SERIAL_ENCODING_ASCII
-     * @see Modbus#SERIAL_ENCODING_RTU
-     * @see Modbus#SERIAL_ENCODING_BIN
-     */
-    public String getEncoding() {
-        return m_Encoding;
     }
 
     /**

@@ -1,5 +1,5 @@
 /*
- * This file is part of j2mod.
+ * This file is part of j2mod-steve.
  *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -92,46 +92,48 @@ public class SimpleProcessImage implements ProcessImageImplementation {
         return m_Unit;
     }
 
-    public void addDigitalIn(DigitalIn di) {
-        if (!isLocked()) {
-            m_DigitalInputs.addElement(di);
+    public DigitalOut[] getDigitalOutRange(int ref, int count) {
+        // ensure valid reference range
+        if (ref < 0 || ref + count > m_DigitalOutputs.size()) {
+            throw new IllegalAddressException();
         }
-    }
-
-    public void addDigitalIn(int ref, DigitalIn d1) {
-        if (ref < 0 || ref >= 65536) {
-            throw new IllegalArgumentException();
-        }
-
-        if (!isLocked()) {
-            synchronized (m_DigitalInputs) {
-                if (ref < m_DigitalInputs.size()) {
-                    m_DigitalInputs.setElementAt(d1, ref);
-                    return;
-                }
-                m_DigitalInputs.setSize(ref + 1);
-                m_DigitalInputs.setElementAt(d1, ref);
+        else {
+            DigitalOut[] douts = new DigitalOut[count];
+            for (int i = 0; i < douts.length; i++) {
+                douts[i] = getDigitalOut(ref + i);
             }
+            return douts;
         }
     }
 
-    public void removeDigitalIn(DigitalIn di) {
-        if (!isLocked()) {
-            m_DigitalInputs.removeElement(di);
-        }
-    }
-
-    public void setDigitalIn(int ref, DigitalIn di) throws IllegalAddressException {
-        if (!isLocked()) {
-            try {
-                if (m_DigitalInputs.get(ref) == null) {
-                    throw new IllegalAddressException();
-                }
-                m_DigitalInputs.setElementAt(di, ref);
-            }
-            catch (IndexOutOfBoundsException ex) {
+    public DigitalOut getDigitalOut(int ref) throws IllegalAddressException {
+        try {
+            DigitalOut result = m_DigitalOutputs.elementAt(ref);
+            if (result == null) {
                 throw new IllegalAddressException();
             }
+            return result;
+        }
+        catch (IndexOutOfBoundsException ex) {
+            throw new IllegalAddressException();
+        }
+    }
+
+    public int getDigitalOutCount() {
+        return m_DigitalOutputs.size();
+    }
+
+    public DigitalIn[] getDigitalInRange(int ref, int count) {
+        // ensure valid reference range
+        if (ref < 0 || ref + count > m_DigitalInputs.size()) {
+            throw new IllegalAddressException();
+        }
+        else {
+            DigitalIn[] dins = new DigitalIn[count];
+            for (int i = 0; i < dins.length; i++) {
+                dins[i] = getDigitalIn(ref + i);
+            }
+            return dins;
         }
     }
 
@@ -152,17 +154,146 @@ public class SimpleProcessImage implements ProcessImageImplementation {
         return m_DigitalInputs.size();
     }
 
-    public DigitalIn[] getDigitalInRange(int ref, int count) {
+    public InputRegister[] getInputRegisterRange(int ref, int count) {
         // ensure valid reference range
-        if (ref < 0 || ref + count > m_DigitalInputs.size()) {
+        if (ref < 0 || ref + count > m_InputRegisters.size()) {
+            throw new IllegalAddressException();
+        }
+
+        InputRegister[] iregs = new InputRegister[count];
+        for (int i = 0; i < iregs.length; i++) {
+            iregs[i] = getInputRegister(ref + i);
+        }
+
+        return iregs;
+    }
+
+    public InputRegister getInputRegister(int ref) throws IllegalAddressException {
+        try {
+            InputRegister result = m_InputRegisters.elementAt(ref);
+            if (result == null) {
+                throw new IllegalAddressException();
+            }
+
+            return result;
+        }
+        catch (IndexOutOfBoundsException ex) {
+            throw new IllegalAddressException();
+        }
+    }
+
+    public int getInputRegisterCount() {
+        return m_InputRegisters.size();
+    }
+
+    public Register[] getRegisterRange(int ref, int count) {
+        if (ref < 0 || ref + count > m_Registers.size()) {
             throw new IllegalAddressException();
         }
         else {
-            DigitalIn[] dins = new DigitalIn[count];
-            for (int i = 0; i < dins.length; i++) {
-                dins[i] = getDigitalIn(ref + i);
+            Register[] iregs = new Register[count];
+            for (int i = 0; i < iregs.length; i++) {
+                iregs[i] = getRegister(ref + i);
             }
-            return dins;
+            return iregs;
+        }
+    }
+
+    public Register getRegister(int ref) throws IllegalAddressException {
+        try {
+            Register result = m_Registers.elementAt(ref);
+            if (result == null) {
+                throw new IllegalAddressException();
+            }
+
+            return result;
+        }
+        catch (IndexOutOfBoundsException ex) {
+            throw new IllegalAddressException();
+        }
+    }
+
+    public int getRegisterCount() {
+        return m_Registers.size();
+    }
+
+    public File getFile(int fileNumber) {
+        try {
+            File result = m_Files.elementAt(fileNumber);
+            if (result == null) {
+                throw new IllegalAddressException();
+            }
+
+            return result;
+        }
+        catch (IndexOutOfBoundsException ex) {
+            throw new IllegalAddressException();
+        }
+    }
+
+    public File getFileByNumber(int ref) {
+        if (ref < 0 || ref >= 10000 || m_Files == null) {
+            throw new IllegalAddressException();
+        }
+
+        synchronized (m_Files) {
+            for (File file : m_Files) {
+                if (file.getFileNumber() == ref) {
+                    return file;
+                }
+            }
+        }
+
+        throw new IllegalAddressException();
+    }
+
+    public int getFileCount() {
+        return m_Files.size();
+    }
+
+    public FIFO getFIFO(int fifoNumber) {
+        try {
+            FIFO result = m_FIFOs.elementAt(fifoNumber);
+            if (result == null) {
+                throw new IllegalAddressException();
+            }
+
+            return result;
+        }
+        catch (IndexOutOfBoundsException ex) {
+            throw new IllegalAddressException();
+        }
+    }
+
+    public FIFO getFIFOByAddress(int ref) {
+        for (FIFO fifo : m_FIFOs) {
+            if (fifo.getAddress() == ref) {
+                return fifo;
+            }
+        }
+
+        return null;
+    }
+
+    public int getFIFOCount() {
+        if (m_FIFOs == null) {
+            return 0;
+        }
+
+        return m_FIFOs.size();
+    }
+
+    public void setDigitalOut(int ref, DigitalOut _do) throws IllegalAddressException {
+        if (!isLocked()) {
+            try {
+                if (m_DigitalOutputs.get(ref) == null) {
+                    throw new IllegalAddressException();
+                }
+                m_DigitalOutputs.setElementAt(_do, ref);
+            }
+            catch (IndexOutOfBoundsException ex) {
+                throw new IllegalAddressException();
+            }
         }
     }
 
@@ -195,13 +326,13 @@ public class SimpleProcessImage implements ProcessImageImplementation {
         }
     }
 
-    public void setDigitalOut(int ref, DigitalOut _do) throws IllegalAddressException {
+    public void setDigitalIn(int ref, DigitalIn di) throws IllegalAddressException {
         if (!isLocked()) {
             try {
-                if (m_DigitalOutputs.get(ref) == null) {
+                if (m_DigitalInputs.get(ref) == null) {
                     throw new IllegalAddressException();
                 }
-                m_DigitalOutputs.setElementAt(_do, ref);
+                m_DigitalInputs.setElementAt(di, ref);
             }
             catch (IndexOutOfBoundsException ex) {
                 throw new IllegalAddressException();
@@ -209,34 +340,47 @@ public class SimpleProcessImage implements ProcessImageImplementation {
         }
     }
 
-    public DigitalOut getDigitalOut(int ref) throws IllegalAddressException {
-        try {
-            DigitalOut result = m_DigitalOutputs.elementAt(ref);
-            if (result == null) {
+    public void addDigitalIn(DigitalIn di) {
+        if (!isLocked()) {
+            m_DigitalInputs.addElement(di);
+        }
+    }
+
+    public void addDigitalIn(int ref, DigitalIn d1) {
+        if (ref < 0 || ref >= 65536) {
+            throw new IllegalArgumentException();
+        }
+
+        if (!isLocked()) {
+            synchronized (m_DigitalInputs) {
+                if (ref < m_DigitalInputs.size()) {
+                    m_DigitalInputs.setElementAt(d1, ref);
+                    return;
+                }
+                m_DigitalInputs.setSize(ref + 1);
+                m_DigitalInputs.setElementAt(d1, ref);
+            }
+        }
+    }
+
+    public void removeDigitalIn(DigitalIn di) {
+        if (!isLocked()) {
+            m_DigitalInputs.removeElement(di);
+        }
+    }
+
+    public void setInputRegister(int ref, InputRegister reg) throws IllegalAddressException {
+        if (!isLocked()) {
+            try {
+                if (m_InputRegisters.get(ref) == null) {
+                    throw new IllegalAddressException();
+                }
+
+                m_InputRegisters.setElementAt(reg, ref);
+            }
+            catch (IndexOutOfBoundsException ex) {
                 throw new IllegalAddressException();
             }
-            return result;
-        }
-        catch (IndexOutOfBoundsException ex) {
-            throw new IllegalAddressException();
-        }
-    }
-
-    public int getDigitalOutCount() {
-        return m_DigitalOutputs.size();
-    }
-
-    public DigitalOut[] getDigitalOutRange(int ref, int count) {
-        // ensure valid reference range
-        if (ref < 0 || ref + count > m_DigitalOutputs.size()) {
-            throw new IllegalAddressException();
-        }
-        else {
-            DigitalOut[] douts = new DigitalOut[count];
-            for (int i = 0; i < douts.length; i++) {
-                douts[i] = getDigitalOut(ref + i);
-            }
-            return douts;
         }
     }
 
@@ -269,51 +413,19 @@ public class SimpleProcessImage implements ProcessImageImplementation {
         }
     }
 
-    public void setInputRegister(int ref, InputRegister reg) throws IllegalAddressException {
+    public void setRegister(int ref, Register reg) throws IllegalAddressException {
         if (!isLocked()) {
             try {
-                if (m_InputRegisters.get(ref) == null) {
+                if (m_Registers.get(ref) == null) {
                     throw new IllegalAddressException();
                 }
 
-                m_InputRegisters.setElementAt(reg, ref);
+                m_Registers.setElementAt(reg, ref);
             }
             catch (IndexOutOfBoundsException ex) {
                 throw new IllegalAddressException();
             }
         }
-    }
-
-    public InputRegister getInputRegister(int ref) throws IllegalAddressException {
-        try {
-            InputRegister result = m_InputRegisters.elementAt(ref);
-            if (result == null) {
-                throw new IllegalAddressException();
-            }
-
-            return result;
-        }
-        catch (IndexOutOfBoundsException ex) {
-            throw new IllegalAddressException();
-        }
-    }
-
-    public int getInputRegisterCount() {
-        return m_InputRegisters.size();
-    }
-
-    public InputRegister[] getInputRegisterRange(int ref, int count) {
-        // ensure valid reference range
-        if (ref < 0 || ref + count > m_InputRegisters.size()) {
-            throw new IllegalAddressException();
-        }
-
-        InputRegister[] iregs = new InputRegister[count];
-        for (int i = 0; i < iregs.length; i++) {
-            iregs[i] = getInputRegister(ref + i);
-        }
-
-        return iregs;
     }
 
     public void addRegister(Register reg) {
@@ -345,49 +457,18 @@ public class SimpleProcessImage implements ProcessImageImplementation {
         }
     }
 
-    public void setRegister(int ref, Register reg) throws IllegalAddressException {
+    public void setFile(int fileNumber, File file) {
         if (!isLocked()) {
             try {
-                if (m_Registers.get(ref) == null) {
+                if (m_Files.get(fileNumber) == null) {
                     throw new IllegalAddressException();
                 }
 
-                m_Registers.setElementAt(reg, ref);
+                m_Files.setElementAt(file, fileNumber);
             }
             catch (IndexOutOfBoundsException ex) {
                 throw new IllegalAddressException();
             }
-        }
-    }
-
-    public Register getRegister(int ref) throws IllegalAddressException {
-        try {
-            Register result = m_Registers.elementAt(ref);
-            if (result == null) {
-                throw new IllegalAddressException();
-            }
-
-            return result;
-        }
-        catch (IndexOutOfBoundsException ex) {
-            throw new IllegalAddressException();
-        }
-    }
-
-    public int getRegisterCount() {
-        return m_Registers.size();
-    }
-
-    public Register[] getRegisterRange(int ref, int count) {
-        if (ref < 0 || ref + count > m_Registers.size()) {
-            throw new IllegalAddressException();
-        }
-        else {
-            Register[] iregs = new Register[count];
-            for (int i = 0; i < iregs.length; i++) {
-                iregs[i] = getRegister(ref + i);
-            }
-            return iregs;
         }
     }
 
@@ -420,53 +501,19 @@ public class SimpleProcessImage implements ProcessImageImplementation {
         }
     }
 
-    public void setFile(int fileNumber, File file) {
+    public void setFIFO(int fifoNumber, FIFO fifo) {
         if (!isLocked()) {
             try {
-                if (m_Files.get(fileNumber) == null) {
+                if (m_FIFOs.get(fifoNumber) == null) {
                     throw new IllegalAddressException();
                 }
 
-                m_Files.setElementAt(file, fileNumber);
+                m_FIFOs.setElementAt(fifo, fifoNumber);
             }
             catch (IndexOutOfBoundsException ex) {
                 throw new IllegalAddressException();
             }
         }
-    }
-
-    public File getFile(int fileNumber) {
-        try {
-            File result = m_Files.elementAt(fileNumber);
-            if (result == null) {
-                throw new IllegalAddressException();
-            }
-
-            return result;
-        }
-        catch (IndexOutOfBoundsException ex) {
-            throw new IllegalAddressException();
-        }
-    }
-
-    public int getFileCount() {
-        return m_Files.size();
-    }
-
-    public File getFileByNumber(int ref) {
-        if (ref < 0 || ref >= 10000 || m_Files == null) {
-            throw new IllegalAddressException();
-        }
-
-        synchronized (m_Files) {
-            for (File file : m_Files) {
-                if (file.getFileNumber() == ref) {
-                    return file;
-                }
-            }
-        }
-
-        throw new IllegalAddressException();
     }
 
     public void addFIFO(FIFO fifo) {
@@ -496,53 +543,6 @@ public class SimpleProcessImage implements ProcessImageImplementation {
         if (!isLocked()) {
             m_FIFOs.removeElement(oldFIFO);
         }
-    }
-
-    public void setFIFO(int fifoNumber, FIFO fifo) {
-        if (!isLocked()) {
-            try {
-                if (m_FIFOs.get(fifoNumber) == null) {
-                    throw new IllegalAddressException();
-                }
-
-                m_FIFOs.setElementAt(fifo, fifoNumber);
-            }
-            catch (IndexOutOfBoundsException ex) {
-                throw new IllegalAddressException();
-            }
-        }
-    }
-
-    public FIFO getFIFO(int fifoNumber) {
-        try {
-            FIFO result = m_FIFOs.elementAt(fifoNumber);
-            if (result == null) {
-                throw new IllegalAddressException();
-            }
-
-            return result;
-        }
-        catch (IndexOutOfBoundsException ex) {
-            throw new IllegalAddressException();
-        }
-    }
-
-    public int getFIFOCount() {
-        if (m_FIFOs == null) {
-            return 0;
-        }
-
-        return m_FIFOs.size();
-    }
-
-    public FIFO getFIFOByAddress(int ref) {
-        for (FIFO fifo : m_FIFOs) {
-            if (fifo.getAddress() == ref) {
-                return fifo;
-            }
-        }
-
-        return null;
     }
 
 }

@@ -1,5 +1,5 @@
 /*
- * This file is part of j2mod.
+ * This file is part of j2mod-steve.
  *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -38,18 +38,8 @@ public abstract class AbstractRegister
         return ((m_Register[0] & 0xff) << 8 | (m_Register[1] & 0xff));
     }
 
-    public final void setValue(int v) {
-        m_Register[0] = (byte)(0xff & (v >> 8));
-        m_Register[1] = (byte)(0xff & v);
-    }
-
     public final short toShort() {
         return (short)((m_Register[0] << 8) | (m_Register[1] & 0xff));
-    }
-
-    public final void setValue(short s) {
-        m_Register[0] = (byte)(0xff & (s >> 8));
-        m_Register[1] = (byte)(0xff & s);
     }
 
     public synchronized byte[] toBytes() {
@@ -66,6 +56,16 @@ public abstract class AbstractRegister
             m_Register[0] = bytes[0];
             m_Register[1] = bytes[1];
         }
+    }
+
+    public final void setValue(int v) {
+        m_Register[0] = (byte)(0xff & (v >> 8));
+        m_Register[1] = (byte)(0xff & v);
+    }
+
+    public final void setValue(short s) {
+        m_Register[0] = (byte)(0xff & (s >> 8));
+        m_Register[1] = (byte)(0xff & s);
     }
 
 }

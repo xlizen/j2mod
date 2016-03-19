@@ -1,5 +1,5 @@
 /*
- * This file is part of j2mod.
+ * This file is part of j2mod-steve.
  *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -103,16 +103,6 @@ public final class WriteSingleRegisterRequest extends ModbusRequest {
     }
 
     /**
-     * Sets the reference of the register to be written to with this
-     * <tt>WriteSingleRegisterRequest</tt>.
-     *
-     * @param ref the reference of the register to be written to.
-     */
-    public void setReference(int ref) {
-        m_Reference = ref;
-    }
-
-    /**
      * Returns the reference of the register to be written to with this
      * <tt>WriteSingleRegisterRequest</tt>.
      *
@@ -123,13 +113,13 @@ public final class WriteSingleRegisterRequest extends ModbusRequest {
     }
 
     /**
-     * Sets the value that should be written to the register with this
+     * Sets the reference of the register to be written to with this
      * <tt>WriteSingleRegisterRequest</tt>.
      *
-     * @param reg the register to be written.
+     * @param ref the reference of the register to be written to.
      */
-    public void setRegister(Register reg) {
-        m_Register = reg;
+    public void setReference(int ref) {
+        m_Reference = ref;
     }
 
     /**
@@ -140,6 +130,16 @@ public final class WriteSingleRegisterRequest extends ModbusRequest {
      */
     public Register getRegister() {
         return m_Register;
+    }
+
+    /**
+     * Sets the value that should be written to the register with this
+     * <tt>WriteSingleRegisterRequest</tt>.
+     *
+     * @param reg the register to be written.
+     */
+    public void setRegister(Register reg) {
+        m_Register = reg;
     }
 
     public void writeData(DataOutput dout) throws IOException {

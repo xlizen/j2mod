@@ -1,5 +1,5 @@
 /*
- * This file is part of j2mod.
+ * This file is part of j2mod-steve.
  *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -103,13 +103,13 @@ public class ModbusUDPTransaction
         }
     }
 
+    public ModbusRequest getRequest() {
+        return m_Request;
+    }
+
     public void setRequest(ModbusRequest req) {
         m_Request = req;
         //m_Response = req.getResponse();
-    }
-
-    public ModbusRequest getRequest() {
-        return m_Request;
     }
 
     public ModbusResponse getResponse() {
@@ -120,20 +120,20 @@ public class ModbusUDPTransaction
         return c_TransactionID & 0x0000FFFF;
     }
 
-    public void setCheckingValidity(boolean b) {
-        m_ValidityCheck = b;
-    }
-
-    public boolean isCheckingValidity() {
-        return m_ValidityCheck;
-    }
-
     public int getRetries() {
         return m_Retries;
     }
 
     public void setRetries(int num) {
         m_Retries = num;
+    }
+
+    public boolean isCheckingValidity() {
+        return m_ValidityCheck;
+    }
+
+    public void setCheckingValidity(boolean b) {
+        m_ValidityCheck = b;
     }
 
     public void execute() throws ModbusIOException, ModbusSlaveException,

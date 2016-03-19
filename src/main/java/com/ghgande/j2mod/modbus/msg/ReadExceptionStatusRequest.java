@@ -1,5 +1,5 @@
 /*
- * This file is part of j2mod.
+ * This file is part of j2mod-steve.
  *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -32,6 +32,21 @@ import java.io.IOException;
  * @version @version@ (@date@)
  */
 public final class ReadExceptionStatusRequest extends ModbusRequest {
+
+    /**
+     * Constructs a new <tt>Read Exception Status</tt> request
+     * instance.
+     */
+    public ReadExceptionStatusRequest() {
+        super();
+
+        setFunctionCode(Modbus.READ_EXCEPTION_STATUS);
+
+		/*
+		 * There is no additional data in this request.
+		 */
+        setDataLength(0);
+    }
 
     /**
      * createResponse -- create an empty response for this request.
@@ -87,20 +102,5 @@ public final class ReadExceptionStatusRequest extends ModbusRequest {
     public byte[] getMessage() {
 
         return new byte[0];
-    }
-
-    /**
-     * Constructs a new <tt>Read Exception Status</tt> request
-     * instance.
-     */
-    public ReadExceptionStatusRequest() {
-        super();
-
-        setFunctionCode(Modbus.READ_EXCEPTION_STATUS);
-		
-		/*
-		 * There is no additional data in this request.
-		 */
-        setDataLength(0);
     }
 }

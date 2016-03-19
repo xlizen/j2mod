@@ -1,5 +1,5 @@
 /*
- * This file is part of j2mod.
+ * This file is part of j2mod-steve.
  *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -43,6 +43,17 @@ public class SerialConnection implements SerialPortDataListener {
     private ModbusSerialTransport m_Transport;
     private SerialPort m_SerialPort;
     private InputStream m_SerialIn;
+
+    /**
+     * Creates a SerialConnection object and initializes variables passed in as
+     * params.
+     *
+     * @param parameters
+     *            A SerialParameters object.
+     */
+    public SerialConnection(SerialParameters parameters) {
+        m_Parameters = parameters;
+    }
 
     /**
      * Returns the <tt>ModbusTransport</tt> instance to be used for receiving
@@ -149,16 +160,5 @@ public class SerialConnection implements SerialPortDataListener {
                     logger.debug("Serial port event: " + e.getEventType());
                 }
         }
-    }
-
-    /**
-     * Creates a SerialConnection object and initializes variables passed in as
-     * params.
-     *
-     * @param parameters
-     *            A SerialParameters object.
-     */
-    public SerialConnection(SerialParameters parameters) {
-        m_Parameters = parameters;
     }
 }

@@ -1,5 +1,5 @@
 /*
- * This file is part of j2mod.
+ * This file is part of j2mod-steve.
  *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -49,16 +49,42 @@ public class ModbusTCPListener implements ModbusListener {
     private InetAddress m_Address;
 
     /**
-     * Sets the port to be listened to.
+     * Constructs a ModbusTCPListener instance.<br>
      *
-     * @param port
-     *            the number of the IP port as <tt>int</tt>.
+     * @param poolsize
+     *            the size of the <tt>ThreadPool</tt> used to handle incoming
+     *            requests.
+     * @param addr
+     *            the interface to use for listening.
      */
-    public void setPort(int port) {
-        m_Port = port;
+    public ModbusTCPListener(int poolsize, InetAddress addr) {
+        m_ThreadPool = new ThreadPool(poolsize);
+        m_Address = addr;
     }
 
     /**
+     /**
+     * Constructs a ModbusTCPListener instance.  This interface is created
+     * to listen on the wildcard address, which will accept TCP packets
+     * on all available interfaces.
+     *
+     * @param poolsize
+     *            the size of the <tt>ThreadPool</tt> used to handle incoming
+     *            requests.
+     */
+    public ModbusTCPListener(int poolsize) {
+        m_ThreadPool = new ThreadPool(poolsize);
+        try {
+			/*
+			 * TODO -- Check for an IPv6 interface and listen on that
+			 * interface if it exists.
+			 */
+            m_Address = InetAddress.getByAddress(new byte[]{0, 0, 0, 0});
+        }
+        catch (UnknownHostException ex) {
+            // Can't happen -- size is fixed.
+        }
+    }    /**
      * Gets the unit number supported by this Modbus/TCP connection. A
      * Modbus/TCP connection, by default, supports unit 0, but may also support
      * a fixed unit number, or a range of unit numbers if the device is a
@@ -72,6 +98,14 @@ public class ModbusTCPListener implements ModbusListener {
     }
 
     /**
+     * Sets the port to be listened to.
+     *
+     * @param port
+     *            the number of the IP port as <tt>int</tt>.
+     */
+    public void setPort(int port) {
+        m_Port = port;
+    }    /**
      * Sets the unit number to be listened for.  A Modbus/TCP connection, by
      * default, supports unit 0, but may also support a fixed unit number, or a
      * range of unit numbers if the device is a Modbus/TCP gateway.
@@ -103,20 +137,6 @@ public class ModbusTCPListener implements ModbusListener {
 
         m_Listener = new Thread(this);
         m_Listener.start();
-    }
-
-    /**
-     * Stops this <tt>ModbusTCPListener</tt>.
-     */
-    public void stop() {
-        m_Listening = false;
-        try {
-            m_ServerSocket.close();
-            m_Listener.join();
-        }
-        catch (Exception ex) {
-            // ?
-        }
     }
 
     /**
@@ -171,7 +191,21 @@ public class ModbusTCPListener implements ModbusListener {
         catch (IOException e) {
             // FIXME: this is a major failure, how do we handle this
         }
+    }    /**
+     * Stops this <tt>ModbusTCPListener</tt>.
+     */
+    public void stop() {
+        m_Listening = false;
+        try {
+            m_ServerSocket.close();
+            m_Listener.join();
+        }
+        catch (Exception ex) {
+            // ?
+        }
     }
+
+
 
     /**
      * Set the listening state of this <tt>ModbusTCPListener</tt> object.
@@ -206,41 +240,7 @@ public class ModbusTCPListener implements ModbusListener {
         return result;
     }
 
-    /**
-     * Constructs a ModbusTCPListener instance.<br>
-     *
-     * @param poolsize
-     *            the size of the <tt>ThreadPool</tt> used to handle incoming
-     *            requests.
-     * @param addr
-     *            the interface to use for listening.
-     */
-    public ModbusTCPListener(int poolsize, InetAddress addr) {
-        m_ThreadPool = new ThreadPool(poolsize);
-        m_Address = addr;
-    }
 
-    /**
-     /**
-     * Constructs a ModbusTCPListener instance.  This interface is created
-     * to listen on the wildcard address, which will accept TCP packets
-     * on all available interfaces.
-     *
-     * @param poolsize
-     *            the size of the <tt>ThreadPool</tt> used to handle incoming
-     *            requests.
-     */
-    public ModbusTCPListener(int poolsize) {
-        m_ThreadPool = new ThreadPool(poolsize);
-        try {
-			/*
-			 * TODO -- Check for an IPv6 interface and listen on that
-			 * interface if it exists.
-			 */
-            m_Address = InetAddress.getByAddress(new byte[]{0, 0, 0, 0});
-        }
-        catch (UnknownHostException ex) {
-            // Can't happen -- size is fixed.
-        }
-    }
+
+
 }

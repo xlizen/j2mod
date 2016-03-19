@@ -1,5 +1,5 @@
 /*
- * This file is part of j2mod.
+ * This file is part of j2mod-steve.
  *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -39,6 +39,32 @@ public final class WriteMultipleCoilsResponse
     // instance attributes
     private int m_Reference;
     private int m_BitCount;
+
+    /**
+     * Constructs a new <tt>WriteMultipleCoilsResponse</tt> instance with a
+     * given count of coils and starting reference.
+     * <p>
+     *
+     * @param ref   the offset to begin writing from.
+     * @param count the number of coils to be written.
+     */
+    public WriteMultipleCoilsResponse(int ref, int count) {
+        super();
+
+        m_Reference = ref;
+        m_BitCount = count;
+
+        setDataLength(4);
+    }
+
+    /**
+     * Constructs a new <tt>WriteMultipleCoilsResponse</tt> instance.
+     */
+    public WriteMultipleCoilsResponse() {
+        super();
+
+        setDataLength(4);
+    }
 
     /**
      * getReference - Returns the reference of the coil to start reading from
@@ -109,31 +135,5 @@ public final class WriteMultipleCoilsResponse
         results[3] = (byte)(m_BitCount & 0xff);
 
         return results;
-    }
-
-    /**
-     * Constructs a new <tt>WriteMultipleCoilsResponse</tt> instance with a
-     * given count of coils and starting reference.
-     * <p>
-     *
-     * @param ref   the offset to begin writing from.
-     * @param count the number of coils to be written.
-     */
-    public WriteMultipleCoilsResponse(int ref, int count) {
-        super();
-
-        m_Reference = ref;
-        m_BitCount = count;
-
-        setDataLength(4);
-    }
-
-    /**
-     * Constructs a new <tt>WriteMultipleCoilsResponse</tt> instance.
-     */
-    public WriteMultipleCoilsResponse() {
-        super();
-
-        setDataLength(4);
     }
 }

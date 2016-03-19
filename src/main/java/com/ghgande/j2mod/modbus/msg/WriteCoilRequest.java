@@ -1,5 +1,5 @@
 /*
- * This file is part of j2mod.
+ * This file is part of j2mod-steve.
  *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -104,6 +104,16 @@ public final class WriteCoilRequest extends ModbusRequest {
     }
 
     /**
+     * Returns the reference of the register of the coil that should be written
+     * to with this <tt>ReadCoilsRequest</tt>.
+     *
+     * @return the reference of the coil's register.
+     */
+    public int getReference() {
+        return m_Reference;
+    }
+
+    /**
      * Sets the reference of the register of the coil that should be written to
      * with this <tt>ReadCoilsRequest</tt>.
      * <p>
@@ -115,13 +125,13 @@ public final class WriteCoilRequest extends ModbusRequest {
     }
 
     /**
-     * Returns the reference of the register of the coil that should be written
-     * to with this <tt>ReadCoilsRequest</tt>.
+     * Returns the state that should be written with this
+     * <tt>WriteCoilRequest</tt>.
      *
-     * @return the reference of the coil's register.
+     * @return true if the coil should be set of false if it should be unset.
      */
-    public int getReference() {
-        return m_Reference;
+    public boolean getCoil() {
+        return m_Coil;
     }
 
     /**
@@ -131,16 +141,6 @@ public final class WriteCoilRequest extends ModbusRequest {
      */
     public void setCoil(boolean b) {
         m_Coil = b;
-    }
-
-    /**
-     * Returns the state that should be written with this
-     * <tt>WriteCoilRequest</tt>.
-     *
-     * @return true if the coil should be set of false if it should be unset.
-     */
-    public boolean getCoil() {
-        return m_Coil;
     }
 
     public void writeData(DataOutput dout) throws IOException {

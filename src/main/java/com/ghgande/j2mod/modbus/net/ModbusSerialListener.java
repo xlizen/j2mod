@@ -1,5 +1,5 @@
 /*
- * This file is part of j2mod.
+ * This file is part of j2mod-steve.
  *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -43,6 +43,16 @@ public class ModbusSerialListener implements ModbusListener {
     private boolean m_Running = true;
     private SerialConnection m_SerialCon;
     private int m_Unit = 0;
+
+    /**
+     * Constructs a new <tt>ModbusSerialListener</tt> instance.
+     *
+     * @param params
+     *            a <tt>SerialParameters</tt> instance.
+     */
+    public ModbusSerialListener(SerialParameters params) {
+        m_SerialCon = new SerialConnection(params);
+    }
 
     /**
      * run
@@ -136,9 +146,7 @@ public class ModbusSerialListener implements ModbusListener {
                 m_SerialCon.close();
             }
         }
-    }
-
-    /**
+    }    /**
      * Sets the Modbus unit number for this <tt>ModbusSerialListener</tt>
      *
      * @param unit
@@ -198,13 +206,5 @@ public class ModbusSerialListener implements ModbusListener {
         return result;
     }
 
-    /**
-     * Constructs a new <tt>ModbusSerialListener</tt> instance.
-     *
-     * @param params
-     *            a <tt>SerialParameters</tt> instance.
-     */
-    public ModbusSerialListener(SerialParameters params) {
-        m_SerialCon = new SerialConnection(params);
-    }
+
 }

@@ -1,5 +1,5 @@
 /*
- * This file is part of j2mod.
+ * This file is part of j2mod-steve.
  *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -28,7 +28,8 @@ package com.ghgande.j2mod.modbus.util;
 public final class BitVector {
 
     private static final Logger logger = Logger.getLogger(BitVector.class);
-
+    private static final int[] ODD_OFFSETS = {-1, -3, -5, -7};
+    private static final int[] STRAIGHT_OFFSETS = {7, 5, 3, 1};
     //instance attributes
     private int m_Size;
     private byte[] m_Data;
@@ -54,6 +55,76 @@ public final class BitVector {
             size = (size / 8);
         }
         m_Data = new byte[size];
+    }
+
+    private static int doTranslateIndex(int idx) {
+
+        int mod4 = idx % 4;
+        int div4 = idx / 4;
+
+        if ((div4 % 2) != 0) {
+            //odd
+            return (idx + ODD_OFFSETS[mod4]);
+        }
+        else {
+            //straight
+            return (idx + STRAIGHT_OFFSETS[mod4]);
+        }
+    }
+
+    /**
+     * Factory method for creating a <tt>BitVector</tt> instance
+     * wrapping the given byte data.
+     *
+     * @param data a byte[] containing packed bits.
+     *
+     * @return the newly created <tt>BitVector</tt> instance.
+     */
+    public static BitVector createBitVector(byte[] data, int size) {
+        BitVector bv = new BitVector(data.length * 8);
+        bv.setBytes(data);
+        bv.m_Size = size;
+        return bv;
+    }
+
+    /**
+     * Factory method for creating a <tt>BitVector</tt> instance
+     * wrapping the given byte data.
+     *
+     * @param data a byte[] containing packed bits.
+     *
+     * @return the newly created <tt>BitVector</tt> instance.
+     */
+    public static BitVector createBitVector(byte[] data) {
+        BitVector bv = new BitVector(data.length * 8);
+        bv.setBytes(data);
+        return bv;
+    }
+
+    public static void main(String[] args) {
+        BitVector test = new BitVector(24);
+        logger.debug(test.isLSBAccess());
+        test.setBit(7, true);
+        logger.debug(test.getBit(7));
+        test.toggleAccess(true);
+        logger.debug(test.getBit(7));
+
+        test.toggleAccess(true);
+        test.setBit(6, true);
+        test.setBit(3, true);
+        test.setBit(2, true);
+
+        test.setBit(0, true);
+        test.setBit(8, true);
+        test.setBit(10, true);
+
+        logger.debug(test);
+        test.toggleAccess(true);
+        logger.debug(test);
+        test.toggleAccess(true);
+        logger.debug(test);
+
+        logger.debug(ModbusUtil.toHex(test.getBytes()));
     }
 
     /**
@@ -294,77 +365,4 @@ public final class BitVector {
             return idx;
         }
     }
-
-    private static int doTranslateIndex(int idx) {
-
-        int mod4 = idx % 4;
-        int div4 = idx / 4;
-
-        if ((div4 % 2) != 0) {
-            //odd
-            return (idx + ODD_OFFSETS[mod4]);
-        }
-        else {
-            //straight
-            return (idx + STRAIGHT_OFFSETS[mod4]);
-        }
-    }
-
-    /**
-     * Factory method for creating a <tt>BitVector</tt> instance
-     * wrapping the given byte data.
-     *
-     * @param data a byte[] containing packed bits.
-     *
-     * @return the newly created <tt>BitVector</tt> instance.
-     */
-    public static BitVector createBitVector(byte[] data, int size) {
-        BitVector bv = new BitVector(data.length * 8);
-        bv.setBytes(data);
-        bv.m_Size = size;
-        return bv;
-    }
-
-    /**
-     * Factory method for creating a <tt>BitVector</tt> instance
-     * wrapping the given byte data.
-     *
-     * @param data a byte[] containing packed bits.
-     *
-     * @return the newly created <tt>BitVector</tt> instance.
-     */
-    public static BitVector createBitVector(byte[] data) {
-        BitVector bv = new BitVector(data.length * 8);
-        bv.setBytes(data);
-        return bv;
-    }
-
-    public static void main(String[] args) {
-        BitVector test = new BitVector(24);
-        logger.debug(test.isLSBAccess());
-        test.setBit(7, true);
-        logger.debug(test.getBit(7));
-        test.toggleAccess(true);
-        logger.debug(test.getBit(7));
-
-        test.toggleAccess(true);
-        test.setBit(6, true);
-        test.setBit(3, true);
-        test.setBit(2, true);
-
-        test.setBit(0, true);
-        test.setBit(8, true);
-        test.setBit(10, true);
-
-        logger.debug(test);
-        test.toggleAccess(true);
-        logger.debug(test);
-        test.toggleAccess(true);
-        logger.debug(test);
-
-        logger.debug(ModbusUtil.toHex(test.getBytes()));
-    }
-
-    private static final int[] ODD_OFFSETS = {-1, -3, -5, -7};
-    private static final int[] STRAIGHT_OFFSETS = {7, 5, 3, 1};
 }

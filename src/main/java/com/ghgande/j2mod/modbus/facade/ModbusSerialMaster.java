@@ -1,5 +1,5 @@
 /*
- * This file is part of j2mod.
+ * This file is part of j2mod-steve.
  *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -74,21 +74,21 @@ public class ModbusSerialMaster {
     }
 
     /**
-     * Sets the unit identifier of this <tt>ModbusSerialMaster</tt>.
-     *
-     * @param unitid the unit identifier.
-     */
-    public void setUnitIdentifier(int unitid) {
-        ModbusCoupler.getReference().setUnitID(unitid);
-    }
-
-    /**
      * Returns the unit identifier of this <tt>ModbusSerialMaster</tt>.
      *
      * @return the unit identifier.
      */
     public int getUnitIdentifier() {
         return ModbusCoupler.getReference().getUnitID();
+    }
+
+    /**
+     * Sets the unit identifier of this <tt>ModbusSerialMaster</tt>.
+     *
+     * @param unitid the unit identifier.
+     */
+    public void setUnitIdentifier(int unitid) {
+        ModbusCoupler.getReference().setUnitID(unitid);
     }
 
     /**

@@ -1,5 +1,5 @@
 /*
- * This file is part of j2mod.
+ * This file is part of j2mod-steve.
  *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -45,6 +45,28 @@ import java.io.IOException;
  */
 public final class ReadCoilsResponse extends ModbusResponse {
     private BitVector coils;
+
+    /**
+     * ReadCoilsResponse -- create an empty response message to be
+     * filled in later.
+     */
+    public ReadCoilsResponse() {
+        setFunctionCode(Modbus.READ_COILS);
+        setDataLength(1);
+        coils = null;
+    }
+
+    /**
+     * ReadCoilsResponse -- create a response for a given number of
+     * coils.
+     *
+     * @param count the number of bits to be read.
+     */
+    public ReadCoilsResponse(int count) {
+        setFunctionCode(Modbus.READ_COILS);
+        coils = new BitVector(count);
+        setDataLength(coils.byteSize() + 1);
+    }
 
     /**
      * getBitCount -- return the number of coils
@@ -139,27 +161,5 @@ public final class ReadCoilsResponse extends ModbusResponse {
         System.arraycopy(coils.getBytes(), 0, result, 1, coils.byteSize());
 
         return result;
-    }
-
-    /**
-     * ReadCoilsResponse -- create an empty response message to be
-     * filled in later.
-     */
-    public ReadCoilsResponse() {
-        setFunctionCode(Modbus.READ_COILS);
-        setDataLength(1);
-        coils = null;
-    }
-
-    /**
-     * ReadCoilsResponse -- create a response for a given number of
-     * coils.
-     *
-     * @param count the number of bits to be read.
-     */
-    public ReadCoilsResponse(int count) {
-        setFunctionCode(Modbus.READ_COILS);
-        coils = new BitVector(count);
-        setDataLength(coils.byteSize() + 1);
     }
 }

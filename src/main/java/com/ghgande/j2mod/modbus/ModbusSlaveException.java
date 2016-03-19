@@ -1,5 +1,5 @@
 /*
- * This file is part of j2mod.
+ * This file is part of j2mod-steve.
  *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -53,6 +53,34 @@ public class ModbusSlaveException extends ModbusException {
     }
 
     /**
+     * Get the exception type message associated with the given exception
+     * number.
+     *
+     * @param type Numerical value of the Modbus exception.
+     *
+     * @return a String indicating the type of slave exception.
+     */
+    public static String getMessage(int type) {
+        switch (type) {
+            case 1:
+                return "Illegal Function";
+            case 2:
+                return "Illegal Data Address";
+            case 3:
+                return "Illegal Data Value";
+            case 4:
+                return "Slave Device Failure";
+            case 5:
+                return "Acknowledge";
+            case 6:
+                return "Slave Device Busy";
+            case 8:
+                return "Memory Parity Error";
+        }
+        return "Error Code = " + type;
+    }
+
+    /**
      * <p>
      * Returns the type of this <tt>ModbusSlaveException</tt>. <br>
      * Types are defined according to the protocol specification in
@@ -89,33 +117,5 @@ public class ModbusSlaveException extends ModbusException {
      */
     public String getMessage() {
         return getMessage(m_Type);
-    }
-
-    /**
-     * Get the exception type message associated with the given exception
-     * number.
-     *
-     * @param type Numerical value of the Modbus exception.
-     *
-     * @return a String indicating the type of slave exception.
-     */
-    public static String getMessage(int type) {
-        switch (type) {
-            case 1:
-                return "Illegal Function";
-            case 2:
-                return "Illegal Data Address";
-            case 3:
-                return "Illegal Data Value";
-            case 4:
-                return "Slave Device Failure";
-            case 5:
-                return "Acknowledge";
-            case 6:
-                return "Slave Device Busy";
-            case 8:
-                return "Memory Parity Error";
-        }
-        return "Error Code = " + type;
     }
 }

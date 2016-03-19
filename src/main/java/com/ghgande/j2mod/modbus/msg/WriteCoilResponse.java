@@ -1,5 +1,5 @@
 /*
- * This file is part of j2mod.
+ * This file is part of j2mod-steve.
  *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -61,21 +61,21 @@ public final class WriteCoilResponse extends ModbusResponse {
     }
 
     /**
-     * Sets the state that has been returned in the raw response.
-     *
-     * @param b true if the coil should be set of false if it should be unset.
-     */
-    public void setCoil(boolean b) {
-        m_Coil = b;
-    }
-
-    /**
      * Gets the state that has been returned in this <tt>WriteCoilRequest</tt>.
      *
      * @return true if the coil is set, false if unset.
      */
     public boolean getCoil() {
         return m_Coil;
+    }
+
+    /**
+     * Sets the state that has been returned in the raw response.
+     *
+     * @param b true if the coil should be set of false if it should be unset.
+     */
+    public void setCoil(boolean b) {
+        m_Coil = b;
     }
 
     /**

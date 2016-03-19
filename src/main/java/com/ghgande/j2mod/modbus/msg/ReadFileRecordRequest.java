@@ -1,5 +1,5 @@
 /*
- * This file is part of j2mod.
+ * This file is part of j2mod-steve.
  *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -32,56 +32,21 @@ import java.io.IOException;
  * @version @version@ (@date@)
  */
 public final class ReadFileRecordRequest extends ModbusRequest {
-    public static class RecordRequest {
-        private int m_FileNumber;
-        private int m_RecordNumber;
-        private int m_WordCount;
-
-        public int getFileNumber() {
-            return m_FileNumber;
-        }
-
-        public int getRecordNumber() {
-            return m_RecordNumber;
-        }
-
-        public int getWordCount() {
-            return m_WordCount;
-        }
-
-        /**
-         * getRequestSize -- return the size of the response in bytes.
-         */
-        public int getRequestSize() {
-            return 7 + m_WordCount * 2;
-        }
-
-        public void getRequest(byte[] request, int offset) {
-            request[offset] = 6;
-            request[offset + 1] = (byte)(m_FileNumber >> 8);
-            request[offset + 2] = (byte)(m_FileNumber & 0xFF);
-            request[offset + 3] = (byte)(m_RecordNumber >> 8);
-            request[offset + 4] = (byte)(m_RecordNumber & 0xFF);
-            request[offset + 5] = (byte)(m_WordCount >> 8);
-            request[offset + 6] = (byte)(m_WordCount & 0xFF);
-        }
-
-        public byte[] getRequest() {
-            byte[] request = new byte[7];
-
-            getRequest(request, 0);
-
-            return request;
-        }
-
-        public RecordRequest(int file, int record, int count) {
-            m_FileNumber = file;
-            m_RecordNumber = record;
-            m_WordCount = count;
-        }
-    }
-
     private RecordRequest[] m_Records;
+
+    /**
+     * Constructs a new <tt>Read File Record</tt> request instance.
+     */
+    public ReadFileRecordRequest() {
+        super();
+
+        setFunctionCode(Modbus.READ_FILE_RECORD);
+
+		/*
+		 * Request size byte is all that is required.
+		 */
+        setDataLength(1);
+    }
 
     /**
      * getRequestSize -- return the total request size. This is useful for
@@ -273,17 +238,52 @@ public final class ReadFileRecordRequest extends ModbusRequest {
         return request;
     }
 
-    /**
-     * Constructs a new <tt>Read File Record</tt> request instance.
-     */
-    public ReadFileRecordRequest() {
-        super();
+    public static class RecordRequest {
+        private int m_FileNumber;
+        private int m_RecordNumber;
+        private int m_WordCount;
 
-        setFunctionCode(Modbus.READ_FILE_RECORD);
+        public RecordRequest(int file, int record, int count) {
+            m_FileNumber = file;
+            m_RecordNumber = record;
+            m_WordCount = count;
+        }
 
-		/*
-		 * Request size byte is all that is required.
-		 */
-        setDataLength(1);
+        public int getFileNumber() {
+            return m_FileNumber;
+        }
+
+        public int getRecordNumber() {
+            return m_RecordNumber;
+        }
+
+        public int getWordCount() {
+            return m_WordCount;
+        }
+
+        /**
+         * getRequestSize -- return the size of the response in bytes.
+         */
+        public int getRequestSize() {
+            return 7 + m_WordCount * 2;
+        }
+
+        public void getRequest(byte[] request, int offset) {
+            request[offset] = 6;
+            request[offset + 1] = (byte)(m_FileNumber >> 8);
+            request[offset + 2] = (byte)(m_FileNumber & 0xFF);
+            request[offset + 3] = (byte)(m_RecordNumber >> 8);
+            request[offset + 4] = (byte)(m_RecordNumber & 0xFF);
+            request[offset + 5] = (byte)(m_WordCount >> 8);
+            request[offset + 6] = (byte)(m_WordCount & 0xFF);
+        }
+
+        public byte[] getRequest() {
+            byte[] request = new byte[7];
+
+            getRequest(request, 0);
+
+            return request;
+        }
     }
 }

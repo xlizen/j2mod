@@ -1,5 +1,5 @@
 /*
- * This file is part of j2mod.
+ * This file is part of j2mod-steve.
  *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -23,14 +23,6 @@ public interface ModbusListener extends Runnable {
     void run();
 
     /**
-     * Sets the unit number for this Modbus interface listener.
-     *
-     * @param unit Modbus unit number. A value of 0 indicates this Modbus
-     *             interface accepts all unit numbers.
-     */
-    void setUnit(int unit);
-
-    /**
      * Gets the unit number for this Modbus interface listener.
      *
      * @return The Modbus unit number.
@@ -38,13 +30,12 @@ public interface ModbusListener extends Runnable {
     int getUnit();
 
     /**
-     * Sets the <i>listening</i> state for this Modbus interface. A Modbus
-     * interface which is not <i>listening</i> will silently discard all
-     * requests.
+     * Sets the unit number for this Modbus interface listener.
      *
-     * @param listening This interface will accept and process requests.
+     * @param unit Modbus unit number. A value of 0 indicates this Modbus
+     *             interface accepts all unit numbers.
      */
-    void setListening(boolean listening);
+    void setUnit(int unit);
 
     /**
      * Gets the <i>listening</i> state for this Modbus interface. A Modbus
@@ -55,6 +46,15 @@ public interface ModbusListener extends Runnable {
      * @return The current <i>listening</i> state.
      */
     boolean isListening();
+
+    /**
+     * Sets the <i>listening</i> state for this Modbus interface. A Modbus
+     * interface which is not <i>listening</i> will silently discard all
+     * requests.
+     *
+     * @param listening This interface will accept and process requests.
+     */
+    void setListening(boolean listening);
 
     /**
      * Starts the listener thread with the <tt>ModbusListener</tt> in

@@ -1,5 +1,5 @@
 /*
- * This file is part of j2mod.
+ * This file is part of j2mod-steve.
  *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -39,6 +39,35 @@ public final class MaskWriteRegisterRequest extends ModbusRequest {
     private int m_Reference;
     private int m_AndMask;
     private int m_OrMask;
+
+    /**
+     * Constructs a new <tt>Mask Write Register</tt> request.
+     *
+     * @param ref Register
+     * @param andMask AND Mask to use
+     * @param orMask OR Mask to use
+     */
+    public MaskWriteRegisterRequest(int ref, int andMask, int orMask) {
+        super();
+
+        setFunctionCode(Modbus.MASK_WRITE_REGISTER);
+        setReference(ref);
+        setAndMask(andMask);
+        setOrMask(orMask);
+
+        setDataLength(6);
+    }
+
+    /**
+     * Constructs a new <tt>Mask Write Register</tt> request.
+     * instance.
+     */
+    public MaskWriteRegisterRequest() {
+        super();
+
+        setFunctionCode(Modbus.MASK_WRITE_REGISTER);
+        setDataLength(6);
+    }
 
     /**
      * getReference -- return the reference field.
@@ -123,7 +152,7 @@ public final class MaskWriteRegisterRequest extends ModbusRequest {
         ProcessImage procimg = ModbusCoupler.getReference().getProcessImage();
         try {
             Register register = procimg.getRegister(m_Reference);
-			
+
 			/*
 			 * Get the original value.  The AND mask will first be
 			 * applied to clear any bits, then the OR mask will be
@@ -132,7 +161,7 @@ public final class MaskWriteRegisterRequest extends ModbusRequest {
             int value = register.getValue();
 
             value = (value & m_AndMask) | (m_OrMask & ~m_AndMask);
-			
+
 			/*
 			 * Store the modified value back where it came from.
 			 */
@@ -181,34 +210,5 @@ public final class MaskWriteRegisterRequest extends ModbusRequest {
         results[5] = (byte)(m_OrMask & 0xFF);
 
         return results;
-    }
-
-    /**
-     * Constructs a new <tt>Mask Write Register</tt> request.
-     *
-     * @param ref Register
-     * @param andMask AND Mask to use
-     * @param orMask OR Mask to use
-     */
-    public MaskWriteRegisterRequest(int ref, int andMask, int orMask) {
-        super();
-
-        setFunctionCode(Modbus.MASK_WRITE_REGISTER);
-        setReference(ref);
-        setAndMask(andMask);
-        setOrMask(orMask);
-
-        setDataLength(6);
-    }
-
-    /**
-     * Constructs a new <tt>Mask Write Register</tt> request.
-     * instance.
-     */
-    public MaskWriteRegisterRequest() {
-        super();
-
-        setFunctionCode(Modbus.MASK_WRITE_REGISTER);
-        setDataLength(6);
     }
 }

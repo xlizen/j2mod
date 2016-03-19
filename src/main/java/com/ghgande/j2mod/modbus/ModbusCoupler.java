@@ -1,5 +1,5 @@
 /*
- * This file is part of j2mod.
+ * This file is part of j2mod-steve.
  *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -60,6 +60,24 @@ public class ModbusCoupler {
     private ModbusCoupler(ProcessImage procimg) {
         setProcessImage(procimg);
         c_Self = this;
+    }
+
+    public static boolean isInitialized() {
+        return c_Self != null;
+    }
+
+    /**
+     * Returns a reference to the singleton instance.
+     *
+     * @return the <tt>ModbusCoupler</tt> instance reference.
+     */
+    public static synchronized ModbusCoupler getReference() {
+        if (c_Self == null) {
+            return (c_Self = new ModbusCoupler());
+        }
+        else {
+            return c_Self;
+        }
     }
 
     /**
@@ -130,15 +148,6 @@ public class ModbusCoupler {
     }
 
     /**
-     * Tests if this instance is not a master device.
-     *
-     * @return true if slave, false otherwise.
-     */
-    public boolean isSlave() {
-        return !m_Master;
-    }
-
-    /**
      * Sets this instance to be or not to be a master device.
      *
      * @param master true if master device, false otherwise.
@@ -147,21 +156,12 @@ public class ModbusCoupler {
         m_Master = master;
     }
 
-    public static boolean isInitialized() {
-        return c_Self != null;
-    }
-
     /**
-     * Returns a reference to the singleton instance.
+     * Tests if this instance is not a master device.
      *
-     * @return the <tt>ModbusCoupler</tt> instance reference.
+     * @return true if slave, false otherwise.
      */
-    public static synchronized ModbusCoupler getReference() {
-        if (c_Self == null) {
-            return (c_Self = new ModbusCoupler());
-        }
-        else {
-            return c_Self;
-        }
+    public boolean isSlave() {
+        return !m_Master;
     }
 }

@@ -1,5 +1,5 @@
 /*
- * This file is part of j2mod.
+ * This file is part of j2mod-steve.
  *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -38,6 +38,17 @@ public final class ReadSerialDiagnosticsResponse extends ModbusResponse {
     private short m_Data;
 
     /**
+     * Constructs a new <tt>Diagnostics</tt> response
+     * instance.
+     */
+    public ReadSerialDiagnosticsResponse() {
+        super();
+
+        setFunctionCode(Modbus.READ_SERIAL_DIAGNOSTICS);
+        setDataLength(4);
+    }
+
+    /**
      * getFunction -- Get the DIAGNOSTICS sub-function.
      *
      * @return Function code
@@ -71,6 +82,13 @@ public final class ReadSerialDiagnosticsResponse extends ModbusResponse {
     }
 
     /**
+     * setData -- Set the optional data value
+     */
+    public void setData(int value) {
+        m_Data = (short)value;
+    }
+
+    /**
      * getData -- Get the data item at the index.
      *
      * @param index - Unused, must be 0.
@@ -83,13 +101,6 @@ public final class ReadSerialDiagnosticsResponse extends ModbusResponse {
         }
 
         return m_Data;
-    }
-
-    /**
-     * setData -- Set the optional data value
-     */
-    public void setData(int value) {
-        m_Data = (short)value;
     }
 
     /**
@@ -135,16 +146,5 @@ public final class ReadSerialDiagnosticsResponse extends ModbusResponse {
         result[3] = (byte)(m_Data & 0xFF);
 
         return result;
-    }
-
-    /**
-     * Constructs a new <tt>Diagnostics</tt> response
-     * instance.
-     */
-    public ReadSerialDiagnosticsResponse() {
-        super();
-
-        setFunctionCode(Modbus.READ_SERIAL_DIAGNOSTICS);
-        setDataLength(4);
     }
 }

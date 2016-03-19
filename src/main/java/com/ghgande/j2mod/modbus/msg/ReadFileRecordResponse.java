@@ -1,5 +1,5 @@
 /*
- * This file is part of j2mod.
+ * This file is part of j2mod-steve.
  *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -31,69 +31,16 @@ import java.io.IOException;
  */
 public final class ReadFileRecordResponse extends ModbusResponse {
 
-    public static class RecordResponse {
-        private int m_WordCount;
-        private byte[] m_Data;
-
-        public int getWordCount() {
-            return m_WordCount;
-        }
-
-        public SimpleRegister getRegister(int register) {
-            if (register < 0 || register >= m_WordCount) {
-                throw new IndexOutOfBoundsException("0 <= " + register + " < " + m_WordCount);
-            }
-            byte b1 = m_Data[register * 2];
-            byte b2 = m_Data[register * 2 + 1];
-
-            return new SimpleRegister(b1, b2);
-        }
-
-        /**
-         * getResponseSize -- return the size of the response in bytes.
-         *
-         * The response is a byte count, a function code, then wordCount
-         * words (2 bytes).
-         */
-        public int getResponseSize() {
-            return 2 + (m_WordCount * 2);
-        }
-
-        /**
-         * getResponse - return the response data for this record
-         *
-         * The response data is the byte size of the response, minus this
-         * byte, the function code (6), then the raw byte data for the
-         * registers (m_WordCount * 2 bytes).
-         *
-         * @param request Request message
-         * @param offset Offset into buffer
-         */
-        public void getResponse(byte[] request, int offset) {
-            request[offset] = (byte)(1 + (m_WordCount * 2));
-            request[offset + 1] = 6;
-            System.arraycopy(m_Data, 0, request, offset + 2, m_Data.length);
-        }
-
-        public byte[] getResponse() {
-            byte[] request = new byte[getResponseSize()];
-            getResponse(request, 0);
-            return request;
-        }
-
-        public RecordResponse(short data[]) {
-            m_WordCount = data.length;
-            m_Data = new byte[m_WordCount * 2];
-
-            int offset = 0;
-            for (int i = 0; i < m_WordCount; i++) {
-                m_Data[offset++] = (byte)(data[i] >> 8);
-                m_Data[offset++] = (byte)(data[i] & 0xFF);
-            }
-        }
-    }
-
     private RecordResponse[] m_Records = null;
+
+    /**
+     * Constructs a new <tt>ReadFileRecordResponse</tt> instance.
+     */
+    public ReadFileRecordResponse() {
+        super();
+
+        setFunctionCode(Modbus.READ_FILE_RECORD);
+    }
 
     /**
      * Returns the number of bytes needed for the response.
@@ -204,12 +151,65 @@ public final class ReadFileRecordResponse extends ModbusResponse {
         return result;
     }
 
-    /**
-     * Constructs a new <tt>ReadFileRecordResponse</tt> instance.
-     */
-    public ReadFileRecordResponse() {
-        super();
+    public static class RecordResponse {
+        private int m_WordCount;
+        private byte[] m_Data;
 
-        setFunctionCode(Modbus.READ_FILE_RECORD);
+        public RecordResponse(short data[]) {
+            m_WordCount = data.length;
+            m_Data = new byte[m_WordCount * 2];
+
+            int offset = 0;
+            for (int i = 0; i < m_WordCount; i++) {
+                m_Data[offset++] = (byte)(data[i] >> 8);
+                m_Data[offset++] = (byte)(data[i] & 0xFF);
+            }
+        }
+
+        public int getWordCount() {
+            return m_WordCount;
+        }
+
+        public SimpleRegister getRegister(int register) {
+            if (register < 0 || register >= m_WordCount) {
+                throw new IndexOutOfBoundsException("0 <= " + register + " < " + m_WordCount);
+            }
+            byte b1 = m_Data[register * 2];
+            byte b2 = m_Data[register * 2 + 1];
+
+            return new SimpleRegister(b1, b2);
+        }
+
+        /**
+         * getResponseSize -- return the size of the response in bytes.
+         *
+         * The response is a byte count, a function code, then wordCount
+         * words (2 bytes).
+         */
+        public int getResponseSize() {
+            return 2 + (m_WordCount * 2);
+        }
+
+        /**
+         * getResponse - return the response data for this record
+         *
+         * The response data is the byte size of the response, minus this
+         * byte, the function code (6), then the raw byte data for the
+         * registers (m_WordCount * 2 bytes).
+         *
+         * @param request Request message
+         * @param offset Offset into buffer
+         */
+        public void getResponse(byte[] request, int offset) {
+            request[offset] = (byte)(1 + (m_WordCount * 2));
+            request[offset + 1] = 6;
+            System.arraycopy(m_Data, 0, request, offset + 2, m_Data.length);
+        }
+
+        public byte[] getResponse() {
+            byte[] request = new byte[getResponseSize()];
+            getResponse(request, 0);
+            return request;
+        }
     }
 }

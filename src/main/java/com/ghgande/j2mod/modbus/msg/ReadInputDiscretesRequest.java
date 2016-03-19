@@ -1,5 +1,5 @@
 /*
- * This file is part of j2mod.
+ * This file is part of j2mod-steve.
  *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -124,6 +124,17 @@ public final class ReadInputDiscretesRequest extends ModbusRequest {
     }
 
     /**
+     * Returns the reference of the discrete to to start reading from with
+     * this <tt>ReadInputDiscretesRequest</tt>.
+     *
+     * @return the reference of the discrete to start reading from as
+     * <tt>int</tt>.
+     */
+    public int getReference() {
+        return m_Reference;
+    }
+
+    /**
      * Sets the reference of the register to start reading from with this
      * <tt>ReadInputDiscretesRequest</tt>.
      * <p>
@@ -139,14 +150,14 @@ public final class ReadInputDiscretesRequest extends ModbusRequest {
     }
 
     /**
-     * Returns the reference of the discrete to to start reading from with
-     * this <tt>ReadInputDiscretesRequest</tt>.
+     * Returns the number of bits (i.e. input discretes) to be read with this
+     * <tt>ReadInputDiscretesRequest</tt>.
+     * <p>
      *
-     * @return the reference of the discrete to start reading from as
-     * <tt>int</tt>.
+     * @return the number of bits to be read.
      */
-    public int getReference() {
-        return m_Reference;
+    public int getBitCount() {
+        return m_BitCount;
     }
 
     /**
@@ -161,17 +172,6 @@ public final class ReadInputDiscretesRequest extends ModbusRequest {
         }
 
         m_BitCount = count;
-    }
-
-    /**
-     * Returns the number of bits (i.e. input discretes) to be read with this
-     * <tt>ReadInputDiscretesRequest</tt>.
-     * <p>
-     *
-     * @return the number of bits to be read.
-     */
-    public int getBitCount() {
-        return m_BitCount;
     }
 
     public void writeData(DataOutput dout) throws IOException {

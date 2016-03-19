@@ -1,5 +1,5 @@
 /*
- * This file is part of j2mod.
+ * This file is part of j2mod-steve.
  *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,6 +30,28 @@ public class Logger extends org.apache.log4j.Logger {
      */
     public Logger(String name) {
         super(name);
+    }
+
+    /**
+     * Creates a custom logger using the name as the Category
+     *
+     * @param name Name of the Category
+     *
+     * @return Logger
+     */
+    static public Logger getLogger(String name) {
+        return (Logger)org.apache.log4j.Logger.getLogger(name, new LoggerFactory());
+    }
+
+    /**
+     * Creates a custom logger using the name as the Category
+     *
+     * @param clazz Class to get name from
+     *
+     * @return Logger
+     */
+    static public Logger getLogger(Class clazz) {
+        return (Logger)org.apache.log4j.Logger.getLogger(clazz.getName(), new LoggerFactory());
     }
 
     /**
@@ -116,38 +138,6 @@ public class Logger extends org.apache.log4j.Logger {
     }
 
     /**
-     * Creates a custom logger using the name as the Category
-     *
-     * @param name Name of the Category
-     *
-     * @return Logger
-     */
-    static public Logger getLogger(String name) {
-        return (Logger)org.apache.log4j.Logger.getLogger(name, new LoggerFactory());
-    }
-
-    /**
-     * Creates a custom logger using the name as the Category
-     *
-     * @param clazz Class to get name from
-     *
-     * @return Logger
-     */
-    static public Logger getLogger(Class clazz) {
-        return (Logger)org.apache.log4j.Logger.getLogger(clazz.getName(), new LoggerFactory());
-    }
-
-    /**
-     * Creates a custom logger factory to use to get our own loggers
-     */
-    public static class LoggerFactory implements org.apache.log4j.spi.LoggerFactory {
-        @Override
-        public org.apache.log4j.Logger makeNewLoggerInstance(String name) {
-            return new Logger(name);
-        }
-    }
-
-    /**
      * Safely formats a string without tears
      *
      * @param message Message to format
@@ -161,6 +151,16 @@ public class Logger extends org.apache.log4j.Logger {
         }
         catch (Exception e) {
             return String.format("%s ERROR:%s", message, e.getMessage());
+        }
+    }
+
+    /**
+     * Creates a custom logger factory to use to get our own loggers
+     */
+    public static class LoggerFactory implements org.apache.log4j.spi.LoggerFactory {
+        @Override
+        public org.apache.log4j.Logger makeNewLoggerInstance(String name) {
+            return new Logger(name);
         }
     }
 

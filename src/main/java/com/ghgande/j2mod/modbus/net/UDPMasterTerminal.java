@@ -1,5 +1,5 @@
 /*
- * This file is part of j2mod.
+ * This file is part of j2mod-steve.
  *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -33,15 +33,29 @@ import java.net.InetAddress;
 class UDPMasterTerminal implements UDPTerminal {
 
     private static final Logger logger = Logger.getLogger(UDPMasterTerminal.class);
-
+    protected InetAddress m_LocalAddress;
+    protected InetAddress m_RemoteAddress;
+    protected ModbusUDPTransport m_ModbusTransport;
     private DatagramSocket m_Socket;
     private int m_Timeout = Modbus.DEFAULT_TIMEOUT;
     private boolean m_Active;
-    protected InetAddress m_LocalAddress;
-    protected InetAddress m_RemoteAddress;
     private int m_RemotePort = Modbus.DEFAULT_PORT;
     private int m_LocalPort = Modbus.DEFAULT_PORT;
-    protected ModbusUDPTransport m_ModbusTransport;
+
+    /**
+     * Create a UDP master connection to the specified Internet address.
+     *
+     * @param addr
+     */
+    protected UDPMasterTerminal(InetAddress addr) {
+        m_RemoteAddress = addr;
+    }
+
+    /**
+     * Create an uninitialized UDP master connection.
+     */
+    public UDPMasterTerminal() {
+    }
 
     public InetAddress getLocalAddress() {
         return m_LocalAddress;
@@ -57,45 +71,6 @@ class UDPMasterTerminal implements UDPTerminal {
 
     protected void setLocalPort(int port) {
         m_LocalPort = port;
-    }
-
-    /**
-     * Returns the destination port of this <tt>UDPSlaveTerminal</tt>.
-     *
-     * @return the port number as <tt>int</tt>.
-     */
-    public int getRemotePort() {
-        return m_RemotePort;
-    }
-
-    /**
-     * Sets the destination port of this <tt>UDPSlaveTerminal</tt>. The default
-     * is defined as <tt>Modbus.DEFAULT_PORT</tt>.
-     *
-     * @param port the port number as <tt>int</tt>.
-     */
-    public void setRemotePort(int port) {
-        m_RemotePort = port;
-    }
-
-    /**
-     * Returns the destination <tt>InetAddress</tt> of this
-     * <tt>UDPSlaveTerminal</tt>.
-     *
-     * @return the destination address as <tt>InetAddress</tt>.
-     */
-    public InetAddress getRemoteAddress() {
-        return m_RemoteAddress;
-    }
-
-    /**
-     * Sets the destination <tt>InetAddress</tt> of this
-     * <tt>UDPSlaveTerminal</tt>.
-     *
-     * @param adr the destination address as <tt>InetAddress</tt>.
-     */
-    public void setRemoteAddress(InetAddress adr) {
-        m_RemoteAddress = adr;
     }
 
     /**
@@ -177,24 +152,6 @@ class UDPMasterTerminal implements UDPTerminal {
         return m_ModbusTransport;
     }
 
-    /**
-     * Returns the timeout for this <tt>UDPMasterTerminal</tt>.
-     *
-     * @return the timeout as <tt>int</tt>.
-     */
-    public int getTimeout() {
-        return m_Timeout;
-    }
-
-    /**
-     * Sets the timeout for this <tt>UDPMasterTerminal</tt>.
-     *
-     * @param timeout the timeout as <tt>int</tt>.
-     */
-    public void setTimeout(int timeout) {
-        m_Timeout = timeout;
-    }
-
     public void sendMessage(byte[] msg) throws Exception {
 
         DatagramPacket req = new DatagramPacket(msg, msg.length, m_RemoteAddress, m_RemotePort);
@@ -218,26 +175,68 @@ class UDPMasterTerminal implements UDPTerminal {
         return buffer;
     }
 
+    /**
+     * Returns the destination port of this <tt>UDPSlaveTerminal</tt>.
+     *
+     * @return the port number as <tt>int</tt>.
+     */
+    public int getRemotePort() {
+        return m_RemotePort;
+    }
+
+    /**
+     * Sets the destination port of this <tt>UDPSlaveTerminal</tt>. The default
+     * is defined as <tt>Modbus.DEFAULT_PORT</tt>.
+     *
+     * @param port the port number as <tt>int</tt>.
+     */
+    public void setRemotePort(int port) {
+        m_RemotePort = port;
+    }
+
+    /**
+     * Returns the destination <tt>InetAddress</tt> of this
+     * <tt>UDPSlaveTerminal</tt>.
+     *
+     * @return the destination address as <tt>InetAddress</tt>.
+     */
+    public InetAddress getRemoteAddress() {
+        return m_RemoteAddress;
+    }
+
+    /**
+     * Sets the destination <tt>InetAddress</tt> of this
+     * <tt>UDPSlaveTerminal</tt>.
+     *
+     * @param adr the destination address as <tt>InetAddress</tt>.
+     */
+    public void setRemoteAddress(InetAddress adr) {
+        m_RemoteAddress = adr;
+    }
+
+    /**
+     * Returns the timeout for this <tt>UDPMasterTerminal</tt>.
+     *
+     * @return the timeout as <tt>int</tt>.
+     */
+    public int getTimeout() {
+        return m_Timeout;
+    }
+
+    /**
+     * Sets the timeout for this <tt>UDPMasterTerminal</tt>.
+     *
+     * @param timeout the timeout as <tt>int</tt>.
+     */
+    public void setTimeout(int timeout) {
+        m_Timeout = timeout;
+    }
+
     public void receiveMessage(byte[] buffer) throws Exception {
         DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
         synchronized (m_Socket) {
             m_Socket.setSoTimeout(m_Timeout);
             m_Socket.receive(packet);
         }
-    }
-
-    /**
-     * Create a UDP master connection to the specified Internet address.
-     *
-     * @param addr
-     */
-    protected UDPMasterTerminal(InetAddress addr) {
-        m_RemoteAddress = addr;
-    }
-
-    /**
-     * Create an uninitialized UDP master connection.
-     */
-    public UDPMasterTerminal() {
     }
 }

@@ -1,5 +1,5 @@
 /*
- * This file is part of j2mod.
+ * This file is part of j2mod-steve.
  *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -77,35 +77,6 @@ public class FastByteArrayInputStream extends InputStream {
 
     // --- begin ByteArrayInputStream compatible methods ---
 
-    public int available() {
-        return count - pos;
-    }
-
-    public boolean markSupported() {
-        return true;
-    }
-
-    public void mark(int readlimit) {
-        // logger.debug("mark()");
-        mark = pos;
-        // logger.debug("mark=" + mark + " pos=" + pos);
-    }
-
-    public void reset() {
-        // logger.debug("reset()");
-        pos = mark;
-        // logger.debug("mark=" + mark + " pos=" + pos);
-    }
-
-    public long skip(long count) {
-        int myCount = (int)count;
-        if (myCount + pos > this.count) {
-            myCount = this.count - pos;
-        }
-        pos += myCount;
-        return myCount;
-    }
-
     public int read() throws IOException {
         // logger.debug("read()");
         // logger.debug("count=" + count + " pos=" + pos);
@@ -130,6 +101,35 @@ public class FastByteArrayInputStream extends InputStream {
             toBuf[offset++] = buf[pos++];
         }
         return length;
+    }
+
+    public long skip(long count) {
+        int myCount = (int)count;
+        if (myCount + pos > this.count) {
+            myCount = this.count - pos;
+        }
+        pos += myCount;
+        return myCount;
+    }
+
+    public int available() {
+        return count - pos;
+    }
+
+    public void mark(int readlimit) {
+        // logger.debug("mark()");
+        mark = pos;
+        // logger.debug("mark=" + mark + " pos=" + pos);
+    }
+
+    public void reset() {
+        // logger.debug("reset()");
+        pos = mark;
+        // logger.debug("mark=" + mark + " pos=" + pos);
+    }
+
+    public boolean markSupported() {
+        return true;
     }
 
     // --- end ByteArrayInputStream compatible methods ---

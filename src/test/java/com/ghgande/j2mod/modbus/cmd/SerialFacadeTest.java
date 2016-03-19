@@ -1,5 +1,5 @@
 /*
- * This file is part of j2mod.
+ * This file is part of j2mod-steve.
  *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -14,28 +14,6 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Foobar.  If not, see <http://www.gnu.org/licenses
  */
-//////////////////////////////////////////////////////////////////////////
-//
-//  File:  SerialFacadeTest.java
-//
-//  Description: Unit test driver to exerecise the methods for
-//  ModbusSerialMaster class.
-//
-//  Programmer:  JDC (CCC), Wed Feb  4 11:54:23 2004
-//
-//  Change History: 
-//
-//  $Log: SerialFacadeTest.java,v $
-//  Revision 1.2  2004/10/21 16:44:36  wimpi
-//  Please see status file for changes.
-//
-//  Revision 1.1  2004/09/30 01:45:38  jdcharlton
-//  Test driver for ModbusSerialMaster facade
-//
-//
-//
-//////////////////////////////////////////////////////////////////////////
-
 package com.ghgande.j2mod.modbus.cmd;
 
 import com.ghgande.j2mod.modbus.Modbus;
@@ -47,6 +25,28 @@ import com.ghgande.j2mod.modbus.util.BitVector;
 import com.ghgande.j2mod.modbus.util.Logger;
 import com.ghgande.j2mod.modbus.util.ModbusUtil;
 import com.ghgande.j2mod.modbus.util.SerialParameters;
+
+//////////////////////////////////////////////////////////////////////////
+//
+//  File:  SerialFacadeTest.java
+//
+//  Description: Unit test driver to exerecise the methods for
+//  ModbusSerialMaster class.
+//
+//  Programmer:  JDC (CCC), Wed Feb  4 11:54:23 2004
+//
+//  Change History:
+//
+//  $Log: SerialFacadeTest.java,v $
+//  Revision 1.2  2004/10/21 16:44:36  wimpi
+//  Please see status file for changes.
+//
+//  Revision 1.1  2004/09/30 01:45:38  jdcharlton
+//  Test driver for ModbusSerialMaster facade
+//
+//
+//
+//////////////////////////////////////////////////////////////////////////
 
 public class SerialFacadeTest {
 
@@ -111,7 +111,7 @@ public class SerialFacadeTest {
             msm.connect();
 
             do {
-                if (msm.writeCoil(slaveId, 4, true) == true) {
+                if (msm.writeCoil(slaveId, 4, true)) {
                     logger.debug("Set output 5 to true");
                 }
                 else {

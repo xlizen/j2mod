@@ -1,5 +1,5 @@
 /*
- * This file is part of j2mod.
+ * This file is part of j2mod-steve.
  *
  * j2mod is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -36,24 +36,6 @@ import java.io.IOException;
  *          messages.
  */
 public abstract class ModbusResponse extends ModbusMessageImpl {
-
-    /**
-     * Utility method to set the raw data of the message. Should not be used
-     * except under rare circumstances.
-     * <p>
-     *
-     * @param msg
-     *            the <tt>byte[]</tt> resembling the raw modbus response
-     *            message.
-     */
-    protected void setMessage(byte[] msg) {
-        try {
-            readData(new DataInputStream(new ByteArrayInputStream(msg)));
-        }
-        catch (IOException ex) {
-
-        }
-    }
 
     /**
      * Factory method creating the required specialized <tt>ModbusResponse</tt>
@@ -134,5 +116,23 @@ public abstract class ModbusResponse extends ModbusMessageImpl {
                 break;
         }
         return response;
+    }
+
+    /**
+     * Utility method to set the raw data of the message. Should not be used
+     * except under rare circumstances.
+     * <p>
+     *
+     * @param msg
+     *            the <tt>byte[]</tt> resembling the raw modbus response
+     *            message.
+     */
+    protected void setMessage(byte[] msg) {
+        try {
+            readData(new DataInputStream(new ByteArrayInputStream(msg)));
+        }
+        catch (IOException ex) {
+
+        }
     }
 }
