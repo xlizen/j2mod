@@ -148,6 +148,9 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
                         out.write(byteCount);
                         readRequestData(byteCount, out);
                         break;
+
+                    default:
+                        throw new IOException(String.format("getResponse unrecognised function code [%s]", function));
                 }
             }
         }
@@ -264,6 +267,11 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
                         }
                         // now get the 2 CRC bytes
                         readRequestData(0, out);
+                        break;
+
+                    default:
+                        throw new IOException(String.format("getResponse unrecognised function code [%s]", function));
+
                 }
             }
             else {
@@ -333,7 +341,7 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
                 System.arraycopy(m_ByteOut.getBuffer(), 0, lastRequest, 0, m_ByteOut.size());
             }
         }
-        catch (Exception ex) {
+        catch (IOException ex) {
             throw new ModbusIOException("I/O failed to write");
         }
     }
@@ -410,7 +418,7 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
             } while (!done);
             return request;
         }
-        catch (Exception ex) {
+        catch (IOException ex) {
 			/*
 			 * An exception mostly means there is no request. The master should
 			 * retry the request.
@@ -477,9 +485,9 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
             } while (!done);
             return response;
         }
-        catch (Exception ex) {
-            logger.debug("Last request: %s", ModbusUtil.toHex(lastRequest));
-            logger.debug(ex.getMessage());
+        catch (IOException ex) {
+            logger.error("Last request: %s", ModbusUtil.toHex(lastRequest));
+            logger.error(ex.getMessage());
             throw new ModbusIOException("I/O exception - failed to read");
         }
     }

@@ -19,7 +19,6 @@ package com.j2mod.modbus.msg;
 import com.j2mod.modbus.Modbus;
 import com.j2mod.modbus.procimg.InputRegister;
 import com.j2mod.modbus.procimg.SimpleInputRegister;
-import com.j2mod.modbus.procimg.SimpleRegister;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -64,7 +63,7 @@ public final class ReadFIFOQueueResponse extends ModbusResponse {
     }
 
     /**
-     * getWordCount -- set the queue size.
+     * setWordCount -- set the queue size.
      *
      * @param ref Register
      */
@@ -72,20 +71,7 @@ public final class ReadFIFOQueueResponse extends ModbusResponse {
         if (ref < 0 || ref > 31) {
             throw new IllegalArgumentException();
         }
-
-        int oldCount = m_Count;
-        InputRegister[] newRegisters = new InputRegister[ref];
-
         m_Count = ref;
-
-        for (int i = 0; i < ref; i++) {
-            if (i < oldCount) {
-                newRegisters[i] = m_Registers[i];
-            }
-            else {
-                newRegisters[i] = new SimpleRegister(0);
-            }
-        }
     }
 
     synchronized public int[] getRegisters() {

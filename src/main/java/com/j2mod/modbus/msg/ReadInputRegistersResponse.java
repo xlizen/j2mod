@@ -86,19 +86,6 @@ public final class ReadInputRegistersResponse extends ModbusResponse {
      */
     public void setWordCount(int count) {
         m_ByteCount = count * 2 + 1;
-
-        InputRegister[] regs = new InputRegister[count];
-        if (m_Registers != null) {
-            for (int i = 0; i < m_Registers.length && i < count; i++) {
-                regs[i] = m_Registers[i];
-            }
-
-            if (m_Registers.length < count) {
-                for (int i = m_Registers.length; i < count; i++) {
-                    regs[i] = new SimpleInputRegister(0);
-                }
-            }
-        }
     }
 
     /**

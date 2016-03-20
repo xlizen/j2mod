@@ -125,7 +125,7 @@ public class ModbusASCIITransport extends ModbusSerialTransport {
                 }
             }
         }
-        catch (Exception ex) {
+        catch (IOException ex) {
             throw new ModbusIOException("I/O failed to write");
         }
     }

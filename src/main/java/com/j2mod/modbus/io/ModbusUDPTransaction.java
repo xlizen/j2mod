@@ -45,6 +45,7 @@ public class ModbusUDPTransaction implements ModbusTransaction {
     private ModbusResponse m_Response;
     private boolean m_ValidityCheck = Modbus.DEFAULT_VALIDITYCHECK;
     private int m_Retries = Modbus.DEFAULT_RETRIES;
+    private final Object MUTEX = new Object();
 
     /**
      * Constructs a new <tt>ModbusUDPTransaction</tt>
@@ -160,7 +161,7 @@ public class ModbusUDPTransaction implements ModbusTransaction {
             try {
                 //3. write request, and read response,
                 //   while holding the lock on the IO object
-                synchronized (m_IO) {
+                synchronized (MUTEX) {
                     //write request message
                     m_IO.writeMessage(m_Request);
                     //read response message

@@ -126,7 +126,7 @@ public class ModbusBINTransport extends ModbusSerialTransport {
                 readEcho(len + 4);
             }
         }
-        catch (Exception ex) {
+        catch (IOException ex) {
             throw new ModbusIOException("I/O failed to write");
         }
     }

@@ -244,7 +244,7 @@ public class ModbusTCPTransport implements ModbusTransport {
         catch (SocketException sockex) {
             throw new ModbusIOException("Socket Exception", true);
         }
-        catch (Exception ex) {
+        catch (IOException ex) {
             throw new ModbusIOException("I/O exception - failed to read");
         }
     }
