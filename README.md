@@ -1,8 +1,8 @@
 # Overview
-This is a project to bring the [j2mod](https://sourceforge.net/projects/j2mod/) (and the venerable jamod on which it was forked) library into the 20th century.
+This is a project to bring the [j2mod](https://sourceforge.net/projects/j2mod/) (and the venerable jamod from which it was forked) library into the 21st century.
 
 j2mod has been actively maintained by [Julie Haugh](https://sourceforge.net/u/jfhaugh/) after forking it from [jamod](http://jamod.sourceforge.net/) and she has done absolutely sterling work in trying to iron out the myriad of wrinkles in this
-piece of work. It's about time she had some help so this project will endeavour to bring more collaboration and some more expertise into the fray.
+piece of work. It's about time she had some help so this project will endeavour to bring more collaboration and expertise into the fray.
 
 The main driver for doing this work is to get away from the RxTxComm library and to use something that brings it's own native implementations and is actively supported.
 
@@ -29,3 +29,6 @@ Should be replaced by JVM ThreadPool with proper init and close code in the TCPL
 * There's a lot of repetition in the code
 * The javadoc also needs some attention - missing descriptions, incorrect tags etc.
 * The format is inconsistent and in places a bit clumsy - it suffers from having originated on editors that were probably limited in width
+* There is no logging framework support, all messages are written to the System.out stream
+* Although there are a lot of test applications, there is no automation (junit)
+* Static code analysis reveals a huge number of potential problems
