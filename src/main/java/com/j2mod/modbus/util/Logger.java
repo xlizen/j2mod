@@ -68,6 +68,18 @@ public class Logger extends org.apache.log4j.Logger {
     }
 
     /**
+     * Creates a message using the message with placeholders for the variables
+     * See String.format() for more detail
+     * The message is sent direct to the System.out stream
+     *
+     * @param message Message to format
+     * @param values  Replacement values
+     */
+    public void system(String message, Object... values) {
+        System.out.println(getMessage(message, values));
+    }
+
+    /**
      * @see Logger#debug(String, Object...)
      */
     public void error(String message, Object... values) {

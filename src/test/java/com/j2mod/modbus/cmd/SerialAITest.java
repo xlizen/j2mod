@@ -75,8 +75,6 @@ public class SerialAITest {
             //2. Set slave identifier for master response parsing
             ModbusCoupler.getReference().setUnitID(unitid);
 
-            logger.debug("com.ghgande.j2mod.modbus.debug set to: " + System.getProperty("com.ghgande.j2mod.modbus.debug"));
-
             //3. Setup serial parameters
             SerialParameters params = new SerialParameters();
             params.setPortName(portname);
@@ -86,7 +84,7 @@ public class SerialAITest {
             params.setStopbits(1);
             params.setEncoding("ascii");
             params.setEcho(false);
-            logger.debug("Encoding [" + params.getEncoding() + "]");
+            logger.system("Encoding [%s]", params.getEncoding());
 
             //4. Open the connection
             con = new SerialConnection(params);
@@ -96,7 +94,7 @@ public class SerialAITest {
             req = new ReadInputRegistersRequest(ref, count);
             req.setUnitID(unitid);
             req.setHeadless();
-            logger.debug("Request: " + req.getHexMessage());
+            logger.system("Request: %s", req.getHexMessage());
 
             //6. Prepare the transaction
             trans = new ModbusSerialTransaction(con);
@@ -108,9 +106,9 @@ public class SerialAITest {
                 trans.execute();
 
                 res = (ReadInputRegistersResponse)trans.getResponse();
-                logger.debug("Response: " + res.getHexMessage());
+                logger.system("Response: %s", res.getHexMessage());
                 for (int n = 0; n < res.getWordCount(); n++) {
-                    logger.debug("Word " + n + "=" + res.getRegisterValue(n));
+                    logger.system("Word %d=%d", n, res.getRegisterValue(n));
                 }
                 k++;
             } while (k < repeat);
@@ -129,7 +127,7 @@ public class SerialAITest {
     }
 
     private static void printUsage() {
-        logger.debug("java com.ghgande.j2mod.modbus.cmd.SerialAITest <portname [String]>  <Unit Address [int8]> <register [int16]> <wordcount [int16]> {<repeat [int]>}"
+        logger.system("\nUsage:\n    java com.j2mod.modbus.cmd.SerialAITest <portname [String]>  <Unit Address [int8]> <register [int16]> <wordcount [int16]> {<repeat [int]>}"
         );
     }
 }

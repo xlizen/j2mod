@@ -36,7 +36,7 @@ public class ReadCoilsTest {
     private static final Logger logger = Logger.getLogger(ReadCoilsTest.class);
 
     private static void printUsage() {
-        logger.debug("java com.ghgande.j2mod.modbus.cmd.ReadDiscretesTest <connection [String]> <unit [int8]> <register [int16]> <bitcount [int16]> {<repeat [int]>}");
+        logger.system("\nUsage:\n    java com.j2mod.modbus.cmd.ReadDiscretesTest <connection [String]> <unit [int8]> <register [int16]> <bitcount [int16]> {<repeat [int]>}");
     }
 
     public static void main(String[] args) {
@@ -62,8 +62,8 @@ public class ReadCoilsTest {
 
                     if (transport instanceof ModbusSerialTransport) {
                         ((ModbusSerialTransport)transport).setReceiveTimeout(500);
-                        if (System.getProperty("com.ghgande.j2mod.modbus.baud") != null) {
-                            ((ModbusSerialTransport)transport).setBaudRate(Integer.parseInt(System.getProperty("com.ghgande.j2mod.modbus.baud")));
+                        if (System.getProperty("com.j2mod.modbus.baud") != null) {
+                            ((ModbusSerialTransport)transport).setBaudRate(Integer.parseInt(System.getProperty("com.j2mod.modbus.baud")));
                         }
                         else {
                             ((ModbusSerialTransport)transport).setBaudRate(19200);
@@ -92,7 +92,7 @@ public class ReadCoilsTest {
 
             req = new ReadCoilsRequest(ref, count);
             req.setUnitID(unit);
-            logger.debug("Request: " + req.getHexMessage());
+            logger.system("Request: %s", req.getHexMessage());
 
             // 4. Prepare the transaction
             trans = transport.createTransaction();
@@ -109,9 +109,9 @@ public class ReadCoilsTest {
 
                 res = (ReadCoilsResponse)trans.getResponse();
 
-                logger.debug("Response: " + res.getHexMessage());
+                logger.system("Response: %s", res.getHexMessage());
 
-                logger.debug("Digital Inputs Status=" + res.getCoils().toString());
+                logger.system("Digital Inputs Status=%s", res.getCoils().toString());
 
                 k++;
             } while (k < repeat);

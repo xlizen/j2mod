@@ -144,15 +144,14 @@ public class ModbusUDPListener implements ModbusListener {
                 else {
                     response = request.createResponse();
                 }
-                logger.debug("Request:" + request.getHexMessage());
-                 logger.debug("Response:" + response.getHexMessage());
+                logger.debug("Request:%s",  request.getHexMessage());
+                logger.debug("Response:%s", response.getHexMessage());
                 m_Transport.writeMessage(response);
             }
         }
         catch (ModbusIOException ex) {
             if (!ex.isEOF()) {
-                // FIXME: other troubles, output for debug
-                ex.printStackTrace();
+                logger.error(ex);
             }
         }
         finally {

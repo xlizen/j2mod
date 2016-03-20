@@ -102,8 +102,8 @@ class UDPSlaveTerminal implements UDPTerminal {
                     m_LocalAddress = m_Socket.getLocalAddress();
                 }
             }
-            logger.debug("UDPSlaveTerminal::haveSocket():" + m_Socket.toString());
-            logger.debug("UDPSlaveTerminal::addr=:" + m_LocalAddress.toString() + ":port=" + m_LocalPort);
+            logger.debug("UDPSlaveTerminal::haveSocket():%s",  m_Socket.toString());
+            logger.debug("UDPSlaveTerminal::addr=:%s:port=%d", m_LocalAddress.toString(), m_LocalPort);
 
             m_Socket.setReceiveBufferSize(1024);
             m_Socket.setSendBufferSize(1024);

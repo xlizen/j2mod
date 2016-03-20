@@ -75,7 +75,7 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
         int read = m_CommPort.readBytes(inpBuf, byteCount);
         out.write(inpBuf, 0, read);
         if (read != byteCount) {
-            logger.debug("Error: looking for " + byteCount + " bytes, received " + read);
+            logger.debug("Error: looking for %d bytes, received %d", byteCount, read);
         }
     }
 
@@ -166,7 +166,7 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
             int len = m_InputStream.available();
             byte buf[] = new byte[len];
             m_InputStream.read(buf, 0, len);
-            logger.debug("Clear input: " + ModbusUtil.toHex(buf, 0, len));
+            logger.debug("Clear input: %s", ModbusUtil.toHex(buf, 0, len));
         }
     }
 
@@ -323,7 +323,7 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
                 m_ByteOut.writeByte(crc[1]);
                 // write message
                 m_CommPort.writeBytes(m_ByteOut.getBuffer(), m_ByteOut.size());
-                logger.debug("Sent: " + ModbusUtil.toHex(m_ByteOut.getBuffer(), 0, m_ByteOut.size()));
+                logger.debug("Sent: %s", ModbusUtil.toHex(m_ByteOut.getBuffer(), 0, m_ByteOut.size()));
                 // clears out the echoed message
                 // for RS485
                 if (m_Echo) {
@@ -380,7 +380,7 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
 						 */
                         getRequest(fc, m_ByteInOut);
                         dlength = m_ByteInOut.size() - 2; // less the crc
-                        logger.debug("Response: " + ModbusUtil.toHex(m_ByteInOut.getBuffer(), 0, dlength + 2));
+                        logger.debug("Response: %s", ModbusUtil.toHex(m_ByteInOut.getBuffer(), 0, dlength + 2));
 
                         m_ByteIn.reset(m_InBuffer, dlength);
 
@@ -388,7 +388,7 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
                         int[] crc = ModbusUtil.calculateCRC(m_InBuffer, 0, dlength); // does not include CRC
                         if (ModbusUtil.unsignedByteToInt(m_InBuffer[dlength]) != crc[0] &&
                                 ModbusUtil.unsignedByteToInt(m_InBuffer[dlength + 1]) != crc[1]) {
-                            logger.debug("CRC should be " + crc[0] + ", " + crc[1]);
+                            logger.debug("CRC should be %d, %d", crc[0], crc[1]);
 
 							/*
                              * Drain the input in case the frame was misread and more
@@ -455,13 +455,13 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
 						 */
                         getResponse(fc, m_ByteInOut);
                         dlength = m_ByteInOut.size() - 2; // less the crc
-                        logger.debug("Response: " + ModbusUtil.toHex(m_ByteInOut.getBuffer(), 0, dlength + 2));
+                        logger.debug("Response: %s", ModbusUtil.toHex(m_ByteInOut.getBuffer(), 0, dlength + 2));
                         m_ByteIn.reset(m_InBuffer, dlength);
 
                         // check CRC
                         int[] crc = ModbusUtil.calculateCRC(m_InBuffer, 0, dlength); // does not include CRC
                         if (ModbusUtil.unsignedByteToInt(m_InBuffer[dlength]) != crc[0] && ModbusUtil.unsignedByteToInt(m_InBuffer[dlength + 1]) != crc[1]) {
-                            logger.debug("CRC should be " + crc[0] + ", " + crc[1]);
+                            logger.debug("CRC should be %d, %d", crc[0], crc[1]);
                             throw new IOException("CRC Error in received frame: " + dlength + " bytes: " + ModbusUtil.toHex(m_ByteIn.getBuffer(), 0, dlength));
                         }
                     }
@@ -478,7 +478,7 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
             return response;
         }
         catch (Exception ex) {
-            logger.debug("Last request: " + ModbusUtil.toHex(lastRequest));
+            logger.debug("Last request: %s", ModbusUtil.toHex(lastRequest));
             logger.debug(ex.getMessage());
             throw new ModbusIOException("I/O exception - failed to read");
         }

@@ -62,7 +62,7 @@ public class ASCIIInputStream extends FilterInputStream {
         if (ch == -1) {
             return -1;
         }
-        logger.debug("Read "+ch+ "="+(char)ch);
+        logger.debug("Read %d=%c", ch, (char)ch);
         sbuf.append((char)ch);
         if (sbuf.charAt(0) == ':') {
             logger.debug("FRAME START");
@@ -82,7 +82,7 @@ public class ASCIIInputStream extends FilterInputStream {
             else {
                 try {
                     sbuf.append((char)in.read());
-                    logger.debug("Read byte: " + sbuf.toString().toLowerCase());
+                    logger.debug("Read byte: %s", sbuf.toString().toLowerCase());
                     return Integer.parseInt(sbuf.toString().toLowerCase(), 16);
                 }
                 catch (NumberFormatException ex) {

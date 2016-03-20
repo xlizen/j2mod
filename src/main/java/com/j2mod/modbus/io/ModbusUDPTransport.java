@@ -122,8 +122,4 @@ public class ModbusUDPTransport implements ModbusTransport {
         }
     }
 
-    public boolean getDebug() {
-        return "true".equals(System.getProperty("com.ghgande.j2mod.modbus.debug"));
-    }
-
 }

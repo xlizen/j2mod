@@ -52,7 +52,7 @@ public class WriteHoldingRegisterTest {
     private static final Logger logger = Logger.getLogger(WriteHoldingRegisterTest.class);
 
     private static void printUsage() {
-        logger.debug("java com.ghgande.j2mod.modbus.cmd.WriteHoldingRegisterTest" + " <connection [String]>" + " <register [int]> <value [int]> {<repeat [int]>}");
+        logger.system("\nUsage:\n    java com.j2mod.modbus.cmd.WriteHoldingRegisterTest <connection [String]> <register [int]> <value [int]> {<repeat [int]>}");
     }
 
     public static void main(String[] args) {
@@ -77,8 +77,8 @@ public class WriteHoldingRegisterTest {
 
                 if (transport instanceof ModbusSerialTransport) {
                     ((ModbusSerialTransport)transport).setReceiveTimeout(500);
-                    if (System.getProperty("com.ghgande.j2mod.modbus.baud") != null) {
-                        ((ModbusSerialTransport)transport).setBaudRate(Integer.parseInt(System.getProperty("com.ghgande.j2mod.modbus.baud")));
+                    if (System.getProperty("com.j2mod.modbus.baud") != null) {
+                        ((ModbusSerialTransport)transport).setBaudRate(Integer.parseInt(System.getProperty("com.j2mod.modbus.baud")));
                     }
                     else {
                         ((ModbusSerialTransport)transport).setBaudRate(19200);
@@ -109,7 +109,7 @@ public class WriteHoldingRegisterTest {
                         unit = Integer.parseInt(parts[2]);
                     }
 
-                    String baud = System.getProperty("com.ghgande.j2mod.modbus.baud");
+                    String baud = System.getProperty("com.j2mod.modbus.baud");
                     if (baud != null) {
                         ((ModbusRTUTransport)transport).setBaudRate(Integer.parseInt(baud));
                     }
@@ -130,14 +130,14 @@ public class WriteHoldingRegisterTest {
             trans.setRequest(req);
             req.setHeadless(trans instanceof ModbusSerialTransaction);
 
-            logger.debug("Request: " + req.getHexMessage());
+            logger.system("Request: %s", req.getHexMessage());
 
             // 4. Execute the transaction repeat times
 
             for (int count = 0; count < repeat; count++) {
                 trans.execute();
 
-                logger.debug("Response: " + trans.getResponse().getHexMessage());
+                logger.system("Response: %s", trans.getResponse().getHexMessage());
             }
         }
         catch (Exception ex) {

@@ -141,7 +141,7 @@ public abstract class ModbusMessageImpl implements ModbusMessage {
      * The function code should be a 1-byte non negative integer value valid in
      * the range of 0-127.<br>
      * Function codes are ordered in conformance classes their values are
-     * specified in <tt>com.ghgande.j2mod.modbus.Modbus</tt>.
+     * specified in <tt>com.j2mod.modbus.Modbus</tt>.
      *
      * @param code the code of the function to be set.
      *

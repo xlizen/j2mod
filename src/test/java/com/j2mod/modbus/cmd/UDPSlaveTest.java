@@ -50,7 +50,7 @@ public class UDPSlaveTest {
                 port = Integer.parseInt(args[0]);
             }
 
-            logger.debug("j2mod Modbus/UDP Slave v0.97");
+            logger.system("j2mod Modbus/UDP Slave v0.97");
 
             // 1. Prepare a process image
             spi = new SimpleProcessImage();

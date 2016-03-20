@@ -141,7 +141,7 @@ abstract public class ModbusSerialTransport implements ModbusTransport {
      */
     public void setBaudRate(int baud) {
         m_CommPort.setBaudRate(baud);
-        logger.debug("baud rate is now " + m_CommPort.getBaudRate());
+        logger.debug("baud rate is now %d", m_CommPort.getBaudRate());
     }
 
     /**
@@ -157,7 +157,7 @@ abstract public class ModbusSerialTransport implements ModbusTransport {
 
         byte echoBuf[] = new byte[len];
         int echoLen = m_CommPort.getInputStream().read(echoBuf, 0, len);
-        logger.debug("Echo: " + ModbusUtil.toHex(echoBuf, 0, echoLen));
+        logger.debug("Echo: %s", ModbusUtil.toHex(echoBuf, 0, echoLen));
         if (echoLen != len) {
             logger.debug("Error: Transmit echo not received");
             throw new IOException("Echo not received");

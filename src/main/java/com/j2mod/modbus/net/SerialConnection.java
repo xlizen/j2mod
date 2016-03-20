@@ -156,7 +156,7 @@ public class SerialConnection implements SerialPortDataListener {
                 // the serial input stream
                 break;
             default:
-                logger.debug("Serial port event: " + e.getEventType());
+                logger.debug("Serial port event: %s", e.getEventType());
         }
     }
 }

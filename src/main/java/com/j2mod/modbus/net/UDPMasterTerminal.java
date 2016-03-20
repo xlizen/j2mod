@@ -89,7 +89,7 @@ class UDPMasterTerminal implements UDPTerminal {
      */
     public synchronized void activate() throws Exception {
         if (!isActive()) {
-            logger.debug("UDPMasterTerminal::activate()::laddr=:" + m_LocalAddress + ":lport=" + m_LocalPort);
+            logger.debug("UDPMasterTerminal::activate()::laddr=:%s:lport:%d",  m_LocalAddress,  m_LocalPort);
 
             if (m_Socket == null) {
                 if (m_LocalAddress != null && m_LocalPort != -1) {
@@ -101,9 +101,9 @@ class UDPMasterTerminal implements UDPTerminal {
                     m_LocalAddress = m_Socket.getLocalAddress();
                 }
             }
-            logger.debug("UDPMasterTerminal::haveSocket():" + m_Socket.toString());
-            logger.debug("UDPMasterTerminal::laddr=:" + m_LocalAddress.toString() + ":lport=" + m_LocalPort);
-            logger.debug("UDPMasterTerminal::raddr=:" + m_RemoteAddress.toString() + ":rport=" + m_RemotePort);
+            logger.debug("UDPMasterTerminal::haveSocket():%s", m_Socket.toString());
+            logger.debug("UDPMasterTerminal::laddr=:%s:lport:%d", m_LocalAddress.toString(), m_LocalPort);
+            logger.debug("UDPMasterTerminal::raddr=:%s:rport:%d", m_RemoteAddress.toString(), m_RemotePort);
 
             m_Socket.setReceiveBufferSize(1024);
             m_Socket.setSendBufferSize(1024);

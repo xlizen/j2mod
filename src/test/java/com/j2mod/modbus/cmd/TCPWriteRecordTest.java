@@ -47,7 +47,7 @@ public class TCPWriteRecordTest {
      * usage -- Print command line arguments and exit.
      */
     private static void usage() {
-        logger.debug("Usage: TCPWriteRecordTest address[:port[:unit]] file record registers [count]");
+        logger.system("Usage: TCPWriteRecordTest address[:port[:unit]] file record registers [count]");
 
         System.exit(1);
     }
@@ -108,11 +108,11 @@ public class TCPWriteRecordTest {
             }
         }
         catch (NumberFormatException x) {
-            logger.debug("Invalid parameter");
+            logger.system("Invalid parameter");
             usage();
         }
         catch (UnknownHostException x) {
-            logger.debug("Unknown host: " + hostName);
+            logger.system("Unknown host: %s", hostName);
             System.exit(1);
         }
         catch (Exception ex) {
@@ -131,7 +131,7 @@ public class TCPWriteRecordTest {
             connection.connect();
             connection.setTimeout(500);
 
-            logger.debug("Connected to " + ipAddress.toString() + ":" + connection.getPort());
+            logger.system("Connected to %s:%d", ipAddress.toString(), connection.getPort());
 
             for (int i = 0; i < requestCount; i++) {
 				/*
@@ -144,7 +144,7 @@ public class TCPWriteRecordTest {
                 RecordRequest recordRequest = new ReadFileRecordRequest.RecordRequest(file, record + i, registers);
                 rdRequest.addRequest(recordRequest);
 
-                logger.debug("Request: " + rdRequest.getHexMessage());
+                logger.system("Request: %s", rdRequest.getHexMessage());
 
 				/*
 				 * Setup the transaction.
@@ -159,15 +159,15 @@ public class TCPWriteRecordTest {
                     trans.execute();
                 }
                 catch (ModbusSlaveException x) {
-                    logger.debug("Slave Exception: " + x.getLocalizedMessage());
+                    logger.error("Slave Exception: %s", x.getLocalizedMessage());
                     continue;
                 }
                 catch (ModbusIOException x) {
-                    logger.debug("I/O Exception: " + x.getLocalizedMessage());
+                    logger.error("I/O Exception: %s", x.getLocalizedMessage());
                     continue;
                 }
                 catch (ModbusException x) {
-                    logger.debug("Modbus Exception: " + x.getLocalizedMessage());
+                    logger.error("Modbus Exception: %s", x.getLocalizedMessage());
                     continue;
                 }
 
@@ -178,20 +178,20 @@ public class TCPWriteRecordTest {
 
                 ModbusResponse dummy = trans.getResponse();
                 if (dummy == null) {
-                    logger.debug("No response for transaction " + i);
+                    logger.system("No response for transaction %d", i);
                     continue;
                 }
                 if (dummy instanceof ExceptionResponse) {
                     ExceptionResponse exception = (ExceptionResponse)dummy;
 
-                    logger.debug(exception);
+                    logger.system(exception.toString());
 
                     continue;
                 }
                 else if (dummy instanceof ReadFileRecordResponse) {
                     rdResponse = (ReadFileRecordResponse)dummy;
 
-                    logger.debug("Response: " + rdResponse.getHexMessage());
+                    logger.system("Response: %s", rdResponse.getHexMessage());
 
                     int count = rdResponse.getRecordCount();
                     for (int j = 0; j < count; j++) {
@@ -201,7 +201,7 @@ public class TCPWriteRecordTest {
                             values[k] = data.getRegister(k).toShort();
                         }
 
-                        logger.debug("read data[" + j + "] = " + Arrays.toString(values));
+                        logger.system("read data[%d] = %s", j, Arrays.toString(values));
 
                         WriteFileRecordRequest.RecordRequest wrData = new WriteFileRecordRequest.RecordRequest(file, record + i, values);
                         wrRequest.addRequest(wrData);
@@ -211,7 +211,7 @@ public class TCPWriteRecordTest {
 					/*
 					 * Unknown message.
 					 */
-                    logger.debug("Unknown Response: " + dummy.getHexMessage());
+                    logger.system("Unknown Response: %s", dummy.getHexMessage());
                 }
 				
 				/*
@@ -227,33 +227,33 @@ public class TCPWriteRecordTest {
                     trans.execute();
                 }
                 catch (ModbusSlaveException x) {
-                    logger.debug("Slave Exception: " + x.getLocalizedMessage());
+                    logger.error("Slave Exception: %s", x.getLocalizedMessage());
                     continue;
                 }
                 catch (ModbusIOException x) {
-                    logger.debug("I/O Exception: " + x.getLocalizedMessage());
+                    logger.error("I/O Exception: %s", x.getLocalizedMessage());
                     continue;
                 }
                 catch (ModbusException x) {
-                    logger.debug("Modbus Exception: " + x.getLocalizedMessage());
+                    logger.error("Modbus Exception: %s", x.getLocalizedMessage());
                     continue;
                 }
 
                 dummy = trans.getResponse();
                 if (dummy == null) {
-                    logger.debug("No response for transaction " + i);
+                    logger.system("No response for transaction %d", i);
                     continue;
                 }
                 if (dummy instanceof ExceptionResponse) {
                     ExceptionResponse exception = (ExceptionResponse)dummy;
 
-                    logger.debug(exception);
+                    logger.system(exception.toString());
 
                 }
                 else if (dummy instanceof WriteFileRecordResponse) {
                     wrResponse = (WriteFileRecordResponse)dummy;
 
-                    logger.debug("Response: " + wrResponse.getHexMessage());
+                    logger.system("Response: %s", wrResponse.getHexMessage());
 
                     int count = wrResponse.getRequestCount();
                     for (int j = 0; j < count; j++) {
@@ -263,14 +263,14 @@ public class TCPWriteRecordTest {
                             values[k] = data.getRegister(k).toShort();
                         }
 
-                        logger.debug("write response data[" + j + "] = " + Arrays.toString(values));
+                        logger.system("write response data[%d] = ", j, Arrays.toString(values));
                     }
                 }
                 else {
 					/*
 					 * Unknown message.
 					 */
-                    logger.debug("Unknown Response: " + dummy.getHexMessage());
+                    logger.system("Unknown Response: %s", dummy.getHexMessage());
                 }
             }
 			

@@ -112,7 +112,7 @@ public class ModbusASCIITransport extends ModbusSerialTransport {
                 //write message
                 m_OutputStream.write(FRAME_START);               //FRAMESTART
                 m_OutputStream.write(buf, 0, len);                 //PDU
-                logger.debug("Writing: " + ModbusUtil.toHex(buf, 0, len));
+                logger.debug("Writing: %s", ModbusUtil.toHex(buf, 0, len));
                 m_OutputStream.write(calculateLRC(buf, 0, len)); //LRC
                 m_OutputStream.write(FRAME_END);                 //FRAMEEND
                 m_OutputStream.flush();
@@ -206,7 +206,7 @@ public class ModbusASCIITransport extends ModbusSerialTransport {
                         m_ByteInOut.writeByte(in);
                     }
                     int len = m_ByteInOut.size();
-                    logger.debug("Received: " + ModbusUtil.toHex(m_InBuffer, 0, len));
+                    logger.debug("Received: %s", ModbusUtil.toHex(m_InBuffer, 0, len));
                     //check LRC
                     if (m_InBuffer[len - 1] != calculateLRC(m_InBuffer, 0, len, 1)) {
                         continue;
@@ -243,10 +243,6 @@ public class ModbusASCIITransport extends ModbusSerialTransport {
             lrc += ((int)data[i]) & 0xFF;
         }
         return (byte)((-lrc) & 0xff);
-    }
-
-    public boolean getDebug() {
-        return "true".equals(System.getProperty("com.ghgande.j2mod.modbus.debug"));
     }
 
 }

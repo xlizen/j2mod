@@ -37,7 +37,7 @@ public class ModbusSlaveTest {
         SimpleProcessImage spi;
 
         try {
-            logger.debug("j2mod Modbus Slave (Server) v0.97");
+            logger.system("j2mod Modbus Slave (Server) v0.97");
 
 			/*
              * Create the process image for this test.
@@ -72,11 +72,11 @@ public class ModbusSlaveTest {
             ModbusCoupler.getReference().setUnitID(15);
 
             // 3. create a listener with 3 threads in pool
-            logger.debug("Creating");
+            logger.system("Creating");
 
             listener = ModbusListenerFactory.createModbusListener(args[0]);
 
-            logger.debug("Listening");
+            logger.system("Listening");
 
             while (listener.isListening()) {
                 try {
@@ -87,10 +87,10 @@ public class ModbusSlaveTest {
                     break;
                 }
             }
-            logger.debug("Done");
+            logger.system("Done");
         }
         catch (Exception x) {
-            logger.debug(x);
+            logger.system(x.toString());
             if (listener != null) {
                 listener.stop();
             }

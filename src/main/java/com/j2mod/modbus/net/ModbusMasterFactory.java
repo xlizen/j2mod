@@ -83,7 +83,7 @@ public class ModbusMasterFactory {
 
             try {
                 Socket socket = new Socket(hostName, port);
-                logger.debug("connecting to " + socket);
+                logger.debug("connecting to %s", socket.toString());
 
                 return new ModbusTCPTransport(socket);
             }

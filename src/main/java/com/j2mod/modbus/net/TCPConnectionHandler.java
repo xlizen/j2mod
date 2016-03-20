@@ -91,8 +91,8 @@ public class TCPConnectionHandler implements Runnable {
 
                 // 2. create the response.
                 response = request.createResponse();
-                logger.debug("Request:" + request.getHexMessage());
-                logger.debug("Response:" + response.getHexMessage());
+                logger.debug("Request:%s",  request.getHexMessage());
+                logger.debug("Response:%s", response.getHexMessage());
 
                 // 3. write the response message.
                 m_Transport.writeMessage(response);

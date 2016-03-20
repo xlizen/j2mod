@@ -70,7 +70,7 @@ public class ASCIIOutputStream extends FilterOutputStream {
         }
         else {
             out.write(ModbusUtil.toHex(b));
-            logger.debug("Wrote byte "+b+"="+new String(ModbusUtil.toHex(b)));
+            logger.debug("Wrote byte %d=%s", b, new String(ModbusUtil.toHex(b)));
         }
     }
 

@@ -16,6 +16,8 @@
  */
 package com.j2mod.modbus.io;
 
+import com.j2mod.modbus.util.Logger;
+
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -30,6 +32,8 @@ import java.io.InputStream;
  * @version 1.2rc1 (09/11/2004)
  */
 public class FastByteArrayInputStream extends InputStream {
+
+    private static final Logger logger = Logger.getLogger(FastByteArrayInputStream.class);
 
     /**
      * Number of bytes in the input buffer.
@@ -78,18 +82,18 @@ public class FastByteArrayInputStream extends InputStream {
     // --- begin ByteArrayInputStream compatible methods ---
 
     public int read() throws IOException {
-        // logger.debug("read()");
-        // logger.debug("count=" + count + " pos=" + pos);
+        logger.debug("read()");
+        logger.debug("count=%d pos=%d", count, pos);
         return (pos < count) ? (buf[pos++] & 0xff) : (-1);
     }
 
     public int read(byte[] toBuf) throws IOException {
-        // logger.debug("read(byte[])");
+        logger.debug("read(byte[])");
         return read(toBuf, 0, toBuf.length);
     }
 
     public int read(byte[] toBuf, int offset, int length) throws IOException {
-        // logger.debug("read(byte[],int,int)");
+        logger.debug("read(byte[],int,int)");
         int avail = count - pos;
         if (avail <= 0) {
             return -1;
@@ -117,15 +121,15 @@ public class FastByteArrayInputStream extends InputStream {
     }
 
     public void mark(int readlimit) {
-        // logger.debug("mark()");
+        logger.debug("mark()");
         mark = pos;
-        // logger.debug("mark=" + mark + " pos=" + pos);
+        logger.debug("mark=%d pos=%d", mark, pos);
     }
 
     public void reset() {
-        // logger.debug("reset()");
+        logger.debug("reset()");
         pos = mark;
-        // logger.debug("mark=" + mark + " pos=" + pos);
+        logger.debug("mark=%d pos=%d", mark, pos);
     }
 
     public boolean markSupported() {

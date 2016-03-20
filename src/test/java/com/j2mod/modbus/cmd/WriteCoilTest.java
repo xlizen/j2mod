@@ -51,7 +51,7 @@ public class WriteCoilTest {
     private static final Logger logger = Logger.getLogger(WriteCoilTest.class);
 
     private static void printUsage() {
-        logger.debug("java com.ghgande.j2mod.modbus.cmd.WriteCoilTest" + " <connection [String]>" + " <unit [int8]>" + " <coil [int16]>" + " <state [boolean]>" + " {<repeat [int]>}");
+        logger.system("\nUsage:\n    java com.j2mod.modbus.cmd.WriteCoilTest <connection [String]> <unit [int8]> <coil [int16]> <state [boolean]> {<repeat [int]>}");
     }
 
     public static void main(String[] args) {
@@ -74,8 +74,8 @@ public class WriteCoilTest {
 
                 if (transport instanceof ModbusSerialTransport) {
                     ((ModbusSerialTransport)transport).setReceiveTimeout(500);
-                    if (System.getProperty("com.ghgande.j2mod.modbus.baud") != null) {
-                        ((ModbusSerialTransport)transport).setBaudRate(Integer.parseInt(System.getProperty("com.ghgande.j2mod.modbus.baud")));
+                    if (System.getProperty("com.j2mod.modbus.baud") != null) {
+                        ((ModbusSerialTransport)transport).setBaudRate(Integer.parseInt(System.getProperty("com.j2mod.modbus.baud")));
                     }
                     else {
                         ((ModbusSerialTransport)transport).setBaudRate(19200);
@@ -105,7 +105,7 @@ public class WriteCoilTest {
             // 3. Prepare the request
             req = new WriteCoilRequest(ref, value);
             req.setUnitID(unit);
-            logger.debug("Request: " + req.getHexMessage());
+            logger.system("Request: %s", req.getHexMessage());
 
             // 4. Prepare the transaction
             trans = transport.createTransaction();
@@ -115,11 +115,11 @@ public class WriteCoilTest {
             for (int count = 0; count < repeat; count++) {
                 trans.execute();
 
-                logger.debug("Response: " + trans.getResponse().getHexMessage());
+                logger.system("Response: %s", trans.getResponse().getHexMessage());
 
                 WriteCoilResponse data = (WriteCoilResponse)trans.getResponse();
                 if (data != null) {
-                    logger.debug("Coil = " + data.getCoil());
+                    logger.system("Coil = %b", data.getCoil());
                 }
             }
 

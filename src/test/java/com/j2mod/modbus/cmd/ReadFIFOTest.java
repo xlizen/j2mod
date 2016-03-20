@@ -44,7 +44,7 @@ public class ReadFIFOTest {
      * usage -- Print command line arguments and exit.
      */
     private static void usage() {
-        logger.debug("Usage: ReadFIFOTest connection unit fifo [repeat]");
+        logger.system("Usage: ReadFIFOTest connection unit fifo [repeat]");
 
         System.exit(1);
     }
@@ -69,8 +69,8 @@ public class ReadFIFOTest {
             transport = ModbusMasterFactory.createModbusMaster(args[0]);
             if (transport instanceof ModbusSerialTransport) {
                 ((ModbusSerialTransport)transport).setReceiveTimeout(500);
-                if (System.getProperty("com.ghgande.j2mod.modbus.baud") != null) {
-                    ((ModbusSerialTransport)transport).setBaudRate(Integer.parseInt(System.getProperty("com.ghgande.j2mod.modbus.baud")));
+                if (System.getProperty("com.j2mod.modbus.baud") != null) {
+                    ((ModbusSerialTransport)transport).setBaudRate(Integer.parseInt(System.getProperty("com.j2mod.modbus.baud")));
                 }
                 else {
                     ((ModbusSerialTransport)transport).setBaudRate(19200);
@@ -86,7 +86,7 @@ public class ReadFIFOTest {
             }
         }
         catch (NumberFormatException x) {
-            logger.debug("Invalid parameter");
+            logger.system("Invalid parameter");
             usage();
         }
         catch (Exception ex) {
@@ -105,7 +105,7 @@ public class ReadFIFOTest {
                 request.setUnitID(unit);
                 request.setReference(fifo);
 
-                logger.debug("Request: " + request.getHexMessage());
+                logger.system("Request: %s", request.getHexMessage());
 
 				/*
 				 * Setup the transaction.
@@ -120,42 +120,41 @@ public class ReadFIFOTest {
                     trans.execute();
                 }
                 catch (ModbusSlaveException x) {
-                    logger.debug("Slave Exception: " + x.getLocalizedMessage());
+                    logger.error("Slave Exception: %s", x.getLocalizedMessage());
                     continue;
                 }
                 catch (ModbusIOException x) {
-                    logger.debug("I/O Exception: " + x.getLocalizedMessage());
+                    logger.error("I/O Exception: %s", x.getLocalizedMessage());
                     continue;
                 }
                 catch (ModbusException x) {
-                    logger.debug("Modbus Exception: " + x.getLocalizedMessage());
+                    logger.error("Modbus Exception: %s", x.getLocalizedMessage());
                     continue;
                 }
 
                 ModbusResponse dummy = trans.getResponse();
                 if (dummy == null) {
-                    logger.debug("No response for transaction " + i);
+                    logger.system("No response for transaction %d", i);
                     continue;
                 }
                 if (dummy instanceof ExceptionResponse) {
                     ExceptionResponse exception = (ExceptionResponse)dummy;
 
-                    logger.debug(exception);
+                    logger.system(exception.toString());
 
                     continue;
                 }
                 else if (dummy instanceof ReadFIFOQueueResponse) {
                     response = (ReadFIFOQueueResponse)dummy;
 
-                    logger.debug("Response: " + response.getHexMessage());
+                    logger.system("Response: %s", response.getHexMessage());
 
                     int count = response.getWordCount();
-                    logger.debug(count + " values");
+                    logger.system("%d values", count);
 
                     for (int j = 0; j < count; j++) {
                         short value = (short)response.getRegister(j);
-
-                        logger.debug("data[" + j + "] = " + value);
+                        logger.system("data[%d] = %f", j, value);
                     }
                     continue;
                 }
@@ -163,13 +162,15 @@ public class ReadFIFOTest {
 				/*
 				 * Unknown message.
 				 */
-                logger.debug("Unknown Response: " + dummy.getHexMessage());
+                logger.system("Unknown Response: %s", dummy.getHexMessage());
             }
 			
 			/*
 			 * Teardown the connection.
 			 */
-            transport.close();
+            if (transport != null) {
+                transport.close();
+            }
         }
         catch (Exception ex) {
             ex.printStackTrace();

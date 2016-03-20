@@ -171,7 +171,7 @@ public void setCheckingValidity(boolean b) {
                             Thread.sleep(m_TransDelayMS);
                         }
                         catch (InterruptedException ex) {
-                            logger.debug("InterruptedException: " + ex.getMessage());
+                            logger.debug("InterruptedException: %s", ex.getMessage());
                         }
                     }
                     //write request message
@@ -184,7 +184,7 @@ public void setCheckingValidity(boolean b) {
                     if (++tries >= m_Retries) {
                         throw e;
                     }
-                    logger.debug("Execute try " + tries + " error: " + e.getMessage());
+                    logger.debug("Execute try %d error: %s", tries, e.getMessage());
                 }
             } while (!finished);
         }

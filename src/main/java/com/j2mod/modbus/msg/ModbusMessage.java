@@ -16,9 +16,6 @@
  */
 package com.j2mod.modbus.msg;
 
-//import java.io.EOFException;
-//import java.io.IOException;
-
 import com.j2mod.modbus.io.Transportable;
 
 /**
@@ -92,7 +89,7 @@ public interface ModbusMessage extends Transportable {
      *
      * <p>
      * Function codes are ordered in conformance classes their values are
-     * specified in <tt>com.ghgande.j2mod.modbus.Modbus</tt>.
+     * specified in <tt>com.j2mod.modbus.Modbus</tt>.
      *
      * @return the function code as <tt>int</tt>.
      *

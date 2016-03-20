@@ -93,7 +93,7 @@ public class DIDOTest {
             con = new TCPMasterConnection(addr);
             con.setPort(port);
             con.connect();
-            logger.debug("Connected to " + addr.toString() + ":" + con.getPort());
+            logger.system("Connected to %s:%d", addr.toString(), con.getPort());
 
             // 3. Prepare the requests
             di_req = new ReadInputDiscretesRequest(di_ref, 1);
@@ -127,7 +127,7 @@ public class DIDOTest {
                     do_req.setCoil(new_in);
                     do_trans.execute();
                     last_out = new_in;
-                    logger.debug("Updated coil with state from DI");
+                    logger.system("Updated coil with state from DI");
                 }
             } while (true);
 
@@ -146,6 +146,6 @@ public class DIDOTest {
     }
 
     private static void printUsage() {
-        logger.debug("java com.ghgande.j2mod.modbus.cmd.DIDOTest <address{:<port>} [String]> <register d_in [int16]> <register d_out [int16]>");
+        logger.system("\nUsage:\n    java com.j2mod.modbus.cmd.DIDOTest <address{:<port>} [String]> <register d_in [int16]> <register d_out [int16]>");
     }
 }

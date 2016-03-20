@@ -55,7 +55,7 @@ public class ReadInputRegistersTest {
     private static final Logger logger = Logger.getLogger(ReadInputRegistersTest.class);
 
     private static void printUsage() {
-        logger.debug("java com.ghgande.j2mod.modbus.cmd.ReadInputRegistersTest" + " <address{:port{:unit}} [String]>" + " <base [int]> <count [int]> {<repeat [int]>}");
+        logger.system("\nUsage:\n    java com.j2mod.modbus.cmd.ReadInputRegistersTest <address{:port{:unit}} [String]> <base [int]> <count [int]> {<repeat [int]>}");
     }
 
     public static void main(String[] args) {
@@ -78,14 +78,14 @@ public class ReadInputRegistersTest {
                 // 2. Open the connection.
                 transport = ModbusMasterFactory.createModbusMaster(args[0]);
                 if (transport == null) {
-                    logger.debug("Cannot open " + args[0]);
+                    logger.system("Cannot open %s", args[0]);
                     System.exit(1);
                 }
 
                 if (transport instanceof ModbusSerialTransport) {
                     ((ModbusSerialTransport)transport).setReceiveTimeout(500);
-                    if (System.getProperty("com.ghgande.j2mod.modbus.baud") != null) {
-                        ((ModbusSerialTransport)transport).setBaudRate(Integer.parseInt(System.getProperty("com.ghgande.j2mod.modbus.baud")));
+                    if (System.getProperty("com.j2mod.modbus.baud") != null) {
+                        ((ModbusSerialTransport)transport).setBaudRate(Integer.parseInt(System.getProperty("com.j2mod.modbus.baud")));
                     }
                     else {
                         ((ModbusSerialTransport)transport).setBaudRate(19200);
@@ -127,7 +127,7 @@ public class ReadInputRegistersTest {
             // 5. Execute the transaction repeat times
 
             for (int k = 0; k < repeat; k++) {
-                logger.debug("Request " + k);
+                logger.system("Request %d", k);
 
                 // 3. Create the command.
                 req = new ReadInputRegistersRequest(ref, count);
@@ -139,7 +139,7 @@ public class ReadInputRegistersTest {
                 trans.setRetries(1);
                 req.setHeadless(trans instanceof ModbusSerialTransaction);
 
-                logger.debug("Request: " + req.getHexMessage());
+                logger.system("Request: %s", req.getHexMessage());
 
                 if (trans instanceof ModbusSerialTransaction) {
                     /*
@@ -156,15 +156,15 @@ public class ReadInputRegistersTest {
                     trans.execute();
                 }
                 catch (ModbusException x) {
-                    logger.debug(x.getMessage());
+                    logger.system(x.getMessage());
                     continue;
                 }
                 ModbusResponse res = trans.getResponse();
                 if (res != null) {
-                    logger.debug("Response: " + res.getHexMessage());
+                    logger.system("Response: %s", res.getHexMessage());
                 }
                 else {
-                    logger.debug("No response to READ INPUT request");
+                    logger.system("No response to READ INPUT request");
                 }
 
                 if (res == null) {
@@ -173,7 +173,7 @@ public class ReadInputRegistersTest {
 
                 if (res instanceof ExceptionResponse) {
                     ExceptionResponse exception = (ExceptionResponse)res;
-                    logger.debug(exception);
+                    logger.system(exception.toString());
                     continue;
                 }
 
@@ -184,7 +184,7 @@ public class ReadInputRegistersTest {
                 ReadInputRegistersResponse data = (ReadInputRegistersResponse)res;
                 InputRegister values[] = data.getRegisters();
 
-                logger.debug("Data: " + Arrays.toString(values));
+                logger.system("Data: %s", Arrays.toString(values));
             }
         }
         catch (Exception ex) {

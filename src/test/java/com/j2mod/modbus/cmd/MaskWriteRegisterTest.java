@@ -52,7 +52,7 @@ public class MaskWriteRegisterTest {
     private static final Logger logger = Logger.getLogger(MaskWriteRegisterTest.class);
 
     private static void printUsage() {
-        logger.debug("java com.ghgande.j2mod.modbus.cmd.WriteHoldingRegisterTest" + " <address{:<port>{:<unit>}} [String]>" + " <register [int]> <andMask [int]> <orMask [int]> {<repeat [int]>}");
+        logger.system("\nUsage:\n    java com.j2mod.modbus.cmd.WriteHoldingRegisterTest <address{:<port>{:<unit>}} [String]> <register [int]> <andMask [int]> <orMask [int]> {<repeat [int]>}");
     }
 
     public static void main(String[] args) {
@@ -90,13 +90,10 @@ public class MaskWriteRegisterTest {
 
             // 2. Open the connection
             transport = ModbusMasterFactory.createModbusMaster(args[0]);
-
-            logger.debug("Connected to " + transport);
-
+            logger.system("Connected to %s", transport);
             req = new MaskWriteRegisterRequest(ref, andMask, orMask);
-
             req.setUnitID(unit);
-            logger.debug("Request: " + req.getHexMessage());
+            logger.system("Request: %s", req.getHexMessage());
 
             // 3. Prepare the transaction
             trans = transport.createTransaction();
@@ -107,10 +104,10 @@ public class MaskWriteRegisterTest {
             for (int count = 0; count < repeat; count++) {
                 trans.execute();
                 if (trans.getResponse() != null) {
-                    logger.debug("Response: " + trans.getResponse().getHexMessage());
+                    logger.system("Response: %s", trans.getResponse().getHexMessage());
                 }
                 else {
-                    logger.debug("No response");
+                    logger.system("No response");
                 }
             }
         }

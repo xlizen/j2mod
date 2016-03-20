@@ -191,16 +191,16 @@ public void setRequest(ModbusRequest req) {
         while (retryCounter < retryLimit) {
             try {
                 synchronized (m_IO) {
-                    logger.debug("request transaction ID = " + m_Request.getTransactionID());
+                    logger.debug("request transaction ID = %d", m_Request.getTransactionID());
 
                     m_IO.writeMessage(m_Request);
                     m_Response = null;
                     do {
                         m_Response = m_IO.readResponse();
                         if (logger.isDebugEnabled()) {
-                            logger.debug("response transaction ID = " + m_Response.getTransactionID());
+                            logger.debug("response transaction ID = %d", m_Response.getTransactionID());
                             if (m_Response.getTransactionID() != m_Request.getTransactionID()) {
-                                logger.debug("expected " + m_Request.getTransactionID() + ", got " + m_Response.getTransactionID());
+                                logger.debug("expected %d, got %d", m_Request.getTransactionID(), m_Response.getTransactionID());
                             }
                         }
                     } while (m_Response != null &&

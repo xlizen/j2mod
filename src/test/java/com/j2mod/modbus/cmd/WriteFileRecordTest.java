@@ -49,7 +49,7 @@ public class WriteFileRecordTest {
      * usage -- Print command line arguments and exit.
      */
     private static void usage() {
-        logger.debug("Usage: WriteFileRecordTest connection unit file record value [value ...]");
+        logger.system("Usage: WriteFileRecordTest connection unit file record value [value ...]");
 
         System.exit(1);
     }
@@ -96,7 +96,7 @@ public class WriteFileRecordTest {
             }
         }
         catch (NumberFormatException x) {
-            logger.debug("Invalid parameter");
+            logger.system("Invalid parameter");
             usage();
         }
         catch (Exception ex) {
@@ -118,7 +118,7 @@ public class WriteFileRecordTest {
             RecordRequest recordRequest = new RecordRequest(file, record, values);
             request.addRequest(recordRequest);
 
-            logger.debug("Request: " + request.getHexMessage());
+            logger.system("Request: %s", request.getHexMessage());
 
 			/*
 			 * Setup the transaction.
@@ -133,32 +133,32 @@ public class WriteFileRecordTest {
                 trans.execute();
             }
             catch (ModbusSlaveException x) {
-                logger.debug("Slave Exception: " + x.getLocalizedMessage());
+                logger.system("Slave Exception: %s", x.getLocalizedMessage());
                 System.exit(1);
             }
             catch (ModbusIOException x) {
-                logger.debug("I/O Exception: " + x.getLocalizedMessage());
+                logger.system("I/O Exception: %s", x.getLocalizedMessage());
                 System.exit(1);
             }
             catch (ModbusException x) {
-                logger.debug("Modbus Exception: " + x.getLocalizedMessage());
+                logger.system("Modbus Exception: %s", x.getLocalizedMessage());
                 System.exit(1);
             }
 
             ModbusResponse dummy = trans.getResponse();
             if (dummy == null) {
-                logger.debug("No response for transaction ");
+                logger.system("No response for transaction ");
                 System.exit(1);
             }
             if (dummy instanceof ExceptionResponse) {
                 ExceptionResponse exception = (ExceptionResponse)dummy;
 
-                logger.debug(exception);
+                logger.system(exception.toString());
             }
             else if (dummy instanceof WriteFileRecordResponse) {
                 response = (WriteFileRecordResponse)dummy;
 
-                logger.debug("Response: " + response.getHexMessage());
+                logger.system("Response: %s", response.getHexMessage());
 
                 int count = response.getRequestCount();
                 for (int j = 0; j < count; j++) {
@@ -168,7 +168,7 @@ public class WriteFileRecordTest {
                         values[k] = data.getRegister(k).toShort();
                     }
 
-                    logger.debug("data[" + j + "] = " + Arrays.toString(values));
+                    logger.system("data[%d] = %s", j, Arrays.toString(values));
                 }
             }
         }
