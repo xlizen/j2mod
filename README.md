@@ -1,5 +1,5 @@
 # Overview
-This is a project to bring the [j2mod](https://sourceforge.net/projects/j2mod/) library into the 21st century.
+This is a project to bring the [j2mod](https://sourceforge.net/projects/j2mod/) library up to date.
 
 j2mod has been actively maintained by [Julie Haugh](https://sourceforge.net/u/jfhaugh/) after forking it from [jamod](http://jamod.sourceforge.net/) and she has done 
 absolutely sterling work in trying to iron out the myriad of wrinkles in this piece of work. It's about time she had some help so this 
