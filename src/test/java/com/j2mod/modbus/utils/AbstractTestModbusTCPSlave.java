@@ -1,24 +1,22 @@
 /*
- * This file is part of j2mod.
+ * Copyright 2002-2016 jamod & j2mod development teams
  *
- * j2mod is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * j2mod is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with j2mod.  If not, see <http://www.gnu.org/licenses
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
-package com.j2mod.modbus;
+package com.j2mod.modbus.utils;
 
 import com.j2mod.modbus.net.ModbusListener;
 import com.j2mod.modbus.util.Logger;
-import com.j2mod.modbus.utils.TestUtils;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -27,7 +25,7 @@ import org.junit.BeforeClass;
  * All the slave unit tests extend this class so that the system will automatically
  * create a test slave to work with and tear it down after a run
  */
-public class AbstractTestModbusTCPSlave {
+public class AbstractTestModbusTCPSlave extends AbstractTestModbusTCPMaster {
 
     private static final Logger logger = Logger.getLogger(AbstractTestModbusTCPSlave.class);
     private static ModbusListener listener = null;
@@ -36,7 +34,7 @@ public class AbstractTestModbusTCPSlave {
     public static void setUpSlave() {
         try {
             TestUtils.loadModPollTool();
-            listener = TestUtils.createTCPSlave();
+            listener = createTCPSlave();
         }
         catch (Exception e) {
             Assert.fail(String.format("Cannot initialise tests - %s", e.getMessage()));
@@ -108,7 +106,7 @@ public class AbstractTestModbusTCPSlave {
         try {
             String output = TestUtils.execToString(String.format("%smodpoll -m tcp -r %d -t %d -c %d -1 %s %s",
                     TestUtils.getTemporaryDirectory(), register, type, numberOfRegisters,
-                    TestUtils.LOCALHOST, outValue == null ? "" : outValue));
+                    LOCALHOST, outValue == null ? "" : outValue));
             boolean returnValue = output != null && output.replaceAll("[\r]", "").contains(expectedOutput);
             if (!returnValue) {
                 logger.error(output);

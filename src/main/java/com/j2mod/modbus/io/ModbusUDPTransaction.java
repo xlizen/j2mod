@@ -1,18 +1,17 @@
 /*
- * This file is part of j2mod.
+ * Copyright 2002-2016 jamod & j2mod development teams
  *
- * j2mod is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * j2mod is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with j2mod.  If not, see <http://www.gnu.org/licenses
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.j2mod.modbus.io;
 
@@ -25,6 +24,7 @@ import com.j2mod.modbus.msg.ModbusRequest;
 import com.j2mod.modbus.msg.ModbusResponse;
 import com.j2mod.modbus.net.UDPMasterConnection;
 import com.j2mod.modbus.net.UDPTerminal;
+import com.j2mod.modbus.util.Logger;
 
 /**
  * Class implementing the <tt>ModbusTransaction</tt>
@@ -34,6 +34,8 @@ import com.j2mod.modbus.net.UDPTerminal;
  * @version 1.2rc1 (09/11/2004)
  */
 public class ModbusUDPTransaction implements ModbusTransaction {
+
+    private static final Logger logger = Logger.getLogger(ModbusUDPTransaction.class);
 
     //class attributes
     private static int c_TransactionID = Modbus.DEFAULT_TRANSACTION_ID;
@@ -136,8 +138,7 @@ public class ModbusUDPTransaction implements ModbusTransaction {
         m_ValidityCheck = b;
     }
 
-    public void execute() throws ModbusIOException, ModbusSlaveException,
-            ModbusException {
+    public void execute() throws ModbusIOException, ModbusSlaveException, ModbusException {
 
         //1. assert executeability
         assertExecutable();
@@ -171,13 +172,15 @@ public class ModbusUDPTransaction implements ModbusTransaction {
             }
             catch (ModbusIOException ex) {
                 m_RetryCounter++;
+                if (m_RetryCounter > m_Retries) {
+                    logger.error("Cannot send UDP message %s", ex.getMessage());
+                }
             }
         }
 
         //4. deal with "application level" exceptions
         if (m_Response instanceof ExceptionResponse) {
-            throw new ModbusSlaveException(((ExceptionResponse)m_Response).getExceptionCode()
-            );
+            throw new ModbusSlaveException(((ExceptionResponse)m_Response).getExceptionCode());
         }
 
         if (isCheckingValidity()) {

@@ -20,17 +20,19 @@ import com.j2mod.modbus.msg.ReadInputDiscretesResponse;
 import com.j2mod.modbus.msg.ReadInputRegistersResponse;
 import com.j2mod.modbus.msg.ReadMultipleRegistersResponse;
 import com.j2mod.modbus.util.Logger;
-import com.j2mod.modbus.utils.AbstractTestModbusTCPMaster;
+import com.j2mod.modbus.utils.AbstractTestModbusUDPMaster;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * This class tests the TCP master read features of the library
  */
+@Ignore
 @SuppressWarnings("ConstantConditions")
-public class TestModbusTCPMasterRead extends AbstractTestModbusTCPMaster {
+public class TestModbusUDPMasterRead extends AbstractTestModbusUDPMaster {
 
-    private static final Logger logger = Logger.getLogger(TestModbusTCPMasterRead.class);
+    private static final Logger logger = Logger.getLogger(TestModbusUDPMasterRead.class);
 
     @Test
     public void testMasterReadCoils() {

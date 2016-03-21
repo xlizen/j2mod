@@ -20,17 +20,19 @@ import com.j2mod.modbus.msg.ReadMultipleRegistersResponse;
 import com.j2mod.modbus.msg.WriteCoilResponse;
 import com.j2mod.modbus.msg.WriteSingleRegisterResponse;
 import com.j2mod.modbus.util.Logger;
-import com.j2mod.modbus.utils.AbstractTestModbusTCPMaster;
+import com.j2mod.modbus.utils.AbstractTestModbusUDPMaster;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * This class tests the TCP master write features of the library
  */
+@Ignore
 @SuppressWarnings("ConstantConditions")
-public class TestModbusTCPMasterWrite extends AbstractTestModbusTCPMaster {
+public class TestModbusUDPMasterWrite extends AbstractTestModbusUDPMaster {
 
-    private static final Logger logger = Logger.getLogger(TestModbusTCPMasterWrite.class);
+    private static final Logger logger = Logger.getLogger(TestModbusUDPMasterWrite.class);
 
     @Test
     public void testMasterWriteCoils() {

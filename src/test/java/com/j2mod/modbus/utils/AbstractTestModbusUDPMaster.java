@@ -1,48 +1,46 @@
 /*
- * This file is part of j2mod.
+ * Copyright 2002-2016 jamod & j2mod development teams
  *
- * j2mod is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * j2mod is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with j2mod.  If not, see <http://www.gnu.org/licenses
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
-package com.j2mod.modbus;
+package com.j2mod.modbus.utils;
 
-import com.j2mod.modbus.io.ModbusTCPTransaction;
-import com.j2mod.modbus.io.ModbusTCPTransport;
+import com.j2mod.modbus.Modbus;
+import com.j2mod.modbus.io.ModbusUDPTransaction;
 import com.j2mod.modbus.msg.*;
-import com.j2mod.modbus.net.ModbusListener;
+import com.j2mod.modbus.net.ModbusUDPListener;
+import com.j2mod.modbus.net.UDPMasterConnection;
 import com.j2mod.modbus.procimg.SimpleRegister;
 import com.j2mod.modbus.util.Logger;
-import com.j2mod.modbus.utils.TestUtils;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 
 import java.io.IOException;
-import java.net.Socket;
+import java.net.InetAddress;
 
 /**
  * All the master unit tests extend this class so that the system will automatically
  * create a test slave to work with and tear it down after a run
  */
-public class AbstractTestModbusTCPMaster {
+public class AbstractTestModbusUDPMaster extends AbstractTestModbus {
 
-    private static final Logger logger = Logger.getLogger(AbstractTestModbusTCPMaster.class);
-    private static ModbusListener listener = null;
+    private static final Logger logger = Logger.getLogger(AbstractTestModbusUDPMaster.class);
 
     @BeforeClass
     public static void setUpSlave() {
         try {
-            listener = TestUtils.createTCPSlave();
+            listener = createUDPSlave();
         }
         catch (Exception e) {
             Assert.fail(String.format("Cannot initialise tests - %s", e.getMessage()));
@@ -57,6 +55,33 @@ public class AbstractTestModbusTCPMaster {
     }
 
     /**
+     * Creates a Slave to use for testing
+     *
+     * @return Listener of the slave
+     *
+     * @throws IOException
+     */
+    public static ModbusUDPListener createUDPSlave() throws Exception {
+        ModbusUDPListener listener = null;
+        try {
+            // Create the test data
+            getSimpleProcessImage();
+
+            // Create a UDP listener
+            listener = new ModbusUDPListener();
+            listener.setListening(true);
+            new Thread(listener).start();
+        }
+        catch (Exception x) {
+            if (listener != null) {
+                listener.stop();
+            }
+            throw new Exception(x.getMessage());
+        }
+        return listener;
+    }
+
+    /**
      * Executes a read transaction using the function code, register and count
      *
      * @param functionCode Function code to use
@@ -66,12 +91,14 @@ public class AbstractTestModbusTCPMaster {
      * @return Response object
      */
     protected static ModbusResponse readRequest(int functionCode, int register, int count) {
-        ModbusTCPTransport transport = null;
-        ModbusTCPTransaction trans;
+        ModbusUDPTransaction trans;
+        UDPMasterConnection connection = null;
         try {
-            // Create a socket to use
-            Socket socket = new Socket(TestUtils.LOCALHOST, Modbus.DEFAULT_PORT);
-            transport = new ModbusTCPTransport(socket);
+            // Prepare the connection
+            connection = new UDPMasterConnection(InetAddress.getByName(LOCALHOST));
+            connection.setPort(Modbus.DEFAULT_PORT);
+            connection.connect();
+            connection.setTimeout(500);
             Thread.sleep(500);
             ModbusRequest req = null;
 
@@ -92,12 +119,11 @@ public class AbstractTestModbusTCPMaster {
                 default:
                     Assert.fail(String.format("Request type %d is not supported by the test harness", functionCode));
             }
-            req.setUnitID(TestUtils.UNIT_ID);
+            req.setUnitID(UNIT_ID);
 
             // Prepare the transaction
-            trans = (ModbusTCPTransaction)transport.createTransaction();
+            trans = new ModbusUDPTransaction(connection);
             trans.setRequest(req);
-            trans.setReconnecting(true);
 
             // Execute the transaction
             trans.execute();
@@ -107,13 +133,8 @@ public class AbstractTestModbusTCPMaster {
             logger.debug(e.getMessage());
         }
         finally {
-            if (transport != null) {
-                try {
-                    transport.close();
-                }
-                catch (IOException e) {
-                    logger.error(e.getMessage());
-                }
+            if (connection != null) {
+                connection.close();
             }
         }
         return null;
@@ -129,12 +150,14 @@ public class AbstractTestModbusTCPMaster {
      * @return Response object
      */
     protected static ModbusResponse writeRequest(int functionCode, int register, int value) {
-        ModbusTCPTransport transport = null;
-        ModbusTCPTransaction trans;
+        ModbusUDPTransaction trans;
+        UDPMasterConnection connection = null;
         try {
-            // Create a socket to use
-            Socket socket = new Socket(TestUtils.LOCALHOST, Modbus.DEFAULT_PORT);
-            transport = new ModbusTCPTransport(socket);
+            // Prepare the connection
+            connection = new UDPMasterConnection(InetAddress.getByName(LOCALHOST));
+            connection.setPort(Modbus.DEFAULT_PORT);
+            connection.connect();
+            connection.setTimeout(500);
             Thread.sleep(500);
             ModbusRequest req = null;
 
@@ -149,12 +172,11 @@ public class AbstractTestModbusTCPMaster {
                 default:
                     Assert.fail(String.format("Request type %d is not supported by the test harness", functionCode));
             }
-            req.setUnitID(TestUtils.UNIT_ID);
+            req.setUnitID(UNIT_ID);
 
             // Prepare the transaction
-            trans = (ModbusTCPTransaction)transport.createTransaction();
+            trans = new ModbusUDPTransaction(connection);
             trans.setRequest(req);
-            trans.setReconnecting(true);
 
             // Execute the transaction
             trans.execute();
@@ -164,13 +186,8 @@ public class AbstractTestModbusTCPMaster {
             logger.debug(e.getMessage());
         }
         finally {
-            if (transport != null) {
-                try {
-                    transport.close();
-                }
-                catch (IOException e) {
-                    logger.error(e.getMessage());
-                }
+            if (connection != null) {
+                connection.close();
             }
         }
         return null;
