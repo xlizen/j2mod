@@ -80,9 +80,8 @@ public class TCPConnectionHandler implements Runnable {
 					 */
                     continue;
                 }
-                if (image.getUnitID() != 0
-                        && request.getUnitID() != image.getUnitID()) {
-					/*
+                if (image.getUnitID() != 0 && request.getUnitID() != image.getUnitID()) {
+                    /*
 					 * Do nothing -- non-existent units do not respond to
 					 * message.
 					 */
@@ -100,7 +99,7 @@ public class TCPConnectionHandler implements Runnable {
         }
         catch (ModbusIOException ex) {
             if (!ex.isEOF()) {
-                logger.debug(ex);
+                logger.error(ex);
             }
         }
         finally {

@@ -97,7 +97,17 @@ public final class WriteSingleRegisterRequest extends ModbusRequest {
         catch (IllegalAddressException iaex) {
             return createExceptionResponse(Modbus.ILLEGAL_ADDRESS_EXCEPTION);
         }
-        response = (WriteSingleRegisterResponse)getResponse();
+        response = new WriteSingleRegisterResponse(this.getReference(), reg.getValue());
+        // transfer header data
+        if (!isHeadless()) {
+            response.setTransactionID(this.getTransactionID());
+            response.setProtocolID(this.getProtocolID());
+        }
+        else {
+            response.setHeadless();
+        }
+        response.setUnitID(this.getUnitID());
+        response.setFunctionCode(this.getFunctionCode());
 
         return response;
     }
