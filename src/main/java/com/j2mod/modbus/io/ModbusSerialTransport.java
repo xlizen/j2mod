@@ -26,6 +26,9 @@ import com.j2mod.modbus.util.ModbusUtil;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Abstract base class for serial <tt>ModbusTransport</tt>
@@ -41,6 +44,7 @@ abstract public class ModbusSerialTransport implements ModbusTransport {
 
     protected SerialPort m_CommPort;
     protected boolean m_Echo = false;     // require RS-485 echo processing
+    private final Set<ModbusSerialTransportListener> listeners = Collections.synchronizedSet(new HashSet<ModbusSerialTransportListener>());
 
     /**
      * <code>prepareStreams</code> prepares the input and output streams of this
@@ -68,7 +72,11 @@ abstract public class ModbusSerialTransport implements ModbusTransport {
      *
      * @throws ModbusIOException if an error occurs
      */
-    abstract public void writeMessage(ModbusMessage msg) throws ModbusIOException;
+    public void writeMessage(ModbusMessage msg) throws ModbusIOException {
+        notifyListeners(ModbusSerialTransportListener.EventType.BEFORE_WRITE_MESSAGE);
+        writeMessageOut(msg);
+        notifyListeners(ModbusSerialTransportListener.EventType.AFTER_WRITE_MESSAGE);
+    }
 
     /**
      * The <code>readRequest</code> method listens continuously on the serial
@@ -79,7 +87,12 @@ abstract public class ModbusSerialTransport implements ModbusTransport {
      *
      * @throws ModbusIOException if an error occurs
      */
-    abstract public ModbusRequest readRequest() throws ModbusIOException;
+    public ModbusRequest readRequest() throws ModbusIOException {
+        notifyListeners(ModbusSerialTransportListener.EventType.BEFORE_READ_REQUEST);
+        ModbusRequest req = readRequestIn();
+        notifyListeners(ModbusSerialTransportListener.EventType.AFTER_READ_REQUEST);
+        return req;
+    }
 
     /**
      * <code>readResponse</code> reads a response message from the slave
@@ -89,7 +102,85 @@ abstract public class ModbusSerialTransport implements ModbusTransport {
      *
      * @throws ModbusIOException if an error occurs
      */
-    abstract public ModbusResponse readResponse() throws ModbusIOException;
+    public ModbusResponse readResponse() throws ModbusIOException {
+        notifyListeners(ModbusSerialTransportListener.EventType.BEFORE_READ_RESPONSE);
+        ModbusResponse res = readResponseIn();
+        notifyListeners(ModbusSerialTransportListener.EventType.AFTER_READ_RESPONSE);
+        return res;
+    }
+
+    /**
+     * The <code>writeMessage</code> method writes a modbus serial message to
+     * its serial output stream to a specified slave unit ID.
+     *
+     * @param msg a <code>ModbusMessage</code> value
+     *
+     * @throws ModbusIOException if an error occurs
+     */
+    abstract protected void writeMessageOut(ModbusMessage msg) throws ModbusIOException;
+
+    /**
+     * The <code>readRequest</code> method listens continuously on the serial
+     * input stream for master request messages and replies if the request slave
+     * ID matches its own set in ModbusCoupler.getUnitID().
+     *
+     * @return a <code>ModbusRequest</code> value
+     *
+     * @throws ModbusIOException if an error occurs
+     */
+    abstract protected ModbusRequest readRequestIn() throws ModbusIOException;
+
+    /**
+     * <code>readResponse</code> reads a response message from the slave
+     * responding to a master writeMessage request.
+     *
+     * @return a <code>ModbusResponse</code> value
+     *
+     * @throws ModbusIOException if an error occurs
+     */
+    abstract protected ModbusResponse readResponseIn() throws ModbusIOException;
+
+    /**
+     * Adds a listener to the transport to be called when an event occurs
+     *
+     * @param listener Listner callback
+     */
+    public void addListener(ModbusSerialTransportListener listener) {
+        if (listener != null) {
+            listeners.add(listener);
+        }
+    }
+
+    /**
+     * Removes a listener from the event callback chain
+     *
+     * @param listener Listener to remove
+     */
+    public void removeListener(ModbusSerialTransportListener listener) {
+        if (listener != null) {
+            listeners.remove(listener);
+        }
+    }
+
+    /**
+     * Clears the list of listeners
+     */
+    public void clearListeners() {
+        listeners.clear();
+    }
+
+    /**
+     * Calls any listeners with the given event and current port
+     *
+     * @param eventType Event type
+     */
+    private void notifyListeners(ModbusSerialTransportListener.EventType eventType) {
+        synchronized (listeners) {
+            for (ModbusSerialTransportListener listener : listeners) {
+                listener.event(eventType, m_CommPort);
+            }
+        }
+    }
 
     /**
      * <code>setCommPort</code> sets the comm port member and prepares the input
@@ -102,6 +193,9 @@ abstract public class ModbusSerialTransport implements ModbusTransport {
     public void setCommPort(SerialPort cp) throws IOException {
         m_CommPort = cp;
         if (cp != null) {
+            if (!m_CommPort.openPort()) {
+                throw new IOException(String.format("Cannot open port %s", m_CommPort.getDescriptivePortName()));
+            }
             prepareStreams(cp.getInputStream(), cp.getOutputStream());
         }
     }
@@ -130,7 +224,7 @@ abstract public class ModbusSerialTransport implements ModbusTransport {
      * @param ms an <code>int</code> value
      */
     public void setReceiveTimeout(int ms) {
-        m_CommPort.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING, ms, ms); /* milliseconds */
+        m_CommPort.setComPortTimeouts(SerialPort.TIMEOUT_WRITE_BLOCKING, ms, ms); /* milliseconds */
     }
 
     /**

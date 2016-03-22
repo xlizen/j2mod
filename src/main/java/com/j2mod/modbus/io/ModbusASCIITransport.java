@@ -98,7 +98,7 @@ public class ModbusASCIITransport extends ModbusSerialTransport {
         m_OutputStream.close();
     }
 
-    public void writeMessage(ModbusMessage msg) throws ModbusIOException {
+    protected void writeMessageOut(ModbusMessage msg) throws ModbusIOException {
 
         try {
             synchronized (m_ByteOut) {
@@ -129,7 +129,7 @@ public class ModbusASCIITransport extends ModbusSerialTransport {
         }
     }
 
-    public ModbusRequest readRequest() throws ModbusIOException {
+    public ModbusRequest readRequestIn() throws ModbusIOException {
 
         boolean done = false;
         ModbusRequest request = null;
@@ -181,7 +181,7 @@ public class ModbusASCIITransport extends ModbusSerialTransport {
 
     }
 
-    public ModbusResponse readResponse() throws ModbusIOException {
+    protected ModbusResponse readResponseIn() throws ModbusIOException {
 
         boolean done = false;
         ModbusResponse response = null;

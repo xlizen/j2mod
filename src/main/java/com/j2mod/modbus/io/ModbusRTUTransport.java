@@ -181,7 +181,6 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
      * @throws IOException
      */
     private void getResponse(int function, BytesOutputStream out) throws IOException {
-        int byteCount;
         byte inpBuf[] = new byte[256];
         try {
             if ((function & 0x80) == 0) {
@@ -199,9 +198,12 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
                          * Read the data payload byte count. There will be two
                          * additional CRC bytes afterwards.
                          */
-                        byteCount = m_CommPort.readBytes(inpBuf, 1);
-                        out.write(byteCount);
-                        readRequestData(byteCount, out);
+                        int cnt = m_CommPort.readBytes(inpBuf, 1);
+                        if (cnt != 1) {
+                            throw new IOException("Cannot read length of message");
+                        }
+                        out.write(inpBuf[0]);
+                        readRequestData(inpBuf[0], out);
                         break;
 
                     case Modbus.WRITE_COIL:
@@ -236,7 +238,7 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
                         out.write(b1);
                         b2 = (byte)(m_InputStream.read() & 0xFF);
                         out.write(b2);
-                        byteCount = ModbusUtil.makeWord(b1, b2);
+                        int byteCount = ModbusUtil.makeWord(b1, b2);
                         readRequestData(byteCount, out);
                         break;
 
@@ -249,7 +251,7 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
                         out.write(sc);
                         // next few bytes are just copied.
                         int id, fieldCount;
-                        int cnt = m_InputStream.read(inpBuf, 0, 5);
+                        cnt = m_InputStream.read(inpBuf, 0, 5);
                         out.write(inpBuf, 0, cnt);
                         fieldCount = (int)inpBuf[4];
                         for (int i = 0; i < fieldCount; i++) {
@@ -313,7 +315,7 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
      *
      * @throws ModbusIOException If an error occurred bundling the message
      */
-    public void writeMessage(ModbusMessage msg) throws ModbusIOException {
+    protected void writeMessageOut(ModbusMessage msg) throws ModbusIOException {
         try {
             int len;
             synchronized (m_ByteOut) {
@@ -337,7 +339,7 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
                     readEcho(len);
                 }
                 lastRequest = new byte[len];
-                System.arraycopy(m_ByteOut.getBuffer(), 0, lastRequest, 0, m_ByteOut.size());
+                System.arraycopy(m_ByteOut.getBuffer(), 0, lastRequest, 0, len);
             }
         }
         catch (IOException ex) {
@@ -350,7 +352,7 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
      *
      * @return a <tt>ModbusRequest</tt> to be processed by the slave simulator
      */
-    public ModbusRequest readRequest() throws ModbusIOException {
+    protected ModbusRequest readRequestIn() throws ModbusIOException {
         ModbusCoupler coupler = ModbusCoupler.getReference();
 
         if (coupler == null || coupler.isMaster()) {
@@ -431,7 +433,7 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
      *
      * @return a <tt>ModbusRespose</tt>
      */
-    public ModbusResponse readResponse() throws ModbusIOException {
+    protected ModbusResponse readResponseIn() throws ModbusIOException {
         boolean done;
         ModbusResponse response;
         int dlength;

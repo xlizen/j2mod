@@ -97,7 +97,7 @@ public class ModbusBINTransport extends ModbusSerialTransport {
         m_OutputStream.close();
     }
 
-    public void writeMessage(ModbusMessage msg) throws ModbusIOException {
+    protected void writeMessageOut(ModbusMessage msg) throws ModbusIOException {
 
         try {
             int len;
@@ -130,7 +130,7 @@ public class ModbusBINTransport extends ModbusSerialTransport {
         }
     }
 
-    public ModbusRequest readRequest() throws ModbusIOException {
+    protected ModbusRequest readRequestIn() throws ModbusIOException {
 
         boolean done = false;
         ModbusRequest request = null;
@@ -181,7 +181,7 @@ public class ModbusBINTransport extends ModbusSerialTransport {
 
     }
 
-    public ModbusResponse readResponse() throws ModbusIOException {
+    protected ModbusResponse readResponseIn() throws ModbusIOException {
 
         boolean done = false;
         ModbusResponse response = null;

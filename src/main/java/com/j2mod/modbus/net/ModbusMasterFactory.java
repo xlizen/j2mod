@@ -52,11 +52,12 @@ public class ModbusMasterFactory {
              */
             SerialParameters parms = new SerialParameters();
             parms.setPortName(parts[1]);
-            parms.setBaudRate(19200);
+            parms.setBaudRate(9600);
             parms.setDatabits(8);
-            parms.setEcho(false);
             parms.setParity(SerialPort.NO_PARITY);
+            parms.setStopbits(1);
             parms.setFlowControlIn(SerialPort.FLOW_CONTROL_DISABLED);
+            parms.setEcho(false);
             try {
                 ModbusRTUTransport transport = new ModbusRTUTransport();
                 transport.setCommPort(SerialPort.getCommPort(parms.getPortName()));

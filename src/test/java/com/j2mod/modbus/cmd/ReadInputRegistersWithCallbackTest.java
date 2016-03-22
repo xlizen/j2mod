@@ -15,15 +15,16 @@
  */
 package com.j2mod.modbus.cmd;
 
+import com.fazecast.jSerialComm.SerialPort;
 import com.j2mod.modbus.ModbusException;
 import com.j2mod.modbus.io.*;
 import com.j2mod.modbus.msg.*;
 import com.j2mod.modbus.net.ModbusMasterFactory;
-import com.j2mod.modbus.procimg.Register;
 import com.j2mod.modbus.util.Logger;
+import com.pi4j.io.gpio.GpioFactory;
+import com.pi4j.wiringpi.Gpio;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 /**
  * Class that implements a simple command line tool for writing to an analog
@@ -44,17 +45,16 @@ import java.util.Arrays;
  * a reset message.
  *
  * @author Dieter Wimberger
- * @version 1.2rc1 (09/11/2004)
- *
  * @author Julie Haugh
  * @version 1.03 (1/18/2014)
  */
-public class ReadHoldingRegistersTest {
+public class ReadInputRegistersWithCallbackTest {
 
-    private static final Logger logger = Logger.getLogger(ReadHoldingRegistersTest.class);
+    private static final Logger logger = Logger.getLogger(ReadInputRegistersWithCallbackTest.class);
+    public static final int RTS_PIN = 0;
 
     private static void printUsage() {
-        logger.system("\nUsage:\n    java com.j2mod.modbus.cmd.ReadHoldingRegistersTest <address{:port{:unit}} [String]> <base [int]> <count [int]> {<repeat [int]>}");
+        logger.system("\nUsage:\n    java com.j2mod.modbus.cmd.ReadInputRegistersWithCallbackTest <address{:port{:unit}} [String]> <base [int]> <count [int]> {<repeat [int]>}");
     }
 
     public static void main(String[] args) {
@@ -72,6 +72,8 @@ public class ReadHoldingRegistersTest {
             System.exit(1);
         }
 
+        GpioFactory.getInstance();
+
         try {
             try {
                 // 2. Open the connection.
@@ -84,6 +86,7 @@ public class ReadHoldingRegistersTest {
 
                 if (transport instanceof ModbusSerialTransport) {
                     ((ModbusSerialTransport)transport).setReceiveTimeout(500);
+                    ((ModbusSerialTransport)transport).addListener(new EventListener());
                     if (System.getProperty("com.j2mod.modbus.baud") != null) {
                         ((ModbusSerialTransport)transport).setBaudRate(Integer.parseInt(System.getProperty("com.j2mod.modbus.baud")));
                     }
@@ -130,7 +133,7 @@ public class ReadHoldingRegistersTest {
             }
 
             // 3. Create the command.
-            req = new ReadMultipleRegistersRequest(ref, count);
+            req = new ReadInputRegistersRequest(ref, count);
             req.setUnitID(unit);
 
             // 4. Prepare the transaction
@@ -163,14 +166,12 @@ public class ReadHoldingRegistersTest {
                     continue;
                 }
 
-                if (!(res instanceof ReadMultipleRegistersResponse)) {
+                if (!(res instanceof ReadInputRegistersResponse)) {
                     continue;
                 }
 
-                ReadMultipleRegistersResponse data = (ReadMultipleRegistersResponse)res;
-                Register values[] = data.getRegisters();
-
-                logger.system("Data: %s", Arrays.toString(values));
+                ReadInputRegistersResponse data = (ReadInputRegistersResponse)res;
+                logger.system("Data: %3.1f", data.getRegister(0).toShort() / 10.0);
             }
         }
         catch (Exception ex) {
@@ -187,5 +188,25 @@ public class ReadHoldingRegistersTest {
             // Do nothing.
         }
         System.exit(0);
+    }
+
+    private static class EventListener implements ModbusSerialTransportListener {
+        @Override
+        public void event(EventType eventType, SerialPort port) {
+            Gpio.pinMode(RTS_PIN, Gpio.OUTPUT);
+            switch (eventType) {
+
+                // Switch the UART into read mode
+                case BEFORE_READ_REQUEST:
+                case BEFORE_READ_RESPONSE:
+                    Gpio.delayMicroseconds(20000);
+                    Gpio.digitalWrite(RTS_PIN, false);
+                    break;
+
+                // Switch the UART into write mode
+                case BEFORE_WRITE_MESSAGE:
+                    Gpio.digitalWrite(RTS_PIN, true);
+            }
+        }
     }
 }

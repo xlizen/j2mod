@@ -145,7 +145,7 @@ public final class ModbusUtil {
             if (((int)data[i] & 0xff) < 0x10) {
                 buf.append("0");
             }
-            buf.append(Long.toString((int)data[i] & 0xff, 16));
+            buf.append(Long.toString((int)data[i] & 0xff, 16).toUpperCase());
             if (i < data.length - 1) {
                 buf.append(" ");
             }
