@@ -51,6 +51,7 @@ public class ModbusUDPListener implements ModbusListener {
     private InetAddress m_Interface;
     private UDPSlaveTerminal m_Terminal;
     private int m_Unit = 0;
+    private String error;
 
     /**
      * Create a new <tt>ModbusUDPListener</tt> instance listening to the given
@@ -115,12 +116,10 @@ public class ModbusUDPListener implements ModbusListener {
 
             m_Transport = new ModbusUDPTransport(m_Terminal);
         }
+
+        // Catch any fatal errors and set the listening flag to false to indicate an error
         catch (Exception e) {
-            /*
-             * TODO -- Make sure the methods in the try block are throwing
-			 * reasonable exemptions and not just "Exception".
-			 */
-            logger.debug(e);
+            error = String.format("Cannot start UDP listener - %s", e.getMessage());
             m_Listening = false;
             return;
         }
@@ -217,5 +216,13 @@ public class ModbusUDPListener implements ModbusListener {
         m_Terminal.deactivate();
         m_Listening = false;
         m_Continue = false;
+    }
+
+    /**
+     * Returns any startup errors that may have aoccurred
+     * @return Error string
+     */
+    public String getError() {
+        return error;
     }
 }

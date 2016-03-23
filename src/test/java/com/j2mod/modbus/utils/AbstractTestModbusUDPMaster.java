@@ -41,6 +41,8 @@ public class AbstractTestModbusUDPMaster extends AbstractTestModbus {
 
     private static final Logger logger = Logger.getLogger(AbstractTestModbusUDPMaster.class);
 
+    private static final int TEST_PORT = 1502;
+
     @BeforeClass
     public static void setUpSlave() {
         try {
@@ -71,10 +73,18 @@ public class AbstractTestModbusUDPMaster extends AbstractTestModbus {
             // Create the test data
             getSimpleProcessImage();
 
-            // Create a UDP listener
+            // Create a UDP listener on the 'all interfaces' address 0.0.0.0
             listener = new ModbusUDPListener();
             listener.setListening(true);
+            listener.setPort(TEST_PORT);
+            listener.setUnit(0);
             new Thread(listener).start();
+
+            // Wait here a moment and then check to see if the listener actually started
+            Thread.sleep(100);
+            if (!listener.isListening()) {
+                throw new Exception(listener.getError());
+            }
         }
         catch (Exception x) {
             if (listener != null) {
@@ -99,10 +109,11 @@ public class AbstractTestModbusUDPMaster extends AbstractTestModbus {
         UDPMasterConnection connection = null;
         try {
             // Prepare the connection
-            connection = new UDPMasterConnection(InetAddress.getByName(LOCALHOST));
-            connection.setPort(Modbus.DEFAULT_PORT);
+
+            connection = new UDPMasterConnection(InetAddress.getByName(TestUtils.getFirstIp4Address()));
+            connection.setPort(TEST_PORT);
             connection.connect();
-            connection.setTimeout(500);
+            connection.setTimeout(1000);
             Thread.sleep(500);
             ModbusRequest req = null;
 
@@ -158,10 +169,11 @@ public class AbstractTestModbusUDPMaster extends AbstractTestModbus {
         UDPMasterConnection connection = null;
         try {
             // Prepare the connection
-            connection = new UDPMasterConnection(InetAddress.getByName(LOCALHOST));
+            connection = new UDPMasterConnection(InetAddress.getByName(TestUtils.getFirstIp4Address()));
             connection.setPort(Modbus.DEFAULT_PORT);
+            connection.setPort(TEST_PORT);
             connection.connect();
-            connection.setTimeout(500);
+            connection.setTimeout(1000);
             Thread.sleep(500);
             ModbusRequest req = null;
 

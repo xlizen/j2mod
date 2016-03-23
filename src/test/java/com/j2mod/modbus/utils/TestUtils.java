@@ -23,6 +23,12 @@ import org.apache.commons.exec.ExecuteWatchdog;
 import org.apache.commons.exec.PumpStreamHandler;
 
 import java.io.*;
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
 
 /**
  * This class is a collection of utility methods used by all test classes
@@ -325,6 +331,66 @@ public class TestUtils {
         catch (Exception e) {
             throw new Exception(String.format("%s - %s", outputStream.toString(), e.getMessage()));
         }
+    }
+
+    /**
+     * Returns the last adapter it finds that is not a loopback
+     *
+     * @return Adapter to use
+     */
+    public static List<NetworkInterface> getNetworkAdapters() {
+        List<NetworkInterface> returnValue = new ArrayList<NetworkInterface>();
+        try {
+
+            // Loop round all the adapters
+
+            Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
+            while (networkInterfaces.hasMoreElements()) {
+
+                // Get the MAC address if it exists
+
+                NetworkInterface network = networkInterfaces.nextElement();
+                byte[] mac = network.getHardwareAddress();
+                if (mac!=null && mac.length>0 && network.getInterfaceAddresses()!=null) {
+                    returnValue.add(network);
+                    logger.debug("Current MAC address : %s (%s)", returnValue, network.getDisplayName());
+                }
+            }
+        }
+        catch (Exception e) {
+            logger.error("Cannot determine the local MAC address - %s", e.getMessage());
+        }
+        return returnValue;
+    }
+
+
+    /**
+     * Returns the first real IP address it finds
+     * @return Real IP address or null if nothing available
+     */
+    public static String getFirstIp4Address() {
+
+        // Get all the physical adapters
+
+        List<NetworkInterface> adapters = getNetworkAdapters();
+        if (adapters.size() > 0) {
+            for (NetworkInterface adapter : adapters) {
+
+                // Loop through all the addresses
+
+                Enumeration<InetAddress> addresses = adapter.getInetAddresses();
+                while (addresses.hasMoreElements()) {
+                    InetAddress address = addresses.nextElement();
+
+                    // Only interested in non-loopback and IPv4 types
+
+                    if (!address.isLoopbackAddress() && address instanceof Inet4Address) {
+                        return address.getHostAddress();
+                    }
+                }
+            }
+        }
+        return null;
     }
 
 }

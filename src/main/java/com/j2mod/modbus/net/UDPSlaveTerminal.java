@@ -50,8 +50,6 @@ class UDPSlaveTerminal implements UDPTerminal {
     private LinkedBlockingQueue<byte[]> m_ReceiveQueue;
     private PacketSender m_PacketSender;
     private PacketReceiver m_PacketReceiver;
-    private Thread m_Receiver;
-    private Thread m_Sender;
 
     protected UDPSlaveTerminal() {
         m_SendQueue = new LinkedBlockingQueue<byte[]>();
@@ -111,12 +109,10 @@ class UDPSlaveTerminal implements UDPTerminal {
             m_Socket.setReceiveBufferSize(1024);
             m_Socket.setSendBufferSize(1024);
             m_PacketReceiver = new PacketReceiver();
-            m_Receiver = new Thread(m_PacketReceiver);
-            m_Receiver.start();
+            new Thread(m_PacketReceiver).start();
             logger.debug("UDPSlaveTerminal::receiver started()");
             m_PacketSender = new PacketSender();
-            m_Sender = new Thread(m_PacketSender);
-            m_Sender.start();
+            new Thread(m_PacketSender).start();
             logger.debug("UDPSlaveTerminal::sender started()");
             m_ModbusTransport = new ModbusUDPTransport(this);
             logger.debug("UDPSlaveTerminal::transport created");
@@ -133,10 +129,8 @@ class UDPSlaveTerminal implements UDPTerminal {
             if (m_Active) {
                 // 1. stop receiver
                 m_PacketReceiver.stop();
-                m_Receiver.join();
                 // 2. stop sender gracefully
                 m_PacketSender.stop();
-                m_Sender.join();
                 // 3. close socket
                 m_Socket.close();
                 m_ModbusTransport = null;
@@ -212,12 +206,29 @@ class UDPSlaveTerminal implements UDPTerminal {
     class PacketSender implements Runnable {
 
         private boolean m_Continue;
+        private boolean m_Closed;
+        private Thread m_Thread;
 
         public PacketSender() {
             m_Continue = true;
         }
 
+        public void stop() {
+            m_Continue = false;
+            m_Thread.interrupt();
+            while (!m_Closed) {
+                try {
+                    Thread.sleep(100);
+                }
+                catch (InterruptedException e) {
+                    logger.debug("interrupted");
+                }
+            }
+        }
+
         public void run() {
+            m_Closed = false;
+            m_Thread = Thread.currentThread();
             do {
                 try {
                     // 1. pickup the message and corresponding request
@@ -229,13 +240,14 @@ class UDPSlaveTerminal implements UDPTerminal {
                     logger.debug("Sent package from queue");
                 }
                 catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            } while (m_Continue || !m_SendQueue.isEmpty());
-        }
+                    // Ignore the error if we are no longer listening
 
-        public void stop() {
-            m_Continue = false;
+                    if (m_Continue) {
+                        logger.error("Problem reading UDP socket - %s", ex.getMessage());
+                    }
+                }
+            } while (m_Continue);
+            m_Closed = true;
         }
 
     }
@@ -243,6 +255,7 @@ class UDPSlaveTerminal implements UDPTerminal {
     class PacketReceiver implements Runnable {
 
         private boolean m_Continue;
+        private boolean m_Closed;
 
         public PacketReceiver() {
             m_Continue = true;
@@ -250,7 +263,19 @@ class UDPSlaveTerminal implements UDPTerminal {
 
         public void stop() {
             m_Continue = false;
-        }        public void run() {
+            m_Socket.close();
+            while (!m_Closed) {
+                try {
+                    Thread.sleep(100);
+                }
+                catch (InterruptedException e) {
+                    logger.debug("interrupted");
+                }
+            }
+        }
+
+        public void run() {
+            m_Closed = false;
             do {
                 try {
                     // 1. Prepare buffer and receive package
@@ -265,11 +290,14 @@ class UDPSlaveTerminal implements UDPTerminal {
                     logger.debug("Received package to queue");
                 }
                 catch (Exception ex) {
-                    ex.printStackTrace();
+                    // Ignore the error if we are no longer listening
+
+                    if (m_Continue) {
+                        logger.error("Problem reading UDP socket - %s", ex.getMessage());
+                    }
                 }
             } while (m_Continue);
+            m_Closed = true;
         }
-
-
     }
 }

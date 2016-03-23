@@ -22,13 +22,11 @@ import com.j2mod.modbus.msg.ReadMultipleRegistersResponse;
 import com.j2mod.modbus.util.Logger;
 import com.j2mod.modbus.utils.AbstractTestModbusUDPMaster;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * This class tests the TCP master read features of the library
  */
-@Ignore
 @SuppressWarnings("ConstantConditions")
 public class TestModbusUDPMasterRead extends AbstractTestModbusUDPMaster {
 
