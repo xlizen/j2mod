@@ -33,6 +33,10 @@ import java.io.IOException;
  *
  * @version 1.2rc1-ghpc (04/26/2011) Added proper support for Modbus exception
  *          messages.
+ *
+ * @author Steve O'Hara (4energy)
+ * @version 2.0 (March 2016)
+ *
  */
 public abstract class ModbusResponse extends ModbusMessageImpl {
 

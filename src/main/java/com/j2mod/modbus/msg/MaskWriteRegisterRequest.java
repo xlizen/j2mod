@@ -33,6 +33,10 @@ import java.io.IOException;
  *
  * @author jfhaugh (jfh@ghgande.com)
  * @version @version@ (@date@)
+ *
+ * @author Steve O'Hara (4energy)
+ * @version 2.0 (March 2016)
+ *
  */
 public final class MaskWriteRegisterRequest extends ModbusRequest {
     private int m_Reference;

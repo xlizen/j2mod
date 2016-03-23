@@ -40,6 +40,10 @@ import java.io.IOException;
  * @version 1.05
  *
  *          20140426 - Refactor and minor bug fix.
+ *
+ * @author Steve O'Hara (4energy)
+ * @version 2.0 (March 2016)
+ *
  */
 public final class WriteMultipleRegistersRequest extends ModbusRequest {
     private int m_Reference;

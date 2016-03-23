@@ -28,6 +28,10 @@ import java.util.Vector;
  *         The FIFO class is only intended to be used for testing purposes and does
  *         not reflect the actual behavior of a FIFO in a real Modbus device.  In an
  *         actual Modbus device, the FIFO is mapped within a fixed address.
+ *
+ * @author Steve O'Hara (4energy)
+ * @version 2.0 (March 2016)
+ *
  */
 public class FIFO {
 

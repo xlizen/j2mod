@@ -37,8 +37,12 @@ import java.util.Set;
  * @author Dieter Wimberger
  * @author John Charlton
  * @version 1.2rc1 (09/11/2004)
+ *
+ * @author Steve O'Hara (4energy)
+ * @version 2.0 (March 2016)
+ *
  */
-abstract public class ModbusSerialTransport implements ModbusTransport {
+public abstract class ModbusSerialTransport implements ModbusTransport {
 
     private static final Logger logger = Logger.getLogger(ModbusSerialTransport.class);
 

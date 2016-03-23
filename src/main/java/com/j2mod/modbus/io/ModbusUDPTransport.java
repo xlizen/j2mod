@@ -33,6 +33,10 @@ import java.util.Arrays;
  *
  * @author Dieter Wimberger
  * @version 1.0 (29/04/2002)
+ *
+ * @author Steve O'Hara (4energy)
+ * @version 2.0 (March 2016)
+ *
  */
 public class ModbusUDPTransport implements ModbusTransport {
 

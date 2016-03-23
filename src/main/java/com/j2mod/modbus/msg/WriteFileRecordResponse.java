@@ -27,6 +27,10 @@ import java.io.IOException;
  *
  * @author Julie
  * @version 0.96
+ *
+ * @author Steve O'Hara (4energy)
+ * @version 2.0 (March 2016)
+ *
  */
 public final class WriteFileRecordResponse extends ModbusResponse {
     private RecordResponse[] m_Records;

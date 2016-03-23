@@ -46,6 +46,10 @@ import java.io.IOException;
  *
  * @author Julie Haugh
  * @version 1.04 (1/18/2014)
+ *
+ * @author Steve O'Hara (4energy)
+ * @version 2.0 (March 2016)
+ *
  */
 public class ReadCommEventCounterTest {
 

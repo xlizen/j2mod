@@ -31,6 +31,10 @@ import java.io.IOException;
  * @version 1.05
  *
  *          20140426 - Refactor and verify the new methods.<br>
+ *
+ * @author Steve O'Hara (4energy)
+ * @version 2.0 (March 2016)
+ *
  */
 public final class WriteMultipleCoilsResponse
         extends ModbusResponse {

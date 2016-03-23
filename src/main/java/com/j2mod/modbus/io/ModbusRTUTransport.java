@@ -37,6 +37,10 @@ import java.io.OutputStream;
  * @version 1.05
  *
  *          20140426 - Implement serial slave support
+ *
+ * @author Steve O'Hara (4energy)
+ * @version 2.0 (March 2016)
+ *
  */
 public class ModbusRTUTransport extends ModbusSerialTransport {
 

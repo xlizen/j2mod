@@ -32,6 +32,10 @@ import java.net.Socket;
 /**
  * All the master unit tests extend this class so that the system will automatically
  * create a test slave to work with and tear it down after a run
+ *
+ * @author Steve O'Hara (4energy)
+ * @version 2.0 (March 2016)
+ *
  */
 public class AbstractTestModbusTCPMaster extends AbstractTestModbus {
 

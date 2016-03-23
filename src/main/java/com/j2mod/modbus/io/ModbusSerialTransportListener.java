@@ -20,6 +20,10 @@ import com.fazecast.jSerialComm.SerialPort;
 /**
  * Any class that wants to listen for the begining and ending of read/writes
  * to the Serial channel need to implement this interface
+ *
+ * @author Steve O'Hara (4energy)
+ * @version 2.0 (March 2016)
+ *
  */
 public interface ModbusSerialTransportListener {
 

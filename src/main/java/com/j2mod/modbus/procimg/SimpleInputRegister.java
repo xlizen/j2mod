@@ -22,6 +22,10 @@ package com.j2mod.modbus.procimg;
  *
  * @author Dieter Wimberger
  * @version 1.2rc1 (09/11/2004)
+ *
+ * @author Steve O'Hara (4energy)
+ * @version 2.0 (March 2016)
+ *
  */
 public class SimpleInputRegister extends SynchronizedAbstractRegister implements InputRegister {
 

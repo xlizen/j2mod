@@ -24,6 +24,10 @@ import org.junit.Test;
  * work against a known good standard
  * Once this is verified, the j2mod slave code can be used to test the features of the
  * master
+ *
+ * @author Steve O'Hara (4energy)
+ * @version 2.0 (March 2016)
+ *
  */
 public class TestModbusTCPSlaveWrite extends AbstractTestModbusTCPSlave {
 

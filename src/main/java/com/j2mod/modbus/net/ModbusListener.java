@@ -15,6 +15,13 @@
  */
 package com.j2mod.modbus.net;
 
+/**
+ * Definition of a listener class
+ *
+ * @author Steve O'Hara (4energy)
+ * @version 2.0 (March 2016)
+ *
+ */
 public interface ModbusListener extends Runnable {
     /**
      * Main execution loop for this Modbus interface listener

@@ -22,6 +22,10 @@ import com.j2mod.modbus.util.Logger;
  *
  *         File -- an abstraction of a Modbus Record, as supported by the
  *         READ FILE RECORD and WRITE FILE RECORD commands.
+ *
+ * @author Steve O'Hara (4energy)
+ * @version 2.0 (March 2016)
+ *
  */
 public class Record {
 

@@ -35,6 +35,10 @@ import java.net.SocketTimeoutException;
  * @author Dieter Wimberger
  * @version 110410-jfh Cleaned up unused variables. Stopped spewing out error
  *          messages.
+ *
+ * @author Steve O'Hara (4energy)
+ * @version 2.0 (March 2016)
+ *
  */
 public class ModbusTCPTransport implements ModbusTransport {
 

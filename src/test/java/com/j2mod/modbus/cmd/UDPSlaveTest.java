@@ -32,6 +32,10 @@ import com.j2mod.modbus.util.Logger;
  * @version 0.97 (08/11/2012)
  * Added Modbus FILE support
  * Copied data points from TCP test harness.
+ *
+ * @author Steve O'Hara (4energy)
+ * @version 2.0 (March 2016)
+ *
  */
 public class UDPSlaveTest {
 

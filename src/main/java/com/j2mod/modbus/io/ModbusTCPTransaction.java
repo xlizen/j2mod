@@ -31,6 +31,10 @@ import com.j2mod.modbus.util.Logger;
  * @author Dieter Wimberger
  * @version 021212- jfhaugh (jfh@ghgande.com) Added code to re-read a response
  *          if the transaction IDs have gotten out of sync.
+ *
+ * @author Steve O'Hara (4energy)
+ * @version 2.0 (March 2016)
+ *
  */
 public class ModbusTCPTransaction implements ModbusTransaction {
 

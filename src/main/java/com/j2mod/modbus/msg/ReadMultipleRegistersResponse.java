@@ -31,6 +31,10 @@ import java.io.IOException;
  * @author Dieter Wimberger
  * @author Julie (jfh@ghgande.com)
  * @version 2012-03-07 Added setFunctionCode() to constructors.
+ *
+ * @author Steve O'Hara (4energy)
+ * @version 2.0 (March 2016)
+ *
  */
 public final class ReadMultipleRegistersResponse extends ModbusResponse {
 

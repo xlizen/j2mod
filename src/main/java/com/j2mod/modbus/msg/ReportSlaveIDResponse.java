@@ -28,6 +28,10 @@ import java.io.IOException;
  *
  * @author Julie Haugh (jfh@ghgande.com)
  * @version 1.2rc1-ghpc (09/27/2010)
+ *
+ * @author Steve O'Hara (4energy)
+ * @version 2.0 (March 2016)
+ *
  */
 public final class ReportSlaveIDResponse extends ModbusResponse {
 

@@ -41,6 +41,10 @@ import java.io.IOException;
  * Created getMessage() method to abstractly create the message
  * data.
  * Cleaned up the constructors.
+ *
+ * @author Steve O'Hara (4energy)
+ * @version 2.0 (March 2016)
+ *
  */
 public final class ReadCoilsResponse extends ModbusResponse {
     private BitVector coils;

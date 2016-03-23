@@ -23,6 +23,10 @@ import com.j2mod.modbus.util.SerialParameters;
  * Create a <tt>ModbusListener</tt> from an URI-like specifier.
  *
  * @author Julie
+ *
+ * @author Steve O'Hara (4energy)
+ * @version 2.0 (March 2016)
+ *
  */
 public class ModbusListenerFactory {
 

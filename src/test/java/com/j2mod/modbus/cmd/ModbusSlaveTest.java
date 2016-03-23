@@ -27,6 +27,10 @@ import com.j2mod.modbus.util.Logger;
  *
  * @author Julie Haugh
  * @version 0.97 (8/12/12)
+ *
+ * @author Steve O'Hara (4energy)
+ * @version 2.0 (March 2016)
+ *
  */
 public class ModbusSlaveTest {
 

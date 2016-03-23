@@ -33,6 +33,10 @@ import java.net.Socket;
  *          Fix bug that caused m_use_UrgentData to be ignored.
  *          Changed default behavior from always using urgent data to it being
  *          condition based on RFC 6093.
+ *
+ * @author Steve O'Hara (4energy)
+ * @version 2.0 (March 2016)
+ *
  */
 public class TCPMasterConnection {
 

@@ -31,6 +31,10 @@ import com.j2mod.modbus.Modbus;
  *
  * @version 1.0-jamod (7/7/2012)
  * 	Added new messages.
+ *
+ * @author Steve O'Hara (4energy)
+ * @version 2.0 (March 2016)
+ *
  */
 public abstract class ModbusRequest extends ModbusMessageImpl {
 

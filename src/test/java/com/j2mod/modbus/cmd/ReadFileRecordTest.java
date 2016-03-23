@@ -35,6 +35,10 @@ import java.util.Arrays;
  *
  * @author Julie
  * @version 0.96
+ *
+ * @author Steve O'Hara (4energy)
+ * @version 2.0 (March 2016)
+ *
  */
 public class ReadFileRecordTest {
 

@@ -34,6 +34,10 @@ import java.io.OutputStream;
  * @version 1.2rc1 (09/11/2004)
  * @see com.j2mod.modbus.io.ModbusASCIITransport#FRAME_START
  * @see com.j2mod.modbus.io.ModbusASCIITransport#FRAME_END
+ *
+ * @author Steve O'Hara (4energy)
+ * @version 2.0 (March 2016)
+ *
  */
 public class ASCIIOutputStream extends FilterOutputStream {
 

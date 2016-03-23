@@ -20,6 +20,10 @@ package com.j2mod.modbus.util;
 /**
  * Simply wrapper class that extends the standard Logger to allow for some
  * more convenient means of sending out useful formatted messages
+ *
+ * @author Steve O'Hara (4energy)
+ * @version 2.0 (March 2016)
+ *
  */
 public class Logger extends org.apache.log4j.Logger {
 

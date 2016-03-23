@@ -29,6 +29,10 @@ import java.io.IOException;
  * @version jamod-1.2rc1-ghpc
  *
  * @version @version@ (@date@)
+ *
+ * @author Steve O'Hara (4energy)
+ * @version 2.0 (March 2016)
+ *
  */
 public final class ReadMEIRequest extends ModbusRequest {
 

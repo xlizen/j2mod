@@ -22,6 +22,10 @@ import com.j2mod.modbus.io.Transportable;
  *
  * @author Dieter Wimberger
  * @version 1.2rc1 (09/11/2004)
+ *
+ * @author Steve O'Hara (4energy)
+ * @version 2.0 (March 2016)
+ *
  */
 public interface ModbusMessage extends Transportable {
 

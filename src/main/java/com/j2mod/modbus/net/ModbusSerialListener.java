@@ -33,6 +33,10 @@ import com.j2mod.modbus.util.SerialParameters;
  *
  * @author Julie Haugh Code cleanup in prep to refactor with ModbusListener
  *         interface
+ *
+ * @author Steve O'Hara (4energy)
+ * @version 2.0 (March 2016)
+ *
  */
 public class ModbusSerialListener implements ModbusListener {
 

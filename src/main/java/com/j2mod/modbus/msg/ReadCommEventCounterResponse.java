@@ -27,6 +27,10 @@ import java.io.IOException;
  * @author Julie Haugh (jfh@ghgande.com)
  *
  * @version @version@ (@date@)
+ *
+ * @author Steve O'Hara (4energy)
+ * @version 2.0 (March 2016)
+ *
  */
 public final class ReadCommEventCounterResponse extends ModbusResponse {
 
