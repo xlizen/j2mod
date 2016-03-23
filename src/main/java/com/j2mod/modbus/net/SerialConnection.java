@@ -16,8 +16,6 @@
 package com.j2mod.modbus.net;
 
 import com.fazecast.jSerialComm.SerialPort;
-import com.fazecast.jSerialComm.SerialPortDataListener;
-import com.fazecast.jSerialComm.SerialPortEvent;
 import com.j2mod.modbus.Modbus;
 import com.j2mod.modbus.io.*;
 import com.j2mod.modbus.util.Logger;
@@ -38,7 +36,7 @@ import java.io.InputStream;
  * @version 2.0 (March 2016)
  *
  */
-public class SerialConnection implements SerialPortDataListener {
+public class SerialConnection {
 
     private static final Logger logger = Logger.getLogger(SerialConnection.class);
 
@@ -94,12 +92,11 @@ public class SerialConnection implements SerialPortDataListener {
         // open, close the port before throwing an exception.
         m_Transport.setCommPort(m_SerialPort);
 
-        // Add this object as an event listener for the serial port.
+        // Open the port so that we can get it's input stream.
         if (!m_SerialPort.openPort()) {
             close();
             throw new Exception("Error opening i/o streams");
         }
-        m_SerialPort.addDataListener(this);
         m_SerialIn = m_SerialPort.getInputStream();
     }
 
@@ -146,20 +143,4 @@ public class SerialConnection implements SerialPortDataListener {
         return m_SerialPort != null;
     }
 
-    @Override
-    public int getListeningEvents() {
-        return SerialPort.LISTENING_EVENT_DATA_AVAILABLE;
-    }
-
-    public void serialEvent(SerialPortEvent e) {
-        // Determine type of event.
-        switch (e.getEventType()) {
-            case SerialPort.LISTENING_EVENT_DATA_AVAILABLE:
-                // This event is ignored, the application reads directly from
-                // the serial input stream
-                break;
-            default:
-                logger.debug("Serial port event: %s", e.getEventType());
-        }
-    }
 }

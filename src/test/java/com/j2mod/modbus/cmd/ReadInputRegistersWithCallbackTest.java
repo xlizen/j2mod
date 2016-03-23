@@ -89,7 +89,7 @@ public class ReadInputRegistersWithCallbackTest {
                 }
 
                 if (transport instanceof ModbusSerialTransport) {
-                    ((ModbusSerialTransport)transport).setReceiveTimeout(500);
+                    ((ModbusSerialTransport)transport).setReceiveTimeout(1000);
                     ((ModbusSerialTransport)transport).addListener(new EventListener());
                     if (System.getProperty("com.j2mod.modbus.baud") != null) {
                         ((ModbusSerialTransport)transport).setBaudRate(Integer.parseInt(System.getProperty("com.j2mod.modbus.baud")));

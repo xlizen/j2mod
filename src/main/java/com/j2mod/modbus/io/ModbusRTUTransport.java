@@ -25,8 +25,6 @@ import com.j2mod.modbus.util.Logger;
 import com.j2mod.modbus.util.ModbusUtil;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 
 /**
  * Class that implements the ModbusRTU transport flavor.
@@ -50,7 +48,6 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
     private final BytesInputStream m_ByteIn = new BytesInputStream(m_InBuffer); // to read message from
     private final BytesOutputStream m_ByteInOut = new BytesOutputStream(m_InBuffer); // to buffer message to
     private final BytesOutputStream m_ByteOut = new BytesOutputStream(Modbus.MAX_MESSAGE_LENGTH); // write frames
-    private InputStream m_InputStream; // wrap into filter input
     private byte[] lastRequest = null;
 
     /**
@@ -75,11 +72,8 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
     private void readRequestData(int byteCount, BytesOutputStream out) throws IOException {
         byteCount += 2;
         byte inpBuf[] = new byte[byteCount];
-        int read = m_CommPort.readBytes(inpBuf, byteCount);
-        out.write(inpBuf, 0, read);
-        if (read != byteCount) {
-            logger.debug("Error: looking for %d bytes, received %d", byteCount, read);
-        }
+        readBytes(inpBuf, byteCount);
+        out.write(inpBuf, 0, byteCount);
     }
 
     /**
@@ -129,25 +123,23 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
 
                     case Modbus.READ_FILE_RECORD:
                     case Modbus.WRITE_FILE_RECORD:
-                        byteCount = m_InputStream.read();
+                        byteCount = readByte();
                         out.write(byteCount);
                         readRequestData(byteCount, out);
                         break;
 
                     case Modbus.WRITE_MULTIPLE_COILS:
                     case Modbus.WRITE_MULTIPLE_REGISTERS:
-                        byteCount = m_InputStream.read(inpBuf, 0, 4);
-                        if (byteCount > 0) {
-                            out.write(inpBuf, 0, byteCount);
-                        }
-                        byteCount = m_InputStream.read();
+                        readBytes(inpBuf, 4);
+                        out.write(inpBuf, 0, 4);
+                        byteCount = readByte();
                         out.write(byteCount);
                         readRequestData(byteCount, out);
                         break;
 
                     case Modbus.READ_WRITE_MULTIPLE:
                         readRequestData(8, out);
-                        byteCount = m_InputStream.read();
+                        byteCount = readByte();
                         out.write(byteCount);
                         readRequestData(byteCount, out);
                         break;
@@ -159,20 +151,6 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
         }
         catch (IOException e) {
             throw new IOException("getResponse serial port exception");
-        }
-    }
-
-    /**
-     * clearInput - Clear the input if characters are found in the input stream.
-     *
-     * @throws IOException
-     */
-    public void clearInput() throws IOException {
-        if (m_InputStream.available() > 0) {
-            int len = m_InputStream.available();
-            byte buf[] = new byte[len];
-            m_InputStream.read(buf, 0, len);
-            logger.debug("Clear input: %s", ModbusUtil.toHex(buf, 0, len));
         }
     }
 
@@ -202,12 +180,9 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
                          * Read the data payload byte count. There will be two
                          * additional CRC bytes afterwards.
                          */
-                        int cnt = m_CommPort.readBytes(inpBuf, 1);
-                        if (cnt != 1) {
-                            throw new IOException("Cannot read length of message");
-                        }
-                        out.write(inpBuf[0]);
-                        readRequestData(inpBuf[0], out);
+                        int cnt = readByte();
+                        out.write(cnt);
+                        readRequestData(cnt, out);
                         break;
 
                     case Modbus.WRITE_COIL:
@@ -238,9 +213,9 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
 
                     case Modbus.READ_FIFO_QUEUE:
                         int b1, b2;
-                        b1 = (byte)(m_InputStream.read() & 0xFF);
+                        b1 = (byte)(readByte() & 0xFF);
                         out.write(b1);
-                        b2 = (byte)(m_InputStream.read() & 0xFF);
+                        b2 = (byte)(readByte() & 0xFF);
                         out.write(b2);
                         int byteCount = ModbusUtil.makeWord(b1, b2);
                         readRequestData(byteCount, out);
@@ -248,26 +223,26 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
 
                     case Modbus.READ_MEI:
                         // read the subcode. We only support 0x0e.
-                        int sc = m_InputStream.read();
+                        int sc = readByte();
                         if (sc != 0x0e) {
                             throw new IOException("Invalid subfunction code");
                         }
                         out.write(sc);
                         // next few bytes are just copied.
                         int id, fieldCount;
-                        cnt = m_InputStream.read(inpBuf, 0, 5);
-                        out.write(inpBuf, 0, cnt);
+                        readBytes(inpBuf, 5);
+                        out.write(inpBuf, 0, 5);
                         fieldCount = (int)inpBuf[4];
                         for (int i = 0; i < fieldCount; i++) {
-                            id = m_InputStream.read();
+                            id = readByte();
                             out.write(id);
-                            int len = m_InputStream.read();
+                            int len = readByte();
                             out.write(len);
-                            len = m_InputStream.read(inpBuf, 0, len);
+                            readBytes(inpBuf, len);
                             out.write(inpBuf, 0, len);
                         }
                         if (fieldCount == 0) {
-                            int err = m_InputStream.read();
+                            int err = readByte();
                             out.write(err);
                         }
                         // now get the 2 CRC bytes
@@ -288,28 +263,6 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
         catch (IOException e) {
             throw new IOException("getResponse serial port exception");
         }
-    }
-
-    /**
-     * prepareStreams - Prepares the input and output streams of this
-     * <tt>ModbusRTUTransport</tt> instance.
-     *
-     * @param in  the input stream to be read from.
-     * @param out the output stream to write to.
-     *
-     * @throws IOException if an I\O error occurs.
-     */
-    public void prepareStreams(InputStream in, OutputStream out) throws IOException {
-        m_InputStream = in;
-    }
-
-    /**
-     * Closes the comms port and any streams associated with it
-     *
-     * @throws IOException
-     */
-    public void close() throws IOException {
-        m_CommPort.closePort();
     }
 
     /**
@@ -335,7 +288,7 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
                 m_ByteOut.writeByte(crc[0]);
                 m_ByteOut.writeByte(crc[1]);
                 // write message
-                m_CommPort.writeBytes(m_ByteOut.getBuffer(), m_ByteOut.size());
+                writeBytes(m_ByteOut.getBuffer(), m_ByteOut.size());
                 logger.debug("Sent: %s", ModbusUtil.toHex(m_ByteOut.getBuffer(), 0, m_ByteOut.size()));
                 // clears out the echoed message
                 // for RS485
@@ -372,9 +325,9 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
                 // 1. read to function code, create request and read function
                 // specific bytes
                 synchronized (m_ByteIn) {
-                    int uid = m_InputStream.read();
+                    int uid = readByte();
                     if (uid != -1) {
-                        int fc = m_InputStream.read();
+                        int fc = readByte();
                         m_ByteInOut.reset();
                         m_ByteInOut.writeByte(uid);
                         m_ByteInOut.writeByte(fc);
@@ -447,9 +400,9 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
                 // 1. read to function code, create request and read function
                 // specific bytes
                 synchronized (m_ByteIn) {
-                    int uid = m_InputStream.read();
+                    int uid = readByte();
                     if (uid != -1) {
-                        int fc = m_InputStream.read();
+                        int fc = readByte();
                         m_ByteInOut.reset();
                         m_ByteInOut.writeByte(uid);
                         m_ByteInOut.writeByte(fc);
