@@ -177,7 +177,6 @@ public abstract class ModbusSerialTransport implements ModbusTransport {
             if (!m_CommPort.openPort()) {
                 throw new IOException(String.format("Cannot open port %s", m_CommPort.getDescriptivePortName()));
             }
-            setReceiveTimeout(500);
         }
     }
 
