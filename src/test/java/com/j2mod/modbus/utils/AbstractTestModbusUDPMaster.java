@@ -16,6 +16,7 @@
 package com.j2mod.modbus.utils;
 
 import com.j2mod.modbus.Modbus;
+import com.j2mod.modbus.facade.ModbusUDPMaster;
 import com.j2mod.modbus.io.ModbusUDPTransaction;
 import com.j2mod.modbus.msg.*;
 import com.j2mod.modbus.net.ModbusUDPListener;
@@ -40,21 +41,26 @@ import java.net.InetAddress;
 public class AbstractTestModbusUDPMaster extends AbstractTestModbus {
 
     private static final Logger logger = Logger.getLogger(AbstractTestModbusUDPMaster.class);
-
-    private static final int TEST_PORT = 1502;
+    protected static ModbusUDPMaster master;
 
     @BeforeClass
     public static void setUpSlave() {
         try {
             listener = createUDPSlave();
+            master = new ModbusUDPMaster(LOCALHOST, PORT);
+            master.connect();
         }
         catch (Exception e) {
+            tearDownSlave();
             Assert.fail(String.format("Cannot initialise tests - %s", e.getMessage()));
         }
     }
 
     @AfterClass
     public static void tearDownSlave() {
+        if (master != null) {
+            master.disconnect();
+        }
         if (listener != null && listener.isListening()) {
             listener.stop();
         }
@@ -76,7 +82,7 @@ public class AbstractTestModbusUDPMaster extends AbstractTestModbus {
             // Create a UDP listener on the 'all interfaces' address 0.0.0.0
             listener = new ModbusUDPListener();
             listener.setListening(true);
-            listener.setPort(TEST_PORT);
+            listener.setPort(PORT);
             listener.setUnit(0);
             new Thread(listener).start();
 
@@ -111,7 +117,7 @@ public class AbstractTestModbusUDPMaster extends AbstractTestModbus {
             // Prepare the connection
 
             connection = new UDPMasterConnection(InetAddress.getByName(TestUtils.getFirstIp4Address()));
-            connection.setPort(TEST_PORT);
+            connection.setPort(PORT);
             connection.connect();
             connection.setTimeout(1000);
             Thread.sleep(500);
@@ -171,7 +177,7 @@ public class AbstractTestModbusUDPMaster extends AbstractTestModbus {
             // Prepare the connection
             connection = new UDPMasterConnection(InetAddress.getByName(TestUtils.getFirstIp4Address()));
             connection.setPort(Modbus.DEFAULT_PORT);
-            connection.setPort(TEST_PORT);
+            connection.setPort(PORT);
             connection.connect();
             connection.setTimeout(1000);
             Thread.sleep(500);
