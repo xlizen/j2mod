@@ -211,8 +211,10 @@ public class TCPMasterConnection {
      */
     public synchronized void setTimeout(int timeout) {
         try {
-            m_Socket.setSoTimeout(m_Timeout);
             m_Timeout = timeout;
+            if (m_Socket != null) {
+                m_Socket.setSoTimeout(m_Timeout);
+            }
         }
         catch (IOException ex) {
             // Do nothing.

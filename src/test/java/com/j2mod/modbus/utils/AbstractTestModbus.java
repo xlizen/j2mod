@@ -33,6 +33,7 @@ public class AbstractTestModbus {
     private static final Logger logger = Logger.getLogger(AbstractTestModbus.class);
     public static ModbusListener listener = null;
     public static final int UNIT_ID = 15;
+    public static final int PORT = 1502;
     public static final String LOCALHOST = "localhost";
 
     /**

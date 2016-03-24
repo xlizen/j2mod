@@ -19,8 +19,7 @@ import com.j2mod.modbus.msg.ReadCoilsResponse;
 import com.j2mod.modbus.msg.ReadMultipleRegistersResponse;
 import com.j2mod.modbus.msg.WriteCoilResponse;
 import com.j2mod.modbus.msg.WriteSingleRegisterResponse;
-import com.j2mod.modbus.util.Logger;
-import com.j2mod.modbus.utils.AbstractTestModbusUDPMaster;
+import com.j2mod.modbus.utils.AbstractTestModbusTCPMaster;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -28,12 +27,10 @@ import org.junit.Test;
  * This class tests the TCP master write features of the library
  */
 @SuppressWarnings("ConstantConditions")
-public class TestModbusUDPMasterWrite extends AbstractTestModbusUDPMaster {
-
-    private static final Logger logger = Logger.getLogger(TestModbusUDPMasterWrite.class);
+public class TestModbusTCPWrite extends AbstractTestModbusTCPMaster {
 
     @Test
-    public void testMasterWriteCoils() {
+    public void testWriteCoils() {
         WriteCoilResponse res = (WriteCoilResponse)writeRequest(Modbus.WRITE_COIL, 1, 1);
         Assert.assertEquals("Incorrect write status for coil 2", true, res.getCoil());
         ReadCoilsResponse res1 = (ReadCoilsResponse)readRequest(Modbus.READ_COILS, 1, 1);
@@ -41,7 +38,7 @@ public class TestModbusUDPMasterWrite extends AbstractTestModbusUDPMaster {
     }
 
     @Test
-    public void testMasterWriteHoldingRegisters() {
+    public void testWriteHoldingRegisters() {
         WriteSingleRegisterResponse res = (WriteSingleRegisterResponse)writeRequest(Modbus.WRITE_SINGLE_REGISTER, 0, 5555);
         Assert.assertEquals("Incorrect write status for register 1", 5555, res.getRegisterValue());
         ReadMultipleRegistersResponse res1 = (ReadMultipleRegistersResponse)readRequest(Modbus.READ_HOLDING_REGISTERS, 0, 1);

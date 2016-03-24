@@ -29,7 +29,7 @@ import org.junit.Test;
  * @version 2.0 (March 2016)
  *
  */
-public class TestModbusTCPSlaveWrite extends AbstractTestModbusTCPSlave {
+public class TestModbusTCPExternalWrite extends AbstractTestModbusTCPSlave {
 
     @Test
     public void testSlaveWriteCoils() {

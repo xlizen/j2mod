@@ -19,7 +19,6 @@ import com.j2mod.modbus.msg.ReadCoilsResponse;
 import com.j2mod.modbus.msg.ReadInputDiscretesResponse;
 import com.j2mod.modbus.msg.ReadInputRegistersResponse;
 import com.j2mod.modbus.msg.ReadMultipleRegistersResponse;
-import com.j2mod.modbus.util.Logger;
 import com.j2mod.modbus.utils.AbstractTestModbusUDPMaster;
 import org.junit.Assert;
 import org.junit.Test;
@@ -28,58 +27,56 @@ import org.junit.Test;
  * This class tests the TCP master read features of the library
  */
 @SuppressWarnings("ConstantConditions")
-public class TestModbusUDPMasterRead extends AbstractTestModbusUDPMaster {
-
-    private static final Logger logger = Logger.getLogger(TestModbusUDPMasterRead.class);
+public class TestModbusUDPRead extends AbstractTestModbusUDPMaster {
 
     @Test
-    public void testMasterReadCoils() {
+    public void testReadCoils() {
         ReadCoilsResponse res = (ReadCoilsResponse)readRequest(Modbus.READ_COILS, 0, 1);
         Assert.assertEquals("Incorrect status for coil 0", true, res.getCoilStatus(0));
         Assert.assertEquals("Incorrect status for coil 1", false, res.getCoilStatus(1));
     }
 
     @Test
-    public void testMasterReadInvalidCoil() {
+    public void testReadInvalidCoil() {
         Assert.assertNull("Failed check for missing coil 3", readRequest(Modbus.READ_COILS, 3, 1));
     }
 
     @Test
-    public void testMasterReadDiscretes() {
+    public void testReadDiscretes() {
         ReadInputDiscretesResponse res = (ReadInputDiscretesResponse)readRequest(Modbus.READ_INPUT_DISCRETES, 0, 2);
         Assert.assertEquals("Incorrect status for discrete 1", false, res.getDiscreteStatus(0));
         Assert.assertEquals("Incorrect status for discrete 2", true, res.getDiscreteStatus(1));
     }
 
     @Test
-    public void testMasterReadInvalidDiscretes() {
+    public void testReadInvalidDiscretes() {
         Assert.assertNull("Failed check for missing discrete 3", readRequest(Modbus.READ_INPUT_DISCRETES, 9, 1));
     }
 
     @Test
-    public void testMasterReadInputRegisters() {
+    public void testReadInputRegisters() {
         ReadInputRegistersResponse res = (ReadInputRegistersResponse)readRequest(Modbus.READ_INPUT_REGISTERS, 0, 1);
         Assert.assertEquals("Incorrect value for input register 1", 45, res.getRegisterValue(0));
     }
 
     @Test
-    public void testMasterReadInvalidInputRegisters() {
+    public void testReadInvalidInputRegisters() {
         Assert.assertNull("Failed check for missing input register 6", readRequest(Modbus.READ_INPUT_REGISTERS, 6, 1));
     }
 
     @Test
-    public void testMasterReadHoldingRegisters() {
+    public void testReadHoldingRegisters() {
         ReadMultipleRegistersResponse res = (ReadMultipleRegistersResponse)readRequest(Modbus.READ_HOLDING_REGISTERS, 0, 1);
         Assert.assertEquals("Incorrect value for holding register 1", 251, res.getRegisterValue(0));
     }
 
     @Test
-    public void testMasterReadInvalidHoldingRegisters() {
+    public void testReadInvalidHoldingRegisters() {
         Assert.assertNull("Failed check for missing holding register 5", readRequest(Modbus.READ_HOLDING_REGISTERS, 5, 1));
     }
 
     @Test
-    public void testMasterReadMultipleInputRegisters() {
+    public void testReadMultipleInputRegisters() {
         ReadInputRegistersResponse res = (ReadInputRegistersResponse)readRequest(Modbus.READ_INPUT_REGISTERS, 0, 5);
         Assert.assertEquals("Failed to read multiple input register 1 length 5", 45, res.getRegisterValue(0));
         Assert.assertEquals("Failed to read multiple input register 2 length 5", 9999, res.getRegisterValue(1));
@@ -89,7 +86,7 @@ public class TestModbusUDPMasterRead extends AbstractTestModbusUDPMaster {
     }
 
     @Test
-    public void testMasterReadMultipleHoldingRegisters() {
+    public void testReadMultipleHoldingRegisters() {
         ReadMultipleRegistersResponse res = (ReadMultipleRegistersResponse)readRequest(Modbus.READ_HOLDING_REGISTERS, 0, 5);
         Assert.assertEquals("Failed to read multiple holding register 1 length 5", 251, res.getRegisterValue(0));
         Assert.assertEquals("Failed to read multiple holding register 2 length 5", 1111, res.getRegisterValue(1));

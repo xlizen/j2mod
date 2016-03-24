@@ -15,11 +15,7 @@
  */
 package com.j2mod.modbus;
 
-import com.j2mod.modbus.msg.ReadCoilsResponse;
-import com.j2mod.modbus.msg.ReadMultipleRegistersResponse;
-import com.j2mod.modbus.msg.WriteCoilResponse;
-import com.j2mod.modbus.msg.WriteSingleRegisterResponse;
-import com.j2mod.modbus.util.Logger;
+import com.j2mod.modbus.procimg.SimpleInputRegister;
 import com.j2mod.modbus.utils.AbstractTestModbusTCPMaster;
 import org.junit.Assert;
 import org.junit.Test;
@@ -30,22 +26,30 @@ import org.junit.Test;
 @SuppressWarnings("ConstantConditions")
 public class TestModbusTCPMasterWrite extends AbstractTestModbusTCPMaster {
 
-    private static final Logger logger = Logger.getLogger(TestModbusTCPMasterWrite.class);
-
     @Test
-    public void testMasterWriteCoils() {
-        WriteCoilResponse res = (WriteCoilResponse)writeRequest(Modbus.WRITE_COIL, 1, 1);
-        Assert.assertEquals("Incorrect write status for coil 2", true, res.getCoil());
-        ReadCoilsResponse res1 = (ReadCoilsResponse)readRequest(Modbus.READ_COILS, 1, 1);
-        Assert.assertEquals("Incorrect status for coil 2", true, res1.getCoilStatus(0));
+    public void testWriteCoils() {
+        try {
+            boolean before = master.readCoils(UNIT_ID, 1, 1).getBit(0);
+            master.writeCoil(UNIT_ID, 1, !before);
+            Assert.assertEquals("Incorrect status for coil 1", true, !before);
+            master.writeCoil(UNIT_ID, 1, before);
+        }
+        catch (Exception e) {
+            Assert.fail(String.format("Cannot write to coil 1 - %s", e.getMessage()));
+        }
     }
 
     @Test
-    public void testMasterWriteHoldingRegisters() {
-        WriteSingleRegisterResponse res = (WriteSingleRegisterResponse)writeRequest(Modbus.WRITE_SINGLE_REGISTER, 0, 5555);
-        Assert.assertEquals("Incorrect write status for register 1", 5555, res.getRegisterValue());
-        ReadMultipleRegistersResponse res1 = (ReadMultipleRegistersResponse)readRequest(Modbus.READ_HOLDING_REGISTERS, 0, 1);
-        Assert.assertEquals("Incorrect status for register 0", 5555, res1.getRegisterValue(0));
+    public void testWriteHoldingRegisters() {
+        try {
+            int before = master.readInputRegisters(UNIT_ID, 1, 1)[0].getValue();
+            master.writeSingleRegister(UNIT_ID, 1, new SimpleInputRegister(9999));
+            Assert.assertEquals("Incorrect status for register 1", 9999, master.readInputRegisters(UNIT_ID, 1, 1)[0].getValue());
+            master.writeSingleRegister(UNIT_ID, 1, new SimpleInputRegister(before));
+        }
+        catch (Exception e) {
+            Assert.fail(String.format("Cannot write to register 1 - %s", e.getMessage()));
+        }
     }
 
 }

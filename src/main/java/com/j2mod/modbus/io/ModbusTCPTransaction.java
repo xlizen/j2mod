@@ -234,11 +234,9 @@ public void setRequest(ModbusRequest req) {
                         throw new ModbusIOException("Connection lost");
                     }
                 }
+                retryCounter++;
                 if (retryCounter >= retryLimit) {
-                    throw new ModbusIOException("Executing transaction failed (tried " + m_Retries + " times)");
-                }
-                else {
-                    retryCounter++;
+                    throw new ModbusIOException(String.format("Executing transaction failed (tried %d times) - %s", m_Retries, ex.getMessage()));
                 }
             }
         }

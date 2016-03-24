@@ -16,6 +16,7 @@
 package com.j2mod.modbus.utils;
 
 import com.j2mod.modbus.Modbus;
+import com.j2mod.modbus.facade.ModbusTCPMaster;
 import com.j2mod.modbus.io.ModbusTCPTransaction;
 import com.j2mod.modbus.io.ModbusTCPTransport;
 import com.j2mod.modbus.msg.*;
@@ -40,19 +41,26 @@ import java.net.Socket;
 public class AbstractTestModbusTCPMaster extends AbstractTestModbus {
 
     private static final Logger logger = Logger.getLogger(AbstractTestModbusTCPMaster.class);
+    protected static ModbusTCPMaster master;
 
     @BeforeClass
     public static void setUpSlave() {
         try {
             listener = createTCPSlave();
+            master = new ModbusTCPMaster(LOCALHOST, PORT);
+            master.connect();
         }
         catch (Exception e) {
+            tearDownSlave();
             Assert.fail(String.format("Cannot initialise tests - %s", e.getMessage()));
         }
     }
 
     @AfterClass
     public static void tearDownSlave() {
+        if (master != null) {
+            master.disconnect();
+        }
         if (listener != null && listener.isListening()) {
             listener.stop();
         }
@@ -74,6 +82,7 @@ public class AbstractTestModbusTCPMaster extends AbstractTestModbus {
             // Create a TCP listener with 5 threads in pool, default address
             listener = new ModbusTCPListener(5);
             listener.setListening(true);
+            listener.setPort(PORT);
             new Thread(listener).start();
         }
         catch (Exception x) {
@@ -99,7 +108,7 @@ public class AbstractTestModbusTCPMaster extends AbstractTestModbus {
         ModbusTCPTransaction trans;
         try {
             // Create a socket to use
-            Socket socket = new Socket(LOCALHOST, Modbus.DEFAULT_PORT);
+            Socket socket = new Socket(LOCALHOST, PORT);
             transport = new ModbusTCPTransport(socket);
             Thread.sleep(500);
             ModbusRequest req = null;

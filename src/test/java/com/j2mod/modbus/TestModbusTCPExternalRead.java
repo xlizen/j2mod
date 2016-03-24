@@ -29,7 +29,7 @@ import org.junit.Test;
  * @version 2.0 (March 2016)
  *
  */
-public class TestModbusTCPSlaveRead extends AbstractTestModbusTCPSlave {
+public class TestModbusTCPExternalRead extends AbstractTestModbusTCPSlave {
 
     @Test
     public void testSlaveReadCoils() {

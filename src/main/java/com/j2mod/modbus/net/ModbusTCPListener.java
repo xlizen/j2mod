@@ -228,8 +228,12 @@ public class ModbusTCPListener implements ModbusListener {
     public void stop() {
         m_Listening = false;
         try {
-            m_ServerSocket.close();
-            m_Listener.join();
+            if (m_ServerSocket != null) {
+                m_ServerSocket.close();
+            }
+            if (m_Listener != null) {
+                m_Listener.join();
+            }
         }
         catch (Exception ex) {
             // ?

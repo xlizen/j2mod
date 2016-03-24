@@ -92,10 +92,17 @@ public class ModbusTCPTransport implements ModbusTransport {
         prepareStreams(socket);
     }
 
+    /**
+     * Set the transport to be headless
+     */
     public void setHeadless() {
         headless = true;
     }
 
+    /**
+     * Set the socket timeout
+     * @param time Timeout in milliseconds
+     */
     public void setTimeout(int time) {
         m_Timeout = time;
 
@@ -109,12 +116,14 @@ public class ModbusTCPTransport implements ModbusTransport {
         }
     }
 
+    @Override
     public void close() throws IOException {
         m_Input.close();
         m_Output.close();
         m_Socket.close();
     }
 
+    @Override
     public ModbusTransaction createTransaction() {
         if (m_Master == null) {
             m_Master = new TCPMasterConnection(m_Socket.getInetAddress());
@@ -124,6 +133,7 @@ public class ModbusTCPTransport implements ModbusTransport {
         return new ModbusTCPTransaction(m_Master);
     }
 
+    @Override
     public void writeMessage(ModbusMessage msg) throws ModbusIOException {
         try {
             byte message[] = msg.getMessage();
@@ -146,7 +156,7 @@ public class ModbusTCPTransport implements ModbusTransport {
             // write more sophisticated exception handling
         }
         catch (SocketException ex) {
-            if (!m_Master.isConnected()) {
+            if (m_Master != null && !m_Master.isConnected()) {
                 try {
                     m_Master.connect();
                 }
@@ -154,10 +164,10 @@ public class ModbusTCPTransport implements ModbusTransport {
                     // Do nothing.
                 }
             }
-            throw new ModbusIOException("I/O exception - failed to write");
+            throw new ModbusIOException(String.format("I/O exception - failed to write - %s", ex.getMessage()));
         }
         catch (Exception ex) {
-            throw new ModbusIOException("I/O exception - failed to write");
+            throw new ModbusIOException(String.format("I/O exception - failed to write - %s", ex.getMessage()));
         }
     }
 
@@ -169,6 +179,7 @@ public class ModbusTCPTransport implements ModbusTransport {
      *
      * @throws ModbusIOException
      */
+    @Override
     public ModbusRequest readRequest() throws ModbusIOException {
 
         try {
@@ -252,6 +263,7 @@ public class ModbusTCPTransport implements ModbusTransport {
         }
     }
 
+    @Override
     public ModbusResponse readResponse() throws ModbusIOException {
 
         try {
@@ -366,14 +378,12 @@ public class ModbusTCPTransport implements ModbusTransport {
         }
 
         m_Input = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
-
         m_Output = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
 
 		/*
 		 * Modbus/TCP adds a header which must be accounted for.
 		 */
         m_ByteIn = new BytesInputStream(Modbus.MAX_MESSAGE_LENGTH + 6);
-
         m_ByteOut = new BytesOutputStream(Modbus.MAX_MESSAGE_LENGTH + 6);
     }
 }
