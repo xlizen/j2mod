@@ -24,10 +24,7 @@ import com.j2mod.modbus.msg.ModbusResponse;
 import com.j2mod.modbus.util.Logger;
 import com.j2mod.modbus.util.ModbusUtil;
 
-import java.io.DataInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 
 /**
  * Class that implements the Modbus/ASCII transport
@@ -43,63 +40,16 @@ import java.io.OutputStream;
  */
 public class ModbusASCIITransport extends ModbusSerialTransport {
 
-    /**
-     * Defines a virtual number for the FRAME START token (COLON).
-     */
-    public static final int FRAME_START = 1000;
-    /**
-     * Defines a virtual number for the FRAME_END token (CR LF).
-     */
-    public static final int FRAME_END = 2000;
     private static final Logger logger = Logger.getLogger(ModbusASCIITransport.class);
-    private DataInputStream m_InputStream;     //used to read from
-    private ASCIIOutputStream m_OutputStream;   //used to write to
-    private byte[] m_InBuffer;
-    private BytesInputStream m_ByteIn;         //to read message from
-    private BytesOutputStream m_ByteInOut;     //to buffer message to
-    private BytesOutputStream m_ByteOut;      //write frames
+    private final byte[] m_InBuffer = new byte[Modbus.MAX_MESSAGE_LENGTH];
+    private final BytesInputStream m_ByteIn = new BytesInputStream(m_InBuffer);         //to read message from
+    private final BytesOutputStream m_ByteInOut = new BytesOutputStream(m_InBuffer);     //to buffer message to
+    private final BytesOutputStream m_ByteOut = new BytesOutputStream(Modbus.MAX_MESSAGE_LENGTH);      //write frames
 
     /**
      * Constructs a new <tt>MobusASCIITransport</tt> instance.
      */
     public ModbusASCIITransport() {
-    }
-
-    private static int calculateLRC(byte[] data, int off, int len) {
-        int lrc = 0;
-        for (int i = off; i < len; i++) {
-            lrc += ((int)data[i]) & 0xFF;
-        }
-        return (-lrc) & 0xff;
-    }
-
-    public ModbusTransaction createTransaction() {
-        return new ModbusSerialTransaction();
-    }
-
-    /**
-     * Prepares the input and output streams of this
-     * <tt>ModbusASCIITransport</tt> instance.
-     * The raw input stream will be wrapped into a
-     * filtered <tt>DataInputStream</tt>.
-     *
-     * @param in  the input stream to be used for reading.
-     * @param out the output stream to be used for writing.
-     *
-     * @throws IOException if an I\O related error occurs.
-     */
-    public void prepareStreams(InputStream in, OutputStream out) throws IOException {
-        m_InputStream = new DataInputStream(new ASCIIInputStream(in));
-        m_OutputStream = new ASCIIOutputStream(out);
-        m_ByteOut = new BytesOutputStream(Modbus.MAX_MESSAGE_LENGTH);
-        m_InBuffer = new byte[Modbus.MAX_MESSAGE_LENGTH];
-        m_ByteIn = new BytesInputStream(m_InBuffer);
-        m_ByteInOut = new BytesOutputStream(m_InBuffer);
-    }
-
-    public void close() throws IOException {
-        m_InputStream.close();
-        m_OutputStream.close();
     }
 
     protected void writeMessageOut(ModbusMessage msg) throws ModbusIOException {
@@ -113,12 +63,11 @@ public class ModbusASCIITransport extends ModbusSerialTransport {
                 int len = m_ByteOut.size();
 
                 //write message
-                m_OutputStream.write(FRAME_START);               //FRAMESTART
-                m_OutputStream.write(buf, 0, len);                 //PDU
+                writeAsciiByte(FRAME_START);               //FRAMESTART
+                writeAsciiBytes(buf, len);                 //PDU
                 logger.debug("Writing: %s", ModbusUtil.toHex(buf, 0, len));
-                m_OutputStream.write(calculateLRC(buf, 0, len)); //LRC
-                m_OutputStream.write(FRAME_END);                 //FRAMEEND
-                m_OutputStream.flush();
+                writeAsciiByte(calculateLRC(buf, 0, len)); //LRC
+                writeAsciiByte(FRAME_END);                 //FRAMEEND
                 m_ByteOut.reset();
                 // clears out the echoed message
                 // for RS485
@@ -143,14 +92,14 @@ public class ModbusASCIITransport extends ModbusSerialTransport {
         try {
             do {
                 //1. Skip to FRAME_START
-                while ((m_InputStream.read()) != FRAME_START) {
+                while ((readAsciiByte()) != FRAME_START) {
                     // Nothing to do
                 }
 
                 //2. Read to FRAME_END
                 synchronized (m_InBuffer) {
                     m_ByteInOut.reset();
-                    while ((in = m_InputStream.read()) != FRAME_END) {
+                    while ((in = readAsciiByte()) != FRAME_END) {
                         if (in == -1) {
                             throw new IOException("I/O exception - Serial port timeout");
                         }
@@ -194,7 +143,7 @@ public class ModbusASCIITransport extends ModbusSerialTransport {
         try {
             do {
                 //1. Skip to FRAME_START
-                while ((in = m_InputStream.read()) != FRAME_START) {
+                while ((in = readAsciiByte()) != FRAME_START) {
                     if (in == -1) {
                         throw new IOException("I/O exception - Serial port timeout");
                     }
@@ -202,7 +151,7 @@ public class ModbusASCIITransport extends ModbusSerialTransport {
                 //2. Read to FRAME_END
                 synchronized (m_InBuffer) {
                     m_ByteInOut.reset();
-                    while ((in = m_InputStream.read()) != FRAME_END) {
+                    while ((in = readAsciiByte()) != FRAME_END) {
                         if (in == -1) {
                             throw new IOException("I/O exception - Serial port timeout");
                         }
@@ -240,7 +189,11 @@ public class ModbusASCIITransport extends ModbusSerialTransport {
         }
     }
 
-    private byte calculateLRC(byte[] data, int off, int length, int tailskip) {
+    private static int calculateLRC(byte[] data, int off, int length) {
+        return calculateLRC(data, off, length, 0);
+    }
+
+    private static byte calculateLRC(byte[] data, int off, int length, int tailskip) {
         int lrc = 0;
         for (int i = off; i < length - tailskip; i++) {
             lrc += ((int)data[i]) & 0xFF;

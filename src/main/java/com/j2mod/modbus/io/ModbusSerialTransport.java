@@ -41,10 +41,29 @@ public abstract class ModbusSerialTransport implements ModbusTransport {
 
     private static final Logger logger = Logger.getLogger(ModbusSerialTransport.class);
 
+    /**
+     * Defines a virtual number for the FRAME START token (COLON).
+     */
+    public static final int FRAME_START = 1000;
+    /**
+     * Defines a virtual number for the FRAME_END token (CR LF).
+     */
+    public static final int FRAME_END = 2000;
+
     protected SerialPort m_CommPort;
     protected boolean m_Echo = false;     // require RS-485 echo processing
     private final Set<ModbusSerialTransportListener> listeners = Collections.synchronizedSet(new HashSet<ModbusSerialTransportListener>());
     private int receiveTimeout = 500;
+
+    /**
+     * Cretes a new transaction suitable for the serial port
+     * @return SerialTransaction
+     */
+    public ModbusTransaction createTransaction() {
+        ModbusSerialTransaction transaction = new ModbusSerialTransaction();
+        transaction.setTransport(this);
+        return transaction;
+    }
 
     /**
      * The <code>writeMessage</code> method writes a modbus serial message to
@@ -70,7 +89,7 @@ public abstract class ModbusSerialTransport implements ModbusTransport {
      */
     public ModbusRequest readRequest() throws ModbusIOException {
         notifyListeners(ModbusSerialTransportListener.EventType.BEFORE_READ_REQUEST);
-        m_CommPort.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING, receiveTimeout, receiveTimeout);
+        m_CommPort.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING | SerialPort.TIMEOUT_WRITE_BLOCKING, receiveTimeout, receiveTimeout);
         ModbusRequest req = readRequestIn();
         notifyListeners(ModbusSerialTransportListener.EventType.AFTER_READ_REQUEST);
         return req;
@@ -86,7 +105,7 @@ public abstract class ModbusSerialTransport implements ModbusTransport {
      */
     public ModbusResponse readResponse() throws ModbusIOException {
         notifyListeners(ModbusSerialTransportListener.EventType.BEFORE_READ_RESPONSE);
-        m_CommPort.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING, receiveTimeout, receiveTimeout);
+        m_CommPort.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING | SerialPort.TIMEOUT_WRITE_BLOCKING, receiveTimeout, receiveTimeout);
         ModbusResponse res = readResponseIn();
         notifyListeners(ModbusSerialTransportListener.EventType.AFTER_READ_RESPONSE);
         return res;
@@ -251,7 +270,7 @@ public abstract class ModbusSerialTransport implements ModbusTransport {
                 throw new IOException("Cannot read from serial port");
             }
             else {
-                return buffer[0];
+                return buffer[0] & 0xff;
             }
         }
         else {
@@ -287,6 +306,95 @@ public abstract class ModbusSerialTransport implements ModbusTransport {
     public final int writeBytes(byte[] buffer, long bytesToWrite) throws IOException {
         if (m_CommPort != null && m_CommPort.isOpen()) {
             return m_CommPort.writeBytes(buffer, bytesToWrite);
+        }
+        else {
+            throw new IOException("Comm port is not valid or not open");
+        }
+    }
+
+    /**
+     * Reads an ascii byte from the input stream
+     * It handles the special start and end frame markers
+     * @return Byte value of the next ASCII couplet
+     * @throws IOException
+     */
+    protected int readAsciiByte() throws IOException {
+        if (m_CommPort != null && m_CommPort.isOpen()) {
+            byte[] buffer = new byte[1];
+            int cnt = m_CommPort.readBytes(buffer, 1);
+            if (cnt != 1) {
+                throw new IOException("Cannot read from serial port");
+            }
+            else if (buffer[0] == ':') {
+                return ModbusASCIITransport.FRAME_START;
+            }
+            else if (buffer[0] == '\r') {
+                return ModbusASCIITransport.FRAME_END;
+            }
+            else {
+                String value = ((int) buffer[0]) + "";
+                cnt = m_CommPort.readBytes(buffer, 1);
+                if (cnt != 1) {
+                    throw new IOException("Cannot read from serial port");
+                }
+                else {
+                    return Integer.parseInt(value + ((int) buffer[0]) + "", 16);
+                }
+            }
+        }
+        else {
+            throw new IOException("Comm port is not valid or not open");
+        }
+    }
+
+    /**
+     * Writes out a byte value as an ascii character
+     * If the value is the special start/end characters, then
+     * allowance is made for these
+     * @param value Value to write
+     * @return Number of bytes written
+     * @throws IOException
+     */
+    public final int writeAsciiByte(int value) throws IOException {
+        if (m_CommPort != null && m_CommPort.isOpen()) {
+            byte[] buffer;
+
+            if (value == ModbusASCIITransport.FRAME_START) {
+                buffer = new byte[]{58};
+                logger.debug("Wrote FRAME_START");
+            }
+            else if (value == ModbusASCIITransport.FRAME_END) {
+                buffer = new byte[]{13,10};
+                logger.debug("Wrote FRAME_END");
+            }
+            else {
+                buffer = ModbusUtil.toHex(value);
+                logger.debug("Wrote byte %d=%s", value, new String(ModbusUtil.toHex(value)));
+            }
+            return m_CommPort.writeBytes(buffer, buffer.length);
+        }
+        else {
+            throw new IOException("Comm port is not valid or not open");
+        }
+    }
+
+    /**
+     * Writes an array of bytes out as a stream of ascii characters
+     * @param buffer Buffer of bytes to write
+     * @param bytesToWrite Number of characters to write
+     * @return Number of bytes written
+     * @throws IOException
+     */
+    public int writeAsciiBytes(byte[] buffer, long bytesToWrite) throws IOException {
+        if (m_CommPort != null && m_CommPort.isOpen()) {
+            int cnt = 0;
+            for (int i=0; i<bytesToWrite; i++) {
+                if (writeAsciiByte(buffer[i]) != 1) {
+                    return cnt;
+                }
+                cnt++;
+            }
+            return cnt;
         }
         else {
             throw new IOException("Comm port is not valid or not open");

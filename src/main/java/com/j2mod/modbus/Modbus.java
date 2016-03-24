@@ -325,11 +325,6 @@ public interface Modbus {
     String SERIAL_ENCODING_RTU = "rtu";
 
     /**
-     * Defines the serial encoding "BIN".
-     */
-    String SERIAL_ENCODING_BIN = "bin";
-
-    /**
      * Defines the default serial encoding (ASCII).
      */
     String DEFAULT_SERIAL_ENCODING = SERIAL_ENCODING_ASCII;

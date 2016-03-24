@@ -51,17 +51,6 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
     private byte[] lastRequest = null;
 
     /**
-     * Creates a suitable transaction
-     *
-     * @return Transaction
-     */
-    public ModbusTransaction createTransaction() {
-        ModbusSerialTransaction transaction = new ModbusSerialTransaction();
-        transaction.setTransport(this);
-        return transaction;
-    }
-
-    /**
      * Read the data for a request of a given fixed size
      *
      * @param byteCount Byte count excluding the 2 byte CRC

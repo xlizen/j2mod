@@ -17,7 +17,10 @@ package com.j2mod.modbus.net;
 
 import com.fazecast.jSerialComm.SerialPort;
 import com.j2mod.modbus.Modbus;
-import com.j2mod.modbus.io.*;
+import com.j2mod.modbus.io.ModbusASCIITransport;
+import com.j2mod.modbus.io.ModbusRTUTransport;
+import com.j2mod.modbus.io.ModbusSerialTransport;
+import com.j2mod.modbus.io.ModbusTransport;
 import com.j2mod.modbus.util.Logger;
 import com.j2mod.modbus.util.SerialParameters;
 
@@ -83,8 +86,8 @@ public class SerialConnection {
         else if (Modbus.SERIAL_ENCODING_RTU.equals(m_Parameters.getEncoding())) {
             m_Transport = new ModbusRTUTransport();
         }
-        else if (Modbus.SERIAL_ENCODING_BIN.equals(m_Parameters.getEncoding())) {
-            m_Transport = new ModbusBINTransport();
+        else {
+            logger.warn("Unknown transport encoding [%s] - reverting to RTU", m_Parameters.getEncoding());
         }
         m_Transport.setEcho(m_Parameters.isEcho());
 

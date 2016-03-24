@@ -203,7 +203,7 @@ public class ReadInputRegistersWithCallbackTest {
                 // Switch the UART into read mode
                 case BEFORE_READ_REQUEST:
                 case BEFORE_READ_RESPONSE:
-                    Gpio.delayMicroseconds(20000);
+                    Gpio.delayMicroseconds(1000);
                     Gpio.digitalWrite(RTS_PIN, false);
                     break;
 

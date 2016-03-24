@@ -425,13 +425,11 @@ public class SerialParameters {
      *
      * @see Modbus#SERIAL_ENCODING_ASCII
      * @see Modbus#SERIAL_ENCODING_RTU
-     * @see Modbus#SERIAL_ENCODING_BIN
      */
     public void setEncoding(String enc) {
         enc = enc.toLowerCase();
         if (enc.equals(Modbus.SERIAL_ENCODING_ASCII) ||
-                enc.equals(Modbus.SERIAL_ENCODING_RTU) ||
-                enc.equals(Modbus.SERIAL_ENCODING_BIN)
+                enc.equals(Modbus.SERIAL_ENCODING_RTU)
                 ) {
             m_Encoding = enc;
         }
