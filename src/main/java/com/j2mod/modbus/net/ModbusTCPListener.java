@@ -119,7 +119,7 @@ public class ModbusTCPListener implements ModbusListener {
         m_Listener.start();
     }
 
-/**
+    /**
      * Accepts incoming connections and handles then with
      * <tt>TCPConnectionHandler</tt> instances.
      */
@@ -134,7 +134,7 @@ public class ModbusTCPListener implements ModbusListener {
 			 */
             int m_FloodProtection = 5;
             m_ServerSocket = new ServerSocket(m_Port, m_FloodProtection, m_Address);
-            logger.debug("Listenening to %s (Port %d)", m_ServerSocket.toString(), m_Port);
+            logger.debug("Listening to %s (Port %d)", m_ServerSocket.toString(), m_Port);
 
 			/*
              * Infinite loop, taking care of resources in case of a lot of

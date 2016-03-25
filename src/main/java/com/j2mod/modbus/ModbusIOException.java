@@ -70,7 +70,6 @@ public class ModbusIOException extends ModbusException {
      */
     public ModbusIOException(String message, boolean b) {
         super(message);
-
         m_EOF = b;
     }
 

@@ -61,8 +61,6 @@ public class UDPMasterConnection {
     public synchronized void connect() throws Exception {
         if (!m_Connected) {
             m_Terminal = new UDPMasterTerminal();
-            m_Terminal.setLocalAddress(InetAddress.getLocalHost());
-            m_Terminal.setLocalPort(5000);
             m_Terminal.setRemoteAddress(m_Address);
             m_Terminal.setRemotePort(m_Port);
             m_Terminal.setTimeout(m_Timeout);

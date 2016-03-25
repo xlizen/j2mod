@@ -17,8 +17,6 @@ package com.j2mod.modbus.net;
 
 import com.j2mod.modbus.io.ModbusUDPTransport;
 
-import java.net.InetAddress;
-
 /**
  * Interface defining a <tt>UDPTerminal</tt>.
  *
@@ -30,20 +28,6 @@ import java.net.InetAddress;
  *
  */
 public interface UDPTerminal {
-
-    /**
-     * Returns the local address of this <tt>UDPTerminal</tt>.
-     *
-     * @return an <tt>InetAddress</tt> instance.
-     */
-    InetAddress getLocalAddress();
-
-    /**
-     * Returns the local port of this <tt>UDPTerminal</tt>.
-     *
-     * @return the local port as <tt>int</tt>.
-     */
-    int getLocalPort();
 
     /**
      * Tests if this <tt>UDPTerminal</tt> is active.

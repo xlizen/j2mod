@@ -36,19 +36,17 @@ import java.net.InetAddress;
 class UDPMasterTerminal implements UDPTerminal {
 
     private static final Logger logger = Logger.getLogger(UDPMasterTerminal.class);
-    protected InetAddress m_LocalAddress;
     protected InetAddress m_RemoteAddress;
     protected ModbusUDPTransport m_ModbusTransport;
     private DatagramSocket m_Socket;
     private int m_Timeout = Modbus.DEFAULT_TIMEOUT;
     private boolean m_Active;
     private int m_RemotePort = Modbus.DEFAULT_PORT;
-    private int m_LocalPort = Modbus.DEFAULT_PORT;
 
     /**
      * Create a UDP master connection to the specified Internet address.
      *
-     * @param addr
+     * @param addr Remote address to connect to
      */
     protected UDPMasterTerminal(InetAddress addr) {
         m_RemoteAddress = addr;
@@ -58,22 +56,6 @@ class UDPMasterTerminal implements UDPTerminal {
      * Create an uninitialized UDP master connection.
      */
     public UDPMasterTerminal() {
-    }
-
-    public InetAddress getLocalAddress() {
-        return m_LocalAddress;
-    }
-
-    public void setLocalAddress(InetAddress addr) {
-        m_LocalAddress = addr;
-    }
-
-    public int getLocalPort() {
-        return m_LocalPort;
-    }
-
-    protected void setLocalPort(int port) {
-        m_LocalPort = port;
     }
 
     /**
@@ -92,20 +74,11 @@ class UDPMasterTerminal implements UDPTerminal {
      */
     public synchronized void activate() throws Exception {
         if (!isActive()) {
-            logger.debug("UDPMasterTerminal::activate()::laddr=:%s:lport:%d",  m_LocalAddress,  m_LocalPort);
 
             if (m_Socket == null) {
-                if (m_LocalAddress != null && m_LocalPort != -1) {
-                    m_Socket = new DatagramSocket(m_LocalPort, m_LocalAddress);
-                }
-                else {
-                    m_Socket = new DatagramSocket();
-                    m_LocalPort = m_Socket.getLocalPort();
-                    m_LocalAddress = m_Socket.getLocalAddress();
-                }
+                m_Socket = new DatagramSocket();
             }
             logger.debug("UDPMasterTerminal::haveSocket():%s", m_Socket.toString());
-            logger.debug("UDPMasterTerminal::laddr=:%s:lport:%d", m_LocalAddress.toString(), m_LocalPort);
             logger.debug("UDPMasterTerminal::raddr=:%s:rport:%d", m_RemoteAddress.toString(), m_RemotePort);
 
             m_Socket.setReceiveBufferSize(1024);
@@ -120,11 +93,12 @@ class UDPMasterTerminal implements UDPTerminal {
     /**
      * Deactivates this <tt>UDPSlaveTerminal</tt>.
      */
-    public void deactivate() {
+    public synchronized void deactivate() {
         try {
             logger.debug("UDPMasterTerminal::deactivate()");
-
-            m_Socket.close();
+            if (m_Socket != null) {
+                m_Socket.close();
+            }
             m_ModbusTransport = null;
             m_Active = false;
         }
@@ -143,15 +117,19 @@ class UDPMasterTerminal implements UDPTerminal {
         return m_ModbusTransport;
     }
 
-    public void sendMessage(byte[] msg) throws Exception {
-
+    /**
+     * Sends a message to the remote address and port
+     *
+     * @param msg the message as <tt>byte[]</tt>.
+     *
+     * @throws Exception
+     */
+    public synchronized void sendMessage(byte[] msg) throws Exception {
         DatagramPacket req = new DatagramPacket(msg, msg.length, m_RemoteAddress, m_RemotePort);
-        synchronized (m_Socket) {
-            m_Socket.send(req);
-        }
+        m_Socket.send(req);
     }
 
-    public byte[] receiveMessage() throws Exception {
+    public synchronized byte[] receiveMessage() throws Exception {
 
 		/*
          * The longest possible DatagramPacket is 256 bytes (Modbus message
@@ -159,10 +137,8 @@ class UDPMasterTerminal implements UDPTerminal {
 		 */
         byte[] buffer = new byte[262];
         DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
-        synchronized (m_Socket) {
-            m_Socket.setSoTimeout(m_Timeout);
-            m_Socket.receive(packet);
-        }
+        m_Socket.setSoTimeout(m_Timeout);
+        m_Socket.receive(packet);
         return buffer;
     }
 
@@ -221,13 +197,5 @@ class UDPMasterTerminal implements UDPTerminal {
      */
     public void setTimeout(int timeout) {
         m_Timeout = timeout;
-    }
-
-    public void receiveMessage(byte[] buffer) throws Exception {
-        DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
-        synchronized (m_Socket) {
-            m_Socket.setSoTimeout(m_Timeout);
-            m_Socket.receive(packet);
-        }
     }
 }

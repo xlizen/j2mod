@@ -47,7 +47,7 @@ public class AbstractTestModbusUDPMaster extends AbstractTestModbus {
     public static void setUpSlave() {
         try {
             listener = createUDPSlave();
-            master = new ModbusUDPMaster("TestUtils.getFirstIp4Address()", PORT);
+            master = new ModbusUDPMaster(TestUtils.getFirstIp4Address(), PORT);
             master.connect();
         }
         catch (Exception e) {
@@ -116,11 +116,10 @@ public class AbstractTestModbusUDPMaster extends AbstractTestModbus {
         try {
             // Prepare the connection
 
-            connection = new UDPMasterConnection(InetAddress.getByName(TestUtils.getFirstIp4Address()));
+            connection = new UDPMasterConnection(InetAddress.getByName("192.168.0.6"));
             connection.setPort(PORT);
             connection.connect();
-            connection.setTimeout(1000);
-            Thread.sleep(500);
+            connection.setTimeout(500);
             ModbusRequest req = null;
 
             // Prepare the request
@@ -179,8 +178,7 @@ public class AbstractTestModbusUDPMaster extends AbstractTestModbus {
             connection.setPort(Modbus.DEFAULT_PORT);
             connection.setPort(PORT);
             connection.connect();
-            connection.setTimeout(1000);
-            Thread.sleep(500);
+            connection.setTimeout(500);
             ModbusRequest req = null;
 
             // Prepare the request
@@ -213,6 +211,30 @@ public class AbstractTestModbusUDPMaster extends AbstractTestModbus {
             }
         }
         return null;
+    }
+
+    /**
+     * Connects to the default port on a local adapter
+     *
+     * @return Master connection
+     *
+     * @throws Exception If connect fails
+     */
+    protected static ModbusUDPMaster connect() throws Exception {
+        ModbusUDPMaster master = new ModbusUDPMaster(TestUtils.getFirstIp4Address(), PORT);
+        master.connect();
+        return master;
+    }
+
+    /**
+     * Disconnects the master
+     *
+     * @param master Master connection
+     */
+    protected static void disconnect(ModbusUDPMaster master) {
+        if (master != null) {
+            master.disconnect();
+        }
     }
 
 }

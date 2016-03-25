@@ -110,7 +110,6 @@ public class AbstractTestModbusTCPMaster extends AbstractTestModbus {
             // Create a socket to use
             Socket socket = new Socket(LOCALHOST, PORT);
             transport = new ModbusTCPTransport(socket);
-            Thread.sleep(500);
             ModbusRequest req = null;
 
             // Prepare the request
@@ -171,9 +170,8 @@ public class AbstractTestModbusTCPMaster extends AbstractTestModbus {
         ModbusTCPTransaction trans;
         try {
             // Create a socket to use
-            Socket socket = new Socket(LOCALHOST, Modbus.DEFAULT_PORT);
+            Socket socket = new Socket(LOCALHOST, PORT);
             transport = new ModbusTCPTransport(socket);
-            Thread.sleep(500);
             ModbusRequest req = null;
 
             // Prepare the request

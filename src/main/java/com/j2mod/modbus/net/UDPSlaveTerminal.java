@@ -42,36 +42,45 @@ class UDPSlaveTerminal implements UDPTerminal {
     private static final Logger logger = Logger.getLogger(UDPSlaveTerminal.class);
     protected InetAddress m_LocalAddress;
     protected ModbusUDPTransport m_ModbusTransport;
-    protected Hashtable<Integer, DatagramPacket> m_Requests;
+    protected Hashtable<Integer, DatagramPacket> m_Requests = new Hashtable<Integer, DatagramPacket>(342);
     private DatagramSocket m_Socket;
     private boolean m_Active;
     private int m_LocalPort = Modbus.DEFAULT_PORT;
-    private LinkedBlockingQueue<byte[]> m_SendQueue;
-    private LinkedBlockingQueue<byte[]> m_ReceiveQueue;
+    private LinkedBlockingQueue<byte[]> m_SendQueue = new LinkedBlockingQueue<byte[]>();
+    private LinkedBlockingQueue<byte[]> m_ReceiveQueue = new LinkedBlockingQueue<byte[]>();
     private PacketSender m_PacketSender;
     private PacketReceiver m_PacketReceiver;
 
-    protected UDPSlaveTerminal() {
-        m_SendQueue = new LinkedBlockingQueue<byte[]>();
-        m_ReceiveQueue = new LinkedBlockingQueue<byte[]>();
-        m_Requests = new Hashtable<Integer, DatagramPacket>(342);
-    }
-
+    /**
+     * Creates a slave terminal on the specified adapter address
+     * Use 0.0.0.0 to listen on all adapters
+     *
+     * @param localaddress Local address to bind to
+     */
     protected UDPSlaveTerminal(InetAddress localaddress) {
         m_LocalAddress = localaddress;
-        m_SendQueue = new LinkedBlockingQueue<byte[]>();
-        m_ReceiveQueue = new LinkedBlockingQueue<byte[]>();
-        m_Requests = new Hashtable<Integer, DatagramPacket>(342);
     }
 
+    /**
+     * Gets the local adapter address
+     * @return Adapter address
+     */
     public InetAddress getLocalAddress() {
         return m_LocalAddress;
     }
 
+    /**
+     * Returns the local port the terminal is listening on
+     * @return Port number
+     */
     public int getLocalPort() {
         return m_LocalPort;
     }
 
+    /**
+     * Sets the local port the terminal is running on
+     * @param port Local port
+     */
     protected void setLocalPort(int port) {
         m_LocalPort = port;
     }
@@ -152,28 +161,29 @@ class UDPSlaveTerminal implements UDPTerminal {
         return m_ModbusTransport;
     }
 
+    /**
+     * Adds the message to the send queue
+     * @param msg the message as <tt>byte[]</tt>.
+     *
+     * @throws Exception
+     */
     public void sendMessage(byte[] msg) throws Exception {
         m_SendQueue.add(msg);
     }
 
+    /**
+     * Takes a message from the received queue - waits if there is nothing available
+     * @return Message from the queue
+     * @throws Exception
+     */
     public byte[] receiveMessage() throws Exception {
         return m_ReceiveQueue.take();
-    }
-
-    protected boolean hasResponse() {
-        return !m_ReceiveQueue.isEmpty();
     }
 
     /**
      * Sets the timeout in milliseconds for this <tt>UDPSlaveTerminal</tt>.
      *
      * @param timeout the timeout as <tt>int</tt>.
-     *
-     * @return the timeout as <tt>int</tt>.
-     *
-     * public int getTimeout() { return m_Timeout; }
-     *
-     * /** Sets the timeout for this <tt>UDPSlaveTerminal</tt>.
      */
     public void setTimeout(int timeout) {
 
@@ -186,33 +196,24 @@ class UDPSlaveTerminal implements UDPTerminal {
     }
 
     /**
-     * Returns the socket of this <tt>UDPSlaveTerminal</tt>.
-     *
-     * @return the socket as <tt>DatagramSocket</tt>.
+     * The background thread that is responsible for sending messages in response to requests
      */
-    public DatagramSocket getSocket() {
-        return m_Socket;
-    }
-
-    /**
-     * Sets the socket of this <tt>UDPTerminal</tt>.
-     *
-     * @param sock the <tt>DatagramSocket</tt> for this terminal.
-     */
-    protected void setSocket(DatagramSocket sock) {
-        m_Socket = sock;
-    }
-
     class PacketSender implements Runnable {
 
         private boolean m_Continue;
         private boolean m_Closed;
         private Thread m_Thread;
 
+        /**
+         * Constructs a seder
+         */
         public PacketSender() {
             m_Continue = true;
         }
 
+        /**
+         * Stops the sender
+         */
         public void stop() {
             m_Continue = false;
             m_Thread.interrupt();
@@ -226,6 +227,9 @@ class UDPSlaveTerminal implements UDPTerminal {
             }
         }
 
+        /**
+         * Thread loop that sends messages
+         */
         public void run() {
             m_Closed = false;
             m_Thread = Thread.currentThread();
@@ -234,10 +238,13 @@ class UDPSlaveTerminal implements UDPTerminal {
                     // 1. pickup the message and corresponding request
                     byte[] message = m_SendQueue.take();
                     DatagramPacket req = m_Requests.remove(ModbusUtil.registersToInt(message));
+
                     // 2. create new Package with corresponding address and port
-                    DatagramPacket res = new DatagramPacket(message, message.length, req.getAddress(), req.getPort());
-                    m_Socket.send(res);
-                    logger.debug("Sent package from queue");
+                    if (req != null) {
+                        DatagramPacket res = new DatagramPacket(message, message.length, req.getAddress(), req.getPort());
+                        m_Socket.send(res);
+                        logger.debug("Sent package from queue");
+                    }
                 }
                 catch (Exception ex) {
                     // Ignore the error if we are no longer listening
@@ -252,15 +259,25 @@ class UDPSlaveTerminal implements UDPTerminal {
 
     }
 
+    /**
+     * The background thread that receives messages and adds them to the process list
+     * for further analysis
+     */
     class PacketReceiver implements Runnable {
 
         private boolean m_Continue;
         private boolean m_Closed;
 
+        /**
+         * A receiver thread for reception of UDP messages
+         */
         public PacketReceiver() {
             m_Continue = true;
         }
 
+        /**
+         * Stops the thread
+         */
         public void stop() {
             m_Continue = false;
             m_Socket.close();
@@ -274,6 +291,9 @@ class UDPSlaveTerminal implements UDPTerminal {
             }
         }
 
+        /**
+         * Background thread for reading UDP messages
+         */
         public void run() {
             m_Closed = false;
             do {
@@ -282,9 +302,11 @@ class UDPSlaveTerminal implements UDPTerminal {
                     byte[] buffer = new byte[256];// max size
                     DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
                     m_Socket.receive(packet);
+
                     // 2. Extract TID and remember request
                     Integer tid = ModbusUtil.registersToInt(buffer);
                     m_Requests.put(tid, packet);
+
                     // 3. place the data buffer in the queue
                     m_ReceiveQueue.put(buffer);
                     logger.debug("Received package to queue");

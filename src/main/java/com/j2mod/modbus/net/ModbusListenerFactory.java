@@ -19,6 +19,8 @@ import com.fazecast.jSerialComm.SerialPort;
 import com.j2mod.modbus.util.Logger;
 import com.j2mod.modbus.util.SerialParameters;
 
+import java.io.IOException;
+
 /**
  * Create a <tt>ModbusListener</tt> from an URI-like specifier.
  *
@@ -32,7 +34,7 @@ public class ModbusListenerFactory {
 
     private static final Logger logger = Logger.getLogger(ModbusListenerFactory.class);
 
-    public static ModbusListener createModbusListener(String address) {
+    public static ModbusListener createModbusListener(String address) throws Exception {
         String parts[] = address.split(" *: *");
         if (parts.length < 2) {
             throw new IllegalArgumentException("missing connection information");
@@ -107,10 +109,14 @@ public class ModbusListenerFactory {
                 }
             }
             listener.setListening(true);
+            new Thread(listener).start();
 
-            Thread result = new Thread(listener);
-            result.start();
+            // Check to see if it started OK
 
+            Thread.sleep(100);
+            if (!listener.isListening()) {
+                throw new IOException(String.format("Cannot start UPD Listener %s", listener.getError()));
+            }
             return listener;
         }
         else {

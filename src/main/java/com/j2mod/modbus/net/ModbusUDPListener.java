@@ -106,7 +106,7 @@ public class ModbusUDPListener implements ModbusListener {
         ModbusTransport m_Transport;
         try {
             if (m_Interface == null) {
-                m_Terminal = new UDPSlaveTerminal(InetAddress.getByName("0.0.0.0"));
+                m_Terminal = new UDPSlaveTerminal(InetAddress.getByAddress(new byte[]{0, 0, 0, 0}));
             }
             else {
                 m_Terminal = new UDPSlaveTerminal(m_Interface);

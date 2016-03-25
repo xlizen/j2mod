@@ -21,6 +21,8 @@ import com.j2mod.modbus.net.ModbusUDPListener;
 import com.j2mod.modbus.procimg.*;
 import com.j2mod.modbus.util.Logger;
 
+import java.io.IOException;
+
 /**
  * Class implementing a simple Modbus/UDP slave. A simple process image is
  * available to test functionality and behaviour of the implementation.
@@ -86,12 +88,17 @@ public class UDPSlaveTest {
             listener.setPort(port);
             new Thread(listener).start();
 
+            // Check to see if it started OK
+
+            Thread.sleep(100);
+            if (!listener.isListening()) {
+                throw new IOException(String.format("Cannot start UPD Listener %s", listener.getError()));
+            }
         }
         catch (Exception ex) {
             ex.printStackTrace();
         }
-
     }
 
-}// class UDPSlaveTest
+}
 
