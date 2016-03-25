@@ -99,7 +99,7 @@ public class TCPConnectionHandler implements Runnable {
         }
         catch (ModbusIOException ex) {
             if (!ex.isEOF()) {
-                logger.error(ex);
+                logger.debug(ex);
             }
         }
         finally {

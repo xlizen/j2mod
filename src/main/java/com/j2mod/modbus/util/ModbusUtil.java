@@ -413,45 +413,6 @@ public final class ModbusUtil {
     }
 
     /**
-     * Returns the broadcast address for the subnet of the host the code
-     * is executed on.
-     *
-     * @return the broadcast address as <tt>InetAddress</tt>.
-     *         <p/>
-     *         public static final InetAddress getBroadcastAddress() {
-     *         byte[] addr = new byte[4];
-     *         try {
-     *         addr = InetAddress.getLocalHost().getAddress();
-     *         addr[3] = -1;
-     *         return getAddressFromBytes(addr);
-     *         } catch (Exception ex) {
-     *         ex.printStackTrace();
-     *         return null;
-     *         }
-     *         }
-     */
-
-  /*
-  public static final InetAddress getAddressFromBytes(byte[] addr) throws Exception {
-    StringBuffer sbuf = new StringBuffer();
-    for (int i = 0; i < addr.length; i++) {
-      if (addr[i] < 0) {
-        sbuf.append(256 + addr[i]);
-      } else {
-        sbuf.append(addr[i]);
-      }
-      if (i < (addr.length - 1)) {
-        sbuf.append('.');
-      }
-    }
-    //DEBUG:logger.debug(sbuf.toString());
-    return InetAddress.getByName(sbuf.toString());
-  }
-  */
-
-    //TODO: John description.
-
-    /**
      * Converts a double value to a byte[8].
      *
      * @param d the double to be converted.
@@ -461,8 +422,6 @@ public final class ModbusUtil {
     public static byte[] doubleToRegisters(double d) {
         return longToRegisters(Double.doubleToLongBits(d));
     }
-
-    //TODO: John description.
 
     /**
      * Converts an unsigned byte to an integer.
@@ -474,8 +433,6 @@ public final class ModbusUtil {
     public static int unsignedByteToInt(byte b) {
         return (int)b & 0xFF;
     }
-
-    //TODO: John description.
 
     /**
      * Returns the low byte of an integer word.

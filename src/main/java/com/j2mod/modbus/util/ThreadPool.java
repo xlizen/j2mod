@@ -15,6 +15,8 @@
  */
 package com.j2mod.modbus.util;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
@@ -28,9 +30,10 @@ public class ThreadPool {
 
     private static final ModbusLogger logger = ModbusLogger.getLogger(ThreadPool.class);
 
-    //instance attributes and associations
     private LinkedBlockingQueue<Runnable> m_TaskPool;
+    private List<PoolThread> threadPool = new ArrayList<PoolThread>();
     private int m_Size = 1;
+    private boolean running;
 
     /**
      * Constructs a new <tt>ThreadPool</tt> instance.
@@ -50,11 +53,13 @@ public class ThreadPool {
      * @param task the <tt>Runnable</tt> to be executed.
      */
     public synchronized void execute(Runnable task) {
-        try {
-            m_TaskPool.put(task);
-        }
-        catch (InterruptedException ex) {
-            //FIXME: Handle!?
+        if (running) {
+            try {
+                m_TaskPool.put(task);
+            }
+            catch (InterruptedException ex) {
+                //FIXME: Handle!?
+            }
         }
     }
 
@@ -63,8 +68,24 @@ public class ThreadPool {
      * n started threads.
      */
     protected void initPool() {
+        running = true;
         for (int i = m_Size; --i >= 0; ) {
-            new PoolThread().start();
+            PoolThread thread = new PoolThread();
+            threadPool.add(thread);
+            thread.start();
+        }
+    }
+
+    /**
+     * Shutdown the pool of threads
+     */
+    public void close() {
+        if (running) {
+            m_TaskPool.clear();
+            running = false;
+            for (PoolThread thread : threadPool) {
+                thread.interrupt();
+            }
         }
     }
 
@@ -91,10 +112,11 @@ public class ThreadPool {
                     m_TaskPool.take().run();
                 }
                 catch (Exception ex) {
-                    //FIXME: Handle somehow!?
-                    ex.printStackTrace();
+                    if (running) {
+                        logger.error("Problem starting receiver thread - %s", ex.getMessage());
+                    }
                 }
-            } while (true);
+            } while (running);
         }
     }
 

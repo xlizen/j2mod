@@ -43,8 +43,8 @@ public class ModbusTCPTransport implements ModbusTransport {
     // instance attributes
     private DataInputStream m_Input; // input stream
     private DataOutputStream m_Output; // output stream
-    private BytesInputStream m_ByteIn;
-    private BytesOutputStream m_ByteOut; // write frames
+    private final BytesInputStream m_ByteIn = new BytesInputStream(Modbus.MAX_MESSAGE_LENGTH + 6);
+    private final BytesOutputStream m_ByteOut = new BytesOutputStream(Modbus.MAX_MESSAGE_LENGTH + 6); // write frames
     private int m_Timeout = Modbus.DEFAULT_TIMEOUT;
     private Socket m_Socket = null;
     private TCPMasterConnection m_Master = null;
@@ -179,8 +179,8 @@ public class ModbusTCPTransport implements ModbusTransport {
     @Override
     public ModbusRequest readRequest() throws ModbusIOException {
 
+        ModbusRequest req;
         try {
-            ModbusRequest req;
             m_ByteIn.reset();
 
             synchronized (m_ByteIn) {
@@ -191,10 +191,9 @@ public class ModbusTCPTransport implements ModbusTransport {
                         throw new EOFException("Premature end of stream (Header truncated)");
                     }
 
-					/*
-                     * The transaction ID must be treated as an unsigned short in
-					 * order for validation to work correctly.
-					 */
+                    // The transaction ID must be treated as an unsigned short in
+                    // order for validation to work correctly.
+
                     int transaction = ModbusUtil.registerToShort(buffer, 0) & 0x0000FFFF;
                     int protocol = ModbusUtil.registerToShort(buffer, 2);
                     int count = ModbusUtil.registerToShort(buffer, 4);
@@ -224,22 +223,19 @@ public class ModbusTCPTransport implements ModbusTransport {
                 }
                 else {
 
-					/*
-                     * This is a headless request.
-					 */
+                    // This is a headless request.
+
                     int unit = m_Input.readByte();
                     int function = m_Input.readByte();
 
                     req = ModbusRequest.createModbusRequest(function);
                     req.setUnitID(unit);
                     req.setHeadless(true);
-
                     req.readData(m_Input);
 
-					/*
-                     * Discard the CRC. This is a TCP/IP connection, which has
-					 * proper error correction and recovery.
-					 */
+                    // Discard the CRC. This is a TCP/IP connection, which has
+                    // proper error correction and recovery.
+
                     m_Input.readShort();
                     logger.debug("Read: %s", req.getHexMessage());
                 }
@@ -250,13 +246,13 @@ public class ModbusTCPTransport implements ModbusTransport {
             throw new ModbusIOException("End of File", true);
         }
         catch (SocketTimeoutException x) {
-            throw new ModbusIOException("Timeout reading request");
+            throw new ModbusIOException("Timeout reading request - %s", x.getMessage());
         }
         catch (SocketException sockex) {
-            throw new ModbusIOException("Socket Exception", true);
+            throw new ModbusIOException("Socket Exception - %s", sockex.getMessage());
         }
         catch (IOException ex) {
-            throw new ModbusIOException("I/O exception - failed to read");
+            throw new ModbusIOException("I/O exception - failed to read - %s", ex.getMessage());
         }
     }
 
@@ -340,10 +336,10 @@ public class ModbusTCPTransport implements ModbusTransport {
             return response;
         }
         catch (SocketTimeoutException ex) {
-            throw new ModbusIOException("Timeout reading response");
+            throw new ModbusIOException("Timeout reading response - %s", ex.getMessage());
         }
         catch (Exception ex) {
-            throw new ModbusIOException("I/O exception - failed to read");
+            throw new ModbusIOException("I/O exception - failed to read - %s", ex.getMessage());
         }
     }
 
@@ -376,11 +372,5 @@ public class ModbusTCPTransport implements ModbusTransport {
 
         m_Input = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
         m_Output = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
-
-		/*
-		 * Modbus/TCP adds a header which must be accounted for.
-		 */
-        m_ByteIn = new BytesInputStream(Modbus.MAX_MESSAGE_LENGTH + 6);
-        m_ByteOut = new BytesOutputStream(Modbus.MAX_MESSAGE_LENGTH + 6);
     }
 }

@@ -70,10 +70,6 @@ public class ModbusTCPListener implements ModbusListener {
     public ModbusTCPListener(int poolsize) {
         m_ThreadPool = new ThreadPool(poolsize);
         try {
-            /*
-			 * TODO -- Check for an IPv6 interface and listen on that
-			 * interface if it exists.
-			 */
             m_Address = InetAddress.getByAddress(new byte[]{0, 0, 0, 0});
         }
         catch (UnknownHostException ex) {
@@ -106,7 +102,6 @@ public class ModbusTCPListener implements ModbusListener {
      */
     public void start() {
         m_Listening = true;
-
         m_Listener = new Thread(this);
         m_Listener.start();
     }
@@ -120,7 +115,7 @@ public class ModbusTCPListener implements ModbusListener {
             /*
              * A server socket is opened with a connectivity queue of a size
 			 * specified in int floodProtection. Concurrent login handling under
-			 * normal circumstances should be allright, denial of service
+			 * normal circumstances should be alright, denial of service
 			 * attacks via massive parallel program logins can probably be
 			 * prevented.
 			 */
@@ -132,14 +127,11 @@ public class ModbusTCPListener implements ModbusListener {
              * Infinite loop, taking care of resources in case of a lot of
 			 * parallel logins
 			 */
-
             m_Listening = true;
             while (m_Listening) {
                 Socket incoming = m_ServerSocket.accept();
                 logger.debug("Making new connection %s", incoming.toString());
-
                 if (m_Listening) {
-                    // FIXME: Replace with object pool due to resource issues
                     m_ThreadPool.execute(new TCPConnectionHandler(new TCPSlaveConnection(incoming)));
                 }
                 else {
@@ -225,6 +217,9 @@ public class ModbusTCPListener implements ModbusListener {
             }
             if (m_Listener != null) {
                 m_Listener.join();
+            }
+            if (m_ThreadPool != null) {
+                m_ThreadPool.close();
             }
         }
         catch (Exception ex) {
