@@ -108,7 +108,7 @@ public class AbstractTestModbusTCPSlave extends AbstractTestModbusTCPMaster {
      */
     private static boolean execModPoll(int register, int type, Integer outValue, String expectedOutput, int numberOfRegisters) {
         try {
-            String output = TestUtils.execToString(String.format("%smodpoll -m tcp -r %d -t %d -c %d -1 %s %s",
+            String output = TestUtils.execToString(String.format("%smodpoll -m tcp -p 1502 -r %d -t %d -c %d -1 %s %s",
                     TestUtils.getTemporaryDirectory(), register, type, numberOfRegisters,
                     LOCALHOST, outValue == null ? "" : outValue));
             boolean returnValue = output != null && output.replaceAll("[\r]", "").contains(expectedOutput);

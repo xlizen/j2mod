@@ -19,7 +19,6 @@ import com.j2mod.modbus.msg.ReadCoilsResponse;
 import com.j2mod.modbus.msg.ReadInputDiscretesResponse;
 import com.j2mod.modbus.msg.ReadInputRegistersResponse;
 import com.j2mod.modbus.msg.ReadMultipleRegistersResponse;
-import com.j2mod.modbus.util.Logger;
 import com.j2mod.modbus.utils.AbstractTestModbusTCPMaster;
 import org.junit.Assert;
 import org.junit.Test;
@@ -29,8 +28,6 @@ import org.junit.Test;
  */
 @SuppressWarnings("ConstantConditions")
 public class TestModbusTCPRead extends AbstractTestModbusTCPMaster {
-
-    private static final Logger logger = Logger.getLogger(TestModbusTCPRead.class);
 
     @Test
     public void testReadCoils() {

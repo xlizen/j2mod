@@ -351,7 +351,7 @@ public class TestUtils {
 
                 NetworkInterface network = networkInterfaces.nextElement();
                 byte[] mac = network.getHardwareAddress();
-                if (mac!=null && mac.length>0 && network.getInterfaceAddresses()!=null) {
+                if (!network.isLoopback() && !network.isVirtual() && network.isUp() && mac != null && mac.length > 0 && network.getInterfaceAddresses() != null) {
                     returnValue.add(network);
                     logger.debug("Current MAC address : %s (%s)", returnValue, network.getDisplayName());
                 }

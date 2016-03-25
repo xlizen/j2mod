@@ -47,7 +47,7 @@ public class AbstractTestModbusUDPMaster extends AbstractTestModbus {
     public static void setUpSlave() {
         try {
             listener = createUDPSlave();
-            master = new ModbusUDPMaster(LOCALHOST, PORT);
+            master = new ModbusUDPMaster("TestUtils.getFirstIp4Address()", PORT);
             master.connect();
         }
         catch (Exception e) {
