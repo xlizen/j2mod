@@ -17,7 +17,7 @@ package com.j2mod.modbus.net;
 
 import com.j2mod.modbus.Modbus;
 import com.j2mod.modbus.io.ModbusUDPTransport;
-import com.j2mod.modbus.util.Logger;
+import com.j2mod.modbus.util.ModbusLogger;
 import com.j2mod.modbus.util.ModbusUtil;
 
 import java.io.IOException;
@@ -31,15 +31,12 @@ import java.util.concurrent.LinkedBlockingQueue;
  * Class implementing a <tt>UDPSlaveTerminal</tt>.
  *
  * @author Dieter Wimberger
- * @version 1.2rc1 (09/11/2004)
- *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
 class UDPSlaveTerminal implements UDPTerminal {
 
-    private static final Logger logger = Logger.getLogger(UDPSlaveTerminal.class);
+    private static final ModbusLogger logger = ModbusLogger.getLogger(UDPSlaveTerminal.class);
     protected InetAddress m_LocalAddress;
     protected ModbusUDPTransport m_ModbusTransport;
     protected Hashtable<Integer, DatagramPacket> m_Requests = new Hashtable<Integer, DatagramPacket>(342);
@@ -63,6 +60,7 @@ class UDPSlaveTerminal implements UDPTerminal {
 
     /**
      * Gets the local adapter address
+     *
      * @return Adapter address
      */
     public InetAddress getLocalAddress() {
@@ -71,17 +69,19 @@ class UDPSlaveTerminal implements UDPTerminal {
 
     /**
      * Returns the local port the terminal is listening on
+     *
      * @return Port number
      */
-    public int getLocalPort() {
+    public synchronized int getLocalPort() {
         return m_LocalPort;
     }
 
     /**
      * Sets the local port the terminal is running on
+     *
      * @param port Local port
      */
-    protected void setLocalPort(int port) {
+    protected synchronized void setLocalPort(int port) {
         m_LocalPort = port;
     }
 
@@ -102,27 +102,33 @@ class UDPSlaveTerminal implements UDPTerminal {
     public synchronized void activate() throws Exception {
         if (!isActive()) {
             logger.debug("UDPSlaveTerminal.activate()");
-            if (m_Socket == null) {
-                if (m_LocalAddress != null && m_LocalPort != -1) {
-                    m_Socket = new DatagramSocket(m_LocalPort, m_LocalAddress);
-                }
-                else {
-                    m_Socket = new DatagramSocket();
-                    m_LocalPort = m_Socket.getLocalPort();
-                    m_LocalAddress = m_Socket.getLocalAddress();
-                }
+            if (m_LocalAddress != null && m_LocalPort != -1) {
+                m_Socket = new DatagramSocket(m_LocalPort, m_LocalAddress);
             }
-            logger.debug("UDPSlaveTerminal::haveSocket():%s",  m_Socket.toString());
+            else {
+                m_Socket = new DatagramSocket();
+                m_LocalPort = m_Socket.getLocalPort();
+                m_LocalAddress = m_Socket.getLocalAddress();
+            }
+            logger.debug("UDPSlaveTerminal::haveSocket():%s", m_Socket.toString());
             logger.debug("UDPSlaveTerminal::addr=:%s:port=%d", m_LocalAddress.toString(), m_LocalPort);
 
             m_Socket.setReceiveBufferSize(1024);
             m_Socket.setSendBufferSize(1024);
-            m_PacketReceiver = new PacketReceiver();
-            new Thread(m_PacketReceiver).start();
-            logger.debug("UDPSlaveTerminal::receiver started()");
-            m_PacketSender = new PacketSender();
+
+            // Start a sender
+            m_PacketSender = new PacketSender(m_Socket);
             new Thread(m_PacketSender).start();
             logger.debug("UDPSlaveTerminal::sender started()");
+
+            // Start a receiver
+
+            m_PacketReceiver = new PacketReceiver(m_Socket);
+            new Thread(m_PacketReceiver).start();
+            logger.debug("UDPSlaveTerminal::receiver started()");
+
+            // Create a transport to use
+
             m_ModbusTransport = new ModbusUDPTransport(this);
             logger.debug("UDPSlaveTerminal::transport created");
             m_Active = true;
@@ -136,12 +142,12 @@ class UDPSlaveTerminal implements UDPTerminal {
     public synchronized void deactivate() {
         try {
             if (m_Active) {
-                // 1. stop receiver
+                // Stop receiver - this will stop and close the socket
                 m_PacketReceiver.stop();
-                // 2. stop sender gracefully
+
+                // Stop sender gracefully
                 m_PacketSender.stop();
-                // 3. close socket
-                m_Socket.close();
+
                 m_ModbusTransport = null;
                 m_Active = false;
             }
@@ -163,6 +169,7 @@ class UDPSlaveTerminal implements UDPTerminal {
 
     /**
      * Adds the message to the send queue
+     *
      * @param msg the message as <tt>byte[]</tt>.
      *
      * @throws Exception
@@ -173,7 +180,9 @@ class UDPSlaveTerminal implements UDPTerminal {
 
     /**
      * Takes a message from the received queue - waits if there is nothing available
+     *
      * @return Message from the queue
+     *
      * @throws Exception
      */
     public byte[] receiveMessage() throws Exception {
@@ -186,9 +195,10 @@ class UDPSlaveTerminal implements UDPTerminal {
      * @param timeout the timeout as <tt>int</tt>.
      */
     public void setTimeout(int timeout) {
-
         try {
-            m_Socket.setSoTimeout(timeout);
+            if (m_Socket != null) {
+                m_Socket.setSoTimeout(timeout);
+            }
         }
         catch (IOException ex) {
             ex.printStackTrace(); // handle? }
@@ -200,24 +210,28 @@ class UDPSlaveTerminal implements UDPTerminal {
      */
     class PacketSender implements Runnable {
 
-        private boolean m_Continue;
-        private boolean m_Closed;
-        private Thread m_Thread;
+        private boolean running;
+        private boolean closed;
+        private Thread thread;
+        private DatagramSocket socket;
 
         /**
-         * Constructs a seder
+         * Constructs a sender with th socket
+         *
+         * @param socket Socket to use
          */
-        public PacketSender() {
-            m_Continue = true;
+        public PacketSender(DatagramSocket socket) {
+            running = true;
+            this.socket = socket;
         }
 
         /**
          * Stops the sender
          */
         public void stop() {
-            m_Continue = false;
-            m_Thread.interrupt();
-            while (!m_Closed) {
+            running = false;
+            thread.interrupt();
+            while (!closed) {
                 try {
                     Thread.sleep(100);
                 }
@@ -231,30 +245,30 @@ class UDPSlaveTerminal implements UDPTerminal {
          * Thread loop that sends messages
          */
         public void run() {
-            m_Closed = false;
-            m_Thread = Thread.currentThread();
+            closed = false;
+            thread = Thread.currentThread();
             do {
                 try {
-                    // 1. pickup the message and corresponding request
+                    // Pickup the message and corresponding request
                     byte[] message = m_SendQueue.take();
                     DatagramPacket req = m_Requests.remove(ModbusUtil.registersToInt(message));
 
-                    // 2. create new Package with corresponding address and port
+                    // Create new Package with corresponding address and port
                     if (req != null) {
                         DatagramPacket res = new DatagramPacket(message, message.length, req.getAddress(), req.getPort());
-                        m_Socket.send(res);
+                        socket.send(res);
                         logger.debug("Sent package from queue");
                     }
                 }
                 catch (Exception ex) {
                     // Ignore the error if we are no longer listening
 
-                    if (m_Continue) {
+                    if (running) {
                         logger.error("Problem reading UDP socket - %s", ex.getMessage());
                     }
                 }
-            } while (m_Continue);
-            m_Closed = true;
+            } while (running);
+            closed = true;
         }
 
     }
@@ -265,23 +279,27 @@ class UDPSlaveTerminal implements UDPTerminal {
      */
     class PacketReceiver implements Runnable {
 
-        private boolean m_Continue;
-        private boolean m_Closed;
+        private boolean running;
+        private boolean closed;
+        private DatagramSocket socket;
 
         /**
          * A receiver thread for reception of UDP messages
+         *
+         * @param socket Socket to use
          */
-        public PacketReceiver() {
-            m_Continue = true;
+        public PacketReceiver(DatagramSocket socket) {
+            running = true;
+            this.socket = socket;
         }
 
         /**
          * Stops the thread
          */
         public void stop() {
-            m_Continue = false;
-            m_Socket.close();
-            while (!m_Closed) {
+            running = false;
+            socket.close();
+            while (!closed) {
                 try {
                     Thread.sleep(100);
                 }
@@ -295,13 +313,13 @@ class UDPSlaveTerminal implements UDPTerminal {
          * Background thread for reading UDP messages
          */
         public void run() {
-            m_Closed = false;
+            closed = false;
             do {
                 try {
                     // 1. Prepare buffer and receive package
                     byte[] buffer = new byte[256];// max size
                     DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
-                    m_Socket.receive(packet);
+                    socket.receive(packet);
 
                     // 2. Extract TID and remember request
                     Integer tid = ModbusUtil.registersToInt(buffer);
@@ -314,12 +332,12 @@ class UDPSlaveTerminal implements UDPTerminal {
                 catch (Exception ex) {
                     // Ignore the error if we are no longer listening
 
-                    if (m_Continue) {
+                    if (running) {
                         logger.error("Problem reading UDP socket - %s", ex.getMessage());
                     }
                 }
-            } while (m_Continue);
-            m_Closed = true;
+            } while (running);
+            closed = true;
         }
     }
 }
