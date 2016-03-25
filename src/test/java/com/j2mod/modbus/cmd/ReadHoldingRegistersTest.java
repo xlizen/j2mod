@@ -20,7 +20,7 @@ import com.j2mod.modbus.io.*;
 import com.j2mod.modbus.msg.*;
 import com.j2mod.modbus.net.ModbusMasterFactory;
 import com.j2mod.modbus.procimg.Register;
-import com.j2mod.modbus.util.Logger;
+import com.j2mod.modbus.util.ModbusLogger;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -55,7 +55,7 @@ import java.util.Arrays;
  */
 public class ReadHoldingRegistersTest {
 
-    private static final Logger logger = Logger.getLogger(ReadHoldingRegistersTest.class);
+    private static final ModbusLogger logger = ModbusLogger.getLogger(ReadHoldingRegistersTest.class);
 
     private static void printUsage() {
         logger.system("\nUsage:\n    java com.j2mod.modbus.cmd.ReadHoldingRegistersTest <address{:port{:unit}} [String]> <base [int]> <count [int]> {<repeat [int]>}");

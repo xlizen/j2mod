@@ -25,14 +25,9 @@ import java.io.IOException;
  * Class implementing a <tt>Read MEI Data</tt> request.
  *
  * @author Julie Haugh (jfh@ghgande.com)
- * @version jamod-1.2rc1-ghpc
- *
  * @author jfhaugh (jfh@ghgande.com)
- * @version @version@ (@date@)
- *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
 public final class ReportSlaveIDRequest extends ModbusRequest {
 
@@ -46,7 +41,7 @@ public final class ReportSlaveIDRequest extends ModbusRequest {
         setFunctionCode(Modbus.REPORT_SLAVE_ID);
 
 		/*
-		 * There is no additional data in this request.
+         * There is no additional data in this request.
 		 */
         setDataLength(0);
     }
@@ -100,7 +95,7 @@ public final class ReportSlaveIDRequest extends ModbusRequest {
 
     /**
      * getMessage -- return an empty array as there is no data for
-     * 		this request.
+     * this request.
      */
     public byte[] getMessage() {
 

@@ -26,17 +26,9 @@ import java.io.IOException;
  * specialised implementations with the functionality they have in common.
  *
  * @author Dieter Wimberger
- * @version 1.2rc1 (09/11/2004)
- *
  * @author Julie Haugh
- * @version 1.2rc1-ghpc (09/27/2010) Added READ_MEI support.
- *
- * @version 1.2rc1-ghpc (04/26/2011) Added proper support for Modbus exception
- *          messages.
- *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
 public abstract class ModbusResponse extends ModbusMessageImpl {
 
@@ -44,8 +36,8 @@ public abstract class ModbusResponse extends ModbusMessageImpl {
      * Factory method creating the required specialized <tt>ModbusResponse</tt>
      * instance.
      *
-     * @param functionCode
-     *            the function code of the response as <tt>int</tt>.
+     * @param functionCode the function code of the response as <tt>int</tt>.
+     *
      * @return a ModbusResponse instance specific for the given function code.
      */
     public static ModbusResponse createModbusResponse(int functionCode) {
@@ -126,8 +118,7 @@ public abstract class ModbusResponse extends ModbusMessageImpl {
      * except under rare circumstances.
      * <p>
      *
-     * @param msg
-     *            the <tt>byte[]</tt> resembling the raw modbus response
+     * @param msg the <tt>byte[]</tt> resembling the raw modbus response
      *            message.
      */
     protected void setMessage(byte[] msg) {

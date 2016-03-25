@@ -25,14 +25,9 @@ import java.io.IOException;
  * Class implementing a <tt>Read MEI Data</tt> request.
  *
  * @author Julie Haugh (jfh@ghgande.com)
- * @version jamod-1.2rc1-ghpc
- *
  * @author jfhaugh (jfh@ghgande.com)
- * @version @version@ (@date@)
- *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
 public final class ReadCommEventCounterRequest extends ModbusRequest {
 

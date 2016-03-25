@@ -20,7 +20,7 @@ import com.j2mod.modbus.ModbusIOException;
 import com.j2mod.modbus.msg.ModbusMessage;
 import com.j2mod.modbus.msg.ModbusRequest;
 import com.j2mod.modbus.msg.ModbusResponse;
-import com.j2mod.modbus.util.Logger;
+import com.j2mod.modbus.util.ModbusLogger;
 import com.j2mod.modbus.util.ModbusUtil;
 
 import java.io.IOException;
@@ -39,7 +39,7 @@ import java.util.Set;
  */
 public abstract class ModbusSerialTransport implements ModbusTransport {
 
-    private static final Logger logger = Logger.getLogger(ModbusSerialTransport.class);
+    private static final ModbusLogger logger = ModbusLogger.getLogger(ModbusSerialTransport.class);
 
     /**
      * Defines a virtual number for the FRAME START token (COLON).
@@ -443,7 +443,7 @@ public abstract class ModbusSerialTransport implements ModbusTransport {
             }
             else {
                 buffer = ModbusUtil.toHex(value);
-                logger.debug("Wrote byte %d=%s", value, new String(ModbusUtil.toHex(value)));
+                logger.debug("Wrote byte %d=%s", value, ModbusUtil.toHex(value));
             }
             return m_CommPort.writeBytes(buffer, buffer.length);
         }

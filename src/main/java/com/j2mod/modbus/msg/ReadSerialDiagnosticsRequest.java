@@ -25,12 +25,8 @@ import java.io.IOException;
  * Class implementing a <tt>ReadSerialDiagnosticsRequest</tt>.
  *
  * @author Julie Haugh (jfh@ghgande.com)
- *
- * @version @version@ (@date@)
- *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
 public final class ReadSerialDiagnosticsRequest extends ModbusRequest {
 
@@ -146,7 +142,7 @@ public final class ReadSerialDiagnosticsRequest extends ModbusRequest {
         response.setFunctionCode(getFunctionCode());
 
 		/*
-		 * Copy the sub-function code.
+         * Copy the sub-function code.
 		 */
         response.setFunction(getFunction());
 

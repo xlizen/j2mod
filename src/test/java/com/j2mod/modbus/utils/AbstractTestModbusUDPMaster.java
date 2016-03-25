@@ -22,7 +22,7 @@ import com.j2mod.modbus.msg.*;
 import com.j2mod.modbus.net.ModbusUDPListener;
 import com.j2mod.modbus.net.UDPMasterConnection;
 import com.j2mod.modbus.procimg.SimpleRegister;
-import com.j2mod.modbus.util.Logger;
+import com.j2mod.modbus.util.ModbusLogger;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -40,7 +40,7 @@ import java.net.InetAddress;
  */
 public class AbstractTestModbusUDPMaster extends AbstractTestModbus {
 
-    private static final Logger logger = Logger.getLogger(AbstractTestModbusUDPMaster.class);
+    private static final ModbusLogger logger = ModbusLogger.getLogger(AbstractTestModbusUDPMaster.class);
     protected static ModbusUDPMaster master;
 
     @BeforeClass

@@ -18,7 +18,7 @@ package com.j2mod.modbus.net;
 import com.j2mod.modbus.Modbus;
 import com.j2mod.modbus.io.ModbusTCPTransport;
 import com.j2mod.modbus.io.ModbusTransport;
-import com.j2mod.modbus.util.Logger;
+import com.j2mod.modbus.util.ModbusLogger;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -29,18 +29,12 @@ import java.net.Socket;
  *
  * @author Dieter Wimberger
  * @author Julie Haugh
- * @version 1.07 (02/14/2016)
- *          Fix bug that caused m_use_UrgentData to be ignored.
- *          Changed default behavior from always using urgent data to it being
- *          condition based on RFC 6093.
- *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
 public class TCPMasterConnection {
 
-    private static final Logger logger = Logger.getLogger(TCPMasterConnection.class);
+    private static final ModbusLogger logger = ModbusLogger.getLogger(TCPMasterConnection.class);
 
     // instance attributes
     private Socket m_Socket;
@@ -137,7 +131,7 @@ public class TCPMasterConnection {
                         m_Socket.sendUrgentData(0);
                         try {
                             /*
-							 * Snooze briefly so the urgent byte isn't
+                             * Snooze briefly so the urgent byte isn't
 							 * merged with the next packet.
 							 */
                             Thread.sleep(5);

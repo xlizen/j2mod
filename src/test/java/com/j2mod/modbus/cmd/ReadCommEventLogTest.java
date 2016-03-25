@@ -22,7 +22,7 @@ import com.j2mod.modbus.io.ModbusTransaction;
 import com.j2mod.modbus.io.ModbusTransport;
 import com.j2mod.modbus.msg.*;
 import com.j2mod.modbus.net.ModbusMasterFactory;
-import com.j2mod.modbus.util.Logger;
+import com.j2mod.modbus.util.ModbusLogger;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -54,7 +54,7 @@ import java.util.Arrays;
  */
 public class ReadCommEventLogTest {
 
-    private static final Logger logger = Logger.getLogger(ReadCommEventLogTest.class);
+    private static final ModbusLogger logger = ModbusLogger.getLogger(ReadCommEventLogTest.class);
 
     private static void printUsage() {
         logger.system("\nUsage:\n    java com.j2mod.modbus.cmd.ReadCommEventLogTest <address{:port} [String]> <unit [int]> {<repeat [int]>}");

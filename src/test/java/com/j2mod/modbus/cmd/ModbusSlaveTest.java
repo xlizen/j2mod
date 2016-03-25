@@ -19,7 +19,7 @@ import com.j2mod.modbus.ModbusCoupler;
 import com.j2mod.modbus.net.ModbusListener;
 import com.j2mod.modbus.net.ModbusListenerFactory;
 import com.j2mod.modbus.procimg.*;
-import com.j2mod.modbus.util.Logger;
+import com.j2mod.modbus.util.ModbusLogger;
 
 /**
  * Class implementing a simple Modbus/TCP slave. A simple process image is
@@ -34,7 +34,7 @@ import com.j2mod.modbus.util.Logger;
  */
 public class ModbusSlaveTest {
 
-    private static final Logger logger = Logger.getLogger(ModbusSlaveTest.class);
+    private static final ModbusLogger logger = ModbusLogger.getLogger(ModbusSlaveTest.class);
     public static void main(String[] args) {
         ModbusListener listener = null;
         SimpleProcessImage spi;

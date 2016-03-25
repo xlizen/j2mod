@@ -26,13 +26,12 @@ import java.io.IOException;
  *
  * @author Dieter Wimberger
  * @author John Charlton
- * @version 1.2rc1 (09/11/2004)
- *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
 public final class ModbusUtil {
+
+    private static final ModbusLogger logger = ModbusLogger.getLogger(ModbusUtil.class);
 
     /* Table of CRC values for high-order byte */
     private final static short[] auchCRCHi = {
@@ -143,7 +142,7 @@ public final class ModbusUtil {
      */
     public static String toHex(byte[] data, int off, int length) {
         //double size, two bytes (hex range) for one byte
-        StringBuffer buf = new StringBuffer(data.length * 2);
+        StringBuilder buf = new StringBuilder(data.length * 2);
         for (int i = off; i < length; i++) {
             //don't forget the second hex digit
             if (((int)data[i] & 0xff) < 0x10) {
@@ -167,13 +166,19 @@ public final class ModbusUtil {
      * @return the generated hexadecimal representation as <code>byte[]</code>.
      */
     public static byte[] toHex(int i) {
-        StringBuffer buf = new StringBuffer(2);
+        StringBuilder buf = new StringBuilder(2);
         //don't forget the second hex digit
         if ((i & 0xff) < 0x10) {
             buf.append("0");
         }
         buf.append(Long.toString(i & 0xff, 16).toUpperCase());
-        return buf.toString().getBytes();
+        try {
+            return buf.toString().getBytes("US-ASCII");
+        }
+        catch (Exception e) {
+            logger.debug("Problem converting bytes to string - %s", e.getMessage());
+        }
+        return null;
     }
 
     /**

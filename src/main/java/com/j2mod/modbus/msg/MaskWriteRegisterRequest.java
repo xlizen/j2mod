@@ -29,14 +29,9 @@ import java.io.IOException;
  * Class implementing a <tt>Mask Write Register</tt> request.
  *
  * @author Julie Haugh (jfh@ghgande.com)
- * @version jamod-1.2rc1-ghpc
- *
  * @author jfhaugh (jfh@ghgande.com)
- * @version @version@ (@date@)
- *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
 public final class MaskWriteRegisterRequest extends ModbusRequest {
     private int m_Reference;
@@ -46,9 +41,9 @@ public final class MaskWriteRegisterRequest extends ModbusRequest {
     /**
      * Constructs a new <tt>Mask Write Register</tt> request.
      *
-     * @param ref Register
+     * @param ref     Register
      * @param andMask AND Mask to use
-     * @param orMask OR Mask to use
+     * @param orMask  OR Mask to use
      */
     public MaskWriteRegisterRequest(int ref, int andMask, int orMask) {
         super();
@@ -88,6 +83,7 @@ public final class MaskWriteRegisterRequest extends ModbusRequest {
 
     /**
      * getAndMask -- return the AND mask value;
+     *
      * @return int
      */
     public int getAndMask() {
@@ -103,6 +99,7 @@ public final class MaskWriteRegisterRequest extends ModbusRequest {
 
     /**
      * getOrMask -- return the OR mask value;
+     *
      * @return int
      */
     public int getOrMask() {
@@ -150,7 +147,7 @@ public final class MaskWriteRegisterRequest extends ModbusRequest {
         MaskWriteRegisterResponse response;
 
 		/*
-		 * Get the process image.
+         * Get the process image.
 		 */
         ProcessImage procimg = ModbusCoupler.getReference().getProcessImage();
         try {
@@ -200,7 +197,7 @@ public final class MaskWriteRegisterRequest extends ModbusRequest {
 
     /**
      * getMessage -- return an empty array as there is no data for
-     * 		this request.
+     * this request.
      */
     public byte[] getMessage() {
         byte results[] = new byte[6];

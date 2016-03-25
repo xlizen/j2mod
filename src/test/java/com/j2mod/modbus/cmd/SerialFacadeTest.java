@@ -20,7 +20,7 @@ import com.j2mod.modbus.facade.ModbusSerialMaster;
 import com.j2mod.modbus.procimg.InputRegister;
 import com.j2mod.modbus.procimg.Register;
 import com.j2mod.modbus.util.BitVector;
-import com.j2mod.modbus.util.Logger;
+import com.j2mod.modbus.util.ModbusLogger;
 import com.j2mod.modbus.util.ModbusUtil;
 import com.j2mod.modbus.util.SerialParameters;
 
@@ -48,7 +48,7 @@ import com.j2mod.modbus.util.SerialParameters;
 
 public class SerialFacadeTest {
 
-    private static final Logger logger = Logger.getLogger(SerialFacadeTest.class);
+    private static final ModbusLogger logger = ModbusLogger.getLogger(SerialFacadeTest.class);
 
     private static void printUsage() {
         logger.system("\nUsage:\n    java com.j2mod.modbus.cmd.SerialAITest <portname [String]> <Unit Address [int8]>");

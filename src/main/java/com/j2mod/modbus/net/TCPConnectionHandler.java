@@ -21,21 +21,18 @@ import com.j2mod.modbus.io.ModbusTransport;
 import com.j2mod.modbus.msg.ModbusRequest;
 import com.j2mod.modbus.msg.ModbusResponse;
 import com.j2mod.modbus.procimg.ProcessImage;
-import com.j2mod.modbus.util.Logger;
+import com.j2mod.modbus.util.ModbusLogger;
 
 /**
  * Class implementing a handler for incoming Modbus/TCP requests.
  *
  * @author Dieter Wimberger
- * @version 1.2rc1 (09/11/2004)
- *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
 public class TCPConnectionHandler implements Runnable {
 
-    private static final Logger logger = Logger.getLogger(TCPConnectionHandler.class);
+    private static final ModbusLogger logger = ModbusLogger.getLogger(TCPConnectionHandler.class);
 
     private TCPSlaveConnection m_Connection;
     private ModbusTransport m_Transport;
@@ -85,7 +82,7 @@ public class TCPConnectionHandler implements Runnable {
                 }
                 if (image.getUnitID() != 0 && request.getUnitID() != image.getUnitID()) {
                     /*
-					 * Do nothing -- non-existent units do not respond to
+                     * Do nothing -- non-existent units do not respond to
 					 * message.
 					 */
                     continue;
@@ -93,7 +90,7 @@ public class TCPConnectionHandler implements Runnable {
 
                 // 2. create the response.
                 response = request.createResponse();
-                logger.debug("Request:%s",  request.getHexMessage());
+                logger.debug("Request:%s", request.getHexMessage());
                 logger.debug("Response:%s", response.getHexMessage());
 
                 // 3. write the response message.

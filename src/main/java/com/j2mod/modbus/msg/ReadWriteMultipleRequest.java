@@ -28,14 +28,9 @@ import java.io.IOException;
  * Class implementing a <tt>Read / Write Multiple Registers</tt> request.
  *
  * @author Julie Haugh
- * @version jamod-1.2rc1-ghpc
- *
  * @author Julie Haugh
- * @version 1.05
- *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
 public final class ReadWriteMultipleRequest extends ModbusRequest {
     private NonWordDataHandler m_NonWordDataHandler;
@@ -79,7 +74,7 @@ public final class ReadWriteMultipleRequest extends ModbusRequest {
         setFunctionCode(Modbus.READ_WRITE_MULTIPLE);
 
 		/*
-		 * There is no additional data in this request.
+         * There is no additional data in this request.
 		 */
         setDataLength(9);
     }
@@ -163,7 +158,7 @@ public final class ReadWriteMultipleRequest extends ModbusRequest {
      * <p>
      *
      * @return the reference of the register to start writing to as <tt>int</tt>
-     *         .
+     * .
      */
     public int getReadReference() {
         return m_ReadReference;
@@ -174,8 +169,7 @@ public final class ReadWriteMultipleRequest extends ModbusRequest {
      * this <tt>ReadWriteMultipleRequest</tt>.
      * <p>
      *
-     * @param ref
-     *            the reference of the register to start writing to as
+     * @param ref the reference of the register to start writing to as
      *            <tt>int</tt>.
      */
     public void setReadReference(int ref) {
@@ -188,7 +182,7 @@ public final class ReadWriteMultipleRequest extends ModbusRequest {
      * <p>
      *
      * @return the reference of the register to start writing to as <tt>int</tt>
-     *         .
+     * .
      */
     public int getWriteReference() {
         return m_WriteReference;
@@ -199,8 +193,7 @@ public final class ReadWriteMultipleRequest extends ModbusRequest {
      * this <tt>ReadWriteMultipleRequest</tt>.
      * <p>
      *
-     * @param ref
-     *            the reference of the register to start writing to as
+     * @param ref the reference of the register to start writing to as
      *            <tt>int</tt>.
      */
     public void setWriteReference(int ref) {
@@ -225,8 +218,7 @@ public final class ReadWriteMultipleRequest extends ModbusRequest {
      * <tt>ReadWriteMultipleRequest</tt>.
      * <p>
      *
-     * @param registers
-     *            the registers to be written as <tt>Register[]</tt>.
+     * @param registers the registers to be written as <tt>Register[]</tt>.
      */
     public void setRegisters(Register[] registers) {
         m_Registers = registers;
@@ -236,13 +228,11 @@ public final class ReadWriteMultipleRequest extends ModbusRequest {
     /**
      * getRegister - Returns the specified <tt>Register</tt>.
      *
-     * @param index
-     *            the index of the <tt>Register</tt>.
+     * @param index the index of the <tt>Register</tt>.
      *
      * @return the register as <tt>Register</tt>.
      *
-     * @throws IndexOutOfBoundsException
-     *             if the index is out of bounds.
+     * @throws IndexOutOfBoundsException if the index is out of bounds.
      */
     public Register getRegister(int index) throws IndexOutOfBoundsException {
         if (index < 0) {
@@ -260,14 +250,12 @@ public final class ReadWriteMultipleRequest extends ModbusRequest {
      * getReadRegisterValue - Returns the value of the specified register
      * interpreted as unsigned short.
      *
-     * @param index
-     *            the relative index of the register for which the value should
-     *            be retrieved.
+     * @param index the relative index of the register for which the value should
+     *              be retrieved.
      *
      * @return the value as <tt>int</tt>.
      *
-     * @throws IndexOutOfBoundsException
-     *             if the index is out of bounds.
+     * @throws IndexOutOfBoundsException if the index is out of bounds.
      */
     public int getReadRegisterValue(int index) throws IndexOutOfBoundsException {
         return getRegister(index).toUnsignedShort();
@@ -295,8 +283,7 @@ public final class ReadWriteMultipleRequest extends ModbusRequest {
     /**
      * setWriteWordCount - Sets the number of words to be written.
      *
-     * @param count
-     *            the number of words to be written as <tt>int</tt>.
+     * @param count the number of words to be written as <tt>int</tt>.
      */
     public void setWriteWordCount(int count) {
         m_WriteCount = count;
@@ -314,8 +301,7 @@ public final class ReadWriteMultipleRequest extends ModbusRequest {
     /**
      * setReadWordCount - Sets the number of words to be read.
      *
-     * @param count
-     *            the number of words to be read as <tt>int</tt>.
+     * @param count the number of words to be read as <tt>int</tt>.
      */
     public void setReadWordCount(int count) {
         m_ReadCount = count;
@@ -335,8 +321,7 @@ public final class ReadWriteMultipleRequest extends ModbusRequest {
      * handler is responsible for converting words from a Modbus packet into the
      * non-word values associated with the actual device's registers.
      *
-     * @param dhandler
-     *            a <tt>NonWordDataHandler</tt> instance.
+     * @param dhandler a <tt>NonWordDataHandler</tt> instance.
      */
     public void setNonWordDataHandler(NonWordDataHandler dhandler) {
         m_NonWordDataHandler = dhandler;

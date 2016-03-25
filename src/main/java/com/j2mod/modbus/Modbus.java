@@ -21,10 +21,6 @@ package com.j2mod.modbus;
  *
  * @author Dieter Wimberger
  * @version 1.2rc1 (09/11/2004)
- *
- * @author Steve O'Hara (4energy)
- * @version 2.0 (March 2016)
- *
  */
 public interface Modbus {
 
@@ -323,6 +319,11 @@ public interface Modbus {
      * Defines the serial encoding "RTU".
      */
     String SERIAL_ENCODING_RTU = "rtu";
+
+    /**
+     * Defines the serial encoding "BIN".
+     */
+    String SERIAL_ENCODING_BIN = "bin";
 
     /**
      * Defines the default serial encoding (ASCII).

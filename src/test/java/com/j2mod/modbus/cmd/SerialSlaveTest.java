@@ -18,7 +18,7 @@ package com.j2mod.modbus.cmd;
 import com.j2mod.modbus.ModbusCoupler;
 import com.j2mod.modbus.net.ModbusSerialListener;
 import com.j2mod.modbus.procimg.*;
-import com.j2mod.modbus.util.Logger;
+import com.j2mod.modbus.util.ModbusLogger;
 import com.j2mod.modbus.util.SerialParameters;
 
 /**
@@ -37,7 +37,7 @@ import com.j2mod.modbus.util.SerialParameters;
  */
 public class SerialSlaveTest {
 
-    private static final Logger logger = Logger.getLogger(SerialSlaveTest.class);
+    private static final ModbusLogger logger = ModbusLogger.getLogger(SerialSlaveTest.class);
 
     public static void main(String[] args) {
 

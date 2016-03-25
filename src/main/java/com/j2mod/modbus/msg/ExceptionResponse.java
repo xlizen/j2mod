@@ -25,11 +25,8 @@ import java.io.IOException;
  * Class implementing a<tt>ModbusResponse</tt> that represents an exception.
  *
  * @author Dieter Wimberger
- * @version 1.2rc1-ghpc (04/26/2011) Cleaned up a bit and added some Javadocs.
- *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
 public class ExceptionResponse extends ModbusResponse {
 

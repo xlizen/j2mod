@@ -24,7 +24,7 @@ import com.j2mod.modbus.msg.ReadInputRegistersResponse;
 import com.j2mod.modbus.msg.WriteSingleRegisterRequest;
 import com.j2mod.modbus.net.TCPMasterConnection;
 import com.j2mod.modbus.procimg.SimpleRegister;
-import com.j2mod.modbus.util.Logger;
+import com.j2mod.modbus.util.ModbusLogger;
 
 import java.net.InetAddress;
 
@@ -72,7 +72,7 @@ import java.net.InetAddress;
  */
 public class AIAOTest {
 
-    private static final Logger logger = Logger.getLogger(AIAOTest.class);
+    private static final ModbusLogger logger = ModbusLogger.getLogger(AIAOTest.class);
 
     private static void printUsage() {
         logger.system("\nUsage:\n    java com.j2mod.modbus.cmd.AIAOTest <address{:<port>} [String]> <register a_in [int16]> <register a_out [int16]>");

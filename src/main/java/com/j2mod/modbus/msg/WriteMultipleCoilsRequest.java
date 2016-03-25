@@ -35,13 +35,8 @@ import java.io.IOException;
  *
  * @author Dieter Wimberger
  * @author Julie Haugh
- * @version 1.05
- *
- *          20140426 - Refactor and exploit the new response methods.<br>
- *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
 public final class WriteMultipleCoilsRequest extends ModbusRequest {
 

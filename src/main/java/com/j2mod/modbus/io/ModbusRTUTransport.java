@@ -21,7 +21,7 @@ import com.j2mod.modbus.ModbusIOException;
 import com.j2mod.modbus.msg.ModbusMessage;
 import com.j2mod.modbus.msg.ModbusRequest;
 import com.j2mod.modbus.msg.ModbusResponse;
-import com.j2mod.modbus.util.Logger;
+import com.j2mod.modbus.util.ModbusLogger;
 import com.j2mod.modbus.util.ModbusUtil;
 
 import java.io.IOException;
@@ -32,17 +32,12 @@ import java.io.IOException;
  * @author John Charlton
  * @author Dieter Wimberger
  * @author Julie Haugh
- * @version 1.05
- *
- *          20140426 - Implement serial slave support
- *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
 public class ModbusRTUTransport extends ModbusSerialTransport {
 
-    private static final Logger logger = Logger.getLogger(ModbusRTUTransport.class);
+    private static final ModbusLogger logger = ModbusLogger.getLogger(ModbusRTUTransport.class);
 
     private final byte[] m_InBuffer = new byte[Modbus.MAX_MESSAGE_LENGTH];
     private final BytesInputStream m_ByteIn = new BytesInputStream(m_InBuffer); // to read message from
@@ -366,8 +361,8 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
             return request;
         }
         catch (IOException ex) {
-			/*
-			 * An exception mostly means there is no request. The master should
+            /*
+             * An exception mostly means there is no request. The master should
 			 * retry the request.
 			 */
             return null;

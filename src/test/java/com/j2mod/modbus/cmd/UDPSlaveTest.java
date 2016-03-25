@@ -19,7 +19,7 @@ import com.j2mod.modbus.Modbus;
 import com.j2mod.modbus.ModbusCoupler;
 import com.j2mod.modbus.net.ModbusUDPListener;
 import com.j2mod.modbus.procimg.*;
-import com.j2mod.modbus.util.Logger;
+import com.j2mod.modbus.util.ModbusLogger;
 
 import java.io.IOException;
 
@@ -41,7 +41,7 @@ import java.io.IOException;
  */
 public class UDPSlaveTest {
 
-    private static final Logger logger = Logger.getLogger(UDPSlaveTest.class);
+    private static final ModbusLogger logger = ModbusLogger.getLogger(UDPSlaveTest.class);
 
     public static void main(String[] args) {
 

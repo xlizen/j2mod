@@ -28,11 +28,8 @@ import java.io.IOException;
  * items which are floating point values or string.
  *
  * @author Dieter Wimberger
- * @version 1.2rc1 (09/11/2004)
- *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
 public interface NonWordDataHandler {
 
@@ -50,17 +47,12 @@ public interface NonWordDataHandler {
     /**
      * Reads the non-word raw data based on an arbitrary implemented structure.
      *
-     * @param in
-     *            the <tt>DataInput</tt> to read from.
-     * @param reference
-     *            to specify the offset as <tt>int</tt>.
-     * @param count
-     *            to specify the amount of bytes as <tt>int</tt>.
+     * @param in        the <tt>DataInput</tt> to read from.
+     * @param reference to specify the offset as <tt>int</tt>.
+     * @param count     to specify the amount of bytes as <tt>int</tt>.
      *
-     * @throws IOException
-     *             if I/O fails.
-     * @throws EOFException
-     *             if the stream ends before all data is read.
+     * @throws IOException  if I/O fails.
+     * @throws EOFException if the stream ends before all data is read.
      */
     void readData(DataInput in, int reference, int count) throws IOException, EOFException;
 
@@ -81,7 +73,7 @@ public interface NonWordDataHandler {
      * reading, for creating a response.
      *
      * @return -1 if the commit was successful, a Modbus exception code valid
-     *         for the read/write multiple registers commands otherwise.
+     * for the read/write multiple registers commands otherwise.
      */
     int commitUpdate();
 
@@ -92,10 +84,8 @@ public interface NonWordDataHandler {
      * This method is called for a message (for example, * <tt>ReadMultipleRegistersRequest</tt>) when finished with reading, for
      * creating a response.
      *
-     * @param reference
-     *            to specify the offset as <tt>int</tt>.
-     * @param count
-     *            to specify the number of bytes as <tt>int</tt>.
+     * @param reference to specify the offset as <tt>int</tt>.
+     * @param count     to specify the number of bytes as <tt>int</tt>.
      */
     void prepareData(int reference, int count);
 }

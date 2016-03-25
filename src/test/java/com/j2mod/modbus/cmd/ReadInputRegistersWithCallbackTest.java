@@ -20,7 +20,7 @@ import com.j2mod.modbus.ModbusException;
 import com.j2mod.modbus.io.*;
 import com.j2mod.modbus.msg.*;
 import com.j2mod.modbus.net.ModbusMasterFactory;
-import com.j2mod.modbus.util.Logger;
+import com.j2mod.modbus.util.ModbusLogger;
 import com.pi4j.io.gpio.GpioFactory;
 import com.pi4j.wiringpi.Gpio;
 
@@ -54,7 +54,7 @@ import java.io.IOException;
  */
 public class ReadInputRegistersWithCallbackTest {
 
-    private static final Logger logger = Logger.getLogger(ReadInputRegistersWithCallbackTest.class);
+    private static final ModbusLogger logger = ModbusLogger.getLogger(ReadInputRegistersWithCallbackTest.class);
     public static final int RTS_PIN = 0;
 
     private static void printUsage() {

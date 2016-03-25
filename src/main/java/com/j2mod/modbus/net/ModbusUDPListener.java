@@ -22,7 +22,7 @@ import com.j2mod.modbus.io.ModbusTransport;
 import com.j2mod.modbus.io.ModbusUDPTransport;
 import com.j2mod.modbus.msg.ModbusRequest;
 import com.j2mod.modbus.msg.ModbusResponse;
-import com.j2mod.modbus.util.Logger;
+import com.j2mod.modbus.util.ModbusLogger;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -31,19 +31,13 @@ import java.net.UnknownHostException;
  * Class that implements a ModbusUDPListener.<br>
  *
  * @author Dieter Wimberger
- * @version 1.2rc1 (09/11/2004)
- *
  * @author Julie Haugh
- * @version 0.97 (8/11/2012) Major code cleanup. Change to listen on wildcard
- *          address.
- *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
 public class ModbusUDPListener implements ModbusListener {
 
-    private static final Logger logger = Logger.getLogger(ModbusUDPListener.class);
+    private static final ModbusLogger logger = ModbusLogger.getLogger(ModbusUDPListener.class);
 
     private int m_Port = Modbus.DEFAULT_PORT;
     private boolean m_Listening = false;
@@ -57,8 +51,7 @@ public class ModbusUDPListener implements ModbusListener {
      * Create a new <tt>ModbusUDPListener</tt> instance listening to the given
      * interface address.
      *
-     * @param ifc
-     *            an <tt>InetAddress</tt> instance.
+     * @param ifc an <tt>InetAddress</tt> instance.
      */
     public ModbusUDPListener(InetAddress ifc) {
         m_Interface = ifc;
@@ -92,8 +85,7 @@ public class ModbusUDPListener implements ModbusListener {
      * Sets the number of the port this <tt>ModbusUDPListener</tt> is listening
      * to.
      *
-     * @param port
-     *            the number of the IP port as <tt>int</tt>.
+     * @param port the number of the IP port as <tt>int</tt>.
      */
     public void setPort(int port) {
         m_Port = ((port > 0) ? port : Modbus.DEFAULT_PORT);
@@ -138,7 +130,7 @@ public class ModbusUDPListener implements ModbusListener {
                 ModbusResponse response;
 
 				/*
-				 * Make sure there is a process image to handle the request.
+                 * Make sure there is a process image to handle the request.
 				 */
                 if (ModbusCoupler.getReference().getProcessImage() == null) {
                     response = request.createExceptionResponse(Modbus.ILLEGAL_FUNCTION_EXCEPTION);
@@ -146,7 +138,7 @@ public class ModbusUDPListener implements ModbusListener {
                 else {
                     response = request.createResponse();
                 }
-                logger.debug("Request:%s",  request.getHexMessage());
+                logger.debug("Request:%s", request.getHexMessage());
                 logger.debug("Response:%s", response.getHexMessage());
                 m_Transport.writeMessage(response);
             }
@@ -180,7 +172,7 @@ public class ModbusUDPListener implements ModbusListener {
      * incoming connections.
      *
      * @return true if listening (and accepting incoming connections), false
-     *         otherwise.
+     * otherwise.
      */
     public boolean isListening() {
         return m_Listening;
@@ -190,9 +182,8 @@ public class ModbusUDPListener implements ModbusListener {
      * Sets if this <tt>ModbusUDPListener</tt> is listening and accepting
      * incoming connections.
      *
-     * @param listen
-     *            true if the <tt>ModbusUDPListener</tt> should listen, false
-     *            otherwise.
+     * @param listen true if the <tt>ModbusUDPListener</tt> should listen, false
+     *               otherwise.
      */
     public void setListening(boolean listen) {
         m_Listening = listen;
@@ -220,6 +211,7 @@ public class ModbusUDPListener implements ModbusListener {
 
     /**
      * Returns any startup errors that may have aoccurred
+     *
      * @return Error string
      */
     public String getError() {

@@ -18,7 +18,7 @@ package com.j2mod.modbus.net;
 import com.j2mod.modbus.Modbus;
 import com.j2mod.modbus.io.ModbusTCPTransport;
 import com.j2mod.modbus.io.ModbusTransport;
-import com.j2mod.modbus.util.Logger;
+import com.j2mod.modbus.util.ModbusLogger;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -28,15 +28,12 @@ import java.net.Socket;
  * Class that implements a TCPSlaveConnection.
  *
  * @author Dieter Wimberger
- * @version 1.2rc1 (09/11/2004)
- *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
 public class TCPSlaveConnection {
 
-    private static final Logger logger = Logger.getLogger(TCPSlaveConnection.class);
+    private static final ModbusLogger logger = ModbusLogger.getLogger(TCPSlaveConnection.class);
 
     // instance attributes
     private Socket m_Socket;

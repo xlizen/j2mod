@@ -21,7 +21,7 @@ import com.j2mod.modbus.ModbusIOException;
 import com.j2mod.modbus.msg.ModbusMessage;
 import com.j2mod.modbus.msg.ModbusRequest;
 import com.j2mod.modbus.msg.ModbusResponse;
-import com.j2mod.modbus.util.Logger;
+import com.j2mod.modbus.util.ModbusLogger;
 import com.j2mod.modbus.util.ModbusUtil;
 
 import java.io.IOException;
@@ -32,15 +32,12 @@ import java.io.IOException;
  *
  * @author Dieter Wimberger
  * @author John Charlton
- * @version 1.2rc1 (09/11/2004)
- *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
 public class ModbusASCIITransport extends ModbusSerialTransport {
 
-    private static final Logger logger = Logger.getLogger(ModbusASCIITransport.class);
+    private static final ModbusLogger logger = ModbusLogger.getLogger(ModbusASCIITransport.class);
     private final byte[] m_InBuffer = new byte[Modbus.MAX_MESSAGE_LENGTH];
     private final BytesInputStream m_ByteIn = new BytesInputStream(m_InBuffer);         //to read message from
     private final BytesOutputStream m_ByteInOut = new BytesOutputStream(m_InBuffer);     //to buffer message to

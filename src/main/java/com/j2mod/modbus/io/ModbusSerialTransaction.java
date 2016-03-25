@@ -23,22 +23,19 @@ import com.j2mod.modbus.msg.ExceptionResponse;
 import com.j2mod.modbus.msg.ModbusRequest;
 import com.j2mod.modbus.msg.ModbusResponse;
 import com.j2mod.modbus.net.SerialConnection;
-import com.j2mod.modbus.util.Logger;
+import com.j2mod.modbus.util.ModbusLogger;
 
 /**
  * Class implementing the <tt>ModbusTransaction</tt>
  * interface.
  *
  * @author Dieter Wimberger
- * @version 1.2rc1 (09/11/2004)
- *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
 public class ModbusSerialTransaction implements ModbusTransaction {
 
-    private static final Logger logger = Logger.getLogger(ModbusSerialTransaction.class);
+    private static final ModbusLogger logger = ModbusLogger.getLogger(ModbusSerialTransaction.class);
 
     //class attributes
     private static int c_TransactionID = Modbus.DEFAULT_TRANSACTION_ID;
@@ -50,6 +47,7 @@ public class ModbusSerialTransaction implements ModbusTransaction {
     private boolean m_ValidityCheck = Modbus.DEFAULT_VALIDITYCHECK;
     private int m_Retries = Modbus.DEFAULT_RETRIES;
     private int m_TransDelayMS = Modbus.DEFAULT_TRANSMIT_DELAY;
+    private final Object MUTEX = new Object();
 
     /**
      * Constructs a new <tt>ModbusSerialTransaction</tt>
@@ -90,11 +88,15 @@ public class ModbusSerialTransaction implements ModbusTransaction {
      * @param con a <tt>SerialConnection</tt>.
      */
     public void setSerialConnection(SerialConnection con) {
-        m_IO = con.getModbusTransport();
+        synchronized (MUTEX) {
+            m_IO = con.getModbusTransport();
+        }
     }
 
     public void setTransport(ModbusSerialTransport transport) {
-        m_IO = transport;
+        synchronized (MUTEX) {
+            m_IO = transport;
+        }
     }
 
     /**
@@ -105,7 +107,8 @@ public class ModbusSerialTransaction implements ModbusTransaction {
     public int getTransDelayMS() {
         return m_TransDelayMS;
     }
-/**
+
+    /**
      * Set the TransDelayMS value.
      *
      * @param newTransDelayMS The new TransDelayMS value.
@@ -121,13 +124,12 @@ public class ModbusSerialTransaction implements ModbusTransaction {
      * @throws ModbusException if the transaction cannot be asserted.
      */
     private void assertExecutable() throws ModbusException {
-        if (m_Request == null ||
-                m_IO == null) {
-            throw new ModbusException("Assertion failed, transaction not executable"
-            );
+        if (m_Request == null || m_IO == null) {
+            throw new ModbusException("Assertion failed, transaction not executable");
         }
     }
-public ModbusRequest getRequest() {
+
+    public ModbusRequest getRequest() {
         return m_Request;
     }
 
@@ -135,25 +137,28 @@ public ModbusRequest getRequest() {
         m_Request = req;
         //m_Response = req.getResponse();
     }
-public ModbusResponse getResponse() {
+
+    public ModbusResponse getResponse() {
         return m_Response;
     }
 
     public int getTransactionID() {
         return c_TransactionID;
     }
+
     public int getRetries() {
         return m_Retries;
     }
 
-        public void setRetries(int num) {
+    public void setRetries(int num) {
         m_Retries = num;
     }
+
     public boolean isCheckingValidity() {
         return m_ValidityCheck;
     }
 
-public void setCheckingValidity(boolean b) {
+    public void setCheckingValidity(boolean b) {
         m_ValidityCheck = b;
     }
 
@@ -164,33 +169,33 @@ public void setCheckingValidity(boolean b) {
 
         //3. write request, and read response,
         //   while holding the lock on the IO object
-        synchronized (m_IO) {
-            int tries = 0;
-            boolean finished = false;
-            do {
-                try {
-                    if (m_TransDelayMS > 0) {
-                        try {
-                            Thread.sleep(m_TransDelayMS);
-                        }
-                        catch (InterruptedException ex) {
-                            logger.debug("InterruptedException: %s", ex.getMessage());
-                        }
+        int tries = 0;
+        boolean finished = false;
+        do {
+            try {
+                if (m_TransDelayMS > 0) {
+                    try {
+                        Thread.sleep(m_TransDelayMS);
                     }
+                    catch (InterruptedException ex) {
+                        logger.debug("InterruptedException: %s", ex.getMessage());
+                    }
+                }
+                synchronized (MUTEX) {
                     //write request message
                     m_IO.writeMessage(m_Request);
                     //read response message
                     m_Response = m_IO.readResponse();
                     finished = true;
                 }
-                catch (ModbusIOException e) {
-                    if (++tries >= m_Retries) {
-                        throw e;
-                    }
-                    logger.debug("Execute try %d error: %s", tries, e.getMessage());
+            }
+            catch (ModbusIOException e) {
+                if (++tries >= m_Retries) {
+                    throw e;
                 }
-            } while (!finished);
-        }
+                logger.debug("Execute try %d error: %s", tries, e.getMessage());
+            }
+        } while (!finished);
 
         //4. deal with exceptions
         if (m_Response instanceof ExceptionResponse) {
@@ -205,7 +210,7 @@ public void setCheckingValidity(boolean b) {
         toggleTransactionID();
     }
 
-/**
+    /**
      * Checks the validity of the transaction, by
      * checking if the values of the response correspond
      * to the values of the request.
@@ -216,7 +221,7 @@ public void setCheckingValidity(boolean b) {
 
     }
 
-/**
+    /**
      * Toggles the transaction identifier, to ensure
      * that each transaction has a distinctive
      * identifier.<br>
@@ -234,11 +239,5 @@ public void setCheckingValidity(boolean b) {
         }
         m_Request.setTransactionID(getTransactionID());
     }
-
-
-
-
-
-
 
 }

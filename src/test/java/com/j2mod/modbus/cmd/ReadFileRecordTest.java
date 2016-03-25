@@ -25,7 +25,7 @@ import com.j2mod.modbus.msg.*;
 import com.j2mod.modbus.msg.ReadFileRecordRequest.RecordRequest;
 import com.j2mod.modbus.msg.ReadFileRecordResponse.RecordResponse;
 import com.j2mod.modbus.net.ModbusMasterFactory;
-import com.j2mod.modbus.util.Logger;
+import com.j2mod.modbus.util.ModbusLogger;
 
 import java.util.Arrays;
 
@@ -42,7 +42,7 @@ import java.util.Arrays;
  */
 public class ReadFileRecordTest {
 
-    private static final Logger logger = Logger.getLogger(ReadFileRecordTest.class);
+    private static final ModbusLogger logger = ModbusLogger.getLogger(ReadFileRecordTest.class);
 
     /**
      * usage -- Print command line arguments and exit.

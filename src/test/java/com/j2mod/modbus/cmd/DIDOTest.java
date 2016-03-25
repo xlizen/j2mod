@@ -22,7 +22,7 @@ import com.j2mod.modbus.msg.ReadInputDiscretesRequest;
 import com.j2mod.modbus.msg.ReadInputDiscretesResponse;
 import com.j2mod.modbus.msg.WriteCoilRequest;
 import com.j2mod.modbus.net.TCPMasterConnection;
-import com.j2mod.modbus.util.Logger;
+import com.j2mod.modbus.util.ModbusLogger;
 
 import java.net.InetAddress;
 
@@ -50,7 +50,7 @@ import java.net.InetAddress;
  */
 public class DIDOTest {
 
-    private static final Logger logger = Logger.getLogger(DIDOTest.class);
+    private static final ModbusLogger logger = ModbusLogger.getLogger(DIDOTest.class);
 
     public static void main(String[] args) {
 

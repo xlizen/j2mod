@@ -23,22 +23,18 @@ import com.j2mod.modbus.msg.ExceptionResponse;
 import com.j2mod.modbus.msg.ModbusRequest;
 import com.j2mod.modbus.msg.ModbusResponse;
 import com.j2mod.modbus.net.TCPMasterConnection;
-import com.j2mod.modbus.util.Logger;
+import com.j2mod.modbus.util.ModbusLogger;
 
 /**
  * Class implementing the <tt>ModbusTransaction</tt> interface.
  *
  * @author Dieter Wimberger
- * @version 021212- jfhaugh (jfh@ghgande.com) Added code to re-read a response
- *          if the transaction IDs have gotten out of sync.
- *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
 public class ModbusTCPTransaction implements ModbusTransaction {
 
-    private static final Logger logger = Logger.getLogger(ModbusTCPTransaction.class);
+    private static final ModbusLogger logger = ModbusLogger.getLogger(ModbusTCPTransaction.class);
 
     // class attributes
     private static int c_TransactionID = Modbus.DEFAULT_TRANSACTION_ID;
@@ -91,7 +87,7 @@ public class ModbusTCPTransaction implements ModbusTransaction {
      *
      * @param con a <tt>TCPMasterConnection</tt>.
      */
-    public void setConnection(TCPMasterConnection con) {
+    public synchronized void setConnection(TCPMasterConnection con) {
         m_Connection = con;
         m_IO = con.getModbusTransport();
     }
@@ -106,7 +102,8 @@ public class ModbusTCPTransaction implements ModbusTransaction {
     public boolean isReconnecting() {
         return m_Reconnecting;
     }
-/**
+
+    /**
      * Sets the flag that controls whether a connection is opened and closed
      * for <b>each</b> execution or not.
      * <p>
@@ -117,24 +114,26 @@ public class ModbusTCPTransaction implements ModbusTransaction {
         m_Reconnecting = b;
     }
 
-    public ModbusRequest getRequest() {
+    public synchronized ModbusRequest getRequest() {
         return m_Request;
     }
-public void setRequest(ModbusRequest req) {
+
+    public synchronized void setRequest(ModbusRequest req) {
         m_Request = req;
     }
 
-    public ModbusResponse getResponse() {
+    public synchronized ModbusResponse getResponse() {
         return m_Response;
     }
-/**
+
+    /**
      * getTransactionID -- get the next transaction ID to use.
      *
      * Note that this method is not synchronized. Callers should synchronize
      * on this class instance if multiple threads can create requests at the
      * same time.
      */
-    public int getTransactionID() {
+    public synchronized int getTransactionID() {
         /*
          * Ensure that the transaction ID is in the valid range between
 		 * 1 and MAX_TRANSACTION_ID (65534).  If not, the value will be forced
@@ -143,18 +142,17 @@ public void setRequest(ModbusRequest req) {
         if (c_TransactionID <= 0 && isCheckingValidity()) {
             c_TransactionID = 1;
         }
-
         if (c_TransactionID >= Modbus.MAX_TRANSACTION_ID) {
             c_TransactionID = 1;
         }
-
         return c_TransactionID;
     }
 
-        public int getRetries() {
+    public synchronized int getRetries() {
         return m_Retries;
     }
-    public void setRetries(int num) {
+
+    public synchronized void setRetries(int num) {
         m_Retries = num;
     }
 
@@ -166,7 +164,7 @@ public void setRequest(ModbusRequest req) {
         m_ValidityCheck = b;
     }
 
-    public void execute() throws ModbusIOException, ModbusSlaveException, ModbusException {
+    public synchronized void execute() throws ModbusException {
 
         if (m_Request == null || m_Connection == null) {
             throw new ModbusException("Invalid request or connection");
@@ -185,7 +183,7 @@ public void setRequest(ModbusRequest req) {
         }
 
 		/*
-		 * Try sending the message up to m_Retries time. Note that the message
+         * Try sending the message up to m_Retries time. Note that the message
 		 * is read immediately after being written, with no flushing of buffers.
 		 */
         int retryCounter = 0;
@@ -193,34 +191,31 @@ public void setRequest(ModbusRequest req) {
 
         while (retryCounter < retryLimit) {
             try {
-                synchronized (m_IO) {
-                    logger.debug("request transaction ID = %d", m_Request.getTransactionID());
+                logger.debug("request transaction ID = %d", m_Request.getTransactionID());
 
-                    m_IO.writeMessage(m_Request);
-                    m_Response = null;
-                    do {
-                        m_Response = m_IO.readResponse();
-                        if (logger.isDebugEnabled()) {
-                            logger.debug("response transaction ID = %d", m_Response.getTransactionID());
-                            if (m_Response.getTransactionID() != m_Request.getTransactionID()) {
-                                logger.debug("expected %d, got %d", m_Request.getTransactionID(), m_Response.getTransactionID());
-                            }
+                m_IO.writeMessage(m_Request);
+                m_Response = null;
+                do {
+                    m_Response = m_IO.readResponse();
+                    if (logger.isDebugEnabled()) {
+                        logger.debug("response transaction ID = %d", m_Response.getTransactionID());
+                        if (m_Response.getTransactionID() != m_Request.getTransactionID()) {
+                            logger.debug("expected %d, got %d", m_Request.getTransactionID(), m_Response.getTransactionID());
                         }
-                    } while (m_Response != null &&
-                            (!isCheckingValidity() ||
-                            (m_Request.getTransactionID() != 0 && m_Request.getTransactionID() != m_Response.getTransactionID())) &&
-                            ++retryCounter < retryLimit);
-
-                    if (retryCounter >= retryLimit) {
-                        throw new ModbusIOException("Executing transaction failed (tried " + m_Retries + " times)");
                     }
+                } while (m_Response != null &&
+                        (!isCheckingValidity() || (m_Request.getTransactionID() != 0 && m_Request.getTransactionID() != m_Response.getTransactionID())) &&
+                        ++retryCounter < retryLimit);
 
-					/*
-					 * Both methods were successful, so the transaction must
-					 * have been executed.
-					 */
-                    break;
+                if (retryCounter >= retryLimit) {
+                    throw new ModbusIOException("Executing transaction failed (tried " + m_Retries + " times)");
                 }
+
+                /*
+                 * Both methods were successful, so the transaction must
+                 * have been executed.
+                 */
+                break;
             }
             catch (ModbusIOException ex) {
                 if (!m_Connection.isConnected()) {
@@ -228,15 +223,15 @@ public void setRequest(ModbusRequest req) {
                         m_Connection.connect();
                     }
                     catch (Exception e) {
-						/*
-						 * Nope, fail this transaction.
+                        /*
+                         * Nope, fail this transaction.
 						 */
                         throw new ModbusIOException("Connection lost");
                     }
                 }
                 retryCounter++;
                 if (retryCounter >= retryLimit) {
-                    throw new ModbusIOException(String.format("Executing transaction failed (tried %d times) - %s", m_Retries, ex.getMessage()));
+                    throw new ModbusIOException("Executing transaction failed (tried %d times) - %s", m_Retries, ex.getMessage());
                 }
             }
         }
@@ -258,14 +253,14 @@ public void setRequest(ModbusRequest req) {
 		/*
 		 * See if packets require validity checking.
 		 */
-        if (isCheckingValidity() && m_Request != null && m_Response != null) {
+        if (isCheckingValidity()) {
             checkValidity();
         }
 
         incrementTransactionID();
     }
 
-/**
+    /**
      * checkValidity -- Verify the transaction IDs match or are zero.
      *
      * @throws ModbusException if the transaction was not valid.
@@ -281,7 +276,7 @@ public void setRequest(ModbusRequest req) {
         }
     }
 
-/**
+    /**
      * incrementTransactionID -- Increment the transaction ID for the next
      * transaction. Note that the caller must get the new transaction ID with
      * getTransactionID(). This is only done validity checking is enabled so
@@ -289,7 +284,7 @@ public void setRequest(ModbusRequest req) {
      * transaction ID incremented as well so that sending the same transaction
      * again won't cause problems.
      */
-    private void incrementTransactionID() {
+    private synchronized void incrementTransactionID() {
         if (isCheckingValidity()) {
             if (c_TransactionID >= Modbus.MAX_TRANSACTION_ID) {
                 c_TransactionID = 1;
@@ -300,8 +295,5 @@ public void setRequest(ModbusRequest req) {
         }
         m_Request.setTransactionID(getTransactionID());
     }
-
-
-
 
 }

@@ -16,7 +16,7 @@
 package com.j2mod.modbus.facade;
 
 import com.j2mod.modbus.net.SerialConnection;
-import com.j2mod.modbus.util.Logger;
+import com.j2mod.modbus.util.ModbusLogger;
 import com.j2mod.modbus.util.SerialParameters;
 
 /**
@@ -24,15 +24,12 @@ import com.j2mod.modbus.util.SerialParameters;
  *
  * @author Dieter Wimberger
  * @author John Charlton
- * @version 1.2rc1 (09/11/2004)
- *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
 public class ModbusSerialMaster extends AbstractModbusMaster {
 
-    private static final Logger logger = Logger.getLogger(ModbusSerialMaster.class);
+    private static final ModbusLogger logger = ModbusLogger.getLogger(ModbusSerialMaster.class);
 
     private SerialConnection m_Connection;
 

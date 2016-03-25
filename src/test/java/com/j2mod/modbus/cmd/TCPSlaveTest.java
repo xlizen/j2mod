@@ -19,7 +19,7 @@ import com.j2mod.modbus.Modbus;
 import com.j2mod.modbus.ModbusCoupler;
 import com.j2mod.modbus.net.ModbusTCPListener;
 import com.j2mod.modbus.procimg.*;
-import com.j2mod.modbus.util.Logger;
+import com.j2mod.modbus.util.ModbusLogger;
 
 import java.net.Inet4Address;
 
@@ -36,7 +36,7 @@ import java.net.Inet4Address;
  */
 public class TCPSlaveTest {
 
-    private static final Logger logger = Logger.getLogger(TCPSlaveTest.class);
+    private static final ModbusLogger logger = ModbusLogger.getLogger(TCPSlaveTest.class);
     public static void main(String[] args) {
 
         ModbusTCPListener listener;

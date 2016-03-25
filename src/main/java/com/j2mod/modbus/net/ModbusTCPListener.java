@@ -16,7 +16,7 @@
 package com.j2mod.modbus.net;
 
 import com.j2mod.modbus.Modbus;
-import com.j2mod.modbus.util.Logger;
+import com.j2mod.modbus.util.ModbusLogger;
 import com.j2mod.modbus.util.ThreadPool;
 
 import java.io.IOException;
@@ -30,18 +30,13 @@ import java.net.*;
  * If not listening, silently drops the requests.
  *
  * @author Dieter Wimberger
- * @version 1.2rc1 (09/11/2004)
- *
  * @author Julie Haugh
- * @version 0.97 (8/11/2012)
- *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
 public class ModbusTCPListener implements ModbusListener {
 
-    private static final Logger logger = Logger.getLogger(ModbusTCPListener.class);
+    private static final ModbusLogger logger = ModbusLogger.getLogger(ModbusTCPListener.class);
 
     private ServerSocket m_ServerSocket = null;
     private ThreadPool m_ThreadPool;
@@ -54,11 +49,9 @@ public class ModbusTCPListener implements ModbusListener {
     /**
      * Constructs a ModbusTCPListener instance.<br>
      *
-     * @param poolsize
-     *            the size of the <tt>ThreadPool</tt> used to handle incoming
-     *            requests.
-     * @param addr
-     *            the interface to use for listening.
+     * @param poolsize the size of the <tt>ThreadPool</tt> used to handle incoming
+     *                 requests.
+     * @param addr     the interface to use for listening.
      */
     public ModbusTCPListener(int poolsize, InetAddress addr) {
         m_ThreadPool = new ThreadPool(poolsize);
@@ -66,19 +59,18 @@ public class ModbusTCPListener implements ModbusListener {
     }
 
     /**
-     /**
+     * /**
      * Constructs a ModbusTCPListener instance.  This interface is created
      * to listen on the wildcard address, which will accept TCP packets
      * on all available interfaces.
      *
-     * @param poolsize
-     *            the size of the <tt>ThreadPool</tt> used to handle incoming
-     *            requests.
+     * @param poolsize the size of the <tt>ThreadPool</tt> used to handle incoming
+     *                 requests.
      */
     public ModbusTCPListener(int poolsize) {
         m_ThreadPool = new ThreadPool(poolsize);
         try {
-			/*
+            /*
 			 * TODO -- Check for an IPv6 interface and listen on that
 			 * interface if it exists.
 			 */
@@ -88,25 +80,25 @@ public class ModbusTCPListener implements ModbusListener {
             // Can't happen -- size is fixed.
         }
     }
-/**
+
+    /**
      * Sets the port to be listened to.
      *
-     * @param port
-     *            the number of the IP port as <tt>int</tt>.
+     * @param port the number of the IP port as <tt>int</tt>.
      */
     public void setPort(int port) {
         m_Port = port;
     }
 
-        /**
+    /**
      * Sets the address of the interface to be listened to.
      *
-     * @param addr
-     *            an <tt>InetAddress</tt> instance.
+     * @param addr an <tt>InetAddress</tt> instance.
      */
     public void setAddress(InetAddress addr) {
         m_Address = addr;
     }
+
     /**
      * Starts this <tt>ModbusTCPListener</tt>.
      *
@@ -165,7 +157,7 @@ public class ModbusTCPListener implements ModbusListener {
         }
     }
 
-/**
+    /**
      * Gets the unit number supported by this Modbus/TCP connection. A
      * Modbus/TCP connection, by default, supports unit 0, but may also support
      * a fixed unit number, or a range of unit numbers if the device is a
@@ -183,18 +175,18 @@ public class ModbusTCPListener implements ModbusListener {
      * default, supports unit 0, but may also support a fixed unit number, or a
      * range of unit numbers if the device is a Modbus/TCP gateway.
      *
-     * @param unit
-     *            the number of the Modbus unit as <tt>int</tt>.
+     * @param unit the number of the Modbus unit as <tt>int</tt>.
      */
     public void setUnit(int unit) {
         m_Unit = unit;
     }
+
     /**
      * Tests if this <tt>ModbusTCPListener</tt> is listening and accepting
      * incoming connections.
      *
      * @return true if listening (and accepting incoming connections), false
-     *         otherwise.
+     * otherwise.
      */
     public boolean isListening() {
         return m_Listening;
@@ -222,7 +214,7 @@ public class ModbusTCPListener implements ModbusListener {
         return result;
     }
 
-/**
+    /**
      * Stops this <tt>ModbusTCPListener</tt>.
      */
     public void stop() {
@@ -239,8 +231,5 @@ public class ModbusTCPListener implements ModbusListener {
             // ?
         }
     }
-
-
-
 
 }

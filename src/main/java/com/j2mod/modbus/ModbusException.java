@@ -19,11 +19,8 @@ package com.j2mod.modbus;
  * Superclass of all specialised exceptions in this package.
  *
  * @author Dieter Wimberger
- * @version 1.2rc1 (09/11/2004)
- *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
 public class ModbusException extends Exception {
 
@@ -49,4 +46,16 @@ public class ModbusException extends Exception {
     public ModbusException(String message) {
         super(message);
     }
+
+    /**
+     * Constructs a new <tt>ModbusIOException</tt> instance with the given
+     * message.
+     * <p>
+     *
+     * @param message the message describing this <tt>ModbusIOException</tt>.
+     */
+    public ModbusException(String message, Object... values) {
+        super(String.format(message, values));
+    }
+
 }

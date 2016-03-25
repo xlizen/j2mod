@@ -19,11 +19,8 @@ import com.j2mod.modbus.Modbus;
 
 /**
  * @author jfhaugh
- * @version @version@ (@date@)
- *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
 public class IllegalFunctionExceptionResponse extends ExceptionResponse {
 

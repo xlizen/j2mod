@@ -22,15 +22,12 @@ package com.j2mod.modbus.util;
  * the LSB (rightmost) bit.
  *
  * @author Dieter Wimberger
- * @version 1.2rc1 (09/11/2004)
- *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
 public final class BitVector {
 
-    private static final Logger logger = Logger.getLogger(BitVector.class);
+    private static final ModbusLogger logger = ModbusLogger.getLogger(BitVector.class);
     private static final int[] ODD_OFFSETS = {-1, -3, -5, -7};
     private static final int[] STRAIGHT_OFFSETS = {7, 5, 3, 1};
     //instance attributes
@@ -291,7 +288,7 @@ public final class BitVector {
      * @return a <tt>String</tt> representing this <tt>BitVector</tt>.
      */
     public String toString() {
-        StringBuffer sbuf = new StringBuffer();
+        StringBuilder sbuf = new StringBuilder();
         for (int i = 0; i < size(); i++) {
             int idx = doTranslateIndex(i);
             sbuf.append(((((m_Data[byteIndex(idx)]

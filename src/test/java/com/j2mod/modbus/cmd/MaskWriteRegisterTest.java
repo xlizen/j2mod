@@ -20,7 +20,7 @@ import com.j2mod.modbus.io.ModbusTransport;
 import com.j2mod.modbus.msg.MaskWriteRegisterRequest;
 import com.j2mod.modbus.msg.ModbusRequest;
 import com.j2mod.modbus.net.ModbusMasterFactory;
-import com.j2mod.modbus.util.Logger;
+import com.j2mod.modbus.util.ModbusLogger;
 
 import java.io.IOException;
 
@@ -52,7 +52,7 @@ import java.io.IOException;
  */
 public class MaskWriteRegisterTest {
 
-    private static final Logger logger = Logger.getLogger(MaskWriteRegisterTest.class);
+    private static final ModbusLogger logger = ModbusLogger.getLogger(MaskWriteRegisterTest.class);
 
     private static void printUsage() {
         logger.system("\nUsage:\n    java com.j2mod.modbus.cmd.WriteHoldingRegisterTest <address{:<port>{:<unit>}} [String]> <register [int]> <andMask [int]> <orMask [int]> {<repeat [int]>}");

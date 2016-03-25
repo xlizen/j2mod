@@ -15,7 +15,7 @@
  */
 package com.j2mod.modbus.procimg;
 
-import com.j2mod.modbus.util.Logger;
+import com.j2mod.modbus.util.ModbusLogger;
 
 import java.util.Vector;
 
@@ -28,14 +28,12 @@ import java.util.Vector;
  *         The FIFO class is only intended to be used for testing purposes and does
  *         not reflect the actual behavior of a FIFO in a real Modbus device.  In an
  *         actual Modbus device, the FIFO is mapped within a fixed address.
- *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
 public class FIFO {
 
-    private static final Logger logger = Logger.getLogger(FIFO.class);
+    private static final ModbusLogger logger = ModbusLogger.getLogger(FIFO.class);
 
     private int m_Address;
     private int m_Register_Count;

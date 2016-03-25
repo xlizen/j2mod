@@ -27,11 +27,8 @@ import java.io.IOException;
  * Derived from similar class for Read Coils response.
  *
  * @author Julie Haugh (jfh@ghgande.com)
- * @version 1.2rc1-ghpc (09/27/2010)
- *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
 public final class MaskWriteRegisterResponse
         extends ModbusResponse {
@@ -68,6 +65,7 @@ public final class MaskWriteRegisterResponse
 
     /**
      * getAndMask -- return the AND mask value;
+     *
      * @return int
      */
     public int getAndMask() {
@@ -83,6 +81,7 @@ public final class MaskWriteRegisterResponse
 
     /**
      * getOrMask -- return the OR mask value;
+     *
      * @return int
      */
     public int getOrMask() {
@@ -105,8 +104,8 @@ public final class MaskWriteRegisterResponse
 
     /**
      * readData -- input the Modbus message from din.  If there was a
-     * 		header, such as for Modbus/TCP, it will have been read
-     * 		already.
+     * header, such as for Modbus/TCP, it will have been read
+     * already.
      */
     public void readData(DataInput din) throws IOException {
         m_Reference = din.readShort();

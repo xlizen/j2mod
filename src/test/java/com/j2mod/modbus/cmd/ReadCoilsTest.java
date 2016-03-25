@@ -22,7 +22,7 @@ import com.j2mod.modbus.io.ModbusTransport;
 import com.j2mod.modbus.msg.ReadCoilsRequest;
 import com.j2mod.modbus.msg.ReadCoilsResponse;
 import com.j2mod.modbus.net.ModbusMasterFactory;
-import com.j2mod.modbus.util.Logger;
+import com.j2mod.modbus.util.ModbusLogger;
 
 /**
  * Class that implements a simple command line tool for reading a digital input.
@@ -36,7 +36,7 @@ import com.j2mod.modbus.util.Logger;
  */
 public class ReadCoilsTest {
 
-    private static final Logger logger = Logger.getLogger(ReadCoilsTest.class);
+    private static final ModbusLogger logger = ModbusLogger.getLogger(ReadCoilsTest.class);
 
     private static void printUsage() {
         logger.system("\nUsage:\n    java com.j2mod.modbus.cmd.ReadDiscretesTest <connection [String]> <unit [int8]> <register [int16]> <bitcount [int16]> {<repeat [int]>}");

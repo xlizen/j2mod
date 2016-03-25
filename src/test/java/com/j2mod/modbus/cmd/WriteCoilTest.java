@@ -21,7 +21,7 @@ import com.j2mod.modbus.io.ModbusTransport;
 import com.j2mod.modbus.msg.WriteCoilRequest;
 import com.j2mod.modbus.msg.WriteCoilResponse;
 import com.j2mod.modbus.net.ModbusMasterFactory;
-import com.j2mod.modbus.util.Logger;
+import com.j2mod.modbus.util.ModbusLogger;
 
 /**
  * <p>
@@ -51,7 +51,7 @@ import com.j2mod.modbus.util.Logger;
  */
 public class WriteCoilTest {
 
-    private static final Logger logger = Logger.getLogger(WriteCoilTest.class);
+    private static final ModbusLogger logger = ModbusLogger.getLogger(WriteCoilTest.class);
 
     private static void printUsage() {
         logger.system("\nUsage:\n    java com.j2mod.modbus.cmd.WriteCoilTest <connection [String]> <unit [int8]> <coil [int16]> <state [boolean]> {<repeat [int]>}");

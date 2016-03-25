@@ -26,13 +26,8 @@ import java.io.IOException;
  * Class implementing a <tt>Read MEI Data</tt> request.
  *
  * @author jfhaugh (jfh@ghgande.com)
- * @version jamod-1.2rc1-ghpc
- *
- * @version @version@ (@date@)
- *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
 public final class ReadMEIRequest extends ModbusRequest {
 
@@ -60,7 +55,7 @@ public final class ReadMEIRequest extends ModbusRequest {
      * <p>
      *
      * @param level the reference number of the register to read from.
-     * @param id the number of bits to be read.
+     * @param id    the number of bits to be read.
      */
     public ReadMEIRequest(int level, int id) {
         super();
@@ -76,6 +71,7 @@ public final class ReadMEIRequest extends ModbusRequest {
 
     /**
      * Returns the response
+     *
      * @return Response
      */
     public ModbusResponse getResponse() {
@@ -130,7 +126,7 @@ public final class ReadMEIRequest extends ModbusRequest {
      * <p>
      *
      * @return the reference of the register to start reading from as
-     *         <tt>int</tt>.
+     * <tt>int</tt>.
      */
     public int getLevel() {
         return m_FieldLevel;

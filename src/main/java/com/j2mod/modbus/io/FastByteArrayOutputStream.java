@@ -15,6 +15,8 @@
  */
 package com.j2mod.modbus.io;
 
+import com.j2mod.modbus.util.ModbusLogger;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
@@ -27,15 +29,12 @@ import java.io.UnsupportedEncodingException;
  *
  * @author Mark Hayes
  * @author Dieter Wimberger
- *
- * @version 1.2rc1 (09/11/2004)
- *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
-public class FastByteArrayOutputStream
-        extends OutputStream {
+public class FastByteArrayOutputStream extends OutputStream {
+
+    private static final ModbusLogger logger = ModbusLogger.getLogger(FastByteArrayOutputStream.class);
 
     /**
      * Defines the default oputput buffer size (100 bytes).
@@ -177,7 +176,13 @@ public class FastByteArrayOutputStream
     }
 
     public String toString() {
-        return new String(buf, 0, count);
+        try {
+            return new String(buf, 0, count, "US-ASCII");
+        }
+        catch (Exception e) {
+            logger.debug("Problem converting bytes to string - %s", e.getMessage());
+        }
+        return "";
     }
 
     /**
@@ -185,6 +190,7 @@ public class FastByteArrayOutputStream
      * as String.
      *
      * @param encoding the encoding to be used for conversion.
+     *
      * @return a newly allocated String.
      *
      * @throws UnsupportedEncodingException if the given encoding is not supported.
@@ -198,7 +204,7 @@ public class FastByteArrayOutputStream
      * of length getSize().
      *
      * @return a newly allocated byte[] with the content of the
-     *         output buffer.
+     * output buffer.
      */
     public byte[] toByteArray() {
         byte[] toBuf = new byte[count];

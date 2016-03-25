@@ -19,7 +19,7 @@ import com.j2mod.modbus.msg.ReadCoilsResponse;
 import com.j2mod.modbus.msg.ReadInputDiscretesResponse;
 import com.j2mod.modbus.msg.ReadInputRegistersResponse;
 import com.j2mod.modbus.msg.ReadMultipleRegistersResponse;
-import com.j2mod.modbus.util.Logger;
+import com.j2mod.modbus.util.ModbusLogger;
 import com.j2mod.modbus.utils.AbstractTestModbusUDPMaster;
 import org.junit.Assert;
 import org.junit.Test;
@@ -30,7 +30,7 @@ import org.junit.Test;
 @SuppressWarnings("ConstantConditions")
 public class TestModbusUDPMasterRead extends AbstractTestModbusUDPMaster {
 
-    private static final Logger logger = Logger.getLogger(TestModbusUDPMasterRead.class);
+    private static final ModbusLogger logger = ModbusLogger.getLogger(TestModbusUDPMasterRead.class);
 
     @Test
     public void testMasterReadCoils() {

@@ -17,7 +17,7 @@ package com.j2mod.modbus.net;
 
 import com.j2mod.modbus.Modbus;
 import com.j2mod.modbus.io.ModbusTransport;
-import com.j2mod.modbus.util.Logger;
+import com.j2mod.modbus.util.ModbusLogger;
 
 import java.net.InetAddress;
 
@@ -25,15 +25,12 @@ import java.net.InetAddress;
  * Class that implements a UDPMasterConnection.
  *
  * @author Dieter Wimberger
- * @version 1.2rc1 (09/11/2004)
- *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
 public class UDPMasterConnection {
 
-    private static final Logger logger = Logger.getLogger(UDPMasterConnection.class);
+    private static final ModbusLogger logger = ModbusLogger.getLogger(UDPMasterConnection.class);
 
     //instance attributes
     private UDPMasterTerminal m_Terminal;

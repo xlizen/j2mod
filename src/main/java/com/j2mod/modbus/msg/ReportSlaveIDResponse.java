@@ -27,11 +27,8 @@ import java.io.IOException;
  * Derived from similar class for Read Coils response.
  *
  * @author Julie Haugh (jfh@ghgande.com)
- * @version 1.2rc1-ghpc (09/27/2010)
- *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
 public final class ReportSlaveIDResponse extends ModbusResponse {
 
@@ -61,7 +58,7 @@ public final class ReportSlaveIDResponse extends ModbusResponse {
 
     /**
      * setSlaveID -- initialize the slave identifier when constructing
-     * 		a response message.
+     * a response message.
      */
     public void setSlaveID(int i) {
         m_slaveId = i;
@@ -69,6 +66,7 @@ public final class ReportSlaveIDResponse extends ModbusResponse {
 
     /**
      * getStatus -- get the slave's "run" status.
+     *
      * @return boolean
      */
     public boolean getStatus() {
@@ -77,7 +75,7 @@ public final class ReportSlaveIDResponse extends ModbusResponse {
 
     /**
      * setStatus -- initialize the slave's "run" status when constructing
-     * 		a response message.
+     * a response message.
      *
      * @param b
      */
@@ -99,7 +97,8 @@ public final class ReportSlaveIDResponse extends ModbusResponse {
 
     /**
      * setData -- initialize the slave's device dependent data when
-     * 		initializing a response.
+     * initializing a response.
+     *
      * @param data byte array
      */
     public void setData(byte[] data) {
@@ -133,8 +132,8 @@ public final class ReportSlaveIDResponse extends ModbusResponse {
 
     /**
      * readData -- input the Modbus message from din.  If there was a
-     * 		header, such as for Modbus/TCP, it will have been read
-     * 		already.
+     * header, such as for Modbus/TCP, it will have been read
+     * already.
      */
     public void readData(DataInput din) throws IOException {
 
@@ -147,7 +146,7 @@ public final class ReportSlaveIDResponse extends ModbusResponse {
         }
 
 		/*
-		 * Get the run status and device identifier.
+         * Get the run status and device identifier.
 		 */
         m_slaveId = din.readUnsignedByte();
         m_status = din.readUnsignedByte();

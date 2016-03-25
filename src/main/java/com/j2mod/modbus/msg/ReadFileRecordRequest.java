@@ -28,11 +28,8 @@ import java.io.IOException;
  * Class implementing a <tt>Read File Record</tt> request.
  *
  * @author Julie Haugh (jfh@ghgande.com)
- * @version @version@ (@date@)
- *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
 public final class ReadFileRecordRequest extends ModbusRequest {
     private RecordRequest[] m_Records;
@@ -46,7 +43,7 @@ public final class ReadFileRecordRequest extends ModbusRequest {
         setFunctionCode(Modbus.READ_FILE_RECORD);
 
 		/*
-		 * Request size byte is all that is required.
+         * Request size byte is all that is required.
 		 */
         setDataLength(1);
     }

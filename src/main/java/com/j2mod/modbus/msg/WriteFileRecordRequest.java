@@ -28,11 +28,8 @@ import java.io.IOException;
  * Class implementing a <tt>Write File Record</tt> request.
  *
  * @author Julie Haugh (jfh@ghgande.com)
- * @version @version@ (@date@)
- *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
 public final class WriteFileRecordRequest extends ModbusRequest {
     private RecordRequest[] m_Records;
@@ -47,7 +44,7 @@ public final class WriteFileRecordRequest extends ModbusRequest {
         setFunctionCode(Modbus.WRITE_FILE_RECORD);
 
 		/*
-		 * Set up space for the initial header.
+         * Set up space for the initial header.
 		 */
         setDataLength(1);
     }

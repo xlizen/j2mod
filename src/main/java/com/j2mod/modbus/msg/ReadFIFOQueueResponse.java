@@ -27,12 +27,8 @@ import java.io.IOException;
  * Class implementing a <tt>ReadFIFOQueueResponse</tt>.
  *
  * @author Julie Haugh (jfh@ghgande.com)
- *
- * @version @version@ (@date@)
- *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
 public final class ReadFIFOQueueResponse extends ModbusResponse {
 
@@ -131,7 +127,7 @@ public final class ReadFIFOQueueResponse extends ModbusResponse {
         din.readShort();
 
 		/*
-		 * The first register is the number of registers which
+         * The first register is the number of registers which
 		 * follow.  Save that as m_Count, not as a register.
 		 */
         m_Count = din.readShort();

@@ -17,7 +17,7 @@ package com.j2mod.modbus.facade;
 
 import com.j2mod.modbus.Modbus;
 import com.j2mod.modbus.net.UDPMasterConnection;
-import com.j2mod.modbus.util.Logger;
+import com.j2mod.modbus.util.ModbusLogger;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -26,15 +26,12 @@ import java.net.UnknownHostException;
  * Modbus/UDP Master facade.
  *
  * @author Dieter Wimberger
- * @version 1.2rc1 (09/11/2004)
- *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
 public class ModbusUDPMaster extends AbstractModbusMaster {
 
-    private static final Logger logger = Logger.getLogger(ModbusUDPMaster.class);
+    private static final ModbusLogger logger = ModbusLogger.getLogger(ModbusUDPMaster.class);
 
     private UDPMasterConnection m_Connection;
 

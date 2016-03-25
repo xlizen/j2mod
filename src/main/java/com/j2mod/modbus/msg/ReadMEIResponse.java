@@ -16,6 +16,7 @@
 package com.j2mod.modbus.msg;
 
 import com.j2mod.modbus.Modbus;
+import com.j2mod.modbus.util.ModbusLogger;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -27,14 +28,12 @@ import java.io.IOException;
  * Derived from similar class for Read Coils response.
  *
  * @author Julie Haugh (jfh@ghgande.com)
- * @version 1.2rc1-ghpc (09/27/2010)
- *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
-public final class ReadMEIResponse
-        extends ModbusResponse {
+public final class ReadMEIResponse extends ModbusResponse {
+
+    private static final ModbusLogger logger = ModbusLogger.getLogger(ReadMEIResponse.class);
 
     //instance attributes
     private int m_FieldLevel = 0;
@@ -58,6 +57,7 @@ public final class ReadMEIResponse
      * Returns the number of fields
      * read with the request.
      * <p>
+     *
      * @return the number of fields that have been read.
      */
     public int getFieldCount() {
@@ -82,13 +82,14 @@ public final class ReadMEIResponse
      * Convenience method that returns the field
      * at the requested index
      * <p>
+     *
      * @param index the index of the field which
-     *       should be returned.
+     *              should be returned.
      *
      * @return requested field
      *
      * @throws IndexOutOfBoundsException if the
-     *         index is out of bounds
+     *                                   index is out of bounds
      */
     public String getField(int index) throws IndexOutOfBoundsException {
         return m_Fields[index];
@@ -98,13 +99,14 @@ public final class ReadMEIResponse
      * Convenience method that returns the field
      * ID at the given index.
      * <p>
+     *
      * @param index the index of the field for which
-     *        the ID should be returned.
+     *              the ID should be returned.
      *
      * @return field ID
      *
      * @throws IndexOutOfBoundsException if the
-     *         index is out of bounds
+     *                                   index is out of bounds
      */
     public int getFieldId(int index) throws IndexOutOfBoundsException {
         return m_FieldIds[index];
@@ -171,7 +173,7 @@ public final class ReadMEIResponse
             size++;
 
 		  /*
-		   * Add the string length byte and the
+           * Add the string length byte and the
 		   * actual string length.
 		   */
             size++;
@@ -191,10 +193,14 @@ public final class ReadMEIResponse
         for (int i = 0; i < m_FieldCount; i++) {
             result[offset++] = (byte)m_FieldIds[i];
             result[offset++] = (byte)m_Fields[i].length();
-            System.arraycopy(m_Fields[i].getBytes(), 0, result, offset, m_Fields[i].length());
+            try {
+                System.arraycopy(m_Fields[i].getBytes("US-ASCII"), 0, result, offset, m_Fields[i].length());
+            }
+            catch (Exception e) {
+                logger.debug("Problem converting bytes to string - %s", e.getMessage());
+            }
             offset += m_Fields[i].length();
         }
-
         return result;
     }
 

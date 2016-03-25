@@ -21,7 +21,7 @@ import com.j2mod.modbus.io.ModbusASCIITransport;
 import com.j2mod.modbus.io.ModbusRTUTransport;
 import com.j2mod.modbus.io.ModbusSerialTransport;
 import com.j2mod.modbus.io.ModbusTransport;
-import com.j2mod.modbus.util.Logger;
+import com.j2mod.modbus.util.ModbusLogger;
 import com.j2mod.modbus.util.SerialParameters;
 
 import java.io.IOException;
@@ -33,15 +33,12 @@ import java.io.InputStream;
  *
  * @author Dieter Wimberger
  * @author John Charlton
- * @version 1.2rc1 (09/11/2004)
- *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
 public class SerialConnection {
 
-    private static final Logger logger = Logger.getLogger(SerialConnection.class);
+    private static final ModbusLogger logger = ModbusLogger.getLogger(SerialConnection.class);
 
     private SerialParameters m_Parameters;
     private ModbusSerialTransport m_Transport;
@@ -52,8 +49,7 @@ public class SerialConnection {
      * Creates a SerialConnection object and initializes variables passed in as
      * params.
      *
-     * @param parameters
-     *            A SerialParameters object.
+     * @param parameters A SerialParameters object.
      */
     public SerialConnection(SerialParameters parameters) {
         m_Parameters = parameters;
@@ -72,8 +68,7 @@ public class SerialConnection {
     /**
      * Opens the communication port.
      *
-     * @throws Exception
-     *             if an error occurs.
+     * @throws Exception if an error occurs.
      */
     public void open() throws Exception {
         m_SerialPort = SerialPort.getCommPort(m_Parameters.getPortName());

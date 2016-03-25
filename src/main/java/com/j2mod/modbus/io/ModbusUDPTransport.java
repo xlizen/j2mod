@@ -21,7 +21,7 @@ import com.j2mod.modbus.msg.ModbusMessage;
 import com.j2mod.modbus.msg.ModbusRequest;
 import com.j2mod.modbus.msg.ModbusResponse;
 import com.j2mod.modbus.net.UDPTerminal;
-import com.j2mod.modbus.util.Logger;
+import com.j2mod.modbus.util.ModbusLogger;
 
 import java.io.IOException;
 import java.io.InterruptedIOException;
@@ -32,20 +32,17 @@ import java.util.Arrays;
  * flavor.
  *
  * @author Dieter Wimberger
- * @version 1.0 (29/04/2002)
- *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
 public class ModbusUDPTransport implements ModbusTransport {
 
-    private static final Logger logger = Logger.getLogger(ModbusUDPTransport.class);
+    private static final ModbusLogger logger = ModbusLogger.getLogger(ModbusUDPTransport.class);
 
     //instance attributes
     private UDPTerminal m_Terminal;
-    private BytesOutputStream m_ByteOut;
-    private BytesInputStream m_ByteIn;
+    private final BytesOutputStream m_ByteOut = new BytesOutputStream(Modbus.MAX_MESSAGE_LENGTH);
+    private final BytesInputStream m_ByteIn = new BytesInputStream(Modbus.MAX_MESSAGE_LENGTH);
 
     /**
      * Constructs a new <tt>ModbusTransport</tt> instance,
@@ -56,21 +53,21 @@ public class ModbusUDPTransport implements ModbusTransport {
      */
     public ModbusUDPTransport(UDPTerminal terminal) {
         m_Terminal = terminal;
-        m_ByteOut = new BytesOutputStream(Modbus.MAX_MESSAGE_LENGTH);
-        m_ByteIn = new BytesInputStream(Modbus.MAX_MESSAGE_LENGTH);
     }
 
+    @Override
     public void close() throws IOException {
         //?
     }
 
+    @Override
     public ModbusTransaction createTransaction() {
         ModbusUDPTransaction trans = new ModbusUDPTransaction();
         trans.setTerminal(m_Terminal);
-
         return trans;
     }
 
+    @Override
     public void writeMessage(ModbusMessage msg) throws ModbusIOException {
         try {
             synchronized (m_ByteOut) {
@@ -83,10 +80,11 @@ public class ModbusUDPTransport implements ModbusTransport {
             }
         }
         catch (Exception ex) {
-            throw new ModbusIOException(String.format("I/O exception - failed to write - %s", ex.getMessage()));
+            throw new ModbusIOException("I/O exception - failed to write - %s", ex.getMessage());
         }
     }
 
+    @Override
     public ModbusRequest readRequest() throws ModbusIOException {
         try {
             ModbusRequest req;
@@ -101,10 +99,11 @@ public class ModbusUDPTransport implements ModbusTransport {
             return req;
         }
         catch (Exception ex) {
-            throw new ModbusIOException("I/O exception - failed to read");
+            throw new ModbusIOException("I/O exception - failed to read - %s", ex.getMessage());
         }
     }
 
+    @Override
     public ModbusResponse readResponse() throws ModbusIOException {
 
         try {
@@ -120,11 +119,11 @@ public class ModbusUDPTransport implements ModbusTransport {
             return res;
         }
         catch (InterruptedIOException ioex) {
-            throw new ModbusIOException("Socket timed out");
+            throw new ModbusIOException("Socket was interrupted - %s", ioex.getMessage());
         }
         catch (Exception ex) {
             ex.printStackTrace();
-            throw new ModbusIOException("I/O exception - failed to read");
+            throw new ModbusIOException("I/O exception - failed to read - %s", ex.getMessage());
         }
     }
 

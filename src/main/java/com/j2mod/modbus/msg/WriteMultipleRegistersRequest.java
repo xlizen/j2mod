@@ -34,16 +34,9 @@ import java.io.IOException;
  * message.
  *
  * @author Dieter Wimberger
- * @version 1.2rc1 (09/11/2004)
- *
  * @author jfhaugh
- * @version 1.05
- *
- *          20140426 - Refactor and minor bug fix.
- *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
 public final class WriteMultipleRegistersRequest extends ModbusRequest {
     private int m_Reference;
@@ -55,10 +48,8 @@ public final class WriteMultipleRegistersRequest extends ModbusRequest {
      * given starting reference and values to be written.
      * <p>
      *
-     * @param first
-     *            -- the address of the first register to write to.
-     * @param registers
-     *            -- the registers to be written.
+     * @param first     -- the address of the first register to write to.
+     * @param registers -- the registers to be written.
      */
     public WriteMultipleRegistersRequest(int first, Register[] registers) {
         setFunctionCode(Modbus.WRITE_MULTIPLE_REGISTERS);
@@ -100,12 +91,12 @@ public final class WriteMultipleRegistersRequest extends ModbusRequest {
      * slave instances.
      *
      * @return the corresponding ModbusResponse.
-     *          <p>
+     * <p>
      *
-     *          createResponse() must be able to handle the case where the word
-     *          data that is in the response is actually non-word data. That is,
-     *          where the slave device has data which are not actually
-     *          <tt>short</tt> values in the range of registers being processed.
+     * createResponse() must be able to handle the case where the word
+     * data that is in the response is actually non-word data. That is,
+     * where the slave device has data which are not actually
+     * <tt>short</tt> values in the range of registers being processed.
      */
     public ModbusResponse createResponse() {
         WriteMultipleRegistersResponse response;
@@ -151,7 +142,7 @@ public final class WriteMultipleRegistersRequest extends ModbusRequest {
      * <p>
      *
      * @return the reference of the register to start writing to as <tt>int</tt>
-     *         .
+     * .
      */
     public int getReference() {
         return m_Reference;
@@ -162,8 +153,7 @@ public final class WriteMultipleRegistersRequest extends ModbusRequest {
      * <tt>WriteMultipleRegistersRequest</tt>.
      * <p>
      *
-     * @param ref
-     *            the reference of the register to start writing to as an
+     * @param ref the reference of the register to start writing to as an
      *            <tt>int</tt>.
      */
     public void setReference(int ref) {
@@ -188,8 +178,7 @@ public final class WriteMultipleRegistersRequest extends ModbusRequest {
      * <tt>WriteMultipleRegistersRequest</tt>.
      * <p>
      *
-     * @param registers
-     *            the registers to be written as <tt>Register[]</tt>.
+     * @param registers the registers to be written as <tt>Register[]</tt>.
      */
     public void setRegisters(Register[] registers) {
         m_Registers = registers;
@@ -198,13 +187,11 @@ public final class WriteMultipleRegistersRequest extends ModbusRequest {
     /**
      * getRegister - Returns the <tt>Register</tt> at the given position.
      *
-     * @param index
-     *            the relative index of the <tt>Register</tt>.
+     * @param index the relative index of the <tt>Register</tt>.
      *
      * @return the register as <tt>Register</tt>.
      *
-     * @throws IndexOutOfBoundsException
-     *             if the index is out of bounds.
+     * @throws IndexOutOfBoundsException if the index is out of bounds.
      */
     public Register getRegister(int index) throws IndexOutOfBoundsException {
         if (index < 0) {
@@ -222,13 +209,11 @@ public final class WriteMultipleRegistersRequest extends ModbusRequest {
      * getRegisterValue - Returns the value of the specified register.
      * <p>
      *
-     * @param index
-     *            the index of the desired register.
+     * @param index the index of the desired register.
      *
      * @return the value as an <tt>int</tt>.
      *
-     * @throws IndexOutOfBoundsException
-     *             if the index is out of bounds.
+     * @throws IndexOutOfBoundsException if the index is out of bounds.
      */
     public int getRegisterValue(int index) throws IndexOutOfBoundsException {
         return getRegister(index).toUnsignedShort();
@@ -272,8 +257,7 @@ public final class WriteMultipleRegistersRequest extends ModbusRequest {
      * is responsible for converting words from a Modbus packet into the
      * non-word values associated with the actual device's registers.
      *
-     * @param dhandler
-     *            a <tt>NonWordDataHandler</tt> instance.
+     * @param dhandler a <tt>NonWordDataHandler</tt> instance.
      */
     public void setNonWordDataHandler(NonWordDataHandler dhandler) {
         m_NonWordDataHandler = dhandler;

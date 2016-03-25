@@ -15,21 +15,19 @@
  */
 package com.j2mod.modbus.procimg;
 
-import com.j2mod.modbus.util.Logger;
+import com.j2mod.modbus.util.ModbusLogger;
 
 /**
  * @author Julie
  *
  *         File -- an abstraction of a Modbus Record, as supported by the
  *         READ FILE RECORD and WRITE FILE RECORD commands.
- *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
 public class Record {
 
-    private static final Logger logger = Logger.getLogger(Record.class);
+    private static final ModbusLogger logger = ModbusLogger.getLogger(Record.class);
 
     private int m_Record_Number;
     private int m_Register_Count;

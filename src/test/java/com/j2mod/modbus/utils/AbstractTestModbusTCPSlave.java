@@ -16,7 +16,7 @@
 package com.j2mod.modbus.utils;
 
 import com.j2mod.modbus.net.ModbusListener;
-import com.j2mod.modbus.util.Logger;
+import com.j2mod.modbus.util.ModbusLogger;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -31,7 +31,7 @@ import org.junit.BeforeClass;
  */
 public class AbstractTestModbusTCPSlave extends AbstractTestModbusTCPMaster {
 
-    private static final Logger logger = Logger.getLogger(AbstractTestModbusTCPSlave.class);
+    private static final ModbusLogger logger = ModbusLogger.getLogger(AbstractTestModbusTCPSlave.class);
     private static ModbusListener listener = null;
 
     @BeforeClass

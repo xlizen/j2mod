@@ -26,7 +26,7 @@ import com.j2mod.modbus.msg.ModbusResponse;
 import com.j2mod.modbus.msg.ReadFIFOQueueRequest;
 import com.j2mod.modbus.msg.ReadFIFOQueueResponse;
 import com.j2mod.modbus.net.ModbusMasterFactory;
-import com.j2mod.modbus.util.Logger;
+import com.j2mod.modbus.util.ModbusLogger;
 
 /**
  * ReadFIFOTest -- Exercise the "READ FIFO" Modbus
@@ -41,7 +41,7 @@ import com.j2mod.modbus.util.Logger;
  */
 public class ReadFIFOTest {
 
-    private static final Logger logger = Logger.getLogger(ReadFIFOTest.class);
+    private static final ModbusLogger logger = ModbusLogger.getLogger(ReadFIFOTest.class);
 
     /**
      * usage -- Print command line arguments and exit.

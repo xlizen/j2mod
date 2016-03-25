@@ -21,14 +21,9 @@ package com.j2mod.modbus.procimg;
  * The <tt>setValue()</tt> method is synchronized, which ensures atomic access, * but no specific access order.
  *
  * @author Dieter Wimberger
- * @version 1.2rc1 (09/11/2004)
- *
  * @author Julie Haugh
- * @version 0.97 (8/12/12)
- *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
 public class SimpleRegister extends SynchronizedAbstractRegister implements
         Register {
@@ -36,10 +31,8 @@ public class SimpleRegister extends SynchronizedAbstractRegister implements
     /**
      * Constructs a new <tt>SimpleRegister</tt> instance.
      *
-     * @param b1
-     *            the first (hi) byte of the word.
-     * @param b2
-     *            the second (low) byte of the word.
+     * @param b1 the first (hi) byte of the word.
+     * @param b2 the second (low) byte of the word.
      */
     public SimpleRegister(byte b1, byte b2) {
         m_Register[0] = b1;
@@ -49,8 +42,7 @@ public class SimpleRegister extends SynchronizedAbstractRegister implements
     /**
      * Constructs a new <tt>SimpleRegister</tt> instance with the given value.
      *
-     * @param value
-     *            the value of this <tt>SimpleRegister</tt> as <tt>int</tt>.
+     * @param value the value of this <tt>SimpleRegister</tt> as <tt>int</tt>.
      */
     public SimpleRegister(int value) {
         setValue(value);

@@ -18,7 +18,7 @@ package com.j2mod.modbus;
 import com.j2mod.modbus.procimg.DefaultProcessImageFactory;
 import com.j2mod.modbus.procimg.ProcessImage;
 import com.j2mod.modbus.procimg.ProcessImageFactory;
-import com.j2mod.modbus.util.Logger;
+import com.j2mod.modbus.util.ModbusLogger;
 
 /**
  * Class implemented following a Singleton pattern, to couple the slave side
@@ -29,15 +29,12 @@ import com.j2mod.modbus.util.Logger;
  * image.
  *
  * @author Dieter Wimberger
- * @version 1.2rc1 (09/11/2004)
- *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
 public class ModbusCoupler {
 
-    private static final Logger logger = Logger.getLogger(ModbusCoupler.class);
+    private static final ModbusLogger logger = ModbusLogger.getLogger(ModbusCoupler.class);
 
     // class attributes
     private static ModbusCoupler c_Self; // Singleton reference
@@ -55,17 +52,7 @@ public class ModbusCoupler {
         m_PIFactory = new DefaultProcessImageFactory();
     }
 
-    /**
-     * Private constructor to prevent multiple instantiation.
-     *
-     * @param procimg a <tt>ProcessImage</tt>.
-     */
-    private ModbusCoupler(ProcessImage procimg) {
-        setProcessImage(procimg);
-        c_Self = this;
-    }
-
-    public static boolean isInitialized() {
+    public static synchronized boolean isInitialized() {
         return c_Self != null;
     }
 
@@ -76,11 +63,9 @@ public class ModbusCoupler {
      */
     public static synchronized ModbusCoupler getReference() {
         if (c_Self == null) {
-            return (c_Self = new ModbusCoupler());
+            c_Self = new ModbusCoupler();
         }
-        else {
-            return c_Self;
-        }
+        return c_Self;
     }
 
     /**

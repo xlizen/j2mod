@@ -27,7 +27,6 @@ import com.j2mod.modbus.util.BitVector;
  *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
 abstract public class AbstractModbusMaster {
 
@@ -45,9 +44,10 @@ abstract public class AbstractModbusMaster {
 
     /**
      * Sets the transaction to use
+     *
      * @param transaction Transaction to use
      */
-    protected void setTransaction(ModbusTransaction transaction) {
+    protected synchronized void setTransaction(ModbusTransaction transaction) {
         m_Transaction = transaction;
     }
 
@@ -70,8 +70,8 @@ abstract public class AbstractModbusMaster {
      * forced to the number originally requested.
      *
      * @param unitId the slave unit id.
-     * @param ref   the offset of the coil to start reading from.
-     * @param count the number of coil states to be read.
+     * @param ref    the offset of the coil to start reading from.
+     * @param count  the number of coil states to be read.
      *
      * @return a <tt>BitVector</tt> instance holding the
      * received coil states.
@@ -126,8 +126,8 @@ abstract public class AbstractModbusMaster {
      * implicitly, through {@link BitVector#size()}.
      *
      * @param unitId the slave unit id.
-     * @param ref   the offset of the coil to start writing to.
-     * @param coils a <tt>BitVector</tt> which holds the coil states to be written.
+     * @param ref    the offset of the coil to start writing to.
+     * @param coils  a <tt>BitVector</tt> which holds the coil states to be written.
      *
      * @throws ModbusException if an I/O error, a slave exception or
      *                         a transaction error occurs.
@@ -151,8 +151,8 @@ abstract public class AbstractModbusMaster {
      * forced to the number originally requested.
      *
      * @param unitId the slave unit id.
-     * @param ref   the offset of the input discrete to start reading from.
-     * @param count the number of input discrete states to be read.
+     * @param ref    the offset of the input discrete to start reading from.
+     * @param count  the number of input discrete states to be read.
      *
      * @return a <tt>BitVector</tt> instance holding the received input discrete
      * states.
@@ -182,8 +182,8 @@ abstract public class AbstractModbusMaster {
      * will be according to the number received in the slave response.
      *
      * @param unitId the slave unit id.
-     * @param ref   the offset of the input register to start reading from.
-     * @param count the number of input registers to be read.
+     * @param ref    the offset of the input register to start reading from.
+     * @param count  the number of input registers to be read.
      *
      * @return a <tt>InputRegister[]</tt> with the received input registers.
      *
@@ -210,8 +210,8 @@ abstract public class AbstractModbusMaster {
      * will be according to the number received in the slave response.
      *
      * @param unitId the slave unit id.
-     * @param ref   the offset of the register to start reading from.
-     * @param count the number of registers to be read.
+     * @param ref    the offset of the register to start reading from.
+     * @param count  the number of registers to be read.
      *
      * @return a <tt>Register[]</tt> holding the received registers.
      *
@@ -234,7 +234,7 @@ abstract public class AbstractModbusMaster {
     /**
      * Writes a single register to the slave.
      *
-     * @param unitId the slave unit id.
+     * @param unitId   the slave unit id.
      * @param ref      the offset of the register to be written.
      * @param register a <tt>Register</tt> holding the value of the register
      *                 to be written.
@@ -257,7 +257,7 @@ abstract public class AbstractModbusMaster {
     /**
      * Writes a number of registers to the slave.
      *
-     * @param unitId the slave unit id.
+     * @param unitId    the slave unit id.
      * @param ref       the offset of the register to start writing to.
      * @param registers a <tt>Register[]</tt> holding the values of
      *                  the registers to be written.
@@ -299,8 +299,8 @@ abstract public class AbstractModbusMaster {
     /**
      * Writes a coil state to the slave.
      *
-     * @param ref    the offset of the coil to be written.
-     * @param state  the coil state to be written.
+     * @param ref   the offset of the coil to be written.
+     * @param state the coil state to be written.
      *
      * @return the state of the coil as returned from the slave.
      *

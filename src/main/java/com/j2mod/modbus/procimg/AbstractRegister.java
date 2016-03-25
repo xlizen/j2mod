@@ -19,11 +19,8 @@ package com.j2mod.modbus.procimg;
  * Abstract class for a register.
  *
  * @author Dieter Wimberger
- * @version 1.2rc1 (09/11/2004)
- *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
 public abstract class AbstractRegister implements Register {
 

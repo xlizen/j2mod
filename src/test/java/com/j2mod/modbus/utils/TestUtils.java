@@ -16,7 +16,7 @@
 package com.j2mod.modbus.utils;
 
 import com.fazecast.jSerialComm.SerialPort;
-import com.j2mod.modbus.util.Logger;
+import com.j2mod.modbus.util.ModbusLogger;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.exec.ExecuteWatchdog;
@@ -39,7 +39,7 @@ import java.util.List;
  */
 public class TestUtils {
 
-    private static final Logger logger = Logger.getLogger(TestUtils.class);
+    private static final ModbusLogger logger = ModbusLogger.getLogger(TestUtils.class);
     private static final int DEFAULT_BUFFER_SIZE = 32 * 1024;
 
     /**

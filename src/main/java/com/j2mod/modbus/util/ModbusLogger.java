@@ -23,16 +23,15 @@ package com.j2mod.modbus.util;
  *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
-public class Logger extends org.apache.log4j.Logger {
+public class ModbusLogger extends org.apache.log4j.Logger {
 
     /**
      * Constructs a logger for our use
      *
      * @param name Name of the Category
      */
-    public Logger(String name) {
+    public ModbusLogger(String name) {
         super(name);
     }
 
@@ -43,8 +42,8 @@ public class Logger extends org.apache.log4j.Logger {
      *
      * @return Logger
      */
-    static public Logger getLogger(String name) {
-        return (Logger)org.apache.log4j.Logger.getLogger(name, new LoggerFactory());
+    static public ModbusLogger getLogger(String name) {
+        return (ModbusLogger)org.apache.log4j.Logger.getLogger(name, new LoggerFactory());
     }
 
     /**
@@ -54,8 +53,8 @@ public class Logger extends org.apache.log4j.Logger {
      *
      * @return Logger
      */
-    static public Logger getLogger(Class clazz) {
-        return (Logger)org.apache.log4j.Logger.getLogger(clazz.getName(), new LoggerFactory());
+    static public ModbusLogger getLogger(Class clazz) {
+        return (ModbusLogger)org.apache.log4j.Logger.getLogger(clazz.getName(), new LoggerFactory());
     }
 
     /**
@@ -84,21 +83,21 @@ public class Logger extends org.apache.log4j.Logger {
     }
 
     /**
-     * @see Logger#debug(String, Object...)
+     * @see ModbusLogger#debug(String, Object...)
      */
     public void error(String message, Object... values) {
         super.error(getMessage(message, values));
     }
 
     /**
-     * @see Logger#debug(String, Object...)
+     * @see ModbusLogger#debug(String, Object...)
      */
     public void fatal(String message, Object... values) {
         super.fatal(getMessage(message, values));
     }
 
     /**
-     * @see Logger#debug(String, Object...)
+     * @see ModbusLogger#debug(String, Object...)
      */
     public void info(String message, Object... values) {
         if (isInfoEnabled()) {
@@ -107,7 +106,7 @@ public class Logger extends org.apache.log4j.Logger {
     }
 
     /**
-     * @see Logger#debug(String, Object...)
+     * @see ModbusLogger#debug(String, Object...)
      */
     public void warn(String message, Object... values) {
         super.warn(getMessage(message, values));
@@ -126,28 +125,28 @@ public class Logger extends org.apache.log4j.Logger {
     }
 
     /**
-     * @see Logger#warn(String, Throwable, Object...)
+     * @see ModbusLogger#warn(String, Throwable, Object...)
      */
     public void info(String message, Throwable t, Object... values) {
         super.info(getMessage(message, values), t);
     }
 
     /**
-     * @see Logger#warn(String, Throwable, Object...)
+     * @see ModbusLogger#warn(String, Throwable, Object...)
      */
     public void fatal(String message, Throwable t, Object... values) {
         super.fatal(getMessage(message, values), t);
     }
 
     /**
-     * @see Logger#warn(String, Throwable, Object...)
+     * @see ModbusLogger#warn(String, Throwable, Object...)
      */
     public void error(String message, Throwable t, Object... values) {
         super.error(getMessage(message, values), t);
     }
 
     /**
-     * @see Logger#warn(String, Throwable, Object...)
+     * @see ModbusLogger#warn(String, Throwable, Object...)
      */
     public void debug(String message, Throwable t, Object... values) {
         super.debug(getMessage(message, values), t);
@@ -176,7 +175,7 @@ public class Logger extends org.apache.log4j.Logger {
     public static class LoggerFactory implements org.apache.log4j.spi.LoggerFactory {
         @Override
         public org.apache.log4j.Logger makeNewLoggerInstance(String name) {
-            return new Logger(name);
+            return new ModbusLogger(name);
         }
     }
 

@@ -15,7 +15,7 @@
  */
 package com.j2mod.modbus.io;
 
-import com.j2mod.modbus.util.Logger;
+import com.j2mod.modbus.util.ModbusLogger;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,15 +27,12 @@ import java.io.InputStream;
  *
  * @author Mark Hayes
  * @author Dieter Wimberger
- * @version 1.2rc1 (09/11/2004)
- *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
 public class FastByteArrayInputStream extends InputStream {
 
-    private static final Logger logger = Logger.getLogger(FastByteArrayInputStream.class);
+    private static final ModbusLogger logger = ModbusLogger.getLogger(FastByteArrayInputStream.class);
 
     /**
      * Number of bytes in the input buffer.
@@ -58,8 +55,7 @@ public class FastByteArrayInputStream extends InputStream {
     /**
      * Creates an input stream.
      *
-     * @param buffer
-     *            the data to read.
+     * @param buffer the data to read.
      */
     public FastByteArrayInputStream(byte[] buffer) {
         buf = buffer;

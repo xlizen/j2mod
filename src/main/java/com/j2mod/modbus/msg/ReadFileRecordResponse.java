@@ -26,11 +26,8 @@ import java.io.IOException;
  * Class implementing a <tt>ReadFileRecordResponse</tt>.
  *
  * @author Julie (jfh@ghgande.com)
- * @version @version@ (@date@)
- *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
 public final class ReadFileRecordResponse extends ModbusResponse {
 
@@ -201,7 +198,7 @@ public final class ReadFileRecordResponse extends ModbusResponse {
          * registers (m_WordCount * 2 bytes).
          *
          * @param request Request message
-         * @param offset Offset into buffer
+         * @param offset  Offset into buffer
          */
         public void getResponse(byte[] request, int offset) {
             request[offset] = (byte)(1 + (m_WordCount * 2));

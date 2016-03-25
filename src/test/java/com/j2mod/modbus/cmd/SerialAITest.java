@@ -20,7 +20,7 @@ import com.j2mod.modbus.io.ModbusSerialTransaction;
 import com.j2mod.modbus.msg.ReadInputRegistersRequest;
 import com.j2mod.modbus.msg.ReadInputRegistersResponse;
 import com.j2mod.modbus.net.SerialConnection;
-import com.j2mod.modbus.util.Logger;
+import com.j2mod.modbus.util.ModbusLogger;
 import com.j2mod.modbus.util.SerialParameters;
 
 /**
@@ -36,7 +36,7 @@ import com.j2mod.modbus.util.SerialParameters;
  */
 public class SerialAITest {
 
-    private static final Logger logger = Logger.getLogger(SerialAITest.class);
+    private static final ModbusLogger logger = ModbusLogger.getLogger(SerialAITest.class);
 
     public static void main(String[] args) {
 

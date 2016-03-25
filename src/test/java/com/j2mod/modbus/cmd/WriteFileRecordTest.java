@@ -28,7 +28,7 @@ import com.j2mod.modbus.msg.WriteFileRecordRequest.RecordRequest;
 import com.j2mod.modbus.msg.WriteFileRecordResponse;
 import com.j2mod.modbus.msg.WriteFileRecordResponse.RecordResponse;
 import com.j2mod.modbus.net.ModbusMasterFactory;
-import com.j2mod.modbus.util.Logger;
+import com.j2mod.modbus.util.ModbusLogger;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -46,7 +46,7 @@ import java.util.Arrays;
  */
 public class WriteFileRecordTest {
 
-    private static final Logger logger = Logger.getLogger(WriteFileRecordTest.class);
+    private static final ModbusLogger logger = ModbusLogger.getLogger(WriteFileRecordTest.class);
 
     /**
      * usage -- Print command line arguments and exit.

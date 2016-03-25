@@ -20,7 +20,7 @@ import com.j2mod.modbus.msg.ModbusRequest;
 import com.j2mod.modbus.msg.WriteSingleRegisterRequest;
 import com.j2mod.modbus.net.ModbusMasterFactory;
 import com.j2mod.modbus.procimg.SimpleRegister;
-import com.j2mod.modbus.util.Logger;
+import com.j2mod.modbus.util.ModbusLogger;
 
 import java.io.IOException;
 
@@ -52,7 +52,7 @@ import java.io.IOException;
  */
 public class WriteHoldingRegisterTest {
 
-    private static final Logger logger = Logger.getLogger(WriteHoldingRegisterTest.class);
+    private static final ModbusLogger logger = ModbusLogger.getLogger(WriteHoldingRegisterTest.class);
 
     private static void printUsage() {
         logger.system("\nUsage:\n    java com.j2mod.modbus.cmd.WriteHoldingRegisterTest <connection [String]> <register [int]> <value [int]> {<repeat [int]>}");

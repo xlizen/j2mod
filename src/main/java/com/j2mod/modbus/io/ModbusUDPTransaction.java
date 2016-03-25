@@ -24,22 +24,19 @@ import com.j2mod.modbus.msg.ModbusRequest;
 import com.j2mod.modbus.msg.ModbusResponse;
 import com.j2mod.modbus.net.UDPMasterConnection;
 import com.j2mod.modbus.net.UDPTerminal;
-import com.j2mod.modbus.util.Logger;
+import com.j2mod.modbus.util.ModbusLogger;
 
 /**
  * Class implementing the <tt>ModbusTransaction</tt>
  * interface for the UDP transport mechanism.
  *
  * @author Dieter Wimberger
- * @version 1.2rc1 (09/11/2004)
- *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
 public class ModbusUDPTransaction implements ModbusTransaction {
 
-    private static final Logger logger = Logger.getLogger(ModbusUDPTransaction.class);
+    private static final ModbusLogger logger = ModbusLogger.getLogger(ModbusUDPTransaction.class);
 
     //class attributes
     private static int c_TransactionID = Modbus.DEFAULT_TRANSACTION_ID;

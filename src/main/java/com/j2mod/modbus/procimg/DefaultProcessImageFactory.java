@@ -21,11 +21,8 @@ package com.j2mod.modbus.procimg;
  *
  * @author Dieter Wimberger
  * @author jfhaugh
- * @version @version@ (@date@)
- *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
 public class DefaultProcessImageFactory implements ProcessImageFactory {
 

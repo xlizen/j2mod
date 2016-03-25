@@ -21,7 +21,7 @@ import com.j2mod.modbus.msg.ModbusMessage;
 import com.j2mod.modbus.msg.ModbusRequest;
 import com.j2mod.modbus.msg.ModbusResponse;
 import com.j2mod.modbus.net.TCPMasterConnection;
-import com.j2mod.modbus.util.Logger;
+import com.j2mod.modbus.util.ModbusLogger;
 import com.j2mod.modbus.util.ModbusUtil;
 
 import java.io.*;
@@ -33,16 +33,12 @@ import java.net.SocketTimeoutException;
  * Class that implements the Modbus transport flavor.
  *
  * @author Dieter Wimberger
- * @version 110410-jfh Cleaned up unused variables. Stopped spewing out error
- *          messages.
- *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
 public class ModbusTCPTransport implements ModbusTransport {
 
-    private static final Logger logger = Logger.getLogger(ModbusTCPTransport.class);
+    private static final ModbusLogger logger = ModbusLogger.getLogger(ModbusTCPTransport.class);
 
     // instance attributes
     private DataInputStream m_Input; // input stream
@@ -101,6 +97,7 @@ public class ModbusTCPTransport implements ModbusTransport {
 
     /**
      * Set the socket timeout
+     *
      * @param time Timeout in milliseconds
      */
     public void setTimeout(int time) {
@@ -164,10 +161,10 @@ public class ModbusTCPTransport implements ModbusTransport {
                     // Do nothing.
                 }
             }
-            throw new ModbusIOException(String.format("I/O exception - failed to write - %s", ex.getMessage()));
+            throw new ModbusIOException("I/O exception - failed to write - %s", ex.getMessage());
         }
         catch (Exception ex) {
-            throw new ModbusIOException(String.format("I/O exception - failed to write - %s", ex.getMessage()));
+            throw new ModbusIOException("I/O exception - failed to write - %s", ex.getMessage());
         }
     }
 
@@ -240,7 +237,7 @@ public class ModbusTCPTransport implements ModbusTransport {
                     req.readData(m_Input);
 
 					/*
-					 * Discard the CRC. This is a TCP/IP connection, which has
+                     * Discard the CRC. This is a TCP/IP connection, which has
 					 * proper error correction and recovery.
 					 */
                     m_Input.readShort();
@@ -273,7 +270,7 @@ public class ModbusTCPTransport implements ModbusTransport {
             synchronized (m_ByteIn) {
                 // use same buffer
                 byte[] buffer = m_ByteIn.getBuffer();
-                logger.debug("Read: %s",  ModbusUtil.toHex(buffer, 0, m_ByteIn.count));
+                logger.debug("Read: %s", ModbusUtil.toHex(buffer, 0, m_ByteIn.count));
 
                 if (!headless) {
 					/*

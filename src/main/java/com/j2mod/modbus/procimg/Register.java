@@ -23,11 +23,8 @@ package com.j2mod.modbus.procimg;
  * implementations have to be carefully designed for concurrency.
  *
  * @author Dieter Wimberger
- * @version 1.2rc1 (09/11/2004)
- *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
 public interface Register extends InputRegister {
 
@@ -35,8 +32,7 @@ public interface Register extends InputRegister {
      * Sets the content of this <tt>Register</tt> from the given unsigned 16-bit
      * value (unsigned short).
      *
-     * @param v
-     *            the value as unsigned short (<tt>int</tt>).
+     * @param v the value as unsigned short (<tt>int</tt>).
      */
     void setValue(int v);
 
@@ -44,16 +40,14 @@ public interface Register extends InputRegister {
      * Sets the content of this register from the given signed 16-bit value
      * (short).
      *
-     * @param s
-     *            the value as <tt>short</tt>.
+     * @param s the value as <tt>short</tt>.
      */
     void setValue(short s);
 
     /**
      * Sets the content of this register from the given raw bytes.
      *
-     * @param bytes
-     *            the raw data as <tt>byte[]</tt>.
+     * @param bytes the raw data as <tt>byte[]</tt>.
      */
     void setValue(byte[] bytes);
 }

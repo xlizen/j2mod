@@ -20,7 +20,7 @@ import com.j2mod.modbus.Modbus;
 import com.j2mod.modbus.io.ModbusRTUTransport;
 import com.j2mod.modbus.io.ModbusTCPTransport;
 import com.j2mod.modbus.io.ModbusTransport;
-import com.j2mod.modbus.util.Logger;
+import com.j2mod.modbus.util.ModbusLogger;
 import com.j2mod.modbus.util.SerialParameters;
 
 import java.io.IOException;
@@ -32,14 +32,12 @@ import java.net.UnknownHostException;
  * Create a <tt>ModbusListener</tt> from an URI-like specifier.
  *
  * @author Julie
- *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
 public class ModbusMasterFactory {
 
-    private static final Logger logger = Logger.getLogger(ModbusMasterFactory.class);
+    private static final ModbusLogger logger = ModbusLogger.getLogger(ModbusMasterFactory.class);
 
     public static ModbusTransport createModbusMaster(String address) {
         String parts[] = address.split(" *: *");

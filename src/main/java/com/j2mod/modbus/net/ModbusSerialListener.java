@@ -21,7 +21,7 @@ import com.j2mod.modbus.ModbusIOException;
 import com.j2mod.modbus.io.ModbusTransport;
 import com.j2mod.modbus.msg.ModbusRequest;
 import com.j2mod.modbus.msg.ModbusResponse;
-import com.j2mod.modbus.util.Logger;
+import com.j2mod.modbus.util.ModbusLogger;
 import com.j2mod.modbus.util.SerialParameters;
 
 /**
@@ -29,18 +29,14 @@ import com.j2mod.modbus.util.SerialParameters;
  * If listening, it accepts incoming requests passing them on to be handled.
  *
  * @author Dieter Wimberger
- * @version 1.2rc1 (09/11/2004)
- *
  * @author Julie Haugh Code cleanup in prep to refactor with ModbusListener
  *         interface
- *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
 public class ModbusSerialListener implements ModbusListener {
 
-    private static final Logger logger = Logger.getLogger(ModbusSerialListener.class);
+    private static final ModbusLogger logger = ModbusLogger.getLogger(ModbusSerialListener.class);
 
     private boolean m_Listening;
     private boolean m_Running = true;
@@ -50,8 +46,7 @@ public class ModbusSerialListener implements ModbusListener {
     /**
      * Constructs a new <tt>ModbusSerialListener</tt> instance.
      *
-     * @param params
-     *            a <tt>SerialParameters</tt> instance.
+     * @param params a <tt>SerialParameters</tt> instance.
      */
     public ModbusSerialListener(SerialParameters params) {
         m_SerialCon = new SerialConnection(params);
@@ -112,7 +107,7 @@ public class ModbusSerialListener implements ModbusListener {
                         }
 
 						/*
-						 * Write the response.
+                         * Write the response.
 						 */
                         transport.writeMessage(response);
                     }
@@ -144,6 +139,7 @@ public class ModbusSerialListener implements ModbusListener {
             }
         }
     }
+
     /**
      * Gets the Modbus unit number for this <tt>ModbusSerialListener</tt>
      *
@@ -153,11 +149,10 @@ public class ModbusSerialListener implements ModbusListener {
         return m_Unit;
     }
 
-/**
+    /**
      * Sets the Modbus unit number for this <tt>ModbusSerialListener</tt>
      *
-     * @param unit
-     *            Modbus unit number
+     * @param unit Modbus unit number
      */
     public void setUnit(int unit) {
         m_Unit = unit;
@@ -168,7 +163,7 @@ public class ModbusSerialListener implements ModbusListener {
      * incoming connections.
      *
      * @return true if listening (and accepting incoming connections), false
-     *         otherwise.
+     * otherwise.
      */
     public boolean isListening() {
         return m_Listening;
@@ -177,9 +172,8 @@ public class ModbusSerialListener implements ModbusListener {
     /**
      * Sets the listening flag of this <tt>ModbusTCPListener</tt>.
      *
-     * @param b
-     *            true if listening (and accepting incoming connections), false
-     *            otherwise.
+     * @param b true if listening (and accepting incoming connections), false
+     *          otherwise.
      */
     public void setListening(boolean b) {
         m_Listening = b;
@@ -203,6 +197,5 @@ public class ModbusSerialListener implements ModbusListener {
         m_Listening = false;
         m_Running = false;
     }
-
 
 }

@@ -25,7 +25,7 @@ import com.j2mod.modbus.msg.*;
 import com.j2mod.modbus.msg.ReadFileRecordRequest.RecordRequest;
 import com.j2mod.modbus.msg.ReadFileRecordResponse.RecordResponse;
 import com.j2mod.modbus.net.UDPMasterConnection;
-import com.j2mod.modbus.util.Logger;
+import com.j2mod.modbus.util.ModbusLogger;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -44,7 +44,7 @@ import java.util.Arrays;
  */
 public class UDPWriteRecordTest {
 
-    private static final Logger logger = Logger.getLogger(UDPWriteRecordTest.class);
+    private static final ModbusLogger logger = ModbusLogger.getLogger(UDPWriteRecordTest.class);
 
     /**
      * usage -- Print command line arguments and exit.

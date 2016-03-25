@@ -16,7 +16,7 @@
 package com.j2mod.modbus.net;
 
 import com.fazecast.jSerialComm.SerialPort;
-import com.j2mod.modbus.util.Logger;
+import com.j2mod.modbus.util.ModbusLogger;
 import com.j2mod.modbus.util.SerialParameters;
 
 import java.io.IOException;
@@ -25,14 +25,12 @@ import java.io.IOException;
  * Create a <tt>ModbusListener</tt> from an URI-like specifier.
  *
  * @author Julie
- *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
 public class ModbusListenerFactory {
 
-    private static final Logger logger = Logger.getLogger(ModbusListenerFactory.class);
+    private static final ModbusLogger logger = ModbusLogger.getLogger(ModbusListenerFactory.class);
 
     public static ModbusListener createModbusListener(String address) throws Exception {
         String parts[] = address.split(" *: *");
@@ -73,7 +71,7 @@ public class ModbusListenerFactory {
         }
         else if (parts[0].toLowerCase().equals("tcp")) {
             /*
-			 * Create a ModbusTCPListener with the default interface
+             * Create a ModbusTCPListener with the default interface
 			 * value.  The second optional value is the TCP port number
 			 * and the third optional value is the Modbus unit number.
 			 */

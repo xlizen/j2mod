@@ -22,19 +22,9 @@ import com.j2mod.modbus.Modbus;
  * specialised implementations with the functionality they have in common.
  *
  * @author Dieter Wimberger
- * @version 1.2rc1 (09/11/2004)
- *
  * @author jfhaugh (jfh@ghgande.com)
- * @version 1.2rc1-ghpc (09/27/2010) Added READ_MEI stuff.
- *
- * @version 1.2rc1-ghpc (02/14/2011) Added REPORT_SLAVE_ID stuff.
- *
- * @version 1.0-jamod (7/7/2012)
- * 	Added new messages.
- *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
 public abstract class ModbusRequest extends ModbusMessageImpl {
 
@@ -42,8 +32,8 @@ public abstract class ModbusRequest extends ModbusMessageImpl {
      * Factory method creating the required specialized <tt>ModbusRequest</tt>
      * instance.
      *
-     * @param functionCode
-     *            the function code of the request as <tt>int</tt>.
+     * @param functionCode the function code of the request as <tt>int</tt>.
+     *
      * @return a ModbusRequest instance specific for the given function type.
      */
     public static ModbusRequest createModbusRequest(int functionCode) {
@@ -152,8 +142,8 @@ public abstract class ModbusRequest extends ModbusMessageImpl {
      * Factory method for creating exception responses with the given exception
      * code.
      *
-     * @param code
-     *            the code of the exception.
+     * @param code the code of the exception.
+     *
      * @return a ModbusResponse instance representing the exception response.
      */
     public ModbusResponse createExceptionResponse(int code) {
