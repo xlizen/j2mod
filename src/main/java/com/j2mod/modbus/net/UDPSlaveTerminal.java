@@ -194,7 +194,7 @@ class UDPSlaveTerminal implements UDPTerminal {
      *
      * @param timeout the timeout as <tt>int</tt>.
      */
-    public void setTimeout(int timeout) {
+    public synchronized void setTimeout(int timeout) {
         try {
             if (m_Socket != null) {
                 m_Socket.setSoTimeout(timeout);
