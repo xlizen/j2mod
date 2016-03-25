@@ -21,13 +21,9 @@ import com.j2mod.modbus.msg.*;
 import com.j2mod.modbus.procimg.InputRegister;
 import com.j2mod.modbus.procimg.Register;
 import com.j2mod.modbus.util.BitVector;
-import com.j2mod.modbus.util.Logger;
 
 /**
- * Modbus/TCP Master facade.
- *
- * @author Dieter Wimberger
- * @version 1.2rc1 (09/11/2004)
+ * Modbus/TCP Master facade - common methods for all the facade implementations
  *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
@@ -35,7 +31,6 @@ import com.j2mod.modbus.util.Logger;
  */
 abstract public class AbstractModbusMaster {
 
-    private static final Logger logger = Logger.getLogger(AbstractModbusMaster.class);
     private static final int DEFAULT_UNIT_ID = 1;
 
     protected ModbusTransaction m_Transaction;
@@ -47,20 +42,6 @@ abstract public class AbstractModbusMaster {
     private ReadMultipleRegistersRequest m_ReadMultipleRegistersRequest;
     private WriteSingleRegisterRequest m_WriteSingleRegisterRequest;
     private WriteMultipleRegistersRequest m_WriteMultipleRegistersRequest;
-
-    /**
-     * Initialises all the objects needed by this connection
-     */
-    public AbstractModbusMaster() {
-        m_ReadCoilsRequest = new ReadCoilsRequest();
-        m_ReadInputDiscretesRequest = new ReadInputDiscretesRequest();
-        m_WriteCoilRequest = new WriteCoilRequest();
-        m_WriteMultipleCoilsRequest = new WriteMultipleCoilsRequest();
-        m_ReadInputRegistersRequest = new ReadInputRegistersRequest();
-        m_ReadMultipleRegistersRequest = new ReadMultipleRegistersRequest();
-        m_WriteSingleRegisterRequest = new WriteSingleRegisterRequest();
-        m_WriteMultipleRegistersRequest = new WriteMultipleRegistersRequest();
-    }
 
     /**
      * Sets the transaction to use
@@ -99,12 +80,16 @@ abstract public class AbstractModbusMaster {
      *                         a transaction error occurs.
      */
     public synchronized BitVector readCoils(int unitId, int ref, int count) throws ModbusException {
+        checkTransaction();
+        if (m_ReadCoilsRequest == null) {
+            m_ReadCoilsRequest = new ReadCoilsRequest();
+        }
         m_ReadCoilsRequest.setUnitID(unitId);
         m_ReadCoilsRequest.setReference(ref);
         m_ReadCoilsRequest.setBitCount(count);
         m_Transaction.setRequest(m_ReadCoilsRequest);
         m_Transaction.execute();
-        BitVector bv = ((ReadCoilsResponse)m_Transaction.getResponse()).getCoils();
+        BitVector bv = ((ReadCoilsResponse)getAndCheckResponse()).getCoils();
         bv.forceSize(count);
         return bv;
     }
@@ -122,12 +107,16 @@ abstract public class AbstractModbusMaster {
      *                         a transaction error occurs.
      */
     public synchronized boolean writeCoil(int unitId, int ref, boolean state) throws ModbusException {
+        checkTransaction();
+        if (m_WriteCoilRequest == null) {
+            m_WriteCoilRequest = new WriteCoilRequest();
+        }
         m_WriteCoilRequest.setUnitID(unitId);
         m_WriteCoilRequest.setReference(ref);
         m_WriteCoilRequest.setCoil(state);
         m_Transaction.setRequest(m_WriteCoilRequest);
         m_Transaction.execute();
-        return ((WriteCoilResponse)m_Transaction.getResponse()).getCoil();
+        return ((WriteCoilResponse)getAndCheckResponse()).getCoil();
     }
 
     /**
@@ -144,6 +133,10 @@ abstract public class AbstractModbusMaster {
      *                         a transaction error occurs.
      */
     public synchronized void writeMultipleCoils(int unitId, int ref, BitVector coils) throws ModbusException {
+        checkTransaction();
+        if (m_WriteMultipleCoilsRequest == null) {
+            m_WriteMultipleCoilsRequest = new WriteMultipleCoilsRequest();
+        }
         m_WriteMultipleCoilsRequest.setUnitID(unitId);
         m_WriteMultipleCoilsRequest.setReference(ref);
         m_WriteMultipleCoilsRequest.setCoils(coils);
@@ -168,12 +161,16 @@ abstract public class AbstractModbusMaster {
      *                         a transaction error occurs.
      */
     public synchronized BitVector readInputDiscretes(int unitId, int ref, int count) throws ModbusException {
+        checkTransaction();
+        if (m_ReadInputDiscretesRequest == null) {
+            m_ReadInputDiscretesRequest = new ReadInputDiscretesRequest();
+        }
         m_ReadInputDiscretesRequest.setUnitID(unitId);
         m_ReadInputDiscretesRequest.setReference(ref);
         m_ReadInputDiscretesRequest.setBitCount(count);
         m_Transaction.setRequest(m_ReadInputDiscretesRequest);
         m_Transaction.execute();
-        BitVector bv = ((ReadInputDiscretesResponse)m_Transaction.getResponse()).getDiscretes();
+        BitVector bv = ((ReadInputDiscretesResponse)getAndCheckResponse()).getDiscretes();
         bv.forceSize(count);
         return bv;
     }
@@ -194,12 +191,16 @@ abstract public class AbstractModbusMaster {
      *                         a transaction error occurs.
      */
     public synchronized InputRegister[] readInputRegisters(int unitId, int ref, int count) throws ModbusException {
+        checkTransaction();
+        if (m_ReadInputRegistersRequest == null) {
+            m_ReadInputRegistersRequest = new ReadInputRegistersRequest();
+        }
         m_ReadInputRegistersRequest.setUnitID(unitId);
         m_ReadInputRegistersRequest.setReference(ref);
         m_ReadInputRegistersRequest.setWordCount(count);
         m_Transaction.setRequest(m_ReadInputRegistersRequest);
         m_Transaction.execute();
-        return ((ReadInputRegistersResponse)m_Transaction.getResponse()).getRegisters();
+        return ((ReadInputRegistersResponse)getAndCheckResponse()).getRegisters();
     }
 
     /**
@@ -218,12 +219,16 @@ abstract public class AbstractModbusMaster {
      *                         a transaction error occurs.
      */
     public synchronized Register[] readMultipleRegisters(int unitId, int ref, int count) throws ModbusException {
+        checkTransaction();
+        if (m_ReadMultipleRegistersRequest == null) {
+            m_ReadMultipleRegistersRequest = new ReadMultipleRegistersRequest();
+        }
         m_ReadMultipleRegistersRequest.setUnitID(unitId);
         m_ReadMultipleRegistersRequest.setReference(ref);
         m_ReadMultipleRegistersRequest.setWordCount(count);
         m_Transaction.setRequest(m_ReadMultipleRegistersRequest);
         m_Transaction.execute();
-        return ((ReadMultipleRegistersResponse)m_Transaction.getResponse()).getRegisters();
+        return ((ReadMultipleRegistersResponse)getAndCheckResponse()).getRegisters();
     }
 
     /**
@@ -238,6 +243,10 @@ abstract public class AbstractModbusMaster {
      *                         a transaction error occurs.
      */
     public synchronized void writeSingleRegister(int unitId, int ref, Register register) throws ModbusException {
+        checkTransaction();
+        if (m_WriteSingleRegisterRequest == null) {
+            m_WriteSingleRegisterRequest = new WriteSingleRegisterRequest();
+        }
         m_WriteSingleRegisterRequest.setUnitID(unitId);
         m_WriteSingleRegisterRequest.setReference(ref);
         m_WriteSingleRegisterRequest.setRegister(register);
@@ -257,7 +266,11 @@ abstract public class AbstractModbusMaster {
      *                         a transaction error occurs.
      */
     public synchronized void writeMultipleRegisters(int unitId, int ref, Register[] registers) throws ModbusException {
-        m_WriteMultipleRegistersRequest.setUnitID(unitId);;
+        checkTransaction();
+        if (m_WriteMultipleRegistersRequest == null) {
+            m_WriteMultipleRegistersRequest = new WriteMultipleRegistersRequest();
+        }
+        m_WriteMultipleRegistersRequest.setUnitID(unitId);
         m_WriteMultipleRegistersRequest.setReference(ref);
         m_WriteMultipleRegistersRequest.setRegisters(registers);
         m_Transaction.setRequest(m_WriteMultipleRegistersRequest);
@@ -395,6 +408,33 @@ abstract public class AbstractModbusMaster {
      */
     public synchronized void writeMultipleRegisters(int ref, Register[] registers) throws ModbusException {
         writeMultipleRegisters(DEFAULT_UNIT_ID, ref, registers);
+    }
+
+    /**
+     * Reads the response from the transaction
+     * If there is no response, then it throws an error
+     *
+     * @return Modbus response
+     *
+     * @throws ModbusException
+     */
+    private ModbusResponse getAndCheckResponse() throws ModbusException {
+        ModbusResponse res = m_Transaction.getResponse();
+        if (res == null) {
+            throw new ModbusException("No response");
+        }
+        return res;
+    }
+
+    /**
+     * Checks to make sure there is a transaction to use
+     *
+     * @throws ModbusException
+     */
+    private void checkTransaction() throws ModbusException {
+        if (m_Transaction == null) {
+            throw new ModbusException("No transaction created, probably not connected");
+        }
     }
 
 }
