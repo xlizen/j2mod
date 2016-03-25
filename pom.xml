@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.j2mod</groupId>
-    <artifactId>modbus</artifactId>
+    <artifactId>j2mod</artifactId>
     <name>j2mod</name>
     <version>2.0</version>
     <description>A fork of the j2mod library to support the jSerialComm connector</description>
@@ -62,13 +62,13 @@
 
     <licenses>
         <license>
-            <name>GNU LGPL Version 3, 29 June 2007</name>
-            <url>http://www.gnu.org/licenses</url>
-            <distribution>repo</distribution>
+            <name>The Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
         </license>
     </licenses>
 
     <scm>
+        <connection>https://github.com/steveohara/j2mod.git</connection>
         <url>https://github.com/steveohara/j2mod</url>
     </scm>
 
@@ -218,7 +218,6 @@
             <resource>
                 <directory>src/main/resources</directory>
                 <excludes>
-                    <exclude>repo.xml</exclude>
                     <exclude>log4j.properties</exclude>
                 </excludes>
             </resource>
