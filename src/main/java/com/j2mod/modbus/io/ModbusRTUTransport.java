@@ -250,7 +250,7 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
             }
         }
         catch (IOException e) {
-            throw new IOException("getResponse serial port exception");
+            throw new IOException(String.format("getResponse serial port exception - %s", e.getMessage()));
         }
     }
 

@@ -52,11 +52,12 @@ public abstract class ModbusSerialTransport implements ModbusTransport {
 
     protected SerialPort m_CommPort;
     protected boolean m_Echo = false;     // require RS-485 echo processing
-    private final Set<ModbusSerialTransportListener> listeners = Collections.synchronizedSet(new HashSet<ModbusSerialTransportListener>());
+    private final Set<AbstractModbusSerialTransportListener> listeners = Collections.synchronizedSet(new HashSet<AbstractModbusSerialTransportListener>());
     private int receiveTimeout = 500;
 
     /**
      * Cretes a new transaction suitable for the serial port
+     *
      * @return SerialTransaction
      */
     public ModbusTransaction createTransaction() {
@@ -70,12 +71,13 @@ public abstract class ModbusSerialTransport implements ModbusTransport {
      * its serial output stream to a specified slave unit ID.
      *
      * @param msg a <code>ModbusMessage</code> value
+     *
      * @throws ModbusIOException if an error occurs
      */
     public void writeMessage(ModbusMessage msg) throws ModbusIOException {
-        notifyListeners(ModbusSerialTransportListener.EventType.BEFORE_WRITE_MESSAGE);
+        notifyListenersBeforeWrite(msg);
         writeMessageOut(msg);
-        notifyListeners(ModbusSerialTransportListener.EventType.AFTER_WRITE_MESSAGE);
+        notifyListenersAfterWrite(msg);
     }
 
     /**
@@ -88,10 +90,10 @@ public abstract class ModbusSerialTransport implements ModbusTransport {
      * @throws ModbusIOException if an error occurs
      */
     public ModbusRequest readRequest() throws ModbusIOException {
-        notifyListeners(ModbusSerialTransportListener.EventType.BEFORE_READ_REQUEST);
+        notifyListenersBeforeRequest();
         m_CommPort.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING | SerialPort.TIMEOUT_WRITE_BLOCKING, receiveTimeout, receiveTimeout);
         ModbusRequest req = readRequestIn();
-        notifyListeners(ModbusSerialTransportListener.EventType.AFTER_READ_REQUEST);
+        notifyListenersAfterRequest(req);
         return req;
     }
 
@@ -104,10 +106,10 @@ public abstract class ModbusSerialTransport implements ModbusTransport {
      * @throws ModbusIOException if an error occurs
      */
     public ModbusResponse readResponse() throws ModbusIOException {
-        notifyListeners(ModbusSerialTransportListener.EventType.BEFORE_READ_RESPONSE);
+        notifyListenersBeforeResponse();
         m_CommPort.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING | SerialPort.TIMEOUT_WRITE_BLOCKING, receiveTimeout, receiveTimeout);
         ModbusResponse res = readResponseIn();
-        notifyListeners(ModbusSerialTransportListener.EventType.AFTER_READ_RESPONSE);
+        notifyListenersAfterResponse(res);
         return res;
     }
 
@@ -116,6 +118,7 @@ public abstract class ModbusSerialTransport implements ModbusTransport {
      * its serial output stream to a specified slave unit ID.
      *
      * @param msg a <code>ModbusMessage</code> value
+     *
      * @throws ModbusIOException if an error occurs
      */
     abstract protected void writeMessageOut(ModbusMessage msg) throws ModbusIOException;
@@ -146,7 +149,7 @@ public abstract class ModbusSerialTransport implements ModbusTransport {
      *
      * @param listener Listner callback
      */
-    public void addListener(ModbusSerialTransportListener listener) {
+    public void addListener(AbstractModbusSerialTransportListener listener) {
         if (listener != null) {
             listeners.add(listener);
         }
@@ -157,7 +160,7 @@ public abstract class ModbusSerialTransport implements ModbusTransport {
      *
      * @param listener Listener to remove
      */
-    public void removeListener(ModbusSerialTransportListener listener) {
+    public void removeListener(AbstractModbusSerialTransportListener listener) {
         if (listener != null) {
             listeners.remove(listener);
         }
@@ -172,13 +175,74 @@ public abstract class ModbusSerialTransport implements ModbusTransport {
 
     /**
      * Calls any listeners with the given event and current port
-     *
-     * @param eventType Event type
      */
-    private void notifyListeners(ModbusSerialTransportListener.EventType eventType) {
+    private void notifyListenersBeforeRequest() {
         synchronized (listeners) {
-            for (ModbusSerialTransportListener listener : listeners) {
-                listener.event(eventType, m_CommPort);
+            for (AbstractModbusSerialTransportListener listener : listeners) {
+                listener.beforeRequestRead(m_CommPort);
+            }
+        }
+    }
+
+    /**
+     * Calls any listeners with the given event and current port
+     *
+     * @param req Request received
+     */
+    private void notifyListenersAfterRequest(ModbusRequest req) {
+        synchronized (listeners) {
+            for (AbstractModbusSerialTransportListener listener : listeners) {
+                listener.afterRequestRead(m_CommPort, req);
+            }
+        }
+    }
+
+    /**
+     * Calls any listeners with the given event and current port
+     */
+    private void notifyListenersBeforeResponse() {
+        synchronized (listeners) {
+            for (AbstractModbusSerialTransportListener listener : listeners) {
+                listener.beforeResponseRead(m_CommPort);
+            }
+        }
+    }
+
+    /**
+     * Calls any listeners with the given event and current port
+     *
+     * @param res Response received
+     */
+    private void notifyListenersAfterResponse(ModbusResponse res) {
+        synchronized (listeners) {
+            for (AbstractModbusSerialTransportListener listener : listeners) {
+                listener.afterResponseRead(m_CommPort, res);
+            }
+        }
+    }
+
+    /**
+     * Calls any listeners with the given event and current port
+     *
+     * @param msg Message to be sent
+     */
+    private void notifyListenersBeforeWrite(ModbusMessage msg) {
+        synchronized (listeners) {
+            for (AbstractModbusSerialTransportListener listener : listeners) {
+                listener.beforeMessageWrite(m_CommPort, msg);
+            }
+        }
+    }
+
+    /**
+     * Calls any listeners with the given event and current port
+     *
+     * @param msg Message sent
+     */
+    private void notifyListenersAfterWrite(ModbusMessage msg) {
+        synchronized (listeners) {
+            for (AbstractModbusSerialTransportListener listener : listeners) {
+                listener.afterMessageWrite(m_CommPort, msg);
             }
         }
     }
@@ -188,6 +252,7 @@ public abstract class ModbusSerialTransport implements ModbusTransport {
      * and output streams to be used for reading from and writing to.
      *
      * @param cp the comm port to read from/write to.
+     *
      * @throws IOException if an I/O related error occurs.
      */
     public void setCommPort(SerialPort cp) throws IOException {
@@ -242,6 +307,7 @@ public abstract class ModbusSerialTransport implements ModbusTransport {
      *
      * @param len is the length of the echo to read.  Timeout will occur if the
      *            echo is not received in the time specified in the SerialConnection.
+     *
      * @throws IOException if a I/O error occurred.
      */
     protected void readEcho(int len) throws IOException {
@@ -283,13 +349,14 @@ public abstract class ModbusSerialTransport implements ModbusTransport {
      *
      * @param buffer      Buffer to put data into
      * @param bytesToRead Number of bytes to read
+     *
      * @throws IOException If the port is invalid or if the number of bytes returned is not equal to that asked for
      */
     protected void readBytes(byte[] buffer, long bytesToRead) throws IOException {
         if (m_CommPort != null && m_CommPort.isOpen()) {
             int cnt = m_CommPort.readBytes(buffer, bytesToRead);
-            if (cnt != 1) {
-                throw new IOException("Cannot read from serial port");
+            if (cnt != bytesToRead) {
+                throw new IOException("Cannot read from serial port - truncated");
             }
         }
         else {
@@ -299,8 +366,10 @@ public abstract class ModbusSerialTransport implements ModbusTransport {
 
     /**
      * Writes the bytes to the output stream
-     * @param buffer Buffer to write
+     *
+     * @param buffer       Buffer to write
      * @param bytesToWrite Number of bytes to write
+     *
      * @return Number of bytes written
      */
     public final int writeBytes(byte[] buffer, long bytesToWrite) throws IOException {
@@ -315,7 +384,9 @@ public abstract class ModbusSerialTransport implements ModbusTransport {
     /**
      * Reads an ascii byte from the input stream
      * It handles the special start and end frame markers
+     *
      * @return Byte value of the next ASCII couplet
+     *
      * @throws IOException
      */
     protected int readAsciiByte() throws IOException {
@@ -332,13 +403,13 @@ public abstract class ModbusSerialTransport implements ModbusTransport {
                 return ModbusASCIITransport.FRAME_END;
             }
             else {
-                String value = ((int) buffer[0]) + "";
+                String value = ((int)buffer[0]) + "";
                 cnt = m_CommPort.readBytes(buffer, 1);
                 if (cnt != 1) {
                     throw new IOException("Cannot read from serial port");
                 }
                 else {
-                    return Integer.parseInt(value + ((int) buffer[0]) + "", 16);
+                    return Integer.parseInt(value + ((int)buffer[0]) + "", 16);
                 }
             }
         }
@@ -351,8 +422,11 @@ public abstract class ModbusSerialTransport implements ModbusTransport {
      * Writes out a byte value as an ascii character
      * If the value is the special start/end characters, then
      * allowance is made for these
+     *
      * @param value Value to write
+     *
      * @return Number of bytes written
+     *
      * @throws IOException
      */
     public final int writeAsciiByte(int value) throws IOException {
@@ -364,7 +438,7 @@ public abstract class ModbusSerialTransport implements ModbusTransport {
                 logger.debug("Wrote FRAME_START");
             }
             else if (value == ModbusASCIITransport.FRAME_END) {
-                buffer = new byte[]{13,10};
+                buffer = new byte[]{13, 10};
                 logger.debug("Wrote FRAME_END");
             }
             else {
@@ -380,15 +454,18 @@ public abstract class ModbusSerialTransport implements ModbusTransport {
 
     /**
      * Writes an array of bytes out as a stream of ascii characters
-     * @param buffer Buffer of bytes to write
+     *
+     * @param buffer       Buffer of bytes to write
      * @param bytesToWrite Number of characters to write
+     *
      * @return Number of bytes written
+     *
      * @throws IOException
      */
     public int writeAsciiBytes(byte[] buffer, long bytesToWrite) throws IOException {
         if (m_CommPort != null && m_CommPort.isOpen()) {
             int cnt = 0;
-            for (int i=0; i<bytesToWrite; i++) {
+            for (int i = 0; i < bytesToWrite; i++) {
                 if (writeAsciiByte(buffer[i]) != 1) {
                     return cnt;
                 }

@@ -77,6 +77,7 @@ public class ReadInputRegistersWithCallbackTest {
         }
 
         GpioFactory.getInstance();
+        Gpio.pinMode(RTS_PIN, Gpio.OUTPUT);
 
         try {
             try {
@@ -158,24 +159,20 @@ public class ReadInputRegistersWithCallbackTest {
                     continue;
                 }
                 ModbusResponse res = trans.getResponse();
-                if (res != null) {
-                    logger.system("Response: %s", res.getHexMessage());
-                }
-                else {
+                if (res == null) {
                     logger.system("No response to READ HOLDING request");
                 }
-                if (res instanceof ExceptionResponse) {
-                    ExceptionResponse exception = (ExceptionResponse)res;
-                    logger.system(exception.toString());
-                    continue;
+                else {
+                    logger.system("Response: %s", res.getHexMessage());
+                    if (res instanceof ExceptionResponse) {
+                        ExceptionResponse exception = (ExceptionResponse)res;
+                        logger.system(exception.toString());
+                    }
+                    else if (res instanceof ReadInputRegistersResponse) {
+                        ReadInputRegistersResponse data = (ReadInputRegistersResponse)res;
+                        logger.system("Data: %3.1f", data.getRegister(0).toShort() / 10.0);
+                    }
                 }
-
-                if (!(res instanceof ReadInputRegistersResponse)) {
-                    continue;
-                }
-
-                ReadInputRegistersResponse data = (ReadInputRegistersResponse)res;
-                logger.system("Data: %3.1f", data.getRegister(0).toShort() / 10.0);
             }
         }
         catch (Exception ex) {
@@ -194,23 +191,18 @@ public class ReadInputRegistersWithCallbackTest {
         System.exit(0);
     }
 
-    private static class EventListener implements ModbusSerialTransportListener {
+    private static class EventListener extends AbstractModbusSerialTransportListener {
         @Override
-        public void event(EventType eventType, SerialPort port) {
-            Gpio.pinMode(RTS_PIN, Gpio.OUTPUT);
-            switch (eventType) {
+        public void beforeMessageWrite(SerialPort port, ModbusMessage msg) {
+            Gpio.digitalWrite(RTS_PIN, true);
+        }
 
-                // Switch the UART into read mode
-                case BEFORE_READ_REQUEST:
-                case BEFORE_READ_RESPONSE:
-                    Gpio.delayMicroseconds(1000);
-                    Gpio.digitalWrite(RTS_PIN, false);
-                    break;
-
-                // Switch the UART into write mode
-                case BEFORE_WRITE_MESSAGE:
-                    Gpio.digitalWrite(RTS_PIN, true);
-            }
+        @Override
+        public void afterMessageWrite(SerialPort port, ModbusMessage msg) {
+            double bytesPerSec = port.getBaudRate() / (port.getNumDataBits() + port.getNumStopBits() + (port.getParity() == SerialPort.NO_PARITY ? 0 : 1));
+            double delayMicroSeconds = 1000000 * 1.3 * msg.getOutputLength() / bytesPerSec;
+            Gpio.delayMicroseconds((int)delayMicroSeconds);
+            Gpio.digitalWrite(RTS_PIN, false);
         }
     }
 }
