@@ -54,11 +54,27 @@ public class ModbusTCPMaster extends AbstractModbusMaster {
      * @param port the port the slave is listening to.
      */
     public ModbusTCPMaster(String addr, int port) {
+        this(addr, port, Modbus.DEFAULT_TIMEOUT, false);
+    }
+
+    /**
+     * Constructs a new master facade instance for communication
+     * with a given slave.
+     *
+     * @param addr an internet address as resolvable IP name or IP number,
+     *             specifying the slave to communicate with.
+     * @param port the port the slave is listening to.
+     * @param timeout Socket timeout in milliseconds
+     * @param reconnect True if the socket should reconnect if it detcts a connection failure
+     */
+    public ModbusTCPMaster(String addr, int port, int timeout, boolean reconnect) {
         super();
         try {
             InetAddress slaveAddress = InetAddress.getByName(addr);
             connection = new TCPMasterConnection(slaveAddress);
             connection.setPort(port);
+            connection.setTimeout(timeout);
+            setReconnecting(reconnect);
         }
         catch (UnknownHostException e) {
             throw new RuntimeException(e.getMessage());
