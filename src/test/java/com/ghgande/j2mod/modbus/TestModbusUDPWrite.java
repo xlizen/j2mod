@@ -20,8 +20,9 @@ import com.ghgande.j2mod.modbus.msg.ReadMultipleRegistersResponse;
 import com.ghgande.j2mod.modbus.msg.WriteCoilResponse;
 import com.ghgande.j2mod.modbus.msg.WriteSingleRegisterResponse;
 import com.ghgande.j2mod.modbus.utils.AbstractTestModbusUDPMaster;
-import org.junit.Assert;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * This class tests the TCP master write features of the library
@@ -32,17 +33,17 @@ public class TestModbusUDPWrite extends AbstractTestModbusUDPMaster {
     @Test
     public void testWriteCoils() {
         WriteCoilResponse res = (WriteCoilResponse)writeRequest(Modbus.WRITE_COIL, 1, 1);
-        Assert.assertEquals("Incorrect write status for coil 2", true, res.getCoil());
+        assertEquals("Incorrect write status for coil 2", true, res.getCoil());
         ReadCoilsResponse res1 = (ReadCoilsResponse)readRequest(Modbus.READ_COILS, 1, 1);
-        Assert.assertEquals("Incorrect status for coil 2", true, res1.getCoilStatus(0));
+        assertEquals("Incorrect status for coil 2", true, res1.getCoilStatus(0));
     }
 
     @Test
     public void testWriteHoldingRegisters() {
         WriteSingleRegisterResponse res = (WriteSingleRegisterResponse)writeRequest(Modbus.WRITE_SINGLE_REGISTER, 0, 5555);
-        Assert.assertEquals("Incorrect write status for register 1", 5555, res.getRegisterValue());
+        assertEquals("Incorrect write status for register 1", 5555, res.getRegisterValue());
         ReadMultipleRegistersResponse res1 = (ReadMultipleRegistersResponse)readRequest(Modbus.READ_HOLDING_REGISTERS, 0, 1);
-        Assert.assertEquals("Incorrect status for register 0", 5555, res1.getRegisterValue(0));
+        assertEquals("Incorrect status for register 0", 5555, res1.getRegisterValue(0));
     }
 
 }

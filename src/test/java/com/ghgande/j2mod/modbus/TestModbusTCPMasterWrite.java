@@ -17,8 +17,10 @@ package com.ghgande.j2mod.modbus;
 
 import com.ghgande.j2mod.modbus.procimg.SimpleInputRegister;
 import com.ghgande.j2mod.modbus.utils.AbstractTestModbusTCPMaster;
-import org.junit.Assert;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 /**
  * This class tests the TCP master write features of the library
@@ -31,11 +33,11 @@ public class TestModbusTCPMasterWrite extends AbstractTestModbusTCPMaster {
         try {
             boolean before = master.readCoils(UNIT_ID, 1, 1).getBit(0);
             master.writeCoil(UNIT_ID, 1, !before);
-            Assert.assertEquals("Incorrect status for coil 1", true, !before);
+            assertEquals("Incorrect status for coil 1", true, !before);
             master.writeCoil(UNIT_ID, 1, before);
         }
         catch (Exception e) {
-            Assert.fail(String.format("Cannot write to coil 1 - %s", e.getMessage()));
+            fail(String.format("Cannot write to coil 1 - %s", e.getMessage()));
         }
     }
 
@@ -44,11 +46,11 @@ public class TestModbusTCPMasterWrite extends AbstractTestModbusTCPMaster {
         try {
             int before = master.readInputRegisters(UNIT_ID, 1, 1)[0].getValue();
             master.writeSingleRegister(UNIT_ID, 1, new SimpleInputRegister(9999));
-            Assert.assertEquals("Incorrect status for register 1", 9999, master.readInputRegisters(UNIT_ID, 1, 1)[0].getValue());
+            assertEquals("Incorrect status for register 1", 9999, master.readInputRegisters(UNIT_ID, 1, 1)[0].getValue());
             master.writeSingleRegister(UNIT_ID, 1, new SimpleInputRegister(before));
         }
         catch (Exception e) {
-            Assert.fail(String.format("Cannot write to register 1 - %s", e.getMessage()));
+            fail(String.format("Cannot write to register 1 - %s", e.getMessage()));
         }
     }
 

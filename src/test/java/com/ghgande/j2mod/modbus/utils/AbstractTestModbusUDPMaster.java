@@ -24,11 +24,12 @@ import com.ghgande.j2mod.modbus.net.UDPMasterConnection;
 import com.ghgande.j2mod.modbus.procimg.SimpleRegister;
 import com.ghgande.j2mod.modbus.util.ModbusLogger;
 import org.junit.AfterClass;
-import org.junit.Assert;
 import org.junit.BeforeClass;
 
 import java.io.IOException;
 import java.net.InetAddress;
+
+import static org.junit.Assert.fail;
 
 /**
  * All the master unit tests extend this class so that the system will automatically
@@ -52,7 +53,7 @@ public class AbstractTestModbusUDPMaster extends AbstractTestModbus {
         }
         catch (Exception e) {
             tearDownSlave();
-            Assert.fail(String.format("Cannot initialise tests - %s", e.getMessage()));
+            fail(String.format("Cannot initialise tests - %s", e.getMessage()));
         }
     }
 
@@ -137,7 +138,7 @@ public class AbstractTestModbusUDPMaster extends AbstractTestModbus {
                     req = new ReadMultipleRegistersRequest(register, count);
                     break;
                 default:
-                    Assert.fail(String.format("Request type %d is not supported by the test harness", functionCode));
+                    fail(String.format("Request type %d is not supported by the test harness", functionCode));
             }
             req.setUnitID(UNIT_ID);
 
@@ -190,7 +191,7 @@ public class AbstractTestModbusUDPMaster extends AbstractTestModbus {
                     req = new WriteSingleRegisterRequest(register, new SimpleRegister(value));
                     break;
                 default:
-                    Assert.fail(String.format("Request type %d is not supported by the test harness", functionCode));
+                    fail(String.format("Request type %d is not supported by the test harness", functionCode));
             }
             req.setUnitID(UNIT_ID);
 

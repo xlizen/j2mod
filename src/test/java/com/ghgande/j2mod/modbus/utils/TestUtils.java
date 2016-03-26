@@ -61,10 +61,6 @@ public class TestUtils {
             osName = "win32";
             exeName = "modpoll.exe";
         }
-        else if (osName.matches("(?is)mac.*")) {
-            osName = "macosx";
-            exeName = "modpoll";
-        }
         else {
             osName = "linux";
             exeName = "modpoll";
@@ -393,4 +389,12 @@ public class TestUtils {
         return null;
     }
 
+    /**
+     * Returns true if the platform supports the modpoll executable
+     *
+     * @return True if modpoll available
+     */
+    public static boolean platformSupportsModPoll() {
+        return System.getProperty("os.name").matches("(?i)(Windows|Linux).*");
+    }
 }

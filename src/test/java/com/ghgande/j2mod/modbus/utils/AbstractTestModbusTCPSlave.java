@@ -18,8 +18,10 @@ package com.ghgande.j2mod.modbus.utils;
 import com.ghgande.j2mod.modbus.net.ModbusListener;
 import com.ghgande.j2mod.modbus.util.ModbusLogger;
 import org.junit.AfterClass;
-import org.junit.Assert;
 import org.junit.BeforeClass;
+
+import static org.junit.Assert.fail;
+import static org.junit.Assume.assumeTrue;
 
 /**
  * All the slave unit tests extend this class so that the system will automatically
@@ -36,12 +38,13 @@ public class AbstractTestModbusTCPSlave extends AbstractTestModbusTCPMaster {
 
     @BeforeClass
     public static void setUpSlave() {
+        assumeTrue("This platform does not support modpoll so the result of this test will be ignored", TestUtils.platformSupportsModPoll());
         try {
             TestUtils.loadModPollTool();
             listener = createTCPSlave();
         }
         catch (Exception e) {
-            Assert.fail(String.format("Cannot initialise tests - %s", e.getMessage()));
+            fail(String.format("Cannot initialise tests - %s", e.getMessage()));
         }
     }
 

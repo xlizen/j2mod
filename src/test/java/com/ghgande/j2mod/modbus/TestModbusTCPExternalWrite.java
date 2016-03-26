@@ -16,8 +16,9 @@
 package com.ghgande.j2mod.modbus;
 
 import com.ghgande.j2mod.modbus.utils.AbstractTestModbusTCPSlave;
-import org.junit.Assert;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * This class uses an external master tool to test that the j2mod slave write features
@@ -33,14 +34,14 @@ public class TestModbusTCPExternalWrite extends AbstractTestModbusTCPSlave {
 
     @Test
     public void testSlaveWriteCoils() {
-        Assert.assertEquals("Incorrect write status for coil 1", true, writeModPoll(1, 0, 0, "Written 1 reference"));
-        Assert.assertEquals("Incorrect status for coil 1", true, readModPoll(1, 0, "[1]: 0"));
+        assertEquals("Incorrect write status for coil 1", true, writeModPoll(1, 0, 0, "Written 1 reference"));
+        assertEquals("Incorrect status for coil 1", true, readModPoll(1, 0, "[1]: 0"));
     }
 
     @Test
     public void testSlaveWriteHoldingRegisters() {
-        Assert.assertEquals("Incorrect write status for holding register 1", true, writeModPoll(1, 4, 5555, "Written 1 reference"));
-        Assert.assertEquals("Incorrect value for holding register 1", true, readModPoll(1, 4, "[1]: 5555"));
+        assertEquals("Incorrect write status for holding register 1", true, writeModPoll(1, 4, 5555, "Written 1 reference"));
+        assertEquals("Incorrect value for holding register 1", true, readModPoll(1, 4, "[1]: 5555"));
     }
 
 }
