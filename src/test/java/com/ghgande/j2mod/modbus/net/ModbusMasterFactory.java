@@ -112,7 +112,7 @@ public class ModbusMasterFactory {
             UDPMasterTerminal terminal;
             try {
                 terminal = new UDPMasterTerminal(InetAddress.getByName(hostName));
-                terminal.setRemotePort(port);
+                terminal.setPort(port);
                 terminal.activate();
             }
             catch (UnknownHostException e) {
@@ -123,7 +123,7 @@ public class ModbusMasterFactory {
                 e.printStackTrace();
                 return null;
             }
-            return terminal.getModbusTransport();
+            return terminal.getTransport();
         }
         else {
             throw new IllegalArgumentException("unknown type " + parts[0]);

@@ -57,9 +57,8 @@ public class UDPMasterConnection {
      */
     public synchronized void connect() throws Exception {
         if (!connected) {
-            terminal = new UDPMasterTerminal();
-            terminal.setRemoteAddress(address);
-            terminal.setRemotePort(port);
+            terminal = new UDPMasterTerminal(address);
+            terminal.setPort(port);
             terminal.setTimeout(timeout);
             terminal.activate();
             connected = true;
@@ -88,7 +87,7 @@ public class UDPMasterConnection {
      * @return the connection's <tt>ModbusTransport</tt>.
      */
     public ModbusTransport getModbusTransport() {
-        return terminal == null ? null : terminal.getModbusTransport();
+        return terminal == null ? null : terminal.getTransport();
     }
 
     /**
@@ -96,7 +95,7 @@ public class UDPMasterConnection {
      *
      * @return a <tt>UDPTerminal</tt> instance.
      */
-    public UDPTerminal getTerminal() {
+    public AbstractUDPTerminal getTerminal() {
         return terminal;
     }
 

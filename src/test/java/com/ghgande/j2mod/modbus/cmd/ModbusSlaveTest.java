@@ -16,7 +16,7 @@
 package com.ghgande.j2mod.modbus.cmd;
 
 import com.ghgande.j2mod.modbus.ModbusCoupler;
-import com.ghgande.j2mod.modbus.net.ModbusListener;
+import com.ghgande.j2mod.modbus.net.AbstractModbusListener;
 import com.ghgande.j2mod.modbus.net.ModbusListenerFactory;
 import com.ghgande.j2mod.modbus.procimg.*;
 import com.ghgande.j2mod.modbus.util.ModbusLogger;
@@ -34,7 +34,7 @@ public class ModbusSlaveTest {
     private static final ModbusLogger logger = ModbusLogger.getLogger(ModbusSlaveTest.class);
 
     public static void main(String[] args) {
-        ModbusListener listener = null;
+        AbstractModbusListener listener = null;
         SimpleProcessImage spi;
 
         try {

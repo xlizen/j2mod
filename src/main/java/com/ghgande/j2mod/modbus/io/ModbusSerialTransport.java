@@ -52,7 +52,7 @@ public abstract class ModbusSerialTransport implements ModbusTransport {
 
     protected SerialPort commPort;
     protected boolean echo = false;     // require RS-485 echo processing
-    private final Set<AbstractModbusSerialTransportListener> listeners = Collections.synchronizedSet(new HashSet<AbstractModbusSerialTransportListener>());
+    private final Set<AbstractSerialTransportListener> listeners = Collections.synchronizedSet(new HashSet<AbstractSerialTransportListener>());
     private int receiveTimeout = 500;
 
     /**
@@ -149,7 +149,7 @@ public abstract class ModbusSerialTransport implements ModbusTransport {
      *
      * @param listener Listner callback
      */
-    public void addListener(AbstractModbusSerialTransportListener listener) {
+    public void addListener(AbstractSerialTransportListener listener) {
         if (listener != null) {
             listeners.add(listener);
         }
@@ -160,7 +160,7 @@ public abstract class ModbusSerialTransport implements ModbusTransport {
      *
      * @param listener Listener to remove
      */
-    public void removeListener(AbstractModbusSerialTransportListener listener) {
+    public void removeListener(AbstractSerialTransportListener listener) {
         if (listener != null) {
             listeners.remove(listener);
         }
@@ -178,7 +178,7 @@ public abstract class ModbusSerialTransport implements ModbusTransport {
      */
     private void notifyListenersBeforeRequest() {
         synchronized (listeners) {
-            for (AbstractModbusSerialTransportListener listener : listeners) {
+            for (AbstractSerialTransportListener listener : listeners) {
                 listener.beforeRequestRead(commPort);
             }
         }
@@ -191,7 +191,7 @@ public abstract class ModbusSerialTransport implements ModbusTransport {
      */
     private void notifyListenersAfterRequest(ModbusRequest req) {
         synchronized (listeners) {
-            for (AbstractModbusSerialTransportListener listener : listeners) {
+            for (AbstractSerialTransportListener listener : listeners) {
                 listener.afterRequestRead(commPort, req);
             }
         }
@@ -202,7 +202,7 @@ public abstract class ModbusSerialTransport implements ModbusTransport {
      */
     private void notifyListenersBeforeResponse() {
         synchronized (listeners) {
-            for (AbstractModbusSerialTransportListener listener : listeners) {
+            for (AbstractSerialTransportListener listener : listeners) {
                 listener.beforeResponseRead(commPort);
             }
         }
@@ -215,7 +215,7 @@ public abstract class ModbusSerialTransport implements ModbusTransport {
      */
     private void notifyListenersAfterResponse(ModbusResponse res) {
         synchronized (listeners) {
-            for (AbstractModbusSerialTransportListener listener : listeners) {
+            for (AbstractSerialTransportListener listener : listeners) {
                 listener.afterResponseRead(commPort, res);
             }
         }
@@ -228,7 +228,7 @@ public abstract class ModbusSerialTransport implements ModbusTransport {
      */
     private void notifyListenersBeforeWrite(ModbusMessage msg) {
         synchronized (listeners) {
-            for (AbstractModbusSerialTransportListener listener : listeners) {
+            for (AbstractSerialTransportListener listener : listeners) {
                 listener.beforeMessageWrite(commPort, msg);
             }
         }
@@ -241,7 +241,7 @@ public abstract class ModbusSerialTransport implements ModbusTransport {
      */
     private void notifyListenersAfterWrite(ModbusMessage msg) {
         synchronized (listeners) {
-            for (AbstractModbusSerialTransportListener listener : listeners) {
+            for (AbstractSerialTransportListener listener : listeners) {
                 listener.afterMessageWrite(commPort, msg);
             }
         }

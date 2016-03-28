@@ -15,7 +15,6 @@
  */
 package com.ghgande.j2mod.modbus.net;
 
-import com.ghgande.j2mod.modbus.Modbus;
 import com.ghgande.j2mod.modbus.util.ModbusLogger;
 import com.ghgande.j2mod.modbus.util.ThreadPool;
 
@@ -34,16 +33,13 @@ import java.net.*;
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
  */
-public class ModbusTCPListener implements ModbusListener {
+public class ModbusTCPListener extends AbstractModbusListener {
 
     private static final ModbusLogger logger = ModbusLogger.getLogger(ModbusTCPListener.class);
 
     private ServerSocket serverSocket = null;
     private ThreadPool threadPool;
     private Thread listener;
-    private int port = Modbus.DEFAULT_PORT;
-    private boolean listening;
-    private InetAddress address;
 
     /**
      * Constructs a ModbusTCPListener instance.<br>
@@ -76,39 +72,19 @@ public class ModbusTCPListener implements ModbusListener {
         }
     }
 
-    /**
-     * Sets the port to be listened to.
-     *
-     * @param port the number of the IP port as <tt>int</tt>.
-     */
-    public void setPort(int port) {
-        this.port = port;
+    @Override
+    public void setTimeout(int timeout) {
+        super.setTimeout(timeout);
+        if (serverSocket != null && listening) {
+            try {
+                serverSocket.setSoTimeout(timeout);
+            }
+            catch (SocketException e) {
+                logger.error("Cannot set socket timeout - %s", e.getMessage());
+            }
+        }
     }
 
-    /**
-     * Sets the address of the interface to be listened to.
-     *
-     * @param addr an <tt>InetAddress</tt> instance.
-     */
-    public void setAddress(InetAddress addr) {
-        address = addr;
-    }
-
-    /**
-     * Starts this <tt>ModbusTCPListener</tt>.
-     *
-     * @deprecated
-     */
-    public void start() {
-        listening = true;
-        listener = new Thread(this);
-        listener.start();
-    }
-
-    /**
-     * Accepts incoming connections and handles then with
-     * <tt>TCPConnectionHandler</tt> instances.
-     */
     @Override
     public void run() {
         try {
@@ -121,7 +97,20 @@ public class ModbusTCPListener implements ModbusListener {
              */
             int floodProtection = 5;
             serverSocket = new ServerSocket(port, floodProtection, address);
+            serverSocket.setSoTimeout(timeout);
             logger.debug("Listening to %s (Port %d)", serverSocket.toString(), port);
+        }
+
+        // Catch any fatal errors and set the listening flag to false to indicate an error
+        catch (Exception e) {
+            error = String.format("Cannot start TCP listener - %s", e.getMessage());
+            listening = false;
+            return;
+        }
+
+        listener = Thread.currentThread();
+        listening = true;
+        try {
 
             // Infinite loop, taking care of resources in case of a lot of
             // parallel logins
@@ -137,54 +126,11 @@ public class ModbusTCPListener implements ModbusListener {
                 }
             }
         }
-        catch (SocketException iex) {
-            if (listening) {
-                logger.debug(iex);
-            }
-        }
         catch (IOException e) {
-            // FIXME: this is a major failure, how do we handle this
+            error = String.format("Problem starting listener - %s", e.getMessage());
         }
     }
 
-    /**
-     * Tests if this <tt>ModbusTCPListener</tt> is listening and accepting
-     * incoming connections.
-     *
-     * @return true if listening (and accepting incoming connections), false
-     * otherwise.
-     */
-    @Override
-    public boolean isListening() {
-        return listening;
-    }
-
-    /**
-     * Set the listening state of this <tt>ModbusTCPListener</tt> object.
-     * A <tt>ModbusTCPListener</tt> will silently drop any requests if the
-     * listening state is set to <tt>false</tt>.
-     *
-     * @param b
-     */
-    public void setListening(boolean b) {
-        listening = b;
-    }
-
-    /**
-     * Start the listener thread for this serial interface.
-     */
-    @Override
-    public Thread listen() {
-        listening = true;
-        Thread result = new Thread(this);
-        result.start();
-
-        return result;
-    }
-
-    /**
-     * Stops this <tt>ModbusTCPListener</tt>.
-     */
     @Override
     public void stop() {
         listening = false;

@@ -32,7 +32,7 @@ public class ModbusListenerFactory {
 
     private static final ModbusLogger logger = ModbusLogger.getLogger(ModbusListenerFactory.class);
 
-    public static ModbusListener createModbusListener(String address) throws Exception {
+    public static AbstractModbusListener createModbusListener(String address) throws Exception {
         String parts[] = address.split(" *: *");
         if (parts.length < 2) {
             throw new IllegalArgumentException("missing connection information");
@@ -75,8 +75,6 @@ public class ModbusListenerFactory {
                 int port = Integer.parseInt(parts[2]);
                 listener.setPort(port);
             }
-            listener.setListening(true);
-
             Thread result = new Thread(listener);
             result.start();
 
@@ -90,7 +88,6 @@ public class ModbusListenerFactory {
                 int port = Integer.parseInt(parts[2]);
                 listener.setPort(port);
             }
-            listener.setListening(true);
             new Thread(listener).start();
 
             // Check to see if it started OK

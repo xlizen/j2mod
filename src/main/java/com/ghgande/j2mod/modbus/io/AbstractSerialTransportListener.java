@@ -27,7 +27,7 @@ import com.ghgande.j2mod.modbus.msg.ModbusResponse;
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
  */
-abstract public class AbstractModbusSerialTransportListener {
+abstract public class AbstractSerialTransportListener {
 
     /**
      * Will be called whenever a message is about to be written

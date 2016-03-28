@@ -15,13 +15,8 @@
  */
 package com.ghgande.j2mod.modbus.net;
 
-import com.ghgande.j2mod.modbus.Modbus;
-import com.ghgande.j2mod.modbus.ModbusCoupler;
 import com.ghgande.j2mod.modbus.ModbusIOException;
 import com.ghgande.j2mod.modbus.io.ModbusUDPTransport;
-import com.ghgande.j2mod.modbus.msg.ModbusRequest;
-import com.ghgande.j2mod.modbus.msg.ModbusResponse;
-import com.ghgande.j2mod.modbus.procimg.ProcessImage;
 import com.ghgande.j2mod.modbus.util.ModbusLogger;
 
 import java.net.InetAddress;
@@ -35,16 +30,10 @@ import java.net.UnknownHostException;
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
  */
-public class ModbusUDPListener implements ModbusListener {
+public class ModbusUDPListener extends AbstractModbusListener {
 
     private static final ModbusLogger logger = ModbusLogger.getLogger(ModbusUDPListener.class);
-
-    private int port = Modbus.DEFAULT_PORT;
-    private boolean listening = false;
-    private boolean running = false;
-    private InetAddress address;
     private UDPSlaveTerminal terminal;
-    private String error;
 
     /**
      * Create a new <tt>ModbusUDPListener</tt> instance listening to the given
@@ -70,24 +59,12 @@ public class ModbusUDPListener implements ModbusListener {
         }
     }
 
-    /**
-     * Returns the number of the port this <tt>ModbusUDPListener</tt> is
-     * listening to.
-     *
-     * @return the number of the IP port as <tt>int</tt>.
-     */
-    public int getPort() {
-        return port;
-    }
-
-    /**
-     * Sets the number of the port this <tt>ModbusUDPListener</tt> is listening
-     * to.
-     *
-     * @param port the number of the IP port as <tt>int</tt>.
-     */
-    public void setPort(int port) {
-        this.port = ((port > 0) ? port : Modbus.DEFAULT_PORT);
+    @Override
+    public void setTimeout(int timeout) {
+        super.setTimeout(timeout);
+        if (terminal != null && listening) {
+            terminal.setTimeout(timeout);
+        }
     }
 
     /**
@@ -103,7 +80,8 @@ public class ModbusUDPListener implements ModbusListener {
             else {
                 terminal = new UDPSlaveTerminal(address);
             }
-            terminal.setLocalPort(port);
+            terminal.setTimeout(timeout);
+            terminal.setPort(port);
             terminal.activate();
             transport = new ModbusUDPTransport(terminal);
         }
@@ -116,28 +94,9 @@ public class ModbusUDPListener implements ModbusListener {
         }
 
         listening = true;
-        running = true;
         try {
-            while (running) {
-                // Get the request from the transport. It will be processed
-                // using an associated process image.
-                ModbusRequest request = transport.readRequest();
-                ModbusResponse response;
-
-                // Test if Process image exists and has a correct unit ID
-                ProcessImage spi = ModbusCoupler.getReference().getProcessImage();
-                if (spi == null ||
-                        (spi.getUnitID() != 0 && request.getUnitID() != spi.getUnitID())) {
-                    response = request.createExceptionResponse(Modbus.ILLEGAL_ADDRESS_EXCEPTION);
-                }
-                else {
-                    response = request.createResponse();
-                }
-                logger.debug("Request:%s", request.getHexMessage());
-                logger.debug("Response:%s", response.getHexMessage());
-
-                // Write the response
-                transport.writeMessage(response);
+            while (listening) {
+                handleRequest(transport);
             }
         }
         catch (ModbusIOException ex) {
@@ -156,58 +115,9 @@ public class ModbusUDPListener implements ModbusListener {
         }
     }
 
-    /**
-     * Tests if this <tt>ModbusTCPListener</tt> is listening and accepting
-     * incoming connections.
-     *
-     * @return true if listening (and accepting incoming connections), false
-     * otherwise.
-     */
-    @Override
-    public boolean isListening() {
-        return listening;
-    }
-
-    /**
-     * Sets if this <tt>ModbusUDPListener</tt> is listening and accepting
-     * incoming connections.
-     *
-     * @param listen true if the <tt>ModbusUDPListener</tt> should listen, false
-     *               otherwise.
-     */
-    @Override
-    public void setListening(boolean listen) {
-        listening = listen;
-    }
-
-    /**
-     * Start the listener thread for this serial interface.
-     */
-    @Override
-    public Thread listen() {
-        listening = true;
-        Thread result = new Thread(this);
-        result.start();
-
-        return result;
-    }
-
-    /**
-     * Stops this <tt>ModbusUDPListener</tt>.
-     */
     @Override
     public void stop() {
         terminal.deactivate();
         listening = false;
-        running = false;
-    }
-
-    /**
-     * Returns any startup errors that may have aoccurred
-     *
-     * @return Error string
-     */
-    public String getError() {
-        return error;
     }
 }

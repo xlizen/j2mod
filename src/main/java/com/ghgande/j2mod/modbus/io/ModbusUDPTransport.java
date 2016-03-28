@@ -20,7 +20,7 @@ import com.ghgande.j2mod.modbus.ModbusIOException;
 import com.ghgande.j2mod.modbus.msg.ModbusMessage;
 import com.ghgande.j2mod.modbus.msg.ModbusRequest;
 import com.ghgande.j2mod.modbus.msg.ModbusResponse;
-import com.ghgande.j2mod.modbus.net.UDPTerminal;
+import com.ghgande.j2mod.modbus.net.AbstractUDPTerminal;
 import com.ghgande.j2mod.modbus.util.ModbusLogger;
 
 import java.io.IOException;
@@ -40,7 +40,7 @@ public class ModbusUDPTransport implements ModbusTransport {
     private static final ModbusLogger logger = ModbusLogger.getLogger(ModbusUDPTransport.class);
 
     //instance attributes
-    private UDPTerminal terminal;
+    private AbstractUDPTerminal terminal;
     private final BytesOutputStream byteOutputStream = new BytesOutputStream(Modbus.MAX_MESSAGE_LENGTH);
     private final BytesInputStream byteInputStream = new BytesInputStream(Modbus.MAX_MESSAGE_LENGTH);
 
@@ -51,7 +51,7 @@ public class ModbusUDPTransport implements ModbusTransport {
      *
      * @param terminal the <tt>UDPTerminal</tt> used for message transport.
      */
-    public ModbusUDPTransport(UDPTerminal terminal) {
+    public ModbusUDPTransport(AbstractUDPTerminal terminal) {
         this.terminal = terminal;
     }
 
