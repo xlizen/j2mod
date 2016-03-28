@@ -24,6 +24,9 @@ import com.ghgande.j2mod.modbus.util.BitVector;
 
 /**
  * Modbus/TCP Master facade - common methods for all the facade implementations
+ * The emphasis is in making callas to Modbus devices as simple as possible
+ * for the most common Function Codes.
+ * This class makes sure that no NPE is raised and that the methods are thread-safe.
  *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
