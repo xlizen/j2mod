@@ -37,7 +37,7 @@ import java.util.Set;
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
  */
-public abstract class ModbusSerialTransport implements ModbusTransport {
+public abstract class ModbusSerialTransport extends AbstractModbusTransport {
 
     private static final ModbusLogger logger = ModbusLogger.getLogger(ModbusSerialTransport.class);
 
@@ -53,7 +53,6 @@ public abstract class ModbusSerialTransport implements ModbusTransport {
     protected SerialPort commPort;
     protected boolean echo = false;     // require RS-485 echo processing
     private final Set<AbstractSerialTransportListener> listeners = Collections.synchronizedSet(new HashSet<AbstractSerialTransportListener>());
-    private int receiveTimeout = 500;
 
     /**
      * Cretes a new transaction suitable for the serial port
@@ -91,7 +90,7 @@ public abstract class ModbusSerialTransport implements ModbusTransport {
      */
     public ModbusRequest readRequest() throws ModbusIOException {
         notifyListenersBeforeRequest();
-        commPort.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING | SerialPort.TIMEOUT_WRITE_BLOCKING, receiveTimeout, receiveTimeout);
+        commPort.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING | SerialPort.TIMEOUT_WRITE_BLOCKING, timeout, timeout);
         ModbusRequest req = readRequestIn();
         notifyListenersAfterRequest(req);
         return req;
@@ -107,7 +106,7 @@ public abstract class ModbusSerialTransport implements ModbusTransport {
      */
     public ModbusResponse readResponse() throws ModbusIOException {
         notifyListenersBeforeResponse();
-        commPort.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING | SerialPort.TIMEOUT_WRITE_BLOCKING, receiveTimeout, receiveTimeout);
+        commPort.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING | SerialPort.TIMEOUT_WRITE_BLOCKING, timeout, timeout);
         ModbusResponse res = readResponseIn();
         notifyListenersAfterResponse(res);
         return res;
@@ -280,15 +279,6 @@ public abstract class ModbusSerialTransport implements ModbusTransport {
      */
     public void setEcho(boolean b) {
         this.echo = b;
-    }
-
-    /**
-     * Describe <code>setReceiveTimeout</code> method here.
-     *
-     * @param ms an <code>int</code> value
-     */
-    public void setReceiveTimeout(int ms) {
-        receiveTimeout = ms;
     }
 
     /**

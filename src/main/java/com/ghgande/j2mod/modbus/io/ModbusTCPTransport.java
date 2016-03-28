@@ -36,7 +36,7 @@ import java.net.SocketTimeoutException;
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
  */
-public class ModbusTCPTransport implements ModbusTransport {
+public class ModbusTCPTransport extends AbstractModbusTransport {
 
     private static final ModbusLogger logger = ModbusLogger.getLogger(ModbusTCPTransport.class);
 
@@ -45,7 +45,6 @@ public class ModbusTCPTransport implements ModbusTransport {
     private DataOutputStream dataOutputStream; // output stream
     private final BytesInputStream byteInputStream = new BytesInputStream(Modbus.MAX_MESSAGE_LENGTH + 6);
     private final BytesOutputStream byteOutputStream = new BytesOutputStream(Modbus.MAX_MESSAGE_LENGTH + 6); // write frames
-    private int timeout = Modbus.DEFAULT_TIMEOUT;
     private Socket socket = null;
     private TCPMasterConnection master = null;
     private boolean headless = false; // Some TCP implementations are.
@@ -94,14 +93,9 @@ public class ModbusTCPTransport implements ModbusTransport {
         headless = true;
     }
 
-    /**
-     * Set the socket timeout
-     *
-     * @param time Timeout in milliseconds
-     */
+    @Override
     public void setTimeout(int time) {
-        timeout = time;
-
+        super.setTimeout(time);
         if (socket != null) {
             try {
                 socket.setSoTimeout(time);

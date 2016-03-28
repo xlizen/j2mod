@@ -15,8 +15,8 @@
  */
 package com.ghgande.j2mod.modbus.cmd;
 
+import com.ghgande.j2mod.modbus.io.AbstractModbusTransport;
 import com.ghgande.j2mod.modbus.io.ModbusTransaction;
-import com.ghgande.j2mod.modbus.io.ModbusTransport;
 import com.ghgande.j2mod.modbus.msg.MaskWriteRegisterRequest;
 import com.ghgande.j2mod.modbus.msg.ModbusRequest;
 import com.ghgande.j2mod.modbus.net.ModbusMasterFactory;
@@ -57,7 +57,7 @@ public class MaskWriteRegisterTest {
 
     public static void main(String[] args) {
 
-        ModbusTransport transport = null;
+        AbstractModbusTransport transport = null;
         ModbusRequest req;
         ModbusTransaction trans;
         int ref = 0;

@@ -16,10 +16,10 @@
 package com.ghgande.j2mod.modbus.cmd;
 
 import com.ghgande.j2mod.modbus.ModbusException;
+import com.ghgande.j2mod.modbus.io.AbstractModbusTransport;
 import com.ghgande.j2mod.modbus.io.ModbusSerialTransaction;
 import com.ghgande.j2mod.modbus.io.ModbusSerialTransport;
 import com.ghgande.j2mod.modbus.io.ModbusTransaction;
-import com.ghgande.j2mod.modbus.io.ModbusTransport;
 import com.ghgande.j2mod.modbus.msg.*;
 import com.ghgande.j2mod.modbus.net.ModbusMasterFactory;
 import com.ghgande.j2mod.modbus.util.ModbusLogger;
@@ -58,7 +58,7 @@ public class ReadCommEventLogTest {
     }
 
     public static void main(String[] args) {
-        ModbusTransport transport = null;
+        AbstractModbusTransport transport = null;
         ModbusRequest req;
         ModbusTransaction trans = null;
         int repeat = 1;
@@ -80,7 +80,7 @@ public class ReadCommEventLogTest {
                 }
 
                 if (transport instanceof ModbusSerialTransport) {
-                    ((ModbusSerialTransport)transport).setReceiveTimeout(500);
+                    transport.setTimeout(500);
                     if (System.getProperty("com.ghgande.j2mod.modbus.baud") != null) {
                         ((ModbusSerialTransport)transport).setBaudRate(Integer.parseInt(System.getProperty("com.ghgande.j2mod.modbus.baud")));
                     }

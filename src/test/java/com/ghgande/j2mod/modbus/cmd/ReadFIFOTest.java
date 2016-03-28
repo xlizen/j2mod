@@ -18,9 +18,9 @@ package com.ghgande.j2mod.modbus.cmd;
 import com.ghgande.j2mod.modbus.ModbusException;
 import com.ghgande.j2mod.modbus.ModbusIOException;
 import com.ghgande.j2mod.modbus.ModbusSlaveException;
+import com.ghgande.j2mod.modbus.io.AbstractModbusTransport;
 import com.ghgande.j2mod.modbus.io.ModbusSerialTransport;
 import com.ghgande.j2mod.modbus.io.ModbusTransaction;
-import com.ghgande.j2mod.modbus.io.ModbusTransport;
 import com.ghgande.j2mod.modbus.msg.ExceptionResponse;
 import com.ghgande.j2mod.modbus.msg.ModbusResponse;
 import com.ghgande.j2mod.modbus.msg.ReadFIFOQueueRequest;
@@ -50,7 +50,7 @@ public class ReadFIFOTest {
     }
 
     public static void main(String[] args) {
-        ModbusTransport transport = null;
+        AbstractModbusTransport transport = null;
         ReadFIFOQueueRequest request;
         ReadFIFOQueueResponse response;
         ModbusTransaction trans;
@@ -66,7 +66,7 @@ public class ReadFIFOTest {
         try {
             transport = ModbusMasterFactory.createModbusMaster(args[0]);
             if (transport instanceof ModbusSerialTransport) {
-                ((ModbusSerialTransport)transport).setReceiveTimeout(500);
+                transport.setTimeout(500);
                 if (System.getProperty("com.ghgande.j2mod.modbus.baud") != null) {
                     ((ModbusSerialTransport)transport).setBaudRate(Integer.parseInt(System.getProperty("com.ghgande.j2mod.modbus.baud")));
                 }

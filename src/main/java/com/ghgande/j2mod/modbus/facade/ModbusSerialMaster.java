@@ -15,6 +15,8 @@
  */
 package com.ghgande.j2mod.modbus.facade;
 
+import com.ghgande.j2mod.modbus.Modbus;
+import com.ghgande.j2mod.modbus.io.AbstractModbusTransport;
 import com.ghgande.j2mod.modbus.net.SerialConnection;
 import com.ghgande.j2mod.modbus.util.ModbusLogger;
 import com.ghgande.j2mod.modbus.util.SerialParameters;
@@ -30,7 +32,6 @@ import com.ghgande.j2mod.modbus.util.SerialParameters;
 public class ModbusSerialMaster extends AbstractModbusMaster {
 
     private static final ModbusLogger logger = ModbusLogger.getLogger(ModbusSerialMaster.class);
-
     private SerialConnection connection;
 
     /**
@@ -41,8 +42,21 @@ public class ModbusSerialMaster extends AbstractModbusMaster {
      *              to communicate with the slave device network.
      */
     public ModbusSerialMaster(SerialParameters param) {
+        this(param, Modbus.DEFAULT_TIMEOUT);
+    }
+
+    /**
+     * Constructs a new master facade instance for communication
+     * with a given slave.
+     *
+     * @param param   SerialParameters specifies the serial port parameters to use
+     *                to communicate with the slave device network.
+     * @param timeout Receive timeout in milliseconds
+     */
+    public ModbusSerialMaster(SerialParameters param, int timeout) {
         try {
             connection = new SerialConnection(param);
+            connection.getModbusTransport().setTimeout(timeout);
         }
         catch (Exception e) {
             throw new RuntimeException(e.getMessage());
@@ -73,4 +87,16 @@ public class ModbusSerialMaster extends AbstractModbusMaster {
         }
     }
 
+    @Override
+    public void setTimeout(int timeout) {
+        super.setTimeout(timeout);
+        if (connection != null) {
+            connection.getModbusTransport().setTimeout(timeout);
+        }
+    }
+
+    @Override
+    public AbstractModbusTransport getTransport() {
+        return connection == null ? null : connection.getModbusTransport();
+    }
 }

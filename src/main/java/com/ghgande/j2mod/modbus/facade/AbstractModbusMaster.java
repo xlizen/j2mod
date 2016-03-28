@@ -15,7 +15,9 @@
  */
 package com.ghgande.j2mod.modbus.facade;
 
+import com.ghgande.j2mod.modbus.Modbus;
 import com.ghgande.j2mod.modbus.ModbusException;
+import com.ghgande.j2mod.modbus.io.AbstractModbusTransport;
 import com.ghgande.j2mod.modbus.io.ModbusTransaction;
 import com.ghgande.j2mod.modbus.msg.*;
 import com.ghgande.j2mod.modbus.procimg.InputRegister;
@@ -44,6 +46,7 @@ abstract public class AbstractModbusMaster {
     private ReadMultipleRegistersRequest readMultipleRegistersRequest;
     private WriteSingleRegisterRequest writeSingleRegisterRequest;
     private WriteMultipleRegistersRequest writeMultipleRegistersRequest;
+    protected int timeout = Modbus.DEFAULT_TIMEOUT;
 
     /**
      * Sets the transaction to use
@@ -439,5 +442,32 @@ abstract public class AbstractModbusMaster {
             throw new ModbusException("No transaction created, probably not connected");
         }
     }
+
+    /**
+     * Returns the receive timeout in milliseconds
+     *
+     * @return Timeout in milliseconds
+     */
+    public int getTimeout() {
+        return timeout;
+    }
+
+    /**
+     * Sets the receive timeout
+     *
+     * @param timeout Timeout in milliseconds
+     */
+    public void setTimeout(int timeout) {
+        this.timeout = timeout;
+    }
+
+    /**
+     * Returns the transport being used by the
+     *
+     * @return ModbusTransport
+     */
+    public abstract AbstractModbusTransport getTransport();
+
+
 
 }

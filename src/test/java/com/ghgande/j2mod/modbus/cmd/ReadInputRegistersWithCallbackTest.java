@@ -59,7 +59,7 @@ public class ReadInputRegistersWithCallbackTest {
     }
 
     public static void main(String[] args) {
-        ModbusTransport transport = null;
+        AbstractModbusTransport transport = null;
         ModbusRequest req;
         ModbusTransaction trans;
         int ref = 0;
@@ -87,7 +87,7 @@ public class ReadInputRegistersWithCallbackTest {
                 }
 
                 if (transport instanceof ModbusSerialTransport) {
-                    ((ModbusSerialTransport)transport).setReceiveTimeout(1000);
+                    transport.setTimeout(1000);
                     ((ModbusSerialTransport)transport).addListener(new EventListener());
                     if (System.getProperty("com.ghgande.j2mod.modbus.baud") != null) {
                         ((ModbusSerialTransport)transport).setBaudRate(Integer.parseInt(System.getProperty("com.ghgande.j2mod.modbus.baud")));

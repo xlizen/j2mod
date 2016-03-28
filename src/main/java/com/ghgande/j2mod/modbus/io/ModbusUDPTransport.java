@@ -35,7 +35,7 @@ import java.util.Arrays;
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
  */
-public class ModbusUDPTransport implements ModbusTransport {
+public class ModbusUDPTransport extends AbstractModbusTransport {
 
     private static final ModbusLogger logger = ModbusLogger.getLogger(ModbusUDPTransport.class);
 
@@ -53,6 +53,14 @@ public class ModbusUDPTransport implements ModbusTransport {
      */
     public ModbusUDPTransport(AbstractUDPTerminal terminal) {
         this.terminal = terminal;
+    }
+
+    @Override
+    public void setTimeout(int time) {
+        super.setTimeout(time);
+        if (terminal != null) {
+            terminal.setTimeout(timeout);
+        }
     }
 
     @Override

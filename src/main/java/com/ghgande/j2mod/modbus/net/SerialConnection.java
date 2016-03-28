@@ -17,10 +17,10 @@ package com.ghgande.j2mod.modbus.net;
 
 import com.fazecast.jSerialComm.SerialPort;
 import com.ghgande.j2mod.modbus.Modbus;
+import com.ghgande.j2mod.modbus.io.AbstractModbusTransport;
 import com.ghgande.j2mod.modbus.io.ModbusASCIITransport;
 import com.ghgande.j2mod.modbus.io.ModbusRTUTransport;
 import com.ghgande.j2mod.modbus.io.ModbusSerialTransport;
-import com.ghgande.j2mod.modbus.io.ModbusTransport;
 import com.ghgande.j2mod.modbus.util.ModbusLogger;
 import com.ghgande.j2mod.modbus.util.SerialParameters;
 
@@ -61,7 +61,7 @@ public class SerialConnection {
      *
      * @return a <tt>ModbusTransport</tt> instance.
      */
-    public ModbusTransport getModbusTransport() {
+    public AbstractModbusTransport getModbusTransport() {
         return transport;
     }
 

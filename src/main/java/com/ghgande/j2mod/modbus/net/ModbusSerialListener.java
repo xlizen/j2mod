@@ -16,8 +16,8 @@
 package com.ghgande.j2mod.modbus.net;
 
 import com.ghgande.j2mod.modbus.ModbusIOException;
+import com.ghgande.j2mod.modbus.io.AbstractModbusTransport;
 import com.ghgande.j2mod.modbus.io.ModbusSerialTransport;
-import com.ghgande.j2mod.modbus.io.ModbusTransport;
 import com.ghgande.j2mod.modbus.util.ModbusLogger;
 import com.ghgande.j2mod.modbus.util.SerialParameters;
 
@@ -51,7 +51,7 @@ public class ModbusSerialListener extends AbstractModbusListener {
         if (serialCon != null && listening) {
             ModbusSerialTransport transport = (ModbusSerialTransport)serialCon.getModbusTransport();
             if (transport != null) {
-                transport.setReceiveTimeout(timeout);
+                transport.setTimeout(timeout);
             }
         }
     }
@@ -71,7 +71,7 @@ public class ModbusSerialListener extends AbstractModbusListener {
         listening = true;
         try {
             while (listening) {
-                ModbusTransport transport = serialCon.getModbusTransport();
+                AbstractModbusTransport transport = serialCon.getModbusTransport();
                 if (listening) {
                     try {
                         handleRequest(transport);

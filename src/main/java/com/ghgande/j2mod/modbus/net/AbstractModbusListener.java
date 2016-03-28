@@ -18,7 +18,7 @@ package com.ghgande.j2mod.modbus.net;
 import com.ghgande.j2mod.modbus.Modbus;
 import com.ghgande.j2mod.modbus.ModbusCoupler;
 import com.ghgande.j2mod.modbus.ModbusIOException;
-import com.ghgande.j2mod.modbus.io.ModbusTransport;
+import com.ghgande.j2mod.modbus.io.AbstractModbusTransport;
 import com.ghgande.j2mod.modbus.msg.ModbusRequest;
 import com.ghgande.j2mod.modbus.msg.ModbusResponse;
 import com.ghgande.j2mod.modbus.procimg.ProcessImage;
@@ -124,7 +124,7 @@ public abstract class AbstractModbusListener implements Runnable {
      * @param transport Transport to read request from
      * @throws ModbusIOException
      */
-    protected void handleRequest(ModbusTransport transport) throws ModbusIOException {
+    protected void handleRequest(AbstractModbusTransport transport) throws ModbusIOException {
 
         // Get the request from the transport. It will be processed
         // using an associated process image.

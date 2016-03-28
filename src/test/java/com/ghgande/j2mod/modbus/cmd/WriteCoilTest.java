@@ -15,9 +15,9 @@
  */
 package com.ghgande.j2mod.modbus.cmd;
 
+import com.ghgande.j2mod.modbus.io.AbstractModbusTransport;
 import com.ghgande.j2mod.modbus.io.ModbusSerialTransport;
 import com.ghgande.j2mod.modbus.io.ModbusTransaction;
-import com.ghgande.j2mod.modbus.io.ModbusTransport;
 import com.ghgande.j2mod.modbus.msg.WriteCoilRequest;
 import com.ghgande.j2mod.modbus.msg.WriteCoilResponse;
 import com.ghgande.j2mod.modbus.net.ModbusMasterFactory;
@@ -56,7 +56,7 @@ public class WriteCoilTest {
 
     public static void main(String[] args) {
         WriteCoilRequest req;
-        ModbusTransport transport = null;
+        AbstractModbusTransport transport = null;
         ModbusTransaction trans;
         int ref = 0;
         boolean value = false;
@@ -73,7 +73,7 @@ public class WriteCoilTest {
                 transport = ModbusMasterFactory.createModbusMaster(args[0]);
 
                 if (transport instanceof ModbusSerialTransport) {
-                    ((ModbusSerialTransport)transport).setReceiveTimeout(500);
+                    transport.setTimeout(500);
                     if (System.getProperty("com.ghgande.j2mod.modbus.baud") != null) {
                         ((ModbusSerialTransport)transport).setBaudRate(Integer.parseInt(System.getProperty("com.ghgande.j2mod.modbus.baud")));
                     }

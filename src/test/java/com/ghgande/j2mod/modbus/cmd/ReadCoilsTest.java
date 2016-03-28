@@ -15,10 +15,10 @@
  */
 package com.ghgande.j2mod.modbus.cmd;
 
+import com.ghgande.j2mod.modbus.io.AbstractModbusTransport;
 import com.ghgande.j2mod.modbus.io.ModbusSerialTransport;
 import com.ghgande.j2mod.modbus.io.ModbusTCPTransaction;
 import com.ghgande.j2mod.modbus.io.ModbusTransaction;
-import com.ghgande.j2mod.modbus.io.ModbusTransport;
 import com.ghgande.j2mod.modbus.msg.ReadCoilsRequest;
 import com.ghgande.j2mod.modbus.msg.ReadCoilsResponse;
 import com.ghgande.j2mod.modbus.net.ModbusMasterFactory;
@@ -42,7 +42,7 @@ public class ReadCoilsTest {
     public static void main(String[] args) {
         ReadCoilsRequest req;
         ReadCoilsResponse res;
-        ModbusTransport transport = null;
+        AbstractModbusTransport transport = null;
         ModbusTransaction trans;
         int ref = 0;
         int count = 0;
@@ -61,7 +61,7 @@ public class ReadCoilsTest {
                     transport = ModbusMasterFactory.createModbusMaster(args[0]);
 
                     if (transport instanceof ModbusSerialTransport) {
-                        ((ModbusSerialTransport)transport).setReceiveTimeout(500);
+                        transport.setTimeout(500);
                         if (System.getProperty("com.ghgande.j2mod.modbus.baud") != null) {
                             ((ModbusSerialTransport)transport).setBaudRate(Integer.parseInt(System.getProperty("com.ghgande.j2mod.modbus.baud")));
                         }

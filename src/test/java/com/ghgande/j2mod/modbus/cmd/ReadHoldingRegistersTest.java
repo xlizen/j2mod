@@ -57,7 +57,7 @@ public class ReadHoldingRegistersTest {
     }
 
     public static void main(String[] args) {
-        ModbusTransport transport = null;
+        AbstractModbusTransport transport = null;
         ModbusRequest req;
         ModbusTransaction trans;
         int ref = 0;
@@ -82,7 +82,7 @@ public class ReadHoldingRegistersTest {
                 }
 
                 if (transport instanceof ModbusSerialTransport) {
-                    ((ModbusSerialTransport)transport).setReceiveTimeout(500);
+                    transport.setTimeout(500);
                     if (System.getProperty("com.ghgande.j2mod.modbus.baud") != null) {
                         ((ModbusSerialTransport)transport).setBaudRate(Integer.parseInt(System.getProperty("com.ghgande.j2mod.modbus.baud")));
                     }

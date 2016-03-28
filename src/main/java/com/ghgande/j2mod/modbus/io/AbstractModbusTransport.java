@@ -15,6 +15,7 @@
  */
 package com.ghgande.j2mod.modbus.io;
 
+import com.ghgande.j2mod.modbus.Modbus;
 import com.ghgande.j2mod.modbus.ModbusIOException;
 import com.ghgande.j2mod.modbus.msg.ModbusMessage;
 import com.ghgande.j2mod.modbus.msg.ModbusRequest;
@@ -30,7 +31,18 @@ import java.io.IOException;
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
  */
-public interface ModbusTransport {
+public abstract class AbstractModbusTransport {
+
+    protected int timeout = Modbus.DEFAULT_TIMEOUT;
+
+    /**
+     * Set the socket timeout
+     *
+     * @param time Timeout in milliseconds
+     */
+    public void setTimeout(int time) {
+        timeout = time;
+    }
 
     /**
      * Closes the raw input and output streams of
@@ -40,14 +52,14 @@ public interface ModbusTransport {
      * @throws IOException if a stream
      *                     cannot be closed properly.
      */
-    void close() throws IOException;
+    public abstract void close() throws IOException;
 
     /**
      * Creates a Modbus transaction for the underlying transport.
      *
      * @return the new transaction
      */
-    ModbusTransaction createTransaction();
+    public abstract ModbusTransaction createTransaction();
 
     /**
      * Writes a <tt<ModbusMessage</tt> to the
@@ -60,7 +72,7 @@ public interface ModbusTransport {
      *                           written properly to the raw output stream of
      *                           this <tt>ModbusTransport</tt>.
      */
-    void writeMessage(ModbusMessage msg) throws ModbusIOException;
+    public abstract void writeMessage(ModbusMessage msg) throws ModbusIOException;
 
     /**
      * Reads a <tt>ModbusRequest</tt> from the
@@ -73,7 +85,7 @@ public interface ModbusTransport {
      *                           read properly from the raw input stream of
      *                           this <tt>ModbusTransport</tt>.
      */
-    ModbusRequest readRequest() throws ModbusIOException;
+    public abstract ModbusRequest readRequest() throws ModbusIOException;
 
     /**
      * Reads a <tt>ModbusResponse</tt> from the
@@ -86,6 +98,6 @@ public interface ModbusTransport {
      *                           read properly from the raw input stream of
      *                           this <tt>ModbusTransport</tt>.
      */
-    ModbusResponse readResponse() throws ModbusIOException;
+    public abstract ModbusResponse readResponse() throws ModbusIOException;
 
 }
