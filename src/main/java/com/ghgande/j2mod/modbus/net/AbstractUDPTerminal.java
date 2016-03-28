@@ -84,7 +84,6 @@ public abstract class AbstractUDPTerminal {
 
     /**
      * Get the transport
-     *
      * @return Transport
      */
     public ModbusUDPTransport getTransport() {

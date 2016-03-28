@@ -35,7 +35,7 @@ import java.net.InetAddress;
 public abstract class AbstractModbusListener implements Runnable {
 
     private static final ModbusLogger logger = ModbusLogger.getLogger(AbstractModbusListener.class);
-    protected int port = Modbus.DEFAULT_PORT;
+    protected  int port = Modbus.DEFAULT_PORT;
     protected boolean listening;
     protected InetAddress address;
     protected String error;
@@ -103,7 +103,6 @@ public abstract class AbstractModbusListener implements Runnable {
 
     /**
      * Get the socket timeout
-     *
      * @return Socket timeout in milliseconds
      */
     public int getTimeout() {
@@ -112,7 +111,6 @@ public abstract class AbstractModbusListener implements Runnable {
 
     /**
      * Sets the socket timeout
-     *
      * @param timeout Timeout in milliseconds
      */
     public void setTimeout(int timeout) {
@@ -124,7 +122,6 @@ public abstract class AbstractModbusListener implements Runnable {
      * and sends back a response
      *
      * @param transport Transport to read request from
-     *
      * @throws ModbusIOException
      */
     protected void handleRequest(ModbusTransport transport) throws ModbusIOException {
@@ -137,7 +134,7 @@ public abstract class AbstractModbusListener implements Runnable {
         // Test if Process image exists and has a correct unit ID
         ProcessImage spi = ModbusCoupler.getReference().getProcessImage();
         if (spi == null ||
-                (spi.getUnitID() != 0 && request.getUnitID() != spi.getUnitID())) {
+            (spi.getUnitID() != 0 && request.getUnitID() != spi.getUnitID())) {
             response = request.createExceptionResponse(Modbus.ILLEGAL_ADDRESS_EXCEPTION);
         }
         else {
