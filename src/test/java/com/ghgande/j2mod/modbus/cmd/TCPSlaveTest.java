@@ -21,6 +21,7 @@ import com.ghgande.j2mod.modbus.net.ModbusTCPListener;
 import com.ghgande.j2mod.modbus.procimg.*;
 import com.ghgande.j2mod.modbus.util.ModbusLogger;
 
+import java.io.IOException;
 import java.net.Inet4Address;
 
 /**
@@ -107,11 +108,17 @@ public class TCPSlaveTest {
             ModbusCoupler.getReference().setMaster(false);
 
             // 3. create a listener with 3 threads in pool
-            logger.system("Listening..");
-
             listener = new ModbusTCPListener(3, Inet4Address.getByName("0.0.0.0"));
             listener.setPort(port);
-            listener.listen();
+            new Thread(listener).start();
+            logger.system("Listening..");
+
+            // Check to see if it started OK
+
+            Thread.sleep(100);
+            if (!listener.isListening()) {
+                throw new IOException(String.format("Cannot start Listener %s", listener.getError()));
+            }
         }
         catch (Exception ex) {
             ex.printStackTrace();

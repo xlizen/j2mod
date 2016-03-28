@@ -186,7 +186,7 @@ public class ReadInputRegistersWithCallbackTest {
         System.exit(0);
     }
 
-    private static class EventListener extends AbstractModbusSerialTransportListener {
+    private static class EventListener extends AbstractSerialTransportListener {
         @Override
         public void beforeMessageWrite(SerialPort port, ModbusMessage msg) {
             Gpio.digitalWrite(RTS_PIN, true);

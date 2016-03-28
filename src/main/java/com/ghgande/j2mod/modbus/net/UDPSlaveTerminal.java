@@ -15,12 +15,10 @@
  */
 package com.ghgande.j2mod.modbus.net;
 
-import com.ghgande.j2mod.modbus.Modbus;
 import com.ghgande.j2mod.modbus.io.ModbusUDPTransport;
 import com.ghgande.j2mod.modbus.util.ModbusLogger;
 import com.ghgande.j2mod.modbus.util.ModbusUtil;
 
-import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -34,15 +32,10 @@ import java.util.concurrent.LinkedBlockingQueue;
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
  */
-class UDPSlaveTerminal implements UDPTerminal {
+class UDPSlaveTerminal extends AbstractUDPTerminal {
 
     private static final ModbusLogger logger = ModbusLogger.getLogger(UDPSlaveTerminal.class);
-    protected InetAddress localAddress;
-    protected ModbusUDPTransport transport;
     protected Hashtable<Integer, DatagramPacket> requests = new Hashtable<Integer, DatagramPacket>(342);
-    private DatagramSocket socket;
-    private boolean active;
-    private int localPort = Modbus.DEFAULT_PORT;
     private LinkedBlockingQueue<byte[]> sendQueue = new LinkedBlockingQueue<byte[]>();
     private LinkedBlockingQueue<byte[]> receiveQueue = new LinkedBlockingQueue<byte[]>();
     private PacketSender packetSender;
@@ -55,66 +48,29 @@ class UDPSlaveTerminal implements UDPTerminal {
      * @param localaddress Local address to bind to
      */
     protected UDPSlaveTerminal(InetAddress localaddress) {
-        localAddress = localaddress;
+        address = localaddress;
     }
 
-    /**
-     * Gets the local adapter address
-     *
-     * @return Adapter address
-     */
-    public InetAddress getLocalAddress() {
-        return localAddress;
-    }
-
-    /**
-     * Returns the local port the terminal is listening on
-     *
-     * @return Port number
-     */
-    public synchronized int getLocalPort() {
-        return localPort;
-    }
-
-    /**
-     * Sets the local port the terminal is running on
-     *
-     * @param port Local port
-     */
-    protected synchronized void setLocalPort(int port) {
-        localPort = port;
-    }
-
-    /**
-     * Tests if this <tt>UDPSlaveTerminal</tt> is active.
-     *
-     * @return <tt>true</tt> if active, <tt>false</tt> otherwise.
-     */
-    public boolean isActive() {
-        return active;
-    }
-
-    /**
-     * Activate this <tt>UDPTerminal</tt>.
-     *
-     * @throws Exception if there is a network failure.
-     */
+    @Override
     public synchronized void activate() throws Exception {
         if (!isActive()) {
             logger.debug("UDPSlaveTerminal.activate()");
-            if (localAddress != null && localPort != -1) {
-                socket = new DatagramSocket(localPort, localAddress);
+            if (address != null && port != -1) {
+                socket = new DatagramSocket(port, address);
             }
             else {
                 socket = new DatagramSocket();
-                localPort = socket.getLocalPort();
-                localAddress = socket.getLocalAddress();
+                port = socket.getLocalPort();
+                address = socket.getLocalAddress();
             }
             logger.debug("UDPSlaveTerminal::haveSocket():%s", socket.toString());
-            logger.debug("UDPSlaveTerminal::addr=:%s:port=%d", localAddress.toString(), localPort);
+            logger.debug("UDPSlaveTerminal::addr=:%s:port=%d", address.toString(), port);
 
             socket.setReceiveBufferSize(1024);
             socket.setSendBufferSize(1024);
+
+            // Never timeout the receive
+            socket.setSoTimeout(0);
 
             // Start a sender
             packetSender = new PacketSender(socket);
@@ -136,9 +92,7 @@ class UDPSlaveTerminal implements UDPTerminal {
         logger.debug("UDPSlaveTerminal::activated");
     }
 
-    /**
-     * Deactivates this <tt>UDPSlaveTerminal</tt>.
-     */
+    @Override
     public synchronized void deactivate() {
         try {
             if (active) {
@@ -157,52 +111,14 @@ class UDPSlaveTerminal implements UDPTerminal {
         }
     }
 
-    /**
-     * Returns the <tt>ModbusTransport</tt> associated with this
-     * <tt>TCPMasterConnection</tt>.
-     *
-     * @return the connection's <tt>ModbusTransport</tt>.
-     */
-    public ModbusUDPTransport getModbusTransport() {
-        return transport;
-    }
-
-    /**
-     * Adds the message to the send queue
-     *
-     * @param msg the message as <tt>byte[]</tt>.
-     *
-     * @throws Exception
-     */
+    @Override
     public void sendMessage(byte[] msg) throws Exception {
         sendQueue.add(msg);
     }
 
-    /**
-     * Takes a message from the received queue - waits if there is nothing available
-     *
-     * @return Message from the queue
-     *
-     * @throws Exception
-     */
+    @Override
     public byte[] receiveMessage() throws Exception {
         return receiveQueue.take();
-    }
-
-    /**
-     * Sets the timeout in milliseconds for this <tt>UDPSlaveTerminal</tt>.
-     *
-     * @param timeout the timeout as <tt>int</tt>.
-     */
-    public synchronized void setTimeout(int timeout) {
-        try {
-            if (socket != null) {
-                socket.setSoTimeout(timeout);
-            }
-        }
-        catch (IOException ex) {
-            ex.printStackTrace(); // handle? }
-        }
     }
 
     /**

@@ -21,8 +21,8 @@ import com.ghgande.j2mod.modbus.ModbusIOException;
 import com.ghgande.j2mod.modbus.ModbusSlaveException;
 import com.ghgande.j2mod.modbus.msg.ExceptionResponse;
 import com.ghgande.j2mod.modbus.msg.ModbusRequest;
+import com.ghgande.j2mod.modbus.net.AbstractUDPTerminal;
 import com.ghgande.j2mod.modbus.net.UDPMasterConnection;
-import com.ghgande.j2mod.modbus.net.UDPTerminal;
 import com.ghgande.j2mod.modbus.util.ModbusLogger;
 
 /**
@@ -38,7 +38,7 @@ public class ModbusUDPTransaction extends ModbusTransaction {
     private static final ModbusLogger logger = ModbusLogger.getLogger(ModbusUDPTransaction.class);
 
     //instance attributes and associations
-    private UDPTerminal terminal;
+    private AbstractUDPTerminal terminal;
     private final Object MUTEX = new Object();
 
     /**
@@ -68,7 +68,7 @@ public class ModbusUDPTransaction extends ModbusTransaction {
      *
      * @param terminal a <tt>UDPTerminal</tt> instance.
      */
-    public ModbusUDPTransaction(UDPTerminal terminal) {
+    public ModbusUDPTransaction(AbstractUDPTerminal terminal) {
         setTerminal(terminal);
     }
 
@@ -90,10 +90,10 @@ public class ModbusUDPTransaction extends ModbusTransaction {
      *
      * @param terminal a <tt>UDPSlaveTerminal</tt>.
      */
-    public void setTerminal(UDPTerminal terminal) {
+    public void setTerminal(AbstractUDPTerminal terminal) {
         this.terminal = terminal;
         if (terminal.isActive()) {
-            transport = terminal.getModbusTransport();
+            transport = terminal.getTransport();
         }
     }
 
@@ -106,7 +106,7 @@ public class ModbusUDPTransaction extends ModbusTransaction {
         if (!terminal.isActive()) {
             try {
                 terminal.activate();
-                transport = terminal.getModbusTransport();
+                transport = terminal.getTransport();
             }
             catch (Exception ex) {
                 ex.printStackTrace();

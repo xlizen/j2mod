@@ -37,7 +37,6 @@ public class TCPSlaveConnection {
 
     // instance attributes
     private Socket socket;
-    private int unitID = 0;
     private int timeout = Modbus.DEFAULT_TIMEOUT;
     private boolean connected;
     private ModbusTCPTransport transport;
@@ -49,26 +48,6 @@ public class TCPSlaveConnection {
      * @param socket the socket instance to be used for communication.
      */
     public TCPSlaveConnection(Socket socket) {
-        try {
-            setSocket(socket);
-        }
-        catch (IOException ex) {
-            logger.debug("TCPSlaveConnection::Socket invalid");
-
-            throw new IllegalStateException("Socket invalid");
-        }
-    }
-
-    /**
-     * Constructs a <tt>TCPSlaveConnection</tt> instance using a given socket
-     * instance.
-     *
-     * @param socket the socket instance to be used for communication.
-     * @param unit   the unit number for this slave connection.
-     */
-    public TCPSlaveConnection(Socket socket, int unit) {
-        unitID = unit;
-
         try {
             setSocket(socket);
         }
@@ -168,17 +147,6 @@ public class TCPSlaveConnection {
      */
     public InetAddress getAddress() {
         return socket.getLocalAddress();
-    }
-
-    /**
-     * Returns the slave unit number for this connection. A unit number of 0
-     * means to accept all unit numbers, while a non-zero unit number means only
-     * to accept requests for that specific unit.
-     *
-     * @return unit number
-     */
-    public int getUnitNumber() {
-        return unitID;
     }
 
     /**

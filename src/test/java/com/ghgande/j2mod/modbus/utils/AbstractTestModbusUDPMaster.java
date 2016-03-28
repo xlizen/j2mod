@@ -83,6 +83,7 @@ public class AbstractTestModbusUDPMaster extends AbstractTestModbus {
             listener = new ModbusUDPListener();
             listener.setListening(true);
             listener.setPort(PORT);
+            listener.setTimeout(5000);
             new Thread(listener).start();
 
             // Wait here a moment and then check to see if the listener actually started
@@ -115,7 +116,7 @@ public class AbstractTestModbusUDPMaster extends AbstractTestModbus {
         try {
             // Prepare the connection
 
-            connection = new UDPMasterConnection(InetAddress.getByName("192.168.0.6"));
+            connection = new UDPMasterConnection(InetAddress.getByName(TestUtils.getFirstIp4Address()));
             connection.setPort(PORT);
             connection.connect();
             connection.setTimeout(500);
@@ -210,30 +211,6 @@ public class AbstractTestModbusUDPMaster extends AbstractTestModbus {
             }
         }
         return null;
-    }
-
-    /**
-     * Connects to the default port on a local adapter
-     *
-     * @return Master connection
-     *
-     * @throws Exception If connect fails
-     */
-    protected static ModbusUDPMaster connect() throws Exception {
-        ModbusUDPMaster master = new ModbusUDPMaster(TestUtils.getFirstIp4Address(), PORT);
-        master.connect();
-        return master;
-    }
-
-    /**
-     * Disconnects the master
-     *
-     * @param master Master connection
-     */
-    protected static void disconnect(ModbusUDPMaster master) {
-        if (master != null) {
-            master.disconnect();
-        }
     }
 
 }
