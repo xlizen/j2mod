@@ -40,10 +40,8 @@ public class ModbusSlaveTest {
         try {
             logger.system("j2mod Modbus Slave (Server) v0.97");
 
-			/*
-             * Create the process image for this test.
-			 */
-            spi = new SimpleProcessImage();
+            // Create the process image for this test.
+            spi = new SimpleProcessImage(15);
 
             spi.addDigitalOut(new SimpleDigitalOut(true));
             spi.addDigitalOut(new SimpleDigitalOut(true));
@@ -70,7 +68,6 @@ public class ModbusSlaveTest {
             // 2. create the coupler holding the image
             ModbusCoupler.getReference().setProcessImage(spi);
             ModbusCoupler.getReference().setMaster(false);
-            ModbusCoupler.getReference().setUnitID(15);
 
             // 3. create a listener with 3 threads in pool
             logger.system("Creating");

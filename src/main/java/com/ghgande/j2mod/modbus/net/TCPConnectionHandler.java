@@ -15,6 +15,7 @@
  */
 package com.ghgande.j2mod.modbus.net;
 
+import com.ghgande.j2mod.modbus.Modbus;
 import com.ghgande.j2mod.modbus.ModbusCoupler;
 import com.ghgande.j2mod.modbus.ModbusIOException;
 import com.ghgande.j2mod.modbus.io.ModbusTransport;
@@ -65,35 +66,23 @@ public class TCPConnectionHandler implements Runnable {
     public void run() {
         try {
             do {
-                // 1. read the request
+                // Read the request
                 ModbusRequest request = transport.readRequest();
                 ModbusResponse response;
 
-				/*
-                 * test if Process image exists.
-				 */
-                ProcessImage image = ModbusCoupler.getReference().getProcessImage();
-                if (image == null) {
-                    /*
-                     * Do nothing -- non-existent devices do not respond to
-					 * messages.
-					 */
-                    continue;
+                // Test if Process image exists and the Unit ID is good
+                ProcessImage spi = ModbusCoupler.getReference().getProcessImage();
+                if (spi == null ||
+                        (spi.getUnitID() != 0 && request.getUnitID() != spi.getUnitID())) {
+                    response = request.createExceptionResponse(Modbus.ILLEGAL_ADDRESS_EXCEPTION);
                 }
-                if (image.getUnitID() != 0 && request.getUnitID() != image.getUnitID()) {
-                    /*
-                     * Do nothing -- non-existent units do not respond to
-					 * message.
-					 */
-                    continue;
+                else {
+                    response = request.createResponse();
                 }
-
-                // 2. create the response.
-                response = request.createResponse();
                 logger.debug("Request:%s", request.getHexMessage());
                 logger.debug("Response:%s", response.getHexMessage());
 
-                // 3. write the response message.
+                // Write the response message.
                 transport.writeMessage(response);
             } while (true);
         }

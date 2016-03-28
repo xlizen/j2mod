@@ -22,8 +22,7 @@ import com.ghgande.j2mod.modbus.msg.ReadMultipleRegistersResponse;
 import com.ghgande.j2mod.modbus.utils.AbstractTestModbusUDPMaster;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 /**
  * This class tests the TCP master read features of the library
@@ -97,4 +96,14 @@ public class TestModbusUDPRead extends AbstractTestModbusUDPMaster {
         assertEquals("Failed to read multiple holding register 5 length 5", 4444, res.getRegisterValue(4));
     }
 
+    @Test
+    public void testBadUnitIdRequest() {
+        try {
+            master.readCoils(UNIT_ID + 10, 0, 1).getBit(0);
+            fail("Failed check for invalid Unit ID");
+        }
+        catch (Exception e) {
+            // expected
+        }
+    }
 }

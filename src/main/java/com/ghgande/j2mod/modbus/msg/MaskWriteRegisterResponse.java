@@ -33,9 +33,7 @@ import java.io.IOException;
 public final class MaskWriteRegisterResponse
         extends ModbusResponse {
 
-    /*
-     * Message fields.
-     */
+    // Message fields.
     private int reference;
     private int andMask;
     private int orMask;

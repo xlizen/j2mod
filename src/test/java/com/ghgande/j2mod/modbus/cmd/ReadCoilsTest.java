@@ -70,10 +70,8 @@ public class ReadCoilsTest {
                         }
                     }
 
-					/*
-                     * There are a number of devices which won't initialize immediately
-					 * after being opened.  Take a moment to let them come up.
-					 */
+                    // There are a number of devices which won't initialize immediately
+                    // after being opened.  Take a moment to let them come up.
                     Thread.sleep(2000);
 
                     unit = Integer.parseInt(args[1]);

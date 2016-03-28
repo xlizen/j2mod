@@ -90,15 +90,15 @@ public class SerialSlaveTest {
 
         try {
 
-			/*
+            /*
              * Prepare a process image.
-			 * 
-			 * The file records from the TCP and UDP test harnesses are
-			 * not included.  They can be added if there is a need to
-			 * test READ FILE RECORD and WRITE FILE RECORD with a Modbus/RTU
-			 * device.
-			 */
-            spi = new SimpleProcessImage();
+             *
+             * The file records from the TCP and UDP test harnesses are
+             * not included.  They can be added if there is a need to
+             * test READ FILE RECORD and WRITE FILE RECORD with a Modbus/RTU
+             * device.
+             */
+            spi = new SimpleProcessImage(15);
 
             for (int i = 0; i < coils; i++) {
                 spi.addDigitalOut(new SimpleDigitalOut(i % 2 == 0));
@@ -133,7 +133,6 @@ public class SerialSlaveTest {
             // 2. Create the coupler and set the slave identity
             ModbusCoupler.getReference().setProcessImage(spi);
             ModbusCoupler.getReference().setMaster(false);
-            ModbusCoupler.getReference().setUnitID(unit);
 
             // 3. Set up serial parameters
             SerialParameters params = new SerialParameters();

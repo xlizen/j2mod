@@ -88,10 +88,8 @@ public class ReadCommEventCounterTest {
                     }
                 }
 
-				/*
-                 * There are a number of devices which won't initialize immediately
-				 * after being opened.  Take a moment to let them come up.
-				 */
+                // There are a number of devices which won't initialize immediately
+                // after being opened.  Take a moment to let them come up.
                 Thread.sleep(2000);
 
                 if (args.length > 1) {
@@ -124,9 +122,7 @@ public class ReadCommEventCounterTest {
                 trans.setRetries(1);
 
                 if (trans instanceof ModbusSerialTransaction) {
-                    /*
-                     * 10ms interpacket delay.
-					 */
+                    // 10ms interpacket delay.
                     ((ModbusSerialTransaction)trans).setTransDelayMS(10);
                 }
 

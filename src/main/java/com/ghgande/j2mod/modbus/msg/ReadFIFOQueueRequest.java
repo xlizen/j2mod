@@ -74,18 +74,14 @@ public final class ReadFIFOQueueRequest extends ModbusRequest {
 
         response = new ReadFIFOQueueResponse();
 
-		/*
-         * Copy any header data from the request.
-		 */
+        // Copy any header data from the request.
         response.setHeadless(isHeadless());
         if (!isHeadless()) {
             response.setTransactionID(getTransactionID());
             response.setProtocolID(getProtocolID());
         }
 
-		/*
-         * Copy the unit ID and function code.
-		 */
+        // Copy the unit ID and function code.
         response.setUnitID(getUnitID());
         response.setFunctionCode(getFunctionCode());
 
@@ -99,16 +95,12 @@ public final class ReadFIFOQueueRequest extends ModbusRequest {
         ReadFIFOQueueResponse response;
         InputRegister[] registers;
 
-		/*
-         * Get the process image.
-		 */
+        // Get the process image.
         ProcessImage procimg = ModbusCoupler.getReference().getProcessImage();
 
         try {
-            /*
-             * Get the FIFO queue location and read the count of available
-			 * registers.
-			 */
+            // Get the FIFO queue location and read the count of available
+            // registers.
             Register queue = procimg.getRegister(reference);
             int count = queue.getValue();
             if (count < 0 || count > 31) {

@@ -48,10 +48,8 @@ public class TCPSlaveTest {
             }
             logger.system("j2mod Modbus Slave (Server) v0.97");
 
-			/*
-             * Create the process image for this test.
-			 */
-            spi = new SimpleProcessImage();
+            // Create the process image for this test.
+            spi = new SimpleProcessImage(15);
 
             spi.addDigitalOut(new SimpleDigitalOut(true));
             spi.addDigitalOut(new SimpleDigitalOut(true));
@@ -107,16 +105,13 @@ public class TCPSlaveTest {
             // 2. create the coupler holding the image
             ModbusCoupler.getReference().setProcessImage(spi);
             ModbusCoupler.getReference().setMaster(false);
-            ModbusCoupler.getReference().setUnitID(15);
 
             // 3. create a listener with 3 threads in pool
             logger.system("Listening..");
 
             listener = new ModbusTCPListener(3, Inet4Address.getByName("0.0.0.0"));
             listener.setPort(port);
-            listener.setUnit(unit);
             listener.listen();
-
         }
         catch (Exception ex) {
             ex.printStackTrace();

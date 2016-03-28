@@ -28,21 +28,6 @@ public interface ModbusListener extends Runnable {
     void run();
 
     /**
-     * Gets the unit number for this Modbus interface listener.
-     *
-     * @return The Modbus unit number.
-     */
-    int getUnit();
-
-    /**
-     * Sets the unit number for this Modbus interface listener.
-     *
-     * @param unit Modbus unit number. A value of 0 indicates this Modbus
-     *             interface accepts all unit numbers.
-     */
-    void setUnit(int unit);
-
-    /**
      * Gets the <i>listening</i> state for this Modbus interface. A Modbus
      * interface which is not <i>listening</i> will silently discard all
      * requests. Additionally, an interface which is no longer alive will return

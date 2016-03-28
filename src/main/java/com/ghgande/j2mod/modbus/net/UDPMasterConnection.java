@@ -88,7 +88,7 @@ public class UDPMasterConnection {
      * @return the connection's <tt>ModbusTransport</tt>.
      */
     public ModbusTransport getModbusTransport() {
-        return terminal.getModbusTransport();
+        return terminal == null ? null : terminal.getModbusTransport();
     }
 
     /**
@@ -116,7 +116,9 @@ public class UDPMasterConnection {
      */
     public synchronized void setTimeout(int timeout) {
         this.timeout = timeout;
-        terminal.setTimeout(timeout);
+        if (terminal != null) {
+            terminal.setTimeout(timeout);
+        }
     }
 
     /**

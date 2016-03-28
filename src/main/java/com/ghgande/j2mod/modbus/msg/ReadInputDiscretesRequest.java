@@ -52,9 +52,7 @@ public final class ReadInputDiscretesRequest extends ModbusRequest {
 
         setFunctionCode(Modbus.READ_INPUT_DISCRETES);
 
-		/*
-         * Two bytes for count, two bytes for offset.
-		 */
+        // Two bytes for count, two bytes for offset.
         setDataLength(4);
     }
 
@@ -113,9 +111,7 @@ public final class ReadInputDiscretesRequest extends ModbusRequest {
         }
         response = getResponse();
 
-		/*
-         * Populate the discrete values from the process image.
-		 */
+        // Populate the discrete values from the process image.
         for (int i = 0; i < dins.length; i++) {
             response.setDiscreteStatus(i, dins[i].isSet());
         }

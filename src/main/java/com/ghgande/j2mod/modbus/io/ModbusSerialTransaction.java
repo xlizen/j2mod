@@ -21,7 +21,6 @@ import com.ghgande.j2mod.modbus.ModbusIOException;
 import com.ghgande.j2mod.modbus.ModbusSlaveException;
 import com.ghgande.j2mod.modbus.msg.ExceptionResponse;
 import com.ghgande.j2mod.modbus.msg.ModbusRequest;
-import com.ghgande.j2mod.modbus.msg.ModbusResponse;
 import com.ghgande.j2mod.modbus.net.SerialConnection;
 import com.ghgande.j2mod.modbus.util.ModbusLogger;
 
@@ -33,19 +32,11 @@ import com.ghgande.j2mod.modbus.util.ModbusLogger;
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
  */
-public class ModbusSerialTransaction implements ModbusTransaction {
+public class ModbusSerialTransaction extends ModbusTransaction {
 
     private static final ModbusLogger logger = ModbusLogger.getLogger(ModbusSerialTransaction.class);
 
-    //class attributes
-    private static int transactionID = Modbus.DEFAULT_TRANSACTION_ID;
-
     //instance attributes and associations
-    private ModbusTransport transport;
-    private ModbusRequest request;
-    private ModbusResponse response;
-    private boolean validityCheck = Modbus.DEFAULT_VALIDITYCHECK;
-    private int retries = Modbus.DEFAULT_RETRIES;
     private int transDelayMS = Modbus.DEFAULT_TRANSMIT_DELAY;
     private final Object MUTEX = new Object();
 
@@ -129,41 +120,8 @@ public class ModbusSerialTransaction implements ModbusTransaction {
         }
     }
 
-    public ModbusRequest getRequest() {
-        return request;
-    }
-
-    public void setRequest(ModbusRequest req) {
-        request = req;
-        //response = req.getResponse();
-    }
-
-    public ModbusResponse getResponse() {
-        return response;
-    }
-
-    public int getTransactionID() {
-        return transactionID;
-    }
-
-    public int getRetries() {
-        return retries;
-    }
-
-    public void setRetries(int num) {
-        retries = num;
-    }
-
-    public boolean isCheckingValidity() {
-        return validityCheck;
-    }
-
-    public void setCheckingValidity(boolean b) {
-        validityCheck = b;
-    }
-
-    public void execute() throws ModbusIOException, ModbusSlaveException,
-            ModbusException {
+    @Override
+    public void execute() throws ModbusException {
         //1. assert executeability
         assertExecutable();
 

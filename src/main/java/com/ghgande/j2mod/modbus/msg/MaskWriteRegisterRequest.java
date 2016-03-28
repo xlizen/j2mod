@@ -121,18 +121,14 @@ public final class MaskWriteRegisterRequest extends ModbusRequest {
 
         response = new MaskWriteRegisterResponse();
 
-		/*
-         * Copy any header data from the request.
-		 */
+        // Copy any header data from the request.
         response.setHeadless(isHeadless());
         if (!isHeadless()) {
             response.setTransactionID(getTransactionID());
             response.setProtocolID(getProtocolID());
         }
 
-		/*
-         * Copy the unit ID and function code.
-		 */
+        // Copy the unit ID and function code.
         response.setUnitID(getUnitID());
         response.setFunctionCode(getFunctionCode());
 
@@ -146,25 +142,21 @@ public final class MaskWriteRegisterRequest extends ModbusRequest {
     public ModbusResponse createResponse() {
         MaskWriteRegisterResponse response;
 
-		/*
-         * Get the process image.
-		 */
+        // Get the process image.
         ProcessImage procimg = ModbusCoupler.getReference().getProcessImage();
         try {
             Register register = procimg.getRegister(reference);
 
-			/*
+            /*
              * Get the original value.  The AND mask will first be
-			 * applied to clear any bits, then the OR mask will be
-			 * applied to set them.
-			 */
+             * applied to clear any bits, then the OR mask will be
+             * applied to set them.
+             */
             int value = register.getValue();
 
             value = (value & andMask) | (orMask & ~andMask);
 
-			/*
-			 * Store the modified value back where it came from.
-			 */
+            // Store the modified value back where it came from.
             register.setValue(value);
         }
         catch (IllegalAddressException iaex) {

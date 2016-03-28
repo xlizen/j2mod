@@ -22,7 +22,8 @@ import java.net.InetAddress;
 import java.util.Date;
 
 /**
- *
+ * A sanity check of how UDP comms should work between client and server
+ * Taken from the online Oracle Java examples
  */
 public class TestUDP {
 
@@ -36,7 +37,6 @@ public class TestUDP {
     public static String readQuote() throws IOException {
 
         // get a datagram socket
-//        DatagramSocket socket = new DatagramSocket();
         DatagramSocket socket = new DatagramSocket();
 
         // send request

@@ -32,9 +32,7 @@ import java.io.IOException;
  */
 public final class ReportSlaveIDResponse extends ModbusResponse {
 
-    /*
-     * Message fields.
-     */
+    // Message fields.
     int m_length;
     byte m_data[];
     int m_status;
@@ -102,10 +100,8 @@ public final class ReportSlaveIDResponse extends ModbusResponse {
      * @param data byte array
      */
     public void setData(byte[] data) {
-        /*
-         * There are always two bytes of payload in the message -- the
-		 * slave ID and the run status indicator.
-		 */
+        // There are always two bytes of payload in the message -- the
+        // slave ID and the run status indicator.
         if (data == null) {
             m_length = 2;
             m_data = new byte[0];
@@ -137,25 +133,21 @@ public final class ReportSlaveIDResponse extends ModbusResponse {
      */
     public void readData(DataInput din) throws IOException {
 
-		/*
-         * Get the size of any device-specific data.
-		 */
+        // Get the size of any device-specific data.
         m_length = din.readUnsignedByte();
         if (m_length < 2 || m_length > 255) {
             return;
         }
 
-		/*
-         * Get the run status and device identifier.
-		 */
+        // Get the run status and device identifier.
         m_slaveId = din.readUnsignedByte();
         m_status = din.readUnsignedByte();
 
-		/*
+        /*
          * The device-specific data is two bytes shorter than the
-		 * length read previously.  That length includes the run status
-		 * and slave ID.
-		 */
+         * length read previously.  That length includes the run status
+         * and slave ID.
+         */
         m_data = new byte[m_length - 2];
         if (m_length > 2) {
             din.readFully(m_data, 0, m_length - 2);

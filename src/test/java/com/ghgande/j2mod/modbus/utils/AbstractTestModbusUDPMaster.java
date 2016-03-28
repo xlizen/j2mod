@@ -83,7 +83,6 @@ public class AbstractTestModbusUDPMaster extends AbstractTestModbus {
             listener = new ModbusUDPListener();
             listener.setListening(true);
             listener.setPort(PORT);
-            listener.setUnit(0);
             new Thread(listener).start();
 
             // Wait here a moment and then check to see if the listener actually started

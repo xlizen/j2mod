@@ -84,9 +84,7 @@ public class WriteHoldingRegisterTest {
                         ((ModbusSerialTransport)transport).setBaudRate(19200);
                     }
 
-					/*
-                     * Some serial devices are slow to wake up.
-					 */
+                    // Some serial devices are slow to wake up.
                     Thread.sleep(2000);
                 }
 

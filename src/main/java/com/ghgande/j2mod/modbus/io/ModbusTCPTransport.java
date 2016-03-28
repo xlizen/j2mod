@@ -266,27 +266,24 @@ public class ModbusTCPTransport implements ModbusTransport {
                 // use same buffer
                 byte[] buffer = byteInputStream.getBuffer();
                 logger.debug("Read: %s", ModbusUtil.toHex(buffer, 0, byteInputStream.count));
-
                 if (!headless) {
-                    /*
-					 * All Modbus TCP transactions start with 6 bytes. Get them.
-					 */
+                    // All Modbus TCP transactions start with 6 bytes. Get them.
                     if (dataInputStream.read(buffer, 0, 6) == -1) {
                         throw new ModbusIOException("Premature end of stream (Header truncated)");
                     }
 
-					/*
-					 * The transaction ID is the first word (offset 0) in the
-					 * data that was just read. It will be echoed back to the
-					 * requester.
-					 *
-					 * The protocol ID is the second word (offset 2) in the
-					 * data. It should always be 0, but I don't check.
-					 *
-					 * The length of the payload is the third word (offset 4) in
-					 * the data that was just read. That's what I need in order
-					 * to read the rest of the response.
-					 */
+                    /*
+                     * The transaction ID is the first word (offset 0) in the
+                     * data that was just read. It will be echoed back to the
+                     * requester.
+                     *
+                     * The protocol ID is the second word (offset 2) in the
+                     * data. It should always be 0, but I don't check.
+                     *
+                     * The length of the payload is the third word (offset 4) in
+                     * the data that was just read. That's what I need in order
+                     * to read the rest of the response.
+                     */
                     int transaction = ModbusUtil.registerToShort(buffer, 0) & 0x0000FFFF;
                     int protocol = ModbusUtil.registerToShort(buffer, 2);
                     int count = ModbusUtil.registerToShort(buffer, 4);
@@ -294,18 +291,14 @@ public class ModbusTCPTransport implements ModbusTransport {
                     if (dataInputStream.read(buffer, 6, count) == -1) {
                         throw new ModbusIOException("Premature end of stream (Message truncated)");
                     }
-
                     byteInputStream.reset(buffer, (6 + count));
-
                     byteInputStream.reset();
                     byteInputStream.skip(7);
                     int function = byteInputStream.readUnsignedByte();
                     response = ModbusResponse.createModbusResponse(function);
 
-					/*
-					 * Rewind the input buffer, then read the data into the
-					 * response.
-					 */
+                    // Rewind the input buffer, then read the data into the
+                    // response.
                     byteInputStream.reset();
                     response.readFrom(byteInputStream);
 
@@ -313,10 +306,8 @@ public class ModbusTCPTransport implements ModbusTransport {
                     response.setProtocolID(protocol);
                 }
                 else {
-					/*
-					 * This is a headless response. It has the same format as a
-					 * RTU over Serial response.
-					 */
+                    // This is a headless response. It has the same format as a
+                    // RTU over Serial response.
                     int unit = dataInputStream.readByte();
                     int function = dataInputStream.readByte();
 
@@ -325,10 +316,8 @@ public class ModbusTCPTransport implements ModbusTransport {
                     response.setHeadless();
                     response.readData(dataInputStream);
 
-					/*
-					 * Now discard the CRC. Which hopefully wasn't needed
-					 * because this is a TCP transport.
-					 */
+                    // Now discard the CRC. Which hopefully wasn't needed
+                    // because this is a TCP transport.
                     dataInputStream.readShort();
                 }
             }
@@ -352,15 +341,12 @@ public class ModbusTCPTransport implements ModbusTransport {
      */
     private void prepareStreams(Socket socket) throws IOException {
 
-		/*
-		 * Close any open streams if I'm being called because a new socket was
-		 * set to handle this transport.
-		 */
+        // Close any open streams if I'm being called because a new socket was
+        // set to handle this transport.
         try {
             if (dataInputStream != null) {
                 dataInputStream.close();
             }
-
             if (dataOutputStream != null) {
                 dataOutputStream.close();
             }

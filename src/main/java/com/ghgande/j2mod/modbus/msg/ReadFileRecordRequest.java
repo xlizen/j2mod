@@ -42,9 +42,7 @@ public final class ReadFileRecordRequest extends ModbusRequest {
 
         setFunctionCode(Modbus.READ_FILE_RECORD);
 
-		/*
-         * Request size byte is all that is required.
-		 */
+        // Request size byte is all that is required.
         setDataLength(1);
     }
 
@@ -115,18 +113,14 @@ public final class ReadFileRecordRequest extends ModbusRequest {
 
         response = new ReadFileRecordResponse();
 
-		/*
-         * Copy any header data from the request.
-		 */
+        // Copy any header data from the request.
         response.setHeadless(isHeadless());
         if (!isHeadless()) {
             response.setTransactionID(getTransactionID());
             response.setProtocolID(getProtocolID());
         }
 
-		/*
-         * Copy the unit ID and function code.
-		 */
+        // Copy the unit ID and function code.
         response.setUnitID(getUnitID());
         response.setFunctionCode(getFunctionCode());
 
@@ -141,14 +135,10 @@ public final class ReadFileRecordRequest extends ModbusRequest {
         ReadFileRecordResponse response;
         response = (ReadFileRecordResponse)getResponse();
 
-		/*
-         * Get the process image.
-		 */
+        // Get the process image.
         ProcessImage procimg = ModbusCoupler.getReference().getProcessImage();
 
-		/*
-         * There is a list of requests to be resolved.
-		 */
+        // There is a list of requests to be resolved.
         try {
             for (int i = 0; i < getRequestCount(); i++) {
                 RecordRequest recordRequest = getRecord(i);

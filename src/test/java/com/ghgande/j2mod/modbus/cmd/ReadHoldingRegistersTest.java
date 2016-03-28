@@ -91,10 +91,8 @@ public class ReadHoldingRegistersTest {
                     }
                 }
 
-				/*
-                 * There are a number of devices which won't initialize immediately
-				 * after being opened.  Take a moment to let them come up.
-				 */
+                // There are a number of devices which won't initialize immediately
+                // after being opened.  Take a moment to let them come up.
                 Thread.sleep(500);
 
                 ref = Integer.parseInt(args[1]);

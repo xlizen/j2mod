@@ -32,9 +32,7 @@ import java.io.IOException;
  */
 public final class ReadFIFOQueueResponse extends ModbusResponse {
 
-    /*
-     * Message fields.
-     */
+    // Message fields.
     private int count;
     private InputRegister registers[];
 
@@ -119,17 +117,15 @@ public final class ReadFIFOQueueResponse extends ModbusResponse {
      */
     public void readData(DataInput din) throws IOException {
 
-		/*
+        /*
          * Read and discard the byte count.  There's no way to indicate
-		 * the packet was inconsistent, other than throwing an I/O
-		 * exception for an invalid packet format ...
-		 */
+         * the packet was inconsistent, other than throwing an I/O
+         * exception for an invalid packet format ...
+         */
         din.readShort();
 
-		/*
-         * The first register is the number of registers which
-		 * follow.  Save that as count, not as a register.
-		 */
+        // The first register is the number of registers which
+        // follow.  Save that as count, not as a register.
         count = din.readShort();
         registers = new InputRegister[count];
 

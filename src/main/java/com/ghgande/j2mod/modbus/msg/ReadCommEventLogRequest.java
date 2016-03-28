@@ -40,9 +40,7 @@ public final class ReadCommEventLogRequest extends ModbusRequest {
 
         setFunctionCode(Modbus.READ_COMM_EVENT_LOG);
 
-		/*
-         * There is no additional data in this request.
-		 */
+        // There is no additional data in this request.
         setDataLength(0);
     }
 
@@ -54,18 +52,14 @@ public final class ReadCommEventLogRequest extends ModbusRequest {
 
         response = new ReadCommEventLogResponse();
 
-		/*
-         * Copy any header data from the request.
-		 */
+        // Copy any header data from the request.
         response.setHeadless(isHeadless());
         if (!isHeadless()) {
             response.setTransactionID(getTransactionID());
             response.setProtocolID(getProtocolID());
         }
 
-		/*
-         * Copy the unit ID and function code.
-		 */
+        // Copy the unit ID and function code.
         response.setUnitID(getUnitID());
         response.setFunctionCode(getFunctionCode());
 

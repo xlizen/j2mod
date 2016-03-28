@@ -40,9 +40,7 @@ public final class ReportSlaveIDRequest extends ModbusRequest {
 
         setFunctionCode(Modbus.REPORT_SLAVE_ID);
 
-		/*
-         * There is no additional data in this request.
-		 */
+        // There is no additional data in this request.
         setDataLength(0);
     }
 
@@ -54,18 +52,14 @@ public final class ReportSlaveIDRequest extends ModbusRequest {
 
         response = new ReportSlaveIDResponse();
 
-		/*
-         * Copy any header data from the request.
-		 */
+        // Copy any header data from the request.
         response.setHeadless(isHeadless());
         if (!isHeadless()) {
             response.setTransactionID(getTransactionID());
             response.setProtocolID(getProtocolID());
         }
 
-		/*
-         * Copy the unit ID and function code.
-		 */
+        // Copy the unit ID and function code.
         response.setUnitID(getUnitID());
         response.setFunctionCode(getFunctionCode());
 

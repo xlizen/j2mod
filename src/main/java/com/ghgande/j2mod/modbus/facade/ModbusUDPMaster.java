@@ -55,11 +55,25 @@ public class ModbusUDPMaster extends AbstractModbusMaster {
      * @param port the port the slave is listening to.
      */
     public ModbusUDPMaster(String addr, int port) {
+        this(addr, port, Modbus.DEFAULT_TIMEOUT);
+    }
+
+    /**
+     * Constructs a new master facade instance for communication
+     * with a given slave.
+     *
+     * @param addr    an internet address as resolvable IP name or IP number,
+     *                specifying the slave to communicate with.
+     * @param port    the port the slave is listening to.
+     * @param timeout Socket timeout in milliseconds
+     */
+    public ModbusUDPMaster(String addr, int port, int timeout) {
         super();
         try {
             InetAddress slaveAddress = InetAddress.getByName(addr);
             connection = new UDPMasterConnection(slaveAddress);
             connection.setPort(port);
+            connection.setTimeout(timeout);
         }
         catch (UnknownHostException e) {
             throw new RuntimeException(e.getMessage());
