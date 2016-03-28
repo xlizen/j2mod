@@ -43,9 +43,7 @@ public final class WriteFileRecordRequest extends ModbusRequest {
 
         setFunctionCode(Modbus.WRITE_FILE_RECORD);
 
-		/*
-         * Set up space for the initial header.
-		 */
+        // Set up space for the initial header.
         setDataLength(1);
     }
 
@@ -117,18 +115,14 @@ public final class WriteFileRecordRequest extends ModbusRequest {
 
         response = new WriteFileRecordResponse();
 
-		/*
-         * Copy any header data from the request.
-		 */
+        // Copy any header data from the request.
         response.setHeadless(isHeadless());
         if (!isHeadless()) {
             response.setTransactionID(getTransactionID());
             response.setProtocolID(getProtocolID());
         }
 
-		/*
-         * Copy the unit ID and function code.
-		 */
+        // Copy the unit ID and function code.
         response.setUnitID(getUnitID());
         response.setFunctionCode(getFunctionCode());
 
@@ -142,14 +136,10 @@ public final class WriteFileRecordRequest extends ModbusRequest {
         WriteFileRecordResponse response;
         response = (WriteFileRecordResponse)getResponse();
 
-		/*
-		 * Get the process image.
-		 */
+        // Get the process image.
         ProcessImage procimg = ModbusCoupler.getReference().getProcessImage();
-		
-		/*
-		 * There is a list of requests to be resolved.
-		 */
+
+        // There is a list of requests to be resolved.
         try {
             for (int i = 0; i < getRequestCount(); i++) {
                 RecordRequest recordRequest = getRecord(i);

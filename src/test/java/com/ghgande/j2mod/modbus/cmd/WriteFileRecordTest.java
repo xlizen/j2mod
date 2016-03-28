@@ -38,11 +38,8 @@ import java.util.Arrays;
  * message.
  *
  * @author Julie
- * @version 0.96
- *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
 public class WriteFileRecordTest {
 
@@ -69,9 +66,7 @@ public class WriteFileRecordTest {
         short values[] = null;
         boolean isSerial = false;
 
-		/*
-         * Get the command line parameters.
-		 */
+        // Get the command line parameters.
         if (args.length < 6) {
             usage();
         }
@@ -109,9 +104,7 @@ public class WriteFileRecordTest {
         }
 
         try {
-            /*
-             * Setup the WRITE FILE RECORD request.
-			 */
+            // Setup the WRITE FILE RECORD request.
             request = new WriteFileRecordRequest();
             request.setUnitID(unit);
             if (isSerial) {
@@ -123,15 +116,11 @@ public class WriteFileRecordTest {
 
             logger.system("Request: %s", request.getHexMessage());
 
-			/*
-			 * Setup the transaction.
-			 */
+            // Setup the transaction.
             trans = transport.createTransaction();
             trans.setRequest(request);
 
-			/*
-			 * Execute the transaction.
-			 */
+            // Execute the transaction.
             try {
                 trans.execute();
             }

@@ -21,7 +21,6 @@ import com.ghgande.j2mod.modbus.ModbusIOException;
 import com.ghgande.j2mod.modbus.ModbusSlaveException;
 import com.ghgande.j2mod.modbus.msg.ExceptionResponse;
 import com.ghgande.j2mod.modbus.msg.ModbusRequest;
-import com.ghgande.j2mod.modbus.msg.ModbusResponse;
 import com.ghgande.j2mod.modbus.net.TCPMasterConnection;
 import com.ghgande.j2mod.modbus.util.ModbusLogger;
 
@@ -32,21 +31,13 @@ import com.ghgande.j2mod.modbus.util.ModbusLogger;
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
  */
-public class ModbusTCPTransaction implements ModbusTransaction {
+public class ModbusTCPTransaction extends ModbusTransaction {
 
     private static final ModbusLogger logger = ModbusLogger.getLogger(ModbusTCPTransaction.class);
 
-    // class attributes
-    private static int transactionID = Modbus.DEFAULT_TRANSACTION_ID;
-
     // instance attributes and associations
     private TCPMasterConnection connection;
-    private ModbusTransport transport;
-    private ModbusRequest request;
-    private ModbusResponse response;
-    private boolean validityCheck = Modbus.DEFAULT_VALIDITYCHECK;
-    private boolean reconnecting = Modbus.DEFAULT_RECONNECTING;
-    private int retries = Modbus.DEFAULT_RETRIES;
+    protected boolean reconnecting = Modbus.DEFAULT_RECONNECTING;
 
     /**
      * Constructs a new <tt>ModbusTCPTransaction</tt> instance.
@@ -114,65 +105,14 @@ public class ModbusTCPTransaction implements ModbusTransaction {
         reconnecting = b;
     }
 
-    public synchronized ModbusRequest getRequest() {
-        return request;
-    }
-
-    public synchronized void setRequest(ModbusRequest req) {
-        request = req;
-    }
-
-    public synchronized ModbusResponse getResponse() {
-        return response;
-    }
-
-    /**
-     * getTransactionID -- get the next transaction ID to use.
-     *
-     * Note that this method is not synchronized. Callers should synchronize
-     * on this class instance if multiple threads can create requests at the
-     * same time.
-     */
-    public synchronized int getTransactionID() {
-        /*
-         * Ensure that the transaction ID is in the valid range between
-		 * 1 and MAX_TRANSACTION_ID (65534).  If not, the value will be forced
-		 * to 1.
-		 */
-        if (transactionID <= 0 && isCheckingValidity()) {
-            transactionID = 1;
-        }
-        if (transactionID >= Modbus.MAX_TRANSACTION_ID) {
-            transactionID = 1;
-        }
-        return transactionID;
-    }
-
-    public synchronized int getRetries() {
-        return retries;
-    }
-
-    public synchronized void setRetries(int num) {
-        retries = num;
-    }
-
-    public boolean isCheckingValidity() {
-        return validityCheck;
-    }
-
-    public void setCheckingValidity(boolean b) {
-        validityCheck = b;
-    }
-
+    @Override
     public synchronized void execute() throws ModbusException {
 
         if (request == null || connection == null) {
             throw new ModbusException("Invalid request or connection");
         }
 
-		/*
-         * Automatically re-connect if disconnected.
-		 */
+        // Automatically re-connect if disconnected.
         if (!connection.isConnected()) {
             try {
                 connection.connect();
@@ -182,17 +122,14 @@ public class ModbusTCPTransaction implements ModbusTransaction {
             }
         }
 
-		/*
-         * Try sending the message up to retries time. Note that the message
-		 * is read immediately after being written, with no flushing of buffers.
-		 */
+        // Try sending the message up to retries time. Note that the message
+        // is read immediately after being written, with no flushing of buffers.
         int retryCounter = 0;
         int retryLimit = (retries > 0 ? retries : 1);
 
         while (retryCounter < retryLimit) {
             try {
                 logger.debug("request transaction ID = %d", request.getTransactionID());
-
                 transport.writeMessage(request);
                 response = null;
                 do {
@@ -211,10 +148,8 @@ public class ModbusTCPTransaction implements ModbusTransaction {
                     throw new ModbusIOException("Executing transaction failed (tried " + retries + " times)");
                 }
 
-                /*
-                 * Both methods were successful, so the transaction must
-                 * have been executed.
-                 */
+                // Both methods were successful, so the transaction must
+                // have been executed.
                 break;
             }
             catch (ModbusIOException ex) {
@@ -223,9 +158,7 @@ public class ModbusTCPTransaction implements ModbusTransaction {
                         connection.connect();
                     }
                     catch (Exception e) {
-                        /*
-                         * Nope, fail this transaction.
-						 */
+                        // Nope, fail this transaction.
                         throw new ModbusIOException("Connection lost");
                     }
                 }
@@ -236,27 +169,20 @@ public class ModbusTCPTransaction implements ModbusTransaction {
             }
         }
 
-		/*
-		 * The slave may have returned an exception -- check for that.
-		 */
+        // The slave may have returned an exception -- check for that.
         if (response instanceof ExceptionResponse) {
             throw new ModbusSlaveException(((ExceptionResponse)response).getExceptionCode());
         }
 
-		/*
-		 * Close the connection if it isn't supposed to stick around.
-		 */
+        // Close the connection if it isn't supposed to stick around.
         if (isReconnecting()) {
             connection.close();
         }
 
-		/*
-		 * See if packets require validity checking.
-		 */
+        // See if packets require validity checking.
         if (isCheckingValidity()) {
             checkValidity();
         }
-
         incrementTransactionID();
     }
 

@@ -43,11 +43,8 @@ import com.ghgande.j2mod.modbus.util.ModbusLogger;
  * a reset message.
  *
  * @author Dieter Wimberger
- * @version 1.2rc1 (09/11/2004)
- *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
 public class WriteCoilTest {
 
@@ -85,10 +82,8 @@ public class WriteCoilTest {
                     }
                 }
 
-				/*
-                 * There are a number of devices which won't initialize immediately
-				 * after being opened.  Take a moment to let them come up.
-				 */
+                // There are a number of devices which won't initialize immediately
+                // after being opened.  Take a moment to let them come up.
                 Thread.sleep(2000);
 
                 unit = Integer.parseInt(args[1]);

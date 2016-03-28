@@ -35,7 +35,6 @@ import java.util.List;
  *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
 public class TestUtils {
 
@@ -359,9 +358,9 @@ public class TestUtils {
         return returnValue;
     }
 
-
     /**
      * Returns the first real IP address it finds
+     *
      * @return Real IP address or null if nothing available
      */
     public static String getFirstIp4Address() {

@@ -128,10 +128,8 @@ class UDPMasterTerminal implements UDPTerminal {
 
     public synchronized byte[] receiveMessage() throws Exception {
 
-		/*
-         * The longest possible DatagramPacket is 256 bytes (Modbus message
-		 * limit) plus the 6 byte header.
-		 */
+        // The longest possible DatagramPacket is 256 bytes (Modbus message
+        // limit) plus the 6 byte header.
         byte[] buffer = new byte[262];
         DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
         socket.setSoTimeout(timeout);

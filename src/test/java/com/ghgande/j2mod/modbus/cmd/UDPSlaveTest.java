@@ -28,16 +28,9 @@ import java.io.IOException;
  * available to test functionality and behaviour of the implementation.
  *
  * @author Dieter Wimberger
- * @version 1.2rc1 (09/11/2004)
- *
  * @author Julie Haugh
- * @version 0.97 (08/11/2012)
- * Added Modbus FILE support
- * Copied data points from TCP test harness.
- *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
 public class UDPSlaveTest {
 

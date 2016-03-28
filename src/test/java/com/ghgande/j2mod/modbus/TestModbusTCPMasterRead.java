@@ -165,7 +165,6 @@ public class TestModbusTCPMasterRead extends AbstractTestModbusTCPMaster {
         catch (Exception e) {
             // expected
         }
-
     }
 
 }

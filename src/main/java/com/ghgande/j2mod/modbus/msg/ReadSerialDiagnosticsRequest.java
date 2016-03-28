@@ -30,9 +30,7 @@ import java.io.IOException;
  */
 public final class ReadSerialDiagnosticsRequest extends ModbusRequest {
 
-    /*
-     * Message fields.
-     */
+    // Message fields.
     private int function;
     private short data;
 
@@ -124,24 +122,18 @@ public final class ReadSerialDiagnosticsRequest extends ModbusRequest {
 
         response = new ReadSerialDiagnosticsResponse();
 
-		/*
-         * Copy any header data from the request.
-		 */
+        // Copy any header data from the request.
         response.setHeadless(isHeadless());
         if (!isHeadless()) {
             response.setTransactionID(getTransactionID());
             response.setProtocolID(getProtocolID());
         }
 
-		/*
-         * Copy the unit ID and function code.
-		 */
+        // Copy the unit ID and function code.
         response.setUnitID(getUnitID());
         response.setFunctionCode(getFunctionCode());
 
-		/*
-         * Copy the sub-function code.
-		 */
+        // Copy the sub-function code.
         response.setFunction(getFunction());
 
         return response;

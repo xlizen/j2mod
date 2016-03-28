@@ -77,9 +77,7 @@ public final class ReadMEIRequest extends ModbusRequest {
     public ModbusResponse getResponse() {
         ReadMEIResponse response;
 
-		/*
-         * Any other sub-function is an error.
-		 */
+        // Any other sub-function is an error.
         if (getSubCode() != 0x0E) {
             IllegalFunctionExceptionResponse error = new IllegalFunctionExceptionResponse();
 

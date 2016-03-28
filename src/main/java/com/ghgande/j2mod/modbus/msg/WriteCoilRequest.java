@@ -164,9 +164,7 @@ public final class WriteCoilRequest extends ModbusRequest {
             coil = false;
         }
 
-		/*
-         * discard the next byte.
-		 */
+        // discard the next byte.
         din.readByte();
     }
 

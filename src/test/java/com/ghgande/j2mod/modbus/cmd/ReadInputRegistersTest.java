@@ -44,14 +44,9 @@ import java.util.Arrays;
  * a reset message.
  *
  * @author Dieter Wimberger
- * @version 1.2rc1 (09/11/2004)
- *
  * @author Julie Haugh
- * @version 1.03 (1/18/2014)
- *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
 public class ReadInputRegistersTest {
 
@@ -95,10 +90,8 @@ public class ReadInputRegistersTest {
                     }
                 }
 
-				/*
-                 * There are a number of devices which won't initialize immediately
-				 * after being opened.  Take a moment to let them come up.
-				 */
+                // There are a number of devices which won't initialize immediately
+                // after being opened.  Take a moment to let them come up.
                 Thread.sleep(2000);
 
                 ref = Integer.parseInt(args[1]);
@@ -145,9 +138,7 @@ public class ReadInputRegistersTest {
                 logger.system("Request: %s", req.getHexMessage());
 
                 if (trans instanceof ModbusSerialTransaction) {
-                    /*
-					 * 10ms interpacket delay.
-					 */
+                    // 10ms interpacket delay.
                     ((ModbusSerialTransaction)trans).setTransDelayMS(10);
                 }
 

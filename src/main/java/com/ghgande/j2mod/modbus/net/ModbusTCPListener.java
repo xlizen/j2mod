@@ -114,19 +114,17 @@ public class ModbusTCPListener implements ModbusListener {
         try {
             /*
              * A server socket is opened with a connectivity queue of a size
-			 * specified in int floodProtection. Concurrent login handling under
-			 * normal circumstances should be alright, denial of service
-			 * attacks via massive parallel program logins can probably be
-			 * prevented.
-			 */
+             * specified in int floodProtection. Concurrent login handling under
+             * normal circumstances should be alright, denial of service
+             * attacks via massive parallel program logins can probably be
+             * prevented.
+             */
             int floodProtection = 5;
             serverSocket = new ServerSocket(port, floodProtection, address);
             logger.debug("Listening to %s (Port %d)", serverSocket.toString(), port);
 
-			/*
-             * Infinite loop, taking care of resources in case of a lot of
-			 * parallel logins
-			 */
+            // Infinite loop, taking care of resources in case of a lot of
+            // parallel logins
             listening = true;
             while (listening) {
                 Socket incoming = serverSocket.accept();

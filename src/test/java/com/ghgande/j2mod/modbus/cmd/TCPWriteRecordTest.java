@@ -36,11 +36,8 @@ import java.util.Arrays;
  * message.
  *
  * @author Julie
- * @version 0.96
- *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
 public class TCPWriteRecordTest {
 
@@ -70,9 +67,7 @@ public class TCPWriteRecordTest {
         int registers = 0;
         int requestCount = 1;
 
-		/*
-         * Get the command line parameters.
-		 */
+        // Get the command line parameters.
         if (args.length < 4 || args.length > 5) {
             usage();
         }
@@ -84,15 +79,15 @@ public class TCPWriteRecordTest {
         try {
             /*
              * Address is of the form
-			 * 
-			 * hostName:port:unitNumber
-			 * 
-			 * where
-			 * 
-			 * hostName -- Standard text host name
-			 * port		-- Modbus port, 502 is the default
-			 * unit		-- Modbus unit number, 0 is the default
-			 */
+             *
+             * hostName:port:unitNumber
+             *
+             * where
+             *
+             * hostName -- Standard text host name
+             * port        -- Modbus port, 502 is the default
+             * unit        -- Modbus unit number, 0 is the default
+             */
             if (parts.length > 1) {
                 port = Integer.parseInt(parts[1]);
 
@@ -125,10 +120,8 @@ public class TCPWriteRecordTest {
         }
 
         try {
-			
-			/*
-			 * Setup the TCP connection to the Modbus/TCP Master
-			 */
+
+            // Setup the TCP connection to the Modbus/TCP Master
             connection = new TCPMasterConnection(ipAddress);
             connection.setPort(port);
             connection.connect();
@@ -137,10 +130,8 @@ public class TCPWriteRecordTest {
             logger.system("Connected to %s:%d", ipAddress.toString(), connection.getPort());
 
             for (int i = 0; i < requestCount; i++) {
-				/*
-				 * Setup the READ FILE RECORD request.  The record number
-				 * will be incremented for each loop.
-				 */
+                // Setup the READ FILE RECORD request.  The record number
+                // will be incremented for each loop.
                 rdRequest = new ReadFileRecordRequest();
                 rdRequest.setUnitID(unit);
 
@@ -149,15 +140,11 @@ public class TCPWriteRecordTest {
 
                 logger.system("Request: %s", rdRequest.getHexMessage());
 
-				/*
-				 * Setup the transaction.
-				 */
+                // Setup the transaction.
                 trans = new ModbusTCPTransaction(connection);
                 trans.setRequest(rdRequest);
 
-				/*
-				 * Execute the transaction.
-				 */
+                // Execute the transaction.
                 try {
                     trans.execute();
                 }
@@ -211,21 +198,15 @@ public class TCPWriteRecordTest {
                     }
                 }
                 else {
-					/*
-					 * Unknown message.
-					 */
+                    // Unknown message.
                     logger.system("Unknown Response: %s", dummy.getHexMessage());
                 }
-				
-				/*
-				 * Setup the transaction.
-				 */
+
+                // Setup the transaction.
                 trans = new ModbusTCPTransaction(connection);
                 trans.setRequest(wrRequest);
 
-				/*
-				 * Execute the transaction.
-				 */
+                // Execute the transaction.
                 try {
                     trans.execute();
                 }
@@ -270,16 +251,12 @@ public class TCPWriteRecordTest {
                     }
                 }
                 else {
-					/*
-					 * Unknown message.
-					 */
+                    // Unknown message.
                     logger.system("Unknown Response: %s", dummy.getHexMessage());
                 }
             }
-			
-			/*
-			 * Teardown the connection.
-			 */
+
+            // Teardown the connection.
             connection.close();
         }
         catch (Exception ex) {

@@ -41,10 +41,10 @@ public class ModbusListenerFactory {
         if (parts[0].toLowerCase().equals("device")) {
             /*
              * Create a ModbusSerialListener with the default Modbus
-			 * values of 19200 baud, no parity, using the specified
-			 * device.  If there is an additional part after the
-			 * device name, it will be used as the Modbus unit number.
-			 */
+             * values of 19200 baud, no parity, using the specified
+             * device.  If there is an additional part after the
+             * device name, it will be used as the Modbus unit number.
+             */
             SerialParameters parms = new SerialParameters();
             parms.setPortName(parts[1]);
             parms.setBaudRate(19200);
@@ -68,10 +68,8 @@ public class ModbusListenerFactory {
             return listener;
         }
         else if (parts[0].toLowerCase().equals("tcp")) {
-            /*
-             * Create a ModbusTCPListener with the default interface
-			 * value.  The second optional value is the TCP port number
-			 */
+            // Create a ModbusTCPListener with the default interface
+            // value.  The second optional value is the TCP port number
             ModbusTCPListener listener = new ModbusTCPListener(5);
             if (parts.length > 2) {
                 int port = Integer.parseInt(parts[2]);
@@ -85,10 +83,8 @@ public class ModbusListenerFactory {
             return listener;
         }
         else if (parts[0].toLowerCase().equals("udp")) {
-			/*
-			 * Create a ModbusUDPListener with the default interface
-			 * value.  The second optional value is the TCP port number
-			 */
+            // Create a ModbusUDPListener with the default interface
+            // value.  The second optional value is the TCP port number
             ModbusUDPListener listener = new ModbusUDPListener();
             if (parts.length > 2) {
                 int port = Integer.parseInt(parts[2]);

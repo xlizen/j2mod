@@ -167,15 +167,11 @@ public final class ReadMEIResponse extends ModbusResponse {
         int size = 6;
 
         for (int i = 0; i < fieldCount; i++) {
-          /*
-           * Add the field ID
-		   */
+            // Add the field ID
             size++;
 
-		  /*
-           * Add the string length byte and the
-		   * actual string length.
-		   */
+            // Add the string length byte and the
+            // actual string length.
             size++;
             size += fields[i].length();
         }

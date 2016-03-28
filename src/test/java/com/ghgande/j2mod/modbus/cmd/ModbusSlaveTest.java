@@ -26,15 +26,13 @@ import com.ghgande.j2mod.modbus.util.ModbusLogger;
  * available to test functionality and behaviour of the implementation.
  *
  * @author Julie Haugh
- * @version 0.97 (8/12/12)
- *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
 public class ModbusSlaveTest {
 
     private static final ModbusLogger logger = ModbusLogger.getLogger(ModbusSlaveTest.class);
+
     public static void main(String[] args) {
         ModbusListener listener = null;
         SimpleProcessImage spi;
@@ -42,9 +40,7 @@ public class ModbusSlaveTest {
         try {
             logger.system("j2mod Modbus Slave (Server) v0.97");
 
-			/*
-             * Create the process image for this test.
-			 */
+            // Create the process image for this test.
             spi = new SimpleProcessImage(15);
 
             spi.addDigitalOut(new SimpleDigitalOut(true));

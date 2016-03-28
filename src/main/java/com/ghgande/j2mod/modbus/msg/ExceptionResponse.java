@@ -43,9 +43,7 @@ public class ExceptionResponse extends ModbusResponse {
      */
     public ExceptionResponse(int fc, int exc) {
 
-		/*
-         * One byte of data.
-		 */
+        // One byte of data.
         setDataLength(1);
         setFunctionCode(fc | Modbus.EXCEPTION_OFFSET);
 
@@ -60,9 +58,7 @@ public class ExceptionResponse extends ModbusResponse {
      */
     public ExceptionResponse(int fc) {
 
-		/*
-         * One byte of data.
-		 */
+        // One byte of data.
         setDataLength(1);
         setFunctionCode(fc | Modbus.EXCEPTION_OFFSET);
     }
@@ -73,9 +69,7 @@ public class ExceptionResponse extends ModbusResponse {
      */
     public ExceptionResponse() {
 
-		/*
-         * One byte of data.
-		 */
+        // One byte of data.
         setDataLength(1);
     }
 

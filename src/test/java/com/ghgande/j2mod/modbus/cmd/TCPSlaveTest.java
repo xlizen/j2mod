@@ -28,15 +28,13 @@ import java.net.Inet4Address;
  * available to test functionality and behaviour of the implementation.
  *
  * @author Dieter Wimberger
- * @version 1.2rc1 (09/11/2004)
- *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
 public class TCPSlaveTest {
 
     private static final ModbusLogger logger = ModbusLogger.getLogger(TCPSlaveTest.class);
+
     public static void main(String[] args) {
 
         ModbusTCPListener listener;
@@ -50,9 +48,7 @@ public class TCPSlaveTest {
             }
             logger.system("j2mod Modbus Slave (Server) v0.97");
 
-			/*
-             * Create the process image for this test.
-			 */
+            // Create the process image for this test.
             spi = new SimpleProcessImage(15);
 
             spi.addDigitalOut(new SimpleDigitalOut(true));

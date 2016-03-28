@@ -69,11 +69,11 @@ public class ModbusSerialListener implements ModbusListener {
                 if (listening) {
                     try {
 
-						/*
+                        /*
                          * Read the request from the serial interface. If this
-						 * instance has been assigned a unit number, it must be
-						 * enforced.
-						 */
+                         * instance has been assigned a unit number, it must be
+                         * enforced.
+                         */
                         ModbusRequest request = transport.readRequest();
                         if (request == null) {
                             continue;
@@ -83,11 +83,11 @@ public class ModbusSerialListener implements ModbusListener {
                             continue;
                         }
 
-						/*
+                        /*
                          * Create the response using a ProcessImage. A Modbus
-						 * ILLEGAL FUNCTION exception will be thrown if there is
-						 * no ProcessImage.
-						 */
+                         * ILLEGAL FUNCTION exception will be thrown if there is
+                         * no ProcessImage.
+                         */
                         ModbusResponse response;
                         if (ModbusCoupler.getReference().getProcessImage() == null) {
                             response = request.createExceptionResponse(Modbus.ILLEGAL_FUNCTION_EXCEPTION);
@@ -96,9 +96,7 @@ public class ModbusSerialListener implements ModbusListener {
                             response = request.createResponse();
                         }
 
-						/*
-                         * Log the Request and Response messages.
-						 */
+                        // Log the Request and Response messages.
                         try {
                             logger.debug("Request (%s): %s", request.getClass().getName(), request.getHexMessage());
                             logger.debug("Response (%s): %s", response.getClass().getName(), response.getHexMessage());
@@ -107,9 +105,7 @@ public class ModbusSerialListener implements ModbusListener {
                             // Ignore.
                         }
 
-						/*
-                         * Write the response.
-						 */
+                        // Write the response.
                         transport.writeMessage(response);
                     }
                     catch (ModbusIOException ex) {
@@ -117,19 +113,15 @@ public class ModbusSerialListener implements ModbusListener {
                     }
                 }
                 else {
-					/*
-					 * Not listening -- read and discard the request so the
-					 * input doesn't get clogged up.
-					 */
+                    // Not listening -- read and discard the request so the
+                    // input doesn't get clogged up.
                     transport.readRequest();
                 }
             }
         }
         catch (Exception e) {
-			/*
-			 * TODO -- Make sure methods are throwing reasonable exceptions, and
-			 * not just throwing "Exception".
-			 */
+            // TODO -- Make sure methods are throwing reasonable exceptions, and
+            // not just throwing "Exception".
             e.printStackTrace();
         }
         finally {

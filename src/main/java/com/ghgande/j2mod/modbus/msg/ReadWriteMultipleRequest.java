@@ -49,9 +49,7 @@ public final class ReadWriteMultipleRequest extends ModbusRequest {
         setUnitID(unit);
         setFunctionCode(Modbus.READ_WRITE_MULTIPLE);
 
-		/*
-         * There is no additional data in this request.
-		 */
+        // There is no additional data in this request.
         setDataLength(9 + writeCount * 2);
 
         readReference = readRef;
@@ -73,9 +71,7 @@ public final class ReadWriteMultipleRequest extends ModbusRequest {
         setUnitID(unit);
         setFunctionCode(Modbus.READ_WRITE_MULTIPLE);
 
-		/*
-         * There is no additional data in this request.
-		 */
+        // There is no additional data in this request.
         setDataLength(9);
     }
 
@@ -87,9 +83,7 @@ public final class ReadWriteMultipleRequest extends ModbusRequest {
 
         setFunctionCode(Modbus.READ_WRITE_MULTIPLE);
 
-		/*
-		 * There is no additional data in this request.
-		 */
+        // There is no additional data in this request.
         setDataLength(9);
     }
 
@@ -101,18 +95,14 @@ public final class ReadWriteMultipleRequest extends ModbusRequest {
 
         response = new ReadWriteMultipleResponse();
 
-		/*
-         * Copy any header data from the request.
-		 */
+        // Copy any header data from the request.
         response.setHeadless(isHeadless());
         if (!isHeadless()) {
             response.setTransactionID(getTransactionID());
             response.setProtocolID(getProtocolID());
         }
 
-		/*
-         * Copy the unit ID and function code.
-		 */
+        // Copy the unit ID and function code.
         response.setUnitID(getUnitID());
         response.setFunctionCode(getFunctionCode());
 

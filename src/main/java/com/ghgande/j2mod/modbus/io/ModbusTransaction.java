@@ -15,6 +15,7 @@
  */
 package com.ghgande.j2mod.modbus.io;
 
+import com.ghgande.j2mod.modbus.Modbus;
 import com.ghgande.j2mod.modbus.ModbusException;
 import com.ghgande.j2mod.modbus.msg.ModbusRequest;
 import com.ghgande.j2mod.modbus.msg.ModbusResponse;
@@ -30,7 +31,14 @@ import com.ghgande.j2mod.modbus.msg.ModbusResponse;
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
  */
-public interface ModbusTransaction {
+public abstract class ModbusTransaction {
+
+    protected ModbusTransport transport;
+    protected ModbusRequest request;
+    protected ModbusResponse response;
+    protected boolean validityCheck = Modbus.DEFAULT_VALIDITYCHECK;
+    protected int retries = Modbus.DEFAULT_RETRIES;
+    protected static int transactionID = Modbus.DEFAULT_TRANSACTION_ID;
 
     /**
      * Returns the <tt>ModbusRequest</tt> instance
@@ -39,7 +47,9 @@ public interface ModbusTransaction {
      *
      * @return the associated <tt>ModbusRequest</tt> instance.
      */
-    ModbusRequest getRequest();
+    public ModbusRequest getRequest() {
+        return request;
+    }
 
     /**
      * Sets the <tt>ModbusRequest</tt> for this
@@ -50,7 +60,9 @@ public interface ModbusTransaction {
      *
      * @param req a <tt>ModbusRequest</tt>.
      */
-    void setRequest(ModbusRequest req);
+    public void setRequest(ModbusRequest req) {
+        request = req;
+    }
 
     /**
      * Returns the <tt>ModbusResponse</tt> instance
@@ -59,19 +71,9 @@ public interface ModbusTransaction {
      *
      * @return the associated <tt>ModbusRequest</tt> instance.
      */
-    ModbusResponse getResponse();
-
-    /**
-     * Returns the actual transaction identifier of
-     * this <tt>ModbusTransaction</tt>.
-     * The identifier is a 2-byte (short) non negative
-     * integer value valid in the range of 0-65535.<br>
-     * <p>
-     *
-     * @return the actual transaction identifier as
-     * <tt>int</tt>.
-     */
-    int getTransactionID();
+    public ModbusResponse getResponse() {
+        return response;
+    }
 
     /**
      * Returns the amount of retries for opening
@@ -80,7 +82,9 @@ public interface ModbusTransaction {
      *
      * @return the amount of retries as <tt>int</tt>.
      */
-    int getRetries();
+    int getRetries() {
+        return retries;
+    }
 
     /**
      * Set the amount of retries for opening
@@ -89,7 +93,9 @@ public interface ModbusTransaction {
      *
      * @param retries the amount of retries as <tt>int</tt>.
      */
-    void setRetries(int retries);
+    public void setRetries(int retries) {
+        this.retries = retries;
+    }
 
     /**
      * Tests whether the validity of a transaction
@@ -98,7 +104,9 @@ public interface ModbusTransaction {
      *
      * @return true if checking validity, false otherwise.
      */
-    boolean isCheckingValidity();
+    public boolean isCheckingValidity() {
+        return validityCheck;
+    }
 
     /**
      * Sets the flag that controls whether the
@@ -107,7 +115,27 @@ public interface ModbusTransaction {
      *
      * @param b true if checking validity, false otherwise.
      */
-    void setCheckingValidity(boolean b);
+    public void setCheckingValidity(boolean b) {
+        validityCheck = b;
+    }
+
+    /**
+     * getTransactionID -- get the next transaction ID to use.
+     */
+    public int getTransactionID() {
+        /*
+         * Ensure that the transaction ID is in the valid range between
+         * 1 and MAX_TRANSACTION_ID (65534).  If not, the value will be forced
+         * to 1.
+         */
+        if (transactionID <= 0 && isCheckingValidity()) {
+            transactionID = 1;
+        }
+        if (transactionID >= Modbus.MAX_TRANSACTION_ID) {
+            transactionID = 1;
+        }
+        return transactionID;
+    }
 
     /**
      * Executes this <tt>ModbusTransaction</tt>.
@@ -121,6 +149,6 @@ public interface ModbusTransaction {
      * @throws ModbusException if an I/O error occurs,
      *                         or the response is a modbus protocol exception.
      */
-    void execute() throws ModbusException;
+    public abstract void execute() throws ModbusException;
 
 }

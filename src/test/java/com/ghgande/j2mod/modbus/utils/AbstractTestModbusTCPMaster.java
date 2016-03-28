@@ -37,7 +37,6 @@ import static org.junit.Assert.fail;
  *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
 public class AbstractTestModbusTCPMaster extends AbstractTestModbus {
 

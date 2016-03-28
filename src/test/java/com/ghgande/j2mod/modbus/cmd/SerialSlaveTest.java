@@ -29,11 +29,8 @@ import com.ghgande.j2mod.modbus.util.SerialParameters;
  * @author Julie Haugh
  *         Added ability to specify the number of coils, discreates, input and
  *         holding registers.
- * @version 1.2rc1 (09/11/2004)
- *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
 public class SerialSlaveTest {
 
@@ -93,14 +90,14 @@ public class SerialSlaveTest {
 
         try {
 
-			/*
+            /*
              * Prepare a process image.
-			 * 
-			 * The file records from the TCP and UDP test harnesses are
-			 * not included.  They can be added if there is a need to
-			 * test READ FILE RECORD and WRITE FILE RECORD with a Modbus/RTU
-			 * device.
-			 */
+             *
+             * The file records from the TCP and UDP test harnesses are
+             * not included.  They can be added if there is a need to
+             * test READ FILE RECORD and WRITE FILE RECORD with a Modbus/RTU
+             * device.
+             */
             spi = new SimpleProcessImage(15);
 
             for (int i = 0; i < coils; i++) {

@@ -30,9 +30,7 @@ import java.io.IOException;
  */
 public final class ReadCommEventLogResponse extends ModbusResponse {
 
-    /*
-     * Message fields.
-     */
+    // Message fields.
     private int byteCount;
     private int status;
     private int eventCount;

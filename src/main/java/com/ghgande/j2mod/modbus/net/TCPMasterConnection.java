@@ -119,21 +119,19 @@ public class TCPMasterConnection {
             else {
                 /*
                  * When m_useUrgentData is set, a byte of urgent data
-				 * will be sent to the server to test the connection. If
-				 * the connection is actually broken, an IException will
-				 * occur and the connection will be closed.
-				 *
-				 * Note: RFC 6093 has decreed that we stop using urgent
-				 * data.
-				 */
+                 * will be sent to the server to test the connection. If
+                 * the connection is actually broken, an IException will
+                 * occur and the connection will be closed.
+                 *
+                 * Note: RFC 6093 has decreed that we stop using urgent
+                 * data.
+                 */
                 if (m_useUrgentData) {
                     try {
                         socket.sendUrgentData(0);
                         try {
-                            /*
-                             * Snooze briefly so the urgent byte isn't
-							 * merged with the next packet.
-							 */
+                            // Snooze briefly so the urgent byte isn't
+                            // merged with the next packet.
                             Thread.sleep(5);
                         }
                         catch (InterruptedException e) {

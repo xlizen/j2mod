@@ -46,11 +46,8 @@ import java.io.IOException;
  *
  * @author Dieter Wimberger
  * @author Julie Haugh
- * @version 1.03 (1/18/2014)
- *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
 public class ReadInputRegistersWithCallbackTest {
 
@@ -100,10 +97,8 @@ public class ReadInputRegistersWithCallbackTest {
                     }
                 }
 
-				/*
-                 * There are a number of devices which won't initialize immediately
-				 * after being opened.  Take a moment to let them come up.
-				 */
+                // There are a number of devices which won't initialize immediately
+                // after being opened.  Take a moment to let them come up.
                 Thread.sleep(500);
 
                 ref = Integer.parseInt(args[1]);

@@ -110,9 +110,7 @@ public final class ReadCoilsRequest extends ModbusRequest {
         }
         response = getResponse();
 
-		/*
-         * Populate the discrete values from the process image.
-		 */
+        // Populate the discrete values from the process image.
         for (int i = 0; i < douts.length; i++) {
             ((ReadCoilsResponse)response).setCoilStatus(i, douts[i].isSet());
         }

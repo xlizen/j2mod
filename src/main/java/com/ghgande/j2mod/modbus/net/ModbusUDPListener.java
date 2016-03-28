@@ -119,10 +119,8 @@ public class ModbusUDPListener implements ModbusListener {
         running = true;
         try {
             while (running) {
-				/*
-                 * Get the request from the transport. It will be processed
-				 * using an associated process image.
-				 */
+                // Get the request from the transport. It will be processed
+                // using an associated process image.
                 ModbusRequest request = transport.readRequest();
                 ModbusResponse response;
 

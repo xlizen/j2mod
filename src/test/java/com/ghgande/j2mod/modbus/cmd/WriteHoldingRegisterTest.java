@@ -44,11 +44,8 @@ import java.io.IOException;
  *
  * @author Dieter Wimberger
  * @author jfhaugh
- * @version @version@ (@date@)
- *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
 public class WriteHoldingRegisterTest {
 
@@ -87,9 +84,7 @@ public class WriteHoldingRegisterTest {
                         ((ModbusSerialTransport)transport).setBaudRate(19200);
                     }
 
-					/*
-                     * Some serial devices are slow to wake up.
-					 */
+                    // Some serial devices are slow to wake up.
                     Thread.sleep(2000);
                 }
 

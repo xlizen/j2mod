@@ -33,11 +33,8 @@ import com.ghgande.j2mod.modbus.util.ModbusLogger;
  * message.
  *
  * @author Julie
- * @version 1.03
- *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
 public class ReadFIFOTest {
 
@@ -61,9 +58,7 @@ public class ReadFIFOTest {
         int fifo = 0;
         int requestCount = 1;
 
-		/*
-         * Get the command line parameters.
-		 */
+        // Get the command line parameters.
         if (args.length < 3 || args.length > 4) {
             usage();
         }
@@ -100,25 +95,19 @@ public class ReadFIFOTest {
 
         try {
             for (int i = 0; i < requestCount; i++) {
-                /*
-                 * Setup the READ FILE RECORD request.  The record number
-				 * will be incremented for each loop.
-				 */
+                // Setup the READ FILE RECORD request.  The record number
+                // will be incremented for each loop.
                 request = new ReadFIFOQueueRequest();
                 request.setUnitID(unit);
                 request.setReference(fifo);
 
                 logger.system("Request: %s", request.getHexMessage());
 
-				/*
-				 * Setup the transaction.
-				 */
+                // Setup the transaction.
                 trans = transport.createTransaction();
                 trans.setRequest(request);
 
-				/*
-				 * Execute the transaction.
-				 */
+                // Execute the transaction.
                 try {
                     trans.execute();
                 }
@@ -162,15 +151,11 @@ public class ReadFIFOTest {
                     continue;
                 }
 
-				/*
-				 * Unknown message.
-				 */
+                // Unknown message.
                 logger.system("Unknown Response: %s", dummy.getHexMessage());
             }
-			
-			/*
-			 * Teardown the connection.
-			 */
+
+            // Teardown the connection.
             if (transport != null) {
                 transport.close();
             }

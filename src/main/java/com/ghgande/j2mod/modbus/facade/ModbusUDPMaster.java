@@ -62,9 +62,9 @@ public class ModbusUDPMaster extends AbstractModbusMaster {
      * Constructs a new master facade instance for communication
      * with a given slave.
      *
-     * @param addr an internet address as resolvable IP name or IP number,
-     *             specifying the slave to communicate with.
-     * @param port the port the slave is listening to.
+     * @param addr    an internet address as resolvable IP name or IP number,
+     *                specifying the slave to communicate with.
+     * @param port    the port the slave is listening to.
      * @param timeout Socket timeout in milliseconds
      */
     public ModbusUDPMaster(String addr, int port, int timeout) {

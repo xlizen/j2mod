@@ -160,10 +160,8 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
                     case Modbus.READ_FILE_RECORD:
                     case Modbus.WRITE_FILE_RECORD:
                     case Modbus.READ_WRITE_MULTIPLE:
-                        /*
-                         * Read the data payload byte count. There will be two
-                         * additional CRC bytes afterwards.
-                         */
+                        // Read the data payload byte count. There will be two
+                        // additional CRC bytes afterwards.
                         int cnt = readByte();
                         out.write(cnt);
                         readRequestData(cnt, out);
@@ -175,18 +173,14 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
                     case Modbus.WRITE_MULTIPLE_COILS:
                     case Modbus.WRITE_MULTIPLE_REGISTERS:
                     case Modbus.READ_SERIAL_DIAGNOSTICS:
-                        /*
-                         * read status: only the CRC remains after the two data
-                         * words.
-                         */
+                        // read status: only the CRC remains after the two data
+                        // words.
                         readRequestData(4, out);
                         break;
 
                     case Modbus.READ_EXCEPTION_STATUS:
-                        /*
-                         * read status: only the CRC remains after exception status
-                         * byte.
-                         */
+                        // read status: only the CRC remains after exception status
+                        // byte.
                         readRequestData(1, out);
                         break;
 
@@ -320,14 +314,14 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
                         request = ModbusRequest.createModbusRequest(fc);
                         request.setHeadless();
 
-						/*
+                        /*
                          * With Modbus RTU, there is no end frame. Either we
-						 * assume the message is complete as is or we must do
-						 * function specific processing to know the correct
-						 * length. To avoid moving frame timing to the serial
-						 * input functions, we set the timeout and to message
-						 * specific parsing to read a response.
-						 */
+                         * assume the message is complete as is or we must do
+                         * function specific processing to know the correct
+                         * length. To avoid moving frame timing to the serial
+                         * input functions, we set the timeout and to message
+                         * specific parsing to read a response.
+                         */
                         getRequest(fc, byteInputOutputStream);
                         dlength = byteInputOutputStream.size() - 2; // less the crc
                         logger.debug("Response: %s", ModbusUtil.toHex(byteInputOutputStream.getBuffer(), 0, dlength + 2));
@@ -340,10 +334,8 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
                                 ModbusUtil.unsignedByteToInt(inBuffer[dlength + 1]) != crc[1]) {
                             logger.debug("CRC should be %d, %d", crc[0], crc[1]);
 
-							/*
-                             * Drain the input in case the frame was misread and more
-							 * was to follow.
-							 */
+                            // Drain the input in case the frame was misread and more
+                            // was to follow.
                             clearInput();
                             throw new IOException("CRC Error in received frame: " + dlength + " bytes: " + ModbusUtil.toHex(byteInputStream.getBuffer(), 0, dlength));
                         }
@@ -361,10 +353,8 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
             return request;
         }
         catch (IOException ex) {
-            /*
-             * An exception mostly means there is no request. The master should
-			 * retry the request.
-			 */
+            // An exception mostly means there is no request. The master should
+            // retry the request.
             return null;
         }
     }
@@ -395,14 +385,14 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
                         response = ModbusResponse.createModbusResponse(fc);
                         response.setHeadless();
 
-						/*
-						 * With Modbus RTU, there is no end frame. Either we
-						 * assume the message is complete as is or we must do
-						 * function specific processing to know the correct
-						 * length. To avoid moving frame timing to the serial
-						 * input functions, we set the timeout and to message
-						 * specific parsing to read a response.
-						 */
+                        /*
+                         * With Modbus RTU, there is no end frame. Either we
+                         * assume the message is complete as is or we must do
+                         * function specific processing to know the correct
+                         * length. To avoid moving frame timing to the serial
+                         * input functions, we set the timeout and to message
+                         * specific parsing to read a response.
+                         */
                         getResponse(fc, byteInputOutputStream);
                         dlength = byteInputOutputStream.size() - 2; // less the crc
                         logger.debug("Response: %s", ModbusUtil.toHex(byteInputOutputStream.getBuffer(), 0, dlength + 2));

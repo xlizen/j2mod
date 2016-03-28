@@ -34,11 +34,8 @@ import java.util.Arrays;
  * message.
  *
  * @author Julie
- * @version 0.96
- *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
- *
  */
 public class ReadFileRecordTest {
 
@@ -64,9 +61,7 @@ public class ReadFileRecordTest {
         int registers = 0;
         int requestCount = 1;
 
-		/*
-         * Get the command line parameters.
-		 */
+        // Get the command line parameters.
         if (args.length < 5 || args.length > 6) {
             usage();
         }
@@ -105,10 +100,8 @@ public class ReadFileRecordTest {
 
         try {
             for (int i = 0; i < requestCount; i++) {
-                /*
-                 * Setup the READ FILE RECORD request.  The record number
-				 * will be incremented for each loop.
-				 */
+                // Setup the READ FILE RECORD request.  The record number
+                // will be incremented for each loop.
                 request = new ReadFileRecordRequest();
                 request.setUnitID(unit);
 
@@ -117,15 +110,11 @@ public class ReadFileRecordTest {
 
                 logger.system("Request: %s", request.getHexMessage());
 
-				/*
-				 * Setup the transaction.
-				 */
+                // Setup the transaction.
                 trans = transport.createTransaction();
                 trans.setRequest(request);
 
-				/*
-				 * Execute the transaction.
-				 */
+                // Execute the transaction.
                 try {
                     trans.execute();
                 }
@@ -169,29 +158,21 @@ public class ReadFileRecordTest {
                     continue;
                 }
 
-				/*
-				 * Unknown message.
-				 */
+                // Unknown message.
                 logger.system("Unknown Response: %s", dummy.getHexMessage());
             }
-			
-			/*
-			 * Now read the number of events sent by the device.  Maybe it will
-			 * tell us something useful.
-			 */
+
+            // Now read the number of events sent by the device.  Maybe it will
+            // tell us something useful.
             ReadCommEventCounterRequest eventRequest = new ReadCommEventCounterRequest();
             eventRequest.setUnitID(unit);
-			
-			/*
-			 * Setup the transaction.
-			 */
+
+            // Setup the transaction.
             if (transport != null) {
                 trans = transport.createTransaction();
                 trans.setRequest(eventRequest);
 
-			/*
-			 * Execute the transaction.
-			 */
+                // Execute the transaction.
                 try {
                     trans.execute();
                     ModbusResponse dummy = trans.getResponse();
@@ -205,9 +186,7 @@ public class ReadFileRecordTest {
                     // Do nothing -- this isn't required.
                 }
 
-			/*
-			 * Teardown the connection.
-			 */
+                // Teardown the connection.
                 transport.close();
             }
         }

@@ -61,10 +61,10 @@ public class ModbusTCPMaster extends AbstractModbusMaster {
      * Constructs a new master facade instance for communication
      * with a given slave.
      *
-     * @param addr an internet address as resolvable IP name or IP number,
-     *             specifying the slave to communicate with.
-     * @param port the port the slave is listening to.
-     * @param timeout Socket timeout in milliseconds
+     * @param addr      an internet address as resolvable IP name or IP number,
+     *                  specifying the slave to communicate with.
+     * @param port      the port the slave is listening to.
+     * @param timeout   Socket timeout in milliseconds
      * @param reconnect True if the socket should reconnect if it detcts a connection failure
      */
     public ModbusTCPMaster(String addr, int port, int timeout, boolean reconnect) {
