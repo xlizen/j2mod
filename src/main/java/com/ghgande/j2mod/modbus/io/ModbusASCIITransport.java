@@ -21,6 +21,7 @@ import com.ghgande.j2mod.modbus.ModbusIOException;
 import com.ghgande.j2mod.modbus.msg.ModbusMessage;
 import com.ghgande.j2mod.modbus.msg.ModbusRequest;
 import com.ghgande.j2mod.modbus.msg.ModbusResponse;
+import com.ghgande.j2mod.modbus.procimg.ProcessImage;
 import com.ghgande.j2mod.modbus.util.ModbusLogger;
 import com.ghgande.j2mod.modbus.util.ModbusUtil;
 
@@ -108,8 +109,13 @@ public class ModbusASCIITransport extends ModbusSerialTransport {
                     }
                     byteInputStream.reset(inBuffer, byteInputOutputStream.size());
                     in = byteInputStream.readUnsignedByte();
+
                     //check message with this slave unit identifier
-                    if (in != ModbusCoupler.getReference().getUnitID()) {
+                    ProcessImage spi = ModbusCoupler.getReference().getProcessImage();
+                    if (spi == null) {
+                        continue;
+                    }
+                    if (in != spi.getUnitID()) {
                         continue;
                     }
                     in = byteInputStream.readUnsignedByte();

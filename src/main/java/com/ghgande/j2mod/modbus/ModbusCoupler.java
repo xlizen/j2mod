@@ -107,26 +107,6 @@ public class ModbusCoupler {
     }
 
     /**
-     * Returns the identifier of this unit. This identifier is required to be
-     * set for serial protocol slave implementations.
-     *
-     * @return the unit identifier as <tt>int</tt>.
-     */
-    public int getUnitID() {
-        return unitID;
-    }
-
-    /**
-     * Sets the identifier of this unit, which is needed to be determined in a
-     * serial network.
-     *
-     * @param id the new unit identifier as <tt>int</tt>.
-     */
-    public void setUnitID(int id) {
-        unitID = id;
-    }
-
-    /**
      * Tests if this instance is a master device.
      *
      * @return true if master, false otherwise.

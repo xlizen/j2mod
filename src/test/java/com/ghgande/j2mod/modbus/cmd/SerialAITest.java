@@ -15,7 +15,6 @@
  */
 package com.ghgande.j2mod.modbus.cmd;
 
-import com.ghgande.j2mod.modbus.ModbusCoupler;
 import com.ghgande.j2mod.modbus.io.ModbusSerialTransaction;
 import com.ghgande.j2mod.modbus.msg.ReadInputRegistersRequest;
 import com.ghgande.j2mod.modbus.msg.ReadInputRegistersResponse;
@@ -74,9 +73,6 @@ public class SerialAITest {
                     System.exit(1);
                 }
             }
-
-            //2. Set slave identifier for master response parsing
-            ModbusCoupler.getReference().setUnitID(unitid);
 
             //3. Setup serial parameters
             SerialParameters params = new SerialParameters();

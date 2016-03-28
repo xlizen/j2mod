@@ -18,10 +18,10 @@ package com.ghgande.j2mod.modbus.net;
 import com.ghgande.j2mod.modbus.Modbus;
 import com.ghgande.j2mod.modbus.ModbusCoupler;
 import com.ghgande.j2mod.modbus.ModbusIOException;
-import com.ghgande.j2mod.modbus.io.ModbusTransport;
 import com.ghgande.j2mod.modbus.io.ModbusUDPTransport;
 import com.ghgande.j2mod.modbus.msg.ModbusRequest;
 import com.ghgande.j2mod.modbus.msg.ModbusResponse;
+import com.ghgande.j2mod.modbus.procimg.ProcessImage;
 import com.ghgande.j2mod.modbus.util.ModbusLogger;
 
 import java.net.InetAddress;
@@ -44,7 +44,6 @@ public class ModbusUDPListener implements ModbusListener {
     private boolean running = false;
     private InetAddress address;
     private UDPSlaveTerminal terminal;
-    private int unitID = 0;
     private String error;
 
     /**
@@ -94,8 +93,9 @@ public class ModbusUDPListener implements ModbusListener {
     /**
      * Starts this <tt>ModbusUDPListener</tt>.
      */
+    @Override
     public void run() {
-        ModbusTransport transport;
+        ModbusUDPTransport transport;
         try {
             if (address == null) {
                 terminal = new UDPSlaveTerminal(InetAddress.getByAddress(new byte[]{0, 0, 0, 0}));
@@ -105,7 +105,6 @@ public class ModbusUDPListener implements ModbusListener {
             }
             terminal.setLocalPort(port);
             terminal.activate();
-
             transport = new ModbusUDPTransport(terminal);
         }
 
@@ -118,10 +117,8 @@ public class ModbusUDPListener implements ModbusListener {
 
         listening = true;
         running = true;
-
         try {
             while (running) {
-
 				/*
                  * Get the request from the transport. It will be processed
 				 * using an associated process image.
@@ -129,17 +126,19 @@ public class ModbusUDPListener implements ModbusListener {
                 ModbusRequest request = transport.readRequest();
                 ModbusResponse response;
 
-				/*
-                 * Make sure there is a process image to handle the request.
-				 */
-                if (ModbusCoupler.getReference().getProcessImage() == null) {
-                    response = request.createExceptionResponse(Modbus.ILLEGAL_FUNCTION_EXCEPTION);
+                // Test if Process image exists and has a correct unit ID
+                ProcessImage spi = ModbusCoupler.getReference().getProcessImage();
+                if (spi == null ||
+                        (spi.getUnitID() != 0 && request.getUnitID() != spi.getUnitID())) {
+                    response = request.createExceptionResponse(Modbus.ILLEGAL_ADDRESS_EXCEPTION);
                 }
                 else {
                     response = request.createResponse();
                 }
                 logger.debug("Request:%s", request.getHexMessage());
                 logger.debug("Response:%s", response.getHexMessage());
+
+                // Write the response
                 transport.writeMessage(response);
             }
         }
@@ -159,14 +158,6 @@ public class ModbusUDPListener implements ModbusListener {
         }
     }
 
-    public int getUnit() {
-        return unitID;
-    }
-
-    public void setUnit(int unit) {
-        unitID = unit;
-    }
-
     /**
      * Tests if this <tt>ModbusTCPListener</tt> is listening and accepting
      * incoming connections.
@@ -174,6 +165,7 @@ public class ModbusUDPListener implements ModbusListener {
      * @return true if listening (and accepting incoming connections), false
      * otherwise.
      */
+    @Override
     public boolean isListening() {
         return listening;
     }
@@ -185,6 +177,7 @@ public class ModbusUDPListener implements ModbusListener {
      * @param listen true if the <tt>ModbusUDPListener</tt> should listen, false
      *               otherwise.
      */
+    @Override
     public void setListening(boolean listen) {
         listening = listen;
     }
@@ -192,6 +185,7 @@ public class ModbusUDPListener implements ModbusListener {
     /**
      * Start the listener thread for this serial interface.
      */
+    @Override
     public Thread listen() {
         listening = true;
         Thread result = new Thread(this);
@@ -203,6 +197,7 @@ public class ModbusUDPListener implements ModbusListener {
     /**
      * Stops this <tt>ModbusUDPListener</tt>.
      */
+    @Override
     public void stop() {
         terminal.deactivate();
         listening = false;

@@ -44,7 +44,7 @@ public class AbstractTestModbus {
     protected static SimpleProcessImage getSimpleProcessImage() {
         // Create a Slave that we can use to exercise each and every register type
 
-        SimpleProcessImage spi = new SimpleProcessImage();
+        SimpleProcessImage spi = new SimpleProcessImage(UNIT_ID);
 
         // Create some coils
         spi.addDigitalOut(new SimpleDigitalOut(true));
@@ -111,7 +111,6 @@ public class AbstractTestModbus {
         // Create the coupler holding the image
         ModbusCoupler.getReference().setProcessImage(spi);
         ModbusCoupler.getReference().setMaster(false);
-        ModbusCoupler.getReference().setUnitID(UNIT_ID);
 
         return spi;
     }

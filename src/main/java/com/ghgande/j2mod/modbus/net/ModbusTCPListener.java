@@ -42,7 +42,6 @@ public class ModbusTCPListener implements ModbusListener {
     private ThreadPool threadPool;
     private Thread listener;
     private int port = Modbus.DEFAULT_PORT;
-    private int unitID = 0;
     private boolean listening;
     private InetAddress address;
 
@@ -61,8 +60,8 @@ public class ModbusTCPListener implements ModbusListener {
     /**
      * /**
      * Constructs a ModbusTCPListener instance.  This interface is created
-     * to listen on the wildcard address, which will accept TCP packets
-     * on all available interfaces.
+     * to listen on the wildcard address (0.0.0.0), which will accept TCP packets
+     * on all available adapters/interfaces
      *
      * @param poolsize the size of the <tt>ThreadPool</tt> used to handle incoming
      *                 requests.
@@ -110,6 +109,7 @@ public class ModbusTCPListener implements ModbusListener {
      * Accepts incoming connections and handles then with
      * <tt>TCPConnectionHandler</tt> instances.
      */
+    @Override
     public void run() {
         try {
             /*
@@ -150,36 +150,13 @@ public class ModbusTCPListener implements ModbusListener {
     }
 
     /**
-     * Gets the unit number supported by this Modbus/TCP connection. A
-     * Modbus/TCP connection, by default, supports unit 0, but may also support
-     * a fixed unit number, or a range of unit numbers if the device is a
-     * Modbus/TCP gateway.  If the unit number is non-zero, all packets for
-     * any other unit number should be discarded.
-     *
-     * @return unit number supported by this interface.
-     */
-    public int getUnit() {
-        return unitID;
-    }
-
-    /**
-     * Sets the unit number to be listened for.  A Modbus/TCP connection, by
-     * default, supports unit 0, but may also support a fixed unit number, or a
-     * range of unit numbers if the device is a Modbus/TCP gateway.
-     *
-     * @param unit the number of the Modbus unit as <tt>int</tt>.
-     */
-    public void setUnit(int unit) {
-        unitID = unit;
-    }
-
-    /**
      * Tests if this <tt>ModbusTCPListener</tt> is listening and accepting
      * incoming connections.
      *
      * @return true if listening (and accepting incoming connections), false
      * otherwise.
      */
+    @Override
     public boolean isListening() {
         return listening;
     }
@@ -198,6 +175,7 @@ public class ModbusTCPListener implements ModbusListener {
     /**
      * Start the listener thread for this serial interface.
      */
+    @Override
     public Thread listen() {
         listening = true;
         Thread result = new Thread(this);
@@ -209,6 +187,7 @@ public class ModbusTCPListener implements ModbusListener {
     /**
      * Stops this <tt>ModbusTCPListener</tt>.
      */
+    @Override
     public void stop() {
         listening = false;
         try {

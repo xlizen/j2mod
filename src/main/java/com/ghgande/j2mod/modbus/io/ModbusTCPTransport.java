@@ -266,7 +266,6 @@ public class ModbusTCPTransport implements ModbusTransport {
                 // use same buffer
                 byte[] buffer = byteInputStream.getBuffer();
                 logger.debug("Read: %s", ModbusUtil.toHex(buffer, 0, byteInputStream.count));
-
                 if (!headless) {
 					/*
 					 * All Modbus TCP transactions start with 6 bytes. Get them.
@@ -294,9 +293,7 @@ public class ModbusTCPTransport implements ModbusTransport {
                     if (dataInputStream.read(buffer, 6, count) == -1) {
                         throw new ModbusIOException("Premature end of stream (Message truncated)");
                     }
-
                     byteInputStream.reset(buffer, (6 + count));
-
                     byteInputStream.reset();
                     byteInputStream.skip(7);
                     int function = byteInputStream.readUnsignedByte();
@@ -360,7 +357,6 @@ public class ModbusTCPTransport implements ModbusTransport {
             if (dataInputStream != null) {
                 dataInputStream.close();
             }
-
             if (dataOutputStream != null) {
                 dataOutputStream.close();
             }

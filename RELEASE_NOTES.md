@@ -12,3 +12,7 @@
 * Fixed the UDP transport for both Master and Slave so that it is some way approaching robust
 * Fixed the code layout - everything has headers, the layout is consistent, variable names and scope make sense etc.
 * Build system incorporates GPG signing and is compatible with one-click deployment to Maven Central through Sonatype
+
+## Version 2.0-rc2
+* Added ability to specify timeout for Facade classes 'ModbusTCPMaster', 'ModbusUDPMaster' and 'ModbusSerialMaster'
+* Fixed all the Unit ID checking when running as a Slave (myriad of problems - cannot see how it has ever worked)

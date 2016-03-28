@@ -59,8 +59,6 @@ public class ModbusListenerFactory {
                 if (unit < 0 || unit > 248) {
                     throw new IllegalArgumentException("illegal unit number");
                 }
-
-                listener.setUnit(unit);
             }
             listener.setListening(true);
 
@@ -73,16 +71,11 @@ public class ModbusListenerFactory {
             /*
              * Create a ModbusTCPListener with the default interface
 			 * value.  The second optional value is the TCP port number
-			 * and the third optional value is the Modbus unit number.
 			 */
             ModbusTCPListener listener = new ModbusTCPListener(5);
             if (parts.length > 2) {
                 int port = Integer.parseInt(parts[2]);
                 listener.setPort(port);
-                if (parts.length > 3) {
-                    int unit = Integer.parseInt(parts[3]);
-                    listener.setUnit(unit);
-                }
             }
             listener.setListening(true);
 
@@ -95,16 +88,11 @@ public class ModbusListenerFactory {
 			/*
 			 * Create a ModbusUDPListener with the default interface
 			 * value.  The second optional value is the TCP port number
-			 * and the third optional value is the Modbus unit number.
 			 */
             ModbusUDPListener listener = new ModbusUDPListener();
             if (parts.length > 2) {
                 int port = Integer.parseInt(parts[2]);
                 listener.setPort(port);
-                if (parts.length > 3) {
-                    int unit = Integer.parseInt(parts[3]);
-                    listener.setUnit(unit);
-                }
             }
             listener.setListening(true);
             new Thread(listener).start();
@@ -113,7 +101,7 @@ public class ModbusListenerFactory {
 
             Thread.sleep(100);
             if (!listener.isListening()) {
-                throw new IOException(String.format("Cannot start UPD Listener %s", listener.getError()));
+                throw new IOException(String.format("Cannot start UDP Listener %s", listener.getError()));
             }
             return listener;
         }

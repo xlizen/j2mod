@@ -58,7 +58,7 @@ public class UDPSlaveTest {
             logger.system("j2mod Modbus/UDP Slave v0.97");
 
             // 1. Prepare a process image
-            spi = new SimpleProcessImage();
+            spi = new SimpleProcessImage(15);
             spi.addDigitalOut(new SimpleDigitalOut(true));
             spi.addDigitalIn(new SimpleDigitalIn(false));
             spi.addDigitalIn(new SimpleDigitalIn(true));
@@ -81,7 +81,6 @@ public class UDPSlaveTest {
 
             ModbusCoupler.getReference().setProcessImage(spi);
             ModbusCoupler.getReference().setMaster(false);
-            ModbusCoupler.getReference().setUnitID(15);
 
             // 2. Setup and start listener
             listener = new ModbusUDPListener();

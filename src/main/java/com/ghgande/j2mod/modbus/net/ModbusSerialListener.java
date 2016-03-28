@@ -57,6 +57,7 @@ public class ModbusSerialListener implements ModbusListener {
      *
      * Listen for incoming messages and process.
      */
+    @Override
     public void run() {
         try {
             listening = true;
@@ -141,30 +142,13 @@ public class ModbusSerialListener implements ModbusListener {
     }
 
     /**
-     * Gets the Modbus unit number for this <tt>ModbusSerialListener</tt>
-     *
-     * @return Modbus unit number
-     */
-    public int getUnit() {
-        return unitID;
-    }
-
-    /**
-     * Sets the Modbus unit number for this <tt>ModbusSerialListener</tt>
-     *
-     * @param unit Modbus unit number
-     */
-    public void setUnit(int unit) {
-        unitID = unit;
-    }
-
-    /**
      * Tests if this <tt>ModbusTCPListener</tt> is listening and accepting
      * incoming connections.
      *
      * @return true if listening (and accepting incoming connections), false
      * otherwise.
      */
+    @Override
     public boolean isListening() {
         return listening;
     }
@@ -175,6 +159,7 @@ public class ModbusSerialListener implements ModbusListener {
      * @param b true if listening (and accepting incoming connections), false
      *          otherwise.
      */
+    @Override
     public void setListening(boolean b) {
         listening = b;
     }
@@ -182,6 +167,7 @@ public class ModbusSerialListener implements ModbusListener {
     /**
      * Start the listener thread for this serial interface.
      */
+    @Override
     public Thread listen() {
         listening = true;
         Thread result = new Thread(this);
@@ -193,6 +179,7 @@ public class ModbusSerialListener implements ModbusListener {
     /**
      * Stops this interface.
      */
+    @Override
     public void stop() {
         listening = false;
         running = false;
