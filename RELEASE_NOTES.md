@@ -16,3 +16,8 @@
 ## Version 2.0-rc2
 * Added ability to specify timeout for Facade classes 'ModbusTCPMaster', 'ModbusUDPMaster' and 'ModbusSerialMaster'
 * Fixed all the Unit ID checking when running as a Slave (myriad of problems - cannot see how it has ever worked)
+
+## Version 2.0-rc3
+* Fixed the timeouts for UDP/TCP and Serial listeners
+* Added more test cases
+
