@@ -16,6 +16,7 @@
 package com.ghgande.j2mod.modbus.facade;
 
 import com.ghgande.j2mod.modbus.Modbus;
+import com.ghgande.j2mod.modbus.io.AbstractModbusTransport;
 import com.ghgande.j2mod.modbus.net.UDPMasterConnection;
 import com.ghgande.j2mod.modbus.util.ModbusLogger;
 
@@ -104,4 +105,16 @@ public class ModbusUDPMaster extends AbstractModbusMaster {
         }
     }
 
+    @Override
+    public void setTimeout(int timeout) {
+        super.setTimeout(timeout);
+        if (connection != null) {
+            connection.setTimeout(timeout);
+        }
+    }
+
+    @Override
+    public AbstractModbusTransport getTransport() {
+        return connection == null ? null : connection.getModbusTransport();
+    }
 }

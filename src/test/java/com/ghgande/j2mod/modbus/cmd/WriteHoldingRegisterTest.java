@@ -59,7 +59,7 @@ public class WriteHoldingRegisterTest {
 
         ModbusRequest req;
         ModbusTransaction trans;
-        ModbusTransport transport = null;
+        AbstractModbusTransport transport = null;
         int ref = 0;
         int value = 0;
         int repeat = 1;
@@ -76,7 +76,7 @@ public class WriteHoldingRegisterTest {
                 transport = ModbusMasterFactory.createModbusMaster(args[0]);
 
                 if (transport instanceof ModbusSerialTransport) {
-                    ((ModbusSerialTransport)transport).setReceiveTimeout(500);
+                    transport.setTimeout(500);
                     if (System.getProperty("com.ghgande.j2mod.modbus.baud") != null) {
                         ((ModbusSerialTransport)transport).setBaudRate(Integer.parseInt(System.getProperty("com.ghgande.j2mod.modbus.baud")));
                     }

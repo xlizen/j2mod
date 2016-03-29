@@ -7,7 +7,8 @@
     <groupId>com.ghgande</groupId>
     <artifactId>j2mod</artifactId>
     <name>j2mod</name>
-    <version>2.0-rc3</version>
+    <url>https://github.com/steveohara/j2mod</url>
+    <version>2.0-rc4</version>
     <description>A fork of the j2mod library to support the jSerialComm connector</description>
 
     <packaging>jar</packaging>

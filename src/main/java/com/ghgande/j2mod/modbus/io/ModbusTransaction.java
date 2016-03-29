@@ -33,7 +33,7 @@ import com.ghgande.j2mod.modbus.msg.ModbusResponse;
  */
 public abstract class ModbusTransaction {
 
-    protected ModbusTransport transport;
+    protected AbstractModbusTransport transport;
     protected ModbusRequest request;
     protected ModbusResponse response;
     protected boolean validityCheck = Modbus.DEFAULT_VALIDITYCHECK;

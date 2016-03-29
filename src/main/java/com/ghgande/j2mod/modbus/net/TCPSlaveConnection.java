@@ -16,8 +16,8 @@
 package com.ghgande.j2mod.modbus.net;
 
 import com.ghgande.j2mod.modbus.Modbus;
+import com.ghgande.j2mod.modbus.io.AbstractModbusTransport;
 import com.ghgande.j2mod.modbus.io.ModbusTCPTransport;
-import com.ghgande.j2mod.modbus.io.ModbusTransport;
 import com.ghgande.j2mod.modbus.util.ModbusLogger;
 
 import java.io.IOException;
@@ -80,7 +80,7 @@ public class TCPSlaveConnection {
      *
      * @return the connection's <tt>ModbusTransport</tt>.
      */
-    public ModbusTransport getModbusTransport() {
+    public AbstractModbusTransport getModbusTransport() {
         return transport;
     }
 

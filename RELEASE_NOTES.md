@@ -21,3 +21,7 @@
 * Fixed the timeouts for UDP/TCP and Serial listeners
 * Added more test cases
 
+## Version 2.0-rc4
+* Fixed an issue with the TCPTransaction class not initialising the Transport correctly
+* Removed all redundant casts
+* Made Transport available from Facade classes so that listeners can be added for Serial events

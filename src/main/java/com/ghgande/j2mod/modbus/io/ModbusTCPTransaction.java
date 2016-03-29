@@ -116,6 +116,7 @@ public class ModbusTCPTransaction extends ModbusTransaction {
         if (!connection.isConnected()) {
             try {
                 connection.connect();
+                transport = connection.getModbusTransport();
             }
             catch (Exception ex) {
                 throw new ModbusIOException("Connection failed");

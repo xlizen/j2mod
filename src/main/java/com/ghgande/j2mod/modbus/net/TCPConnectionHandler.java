@@ -18,7 +18,7 @@ package com.ghgande.j2mod.modbus.net;
 import com.ghgande.j2mod.modbus.Modbus;
 import com.ghgande.j2mod.modbus.ModbusCoupler;
 import com.ghgande.j2mod.modbus.ModbusIOException;
-import com.ghgande.j2mod.modbus.io.ModbusTransport;
+import com.ghgande.j2mod.modbus.io.AbstractModbusTransport;
 import com.ghgande.j2mod.modbus.msg.ModbusRequest;
 import com.ghgande.j2mod.modbus.msg.ModbusResponse;
 import com.ghgande.j2mod.modbus.procimg.ProcessImage;
@@ -36,7 +36,7 @@ public class TCPConnectionHandler implements Runnable {
     private static final ModbusLogger logger = ModbusLogger.getLogger(TCPConnectionHandler.class);
 
     private TCPSlaveConnection connection;
-    private ModbusTransport transport;
+    private AbstractModbusTransport transport;
 
     /**
      * Constructs a new <tt>TCPConnectionHandler</tt> instance.

@@ -16,6 +16,7 @@
 package com.ghgande.j2mod.modbus.facade;
 
 import com.ghgande.j2mod.modbus.Modbus;
+import com.ghgande.j2mod.modbus.io.AbstractModbusTransport;
 import com.ghgande.j2mod.modbus.io.ModbusTCPTransaction;
 import com.ghgande.j2mod.modbus.net.TCPMasterConnection;
 
@@ -74,6 +75,7 @@ public class ModbusTCPMaster extends AbstractModbusMaster {
             connection = new TCPMasterConnection(slaveAddress);
             connection.setPort(port);
             connection.setTimeout(timeout);
+            this.timeout = timeout;
             setReconnecting(reconnect);
         }
         catch (UnknownHostException e) {
@@ -131,4 +133,16 @@ public class ModbusTCPMaster extends AbstractModbusMaster {
         }
     }
 
+    @Override
+    public void setTimeout(int timeout) {
+        super.setTimeout(timeout);
+        if (connection != null) {
+            connection.setTimeout(timeout);
+        }
+    }
+
+    @Override
+    public AbstractModbusTransport getTransport() {
+        return connection == null ? null : connection.getModbusTransport();
+    }
 }

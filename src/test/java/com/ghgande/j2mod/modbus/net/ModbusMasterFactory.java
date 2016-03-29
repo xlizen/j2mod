@@ -17,9 +17,9 @@ package com.ghgande.j2mod.modbus.net;
 
 import com.fazecast.jSerialComm.SerialPort;
 import com.ghgande.j2mod.modbus.Modbus;
+import com.ghgande.j2mod.modbus.io.AbstractModbusTransport;
 import com.ghgande.j2mod.modbus.io.ModbusRTUTransport;
 import com.ghgande.j2mod.modbus.io.ModbusTCPTransport;
-import com.ghgande.j2mod.modbus.io.ModbusTransport;
 import com.ghgande.j2mod.modbus.util.ModbusLogger;
 import com.ghgande.j2mod.modbus.util.SerialParameters;
 
@@ -39,7 +39,7 @@ public class ModbusMasterFactory {
 
     private static final ModbusLogger logger = ModbusLogger.getLogger(ModbusMasterFactory.class);
 
-    public static ModbusTransport createModbusMaster(String address) {
+    public static AbstractModbusTransport createModbusMaster(String address) {
         String parts[] = address.split(" *: *");
         if (parts.length < 2) {
             throw new IllegalArgumentException("missing connection information");

@@ -59,7 +59,7 @@ public class ReadInputRegistersWithCallbackTest {
     }
 
     public static void main(String[] args) {
-        ModbusTransport transport = null;
+        AbstractModbusTransport transport = null;
         ModbusRequest req;
         ModbusTransaction trans;
         int ref = 0;
@@ -87,19 +87,19 @@ public class ReadInputRegistersWithCallbackTest {
                 }
 
                 if (transport instanceof ModbusSerialTransport) {
-                    ((ModbusSerialTransport)transport).setReceiveTimeout(1000);
+                    transport.setTimeout(1000);
                     ((ModbusSerialTransport)transport).addListener(new EventListener());
                     if (System.getProperty("com.ghgande.j2mod.modbus.baud") != null) {
                         ((ModbusSerialTransport)transport).setBaudRate(Integer.parseInt(System.getProperty("com.ghgande.j2mod.modbus.baud")));
                     }
                     else {
-                        ((ModbusSerialTransport)transport).setBaudRate(9600);
+                        ((ModbusSerialTransport)transport).setBaudRate(115200);
                     }
                 }
 
                 // There are a number of devices which won't initialize immediately
                 // after being opened.  Take a moment to let them come up.
-                Thread.sleep(500);
+                Thread.sleep(100);
 
                 ref = Integer.parseInt(args[1]);
                 count = Integer.parseInt(args[2]);
@@ -141,7 +141,7 @@ public class ReadInputRegistersWithCallbackTest {
             trans.setRequest(req);
             req.setHeadless(trans instanceof ModbusSerialTransaction);
 
-            logger.system("Request: %s", req.getHexMessage());
+            logger.system("Request is: %s", req.getHexMessage());
 
             // 5. Execute the transaction repeat times
 
