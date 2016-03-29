@@ -82,6 +82,7 @@ public class SerialConnection {
             transport = new ModbusRTUTransport();
         }
         else {
+            transport = new ModbusRTUTransport();
             logger.warn("Unknown transport encoding [%s] - reverting to RTU", parameters.getEncoding());
         }
         transport.setEcho(parameters.isEcho());
