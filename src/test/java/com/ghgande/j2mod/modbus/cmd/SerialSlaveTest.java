@@ -18,8 +18,9 @@ package com.ghgande.j2mod.modbus.cmd;
 import com.ghgande.j2mod.modbus.ModbusCoupler;
 import com.ghgande.j2mod.modbus.net.ModbusSerialListener;
 import com.ghgande.j2mod.modbus.procimg.*;
-import com.ghgande.j2mod.modbus.util.ModbusLogger;
 import com.ghgande.j2mod.modbus.util.SerialParameters;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Class implementing a simple Modbus slave. A simple process image is available
@@ -34,7 +35,7 @@ import com.ghgande.j2mod.modbus.util.SerialParameters;
  */
 public class SerialSlaveTest {
 
-    private static final ModbusLogger logger = ModbusLogger.getLogger(SerialSlaveTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(SerialSlaveTest.class);
 
     public static void main(String[] args) {
 
@@ -86,7 +87,7 @@ public class SerialSlaveTest {
             unit = Integer.parseInt(args[arg++]);
         }
 
-        logger.system("j2mod ModbusSerial Slave");
+        System.out.printf("j2mod ModbusSerial Slave");
 
         try {
 
@@ -109,7 +110,7 @@ public class SerialSlaveTest {
             }
 
             if (hasHoldings) {
-                logger.system("Adding %d holding registers", holdings);
+                System.out.printf("Adding %d holding registers", holdings);
 
                 for (int i = 0; i < holdings; i++) {
                     spi.addRegister(new SimpleRegister(i));
@@ -120,7 +121,7 @@ public class SerialSlaveTest {
             }
 
             if (hasInputs) {
-                logger.system("Adding input registers", inputs);
+                System.out.printf("Adding input registers", inputs);
 
                 for (int i = 0; i < inputs; i++) {
                     spi.addInputRegister(new SimpleInputRegister(i));
@@ -144,7 +145,7 @@ public class SerialSlaveTest {
             params.setStopbits(1);
             params.setEncoding("rtu");
             params.setEcho(false);
-            logger.system("Encoding [%s]", params.getEncoding());
+            System.out.printf("Encoding [%s]", params.getEncoding());
 
             // 4. Set up serial listener
             listener = new ModbusSerialListener(params);

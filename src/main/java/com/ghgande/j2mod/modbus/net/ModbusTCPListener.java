@@ -15,8 +15,9 @@
  */
 package com.ghgande.j2mod.modbus.net;
 
-import com.ghgande.j2mod.modbus.util.ModbusLogger;
 import com.ghgande.j2mod.modbus.util.ThreadPool;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.*;
@@ -35,7 +36,7 @@ import java.net.*;
  */
 public class ModbusTCPListener extends AbstractModbusListener {
 
-    private static final ModbusLogger logger = ModbusLogger.getLogger(ModbusTCPListener.class);
+    private static final Logger logger = LoggerFactory.getLogger(ModbusTCPListener.class);
 
     private ServerSocket serverSocket = null;
     private ThreadPool threadPool;
@@ -80,7 +81,7 @@ public class ModbusTCPListener extends AbstractModbusListener {
                 serverSocket.setSoTimeout(timeout);
             }
             catch (SocketException e) {
-                logger.error("Cannot set socket timeout - %s", e.getMessage());
+                logger.error("Cannot set socket timeout - {}", e.getMessage());
             }
         }
     }
@@ -98,7 +99,7 @@ public class ModbusTCPListener extends AbstractModbusListener {
             int floodProtection = 5;
             serverSocket = new ServerSocket(port, floodProtection, address);
             serverSocket.setSoTimeout(timeout);
-            logger.debug("Listening to %s (Port %d)", serverSocket.toString(), port);
+            logger.debug("Listening to {} (Port {})", serverSocket.toString(), port);
         }
 
         // Catch any fatal errors and set the listening flag to false to indicate an error
@@ -117,7 +118,7 @@ public class ModbusTCPListener extends AbstractModbusListener {
             listening = true;
             while (listening) {
                 Socket incoming = serverSocket.accept();
-                logger.debug("Making new connection %s", incoming.toString());
+                logger.debug("Making new connection {}", incoming.toString());
                 if (listening) {
                     threadPool.execute(new TCPConnectionHandler(new TCPSlaveConnection(incoming)));
                 }

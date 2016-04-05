@@ -15,6 +15,9 @@
  */
 package com.ghgande.j2mod.modbus.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -28,7 +31,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  */
 public class ThreadPool {
 
-    private static final ModbusLogger logger = ModbusLogger.getLogger(ThreadPool.class);
+    private static final Logger logger = LoggerFactory.getLogger(ThreadPool.class);
 
     private LinkedBlockingQueue<Runnable> taskPool;
     private List<PoolThread> threadPool = new ArrayList<PoolThread>();
@@ -113,7 +116,7 @@ public class ThreadPool {
                 }
                 catch (Exception ex) {
                     if (running) {
-                        logger.error("Problem starting receiver thread - %s", ex.getMessage());
+                        logger.error("Problem starting receiver thread - {}", ex.getMessage());
                     }
                 }
             } while (running);

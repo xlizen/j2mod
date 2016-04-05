@@ -16,8 +16,9 @@
 package com.ghgande.j2mod.modbus.net;
 
 import com.fazecast.jSerialComm.SerialPort;
-import com.ghgande.j2mod.modbus.util.ModbusLogger;
 import com.ghgande.j2mod.modbus.util.SerialParameters;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
@@ -30,7 +31,7 @@ import java.io.IOException;
  */
 public class ModbusListenerFactory {
 
-    private static final ModbusLogger logger = ModbusLogger.getLogger(ModbusListenerFactory.class);
+    private static final Logger logger = LoggerFactory.getLogger(ModbusListenerFactory.class);
 
     public static AbstractModbusListener createModbusListener(String address) throws Exception {
         String parts[] = address.split(" *: *");

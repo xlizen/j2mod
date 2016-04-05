@@ -19,7 +19,8 @@ import com.ghgande.j2mod.modbus.Modbus;
 import com.ghgande.j2mod.modbus.ModbusCoupler;
 import com.ghgande.j2mod.modbus.net.ModbusUDPListener;
 import com.ghgande.j2mod.modbus.procimg.*;
-import com.ghgande.j2mod.modbus.util.ModbusLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
@@ -34,7 +35,7 @@ import java.io.IOException;
  */
 public class UDPSlaveTest {
 
-    private static final ModbusLogger logger = ModbusLogger.getLogger(UDPSlaveTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(UDPSlaveTest.class);
 
     public static void main(String[] args) {
 
@@ -48,7 +49,7 @@ public class UDPSlaveTest {
                 port = Integer.parseInt(args[0]);
             }
 
-            logger.system("j2mod Modbus/UDP Slave v0.97");
+            System.out.printf("j2mod Modbus/UDP Slave v0.97");
 
             // 1. Prepare a process image
             spi = new SimpleProcessImage(15);

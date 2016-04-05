@@ -15,7 +15,9 @@
  */
 package com.ghgande.j2mod.modbus.io;
 
-import com.ghgande.j2mod.modbus.util.ModbusLogger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -32,7 +34,7 @@ import java.io.InputStream;
  */
 public class FastByteArrayInputStream extends InputStream {
 
-    private static final ModbusLogger logger = ModbusLogger.getLogger(FastByteArrayInputStream.class);
+    private static final Logger logger = LoggerFactory.getLogger(FastByteArrayInputStream.class);
 
     /**
      * Number of bytes in the input buffer.
@@ -81,7 +83,7 @@ public class FastByteArrayInputStream extends InputStream {
 
     public int read() throws IOException {
         logger.debug("read()");
-        logger.debug("count=%d pos=%d", count, pos);
+        logger.debug("count={}", count, pos);
         return (pos < count) ? (buf[pos++] & 0xff) : (-1);
     }
 
@@ -121,13 +123,13 @@ public class FastByteArrayInputStream extends InputStream {
     public void mark(int readlimit) {
         logger.debug("mark()");
         mark = pos;
-        logger.debug("mark=%d pos=%d", mark, pos);
+        logger.debug("mark={}", mark, pos);
     }
 
     public void reset() {
         logger.debug("reset()");
         pos = mark;
-        logger.debug("mark=%d pos=%d", mark, pos);
+        logger.debug("mark={} pos={}", mark, pos);
     }
 
     public boolean markSupported() {

@@ -22,9 +22,10 @@ import com.ghgande.j2mod.modbus.io.ModbusTCPTransport;
 import com.ghgande.j2mod.modbus.msg.*;
 import com.ghgande.j2mod.modbus.net.ModbusTCPListener;
 import com.ghgande.j2mod.modbus.procimg.SimpleRegister;
-import com.ghgande.j2mod.modbus.util.ModbusLogger;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -40,7 +41,7 @@ import static org.junit.Assert.fail;
  */
 public class AbstractTestModbusTCPMaster extends AbstractTestModbus {
 
-    private static final ModbusLogger logger = ModbusLogger.getLogger(AbstractTestModbusTCPMaster.class);
+    private static final Logger logger = LoggerFactory.getLogger(AbstractTestModbusTCPMaster.class);
     protected static ModbusTCPMaster master;
 
     @BeforeClass

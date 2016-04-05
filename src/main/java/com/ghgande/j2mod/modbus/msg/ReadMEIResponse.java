@@ -16,7 +16,8 @@
 package com.ghgande.j2mod.modbus.msg;
 
 import com.ghgande.j2mod.modbus.Modbus;
-import com.ghgande.j2mod.modbus.util.ModbusLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -33,7 +34,7 @@ import java.io.IOException;
  */
 public final class ReadMEIResponse extends ModbusResponse {
 
-    private static final ModbusLogger logger = ModbusLogger.getLogger(ReadMEIResponse.class);
+    private static final Logger logger = LoggerFactory.getLogger(ReadMEIResponse.class);
 
     //instance attributes
     private int fieldLevel = 0;
@@ -193,7 +194,7 @@ public final class ReadMEIResponse extends ModbusResponse {
                 System.arraycopy(fields[i].getBytes("US-ASCII"), 0, result, offset, fields[i].length());
             }
             catch (Exception e) {
-                logger.debug("Problem converting bytes to string - %s", e.getMessage());
+                logger.debug("Problem converting bytes to string - {}", e.getMessage());
             }
             offset += fields[i].length();
         }

@@ -25,7 +25,8 @@ import com.ghgande.j2mod.modbus.msg.*;
 import com.ghgande.j2mod.modbus.msg.ReadFileRecordRequest.RecordRequest;
 import com.ghgande.j2mod.modbus.msg.ReadFileRecordResponse.RecordResponse;
 import com.ghgande.j2mod.modbus.net.ModbusMasterFactory;
-import com.ghgande.j2mod.modbus.util.ModbusLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 
@@ -39,13 +40,13 @@ import java.util.Arrays;
  */
 public class ReadFileRecordTest {
 
-    private static final ModbusLogger logger = ModbusLogger.getLogger(ReadFileRecordTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(ReadFileRecordTest.class);
 
     /**
      * usage -- Print command line arguments and exit.
      */
     private static void usage() {
-        logger.system("Usage: ReadFileRecord connection unit file record registers [repeat]");
+        System.out.printf("Usage: ReadFileRecord connection unit file record registers [repeat]");
 
         System.exit(1);
     }
@@ -89,7 +90,7 @@ public class ReadFileRecordTest {
             }
         }
         catch (NumberFormatException x) {
-            logger.system("Invalid parameter");
+            System.out.printf("Invalid parameter");
             usage();
         }
         catch (Exception ex) {
@@ -108,7 +109,7 @@ public class ReadFileRecordTest {
                 RecordRequest recordRequest = new ReadFileRecordRequest.RecordRequest(file, record + i, registers);
                 request.addRequest(recordRequest);
 
-                logger.system("Request: %s", request.getHexMessage());
+                System.out.printf("Request: %s", request.getHexMessage());
 
                 // Setup the transaction.
                 trans = transport.createTransaction();
@@ -119,32 +120,32 @@ public class ReadFileRecordTest {
                     trans.execute();
                 }
                 catch (ModbusSlaveException x) {
-                    logger.error("Slave Exception: %s", x.getLocalizedMessage());
+                    logger.error("Slave Exception: {}", x.getLocalizedMessage());
                     continue;
                 }
                 catch (ModbusIOException x) {
-                    logger.error("I/O Exception: %s", x.getLocalizedMessage());
+                    logger.error("I/O Exception: {}", x.getLocalizedMessage());
                     continue;
                 }
                 catch (ModbusException x) {
-                    logger.error("Modbus Exception: %s", x.getLocalizedMessage());
+                    logger.error("Modbus Exception: {}", x.getLocalizedMessage());
                     continue;
                 }
 
                 ModbusResponse dummy = trans.getResponse();
                 if (dummy == null) {
-                    logger.system("No response for transaction %d", i);
+                    System.out.printf("No response for transaction %d", i);
                     continue;
                 }
                 if (dummy instanceof ExceptionResponse) {
                     ExceptionResponse exception = (ExceptionResponse)dummy;
-                    logger.system(exception.toString());
+                    System.out.printf(exception.toString());
                     continue;
                 }
                 else if (dummy instanceof ReadFileRecordResponse) {
                     response = (ReadFileRecordResponse)dummy;
 
-                    logger.system("Response: %s", response.getHexMessage());
+                    System.out.printf("Response: %s", response.getHexMessage());
 
                     int count = response.getRecordCount();
                     for (int j = 0; j < count; j++) {
@@ -153,13 +154,13 @@ public class ReadFileRecordTest {
                         for (int k = 0; k < data.getWordCount(); k++) {
                             values[k] = data.getRegister(k).toShort();
                         }
-                        logger.system("data[%d][%d] = %s", i, Arrays.toString(values));
+                        System.out.printf("data[%d][%d] = %s", i, Arrays.toString(values));
                     }
                     continue;
                 }
 
                 // Unknown message.
-                logger.system("Unknown Response: %s", dummy.getHexMessage());
+                System.out.printf("Unknown Response: %s", dummy.getHexMessage());
             }
 
             // Now read the number of events sent by the device.  Maybe it will
@@ -179,7 +180,7 @@ public class ReadFileRecordTest {
 
                     if (dummy instanceof ReadCommEventCounterResponse) {
                         ReadCommEventCounterResponse eventResponse = (ReadCommEventCounterResponse)dummy;
-                        logger.system("  Events: %s", eventResponse.getEventCount());
+                        System.out.printf("  Events: %s", eventResponse.getEventCount());
                     }
                 }
                 catch (ModbusException x) {

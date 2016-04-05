@@ -22,7 +22,8 @@ import com.ghgande.j2mod.modbus.io.AbstractModbusTransport;
 import com.ghgande.j2mod.modbus.msg.ModbusRequest;
 import com.ghgande.j2mod.modbus.msg.ModbusResponse;
 import com.ghgande.j2mod.modbus.procimg.ProcessImage;
-import com.ghgande.j2mod.modbus.util.ModbusLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.InetAddress;
 
@@ -34,7 +35,7 @@ import java.net.InetAddress;
  */
 public abstract class AbstractModbusListener implements Runnable {
 
-    private static final ModbusLogger logger = ModbusLogger.getLogger(AbstractModbusListener.class);
+    private static final Logger logger = LoggerFactory.getLogger(AbstractModbusListener.class);
     protected  int port = Modbus.DEFAULT_PORT;
     protected boolean listening;
     protected InetAddress address;
@@ -140,8 +141,8 @@ public abstract class AbstractModbusListener implements Runnable {
         else {
             response = request.createResponse();
         }
-        logger.debug("Request:%s", request.getHexMessage());
-        logger.debug("Response:%s", response.getHexMessage());
+        logger.debug("Request:{}", request.getHexMessage());
+        logger.debug("Response:{}", response.getHexMessage());
 
         // Write the response
         transport.writeMessage(response);

@@ -20,7 +20,8 @@ import com.ghgande.j2mod.modbus.io.*;
 import com.ghgande.j2mod.modbus.msg.*;
 import com.ghgande.j2mod.modbus.net.ModbusMasterFactory;
 import com.ghgande.j2mod.modbus.procimg.Register;
-import com.ghgande.j2mod.modbus.util.ModbusLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -50,10 +51,10 @@ import java.util.Arrays;
  */
 public class ReadHoldingRegistersTest {
 
-    private static final ModbusLogger logger = ModbusLogger.getLogger(ReadHoldingRegistersTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(ReadHoldingRegistersTest.class);
 
     private static void printUsage() {
-        logger.system("\nUsage:\n    java com.ghgande.j2mod.modbus.cmd.ReadHoldingRegistersTest <address{:port{:unit}} [String]> <base [int]> <count [int]> {<repeat [int]>}");
+        System.out.printf("\nUsage:\n    java com.ghgande.j2mod.modbus.cmd.ReadHoldingRegistersTest <address{:port{:unit}} [String]> <base [int]> <count [int]> {<repeat [int]>}");
     }
 
     public static void main(String[] args) {
@@ -77,7 +78,7 @@ public class ReadHoldingRegistersTest {
                 transport = ModbusMasterFactory.createModbusMaster(args[0]);
 
                 if (transport == null) {
-                    logger.system("Cannot open %s", args[0]);
+                    System.out.printf("Cannot open %s", args[0]);
                     System.exit(1);
                 }
 
@@ -135,7 +136,7 @@ public class ReadHoldingRegistersTest {
             trans.setRequest(req);
             req.setHeadless(trans instanceof ModbusSerialTransaction);
 
-            logger.system("Request: %s", req.getHexMessage());
+            System.out.printf("Request: %s", req.getHexMessage());
 
             // 5. Execute the transaction repeat times
 
@@ -144,19 +145,19 @@ public class ReadHoldingRegistersTest {
                     trans.execute();
                 }
                 catch (ModbusException x) {
-                    logger.system(x.getMessage());
+                    System.out.printf(x.getMessage());
                     continue;
                 }
                 ModbusResponse res = trans.getResponse();
                 if (res != null) {
-                    logger.system("Response: %s", res.getHexMessage());
+                    System.out.printf("Response: %s", res.getHexMessage());
                 }
                 else {
-                    logger.system("No response to READ HOLDING request");
+                    System.out.printf("No response to READ HOLDING request");
                 }
                 if (res instanceof ExceptionResponse) {
                     ExceptionResponse exception = (ExceptionResponse)res;
-                    logger.system(exception.toString());
+                    System.out.printf(exception.toString());
                     continue;
                 }
 
@@ -167,7 +168,7 @@ public class ReadHoldingRegistersTest {
                 ReadMultipleRegistersResponse data = (ReadMultipleRegistersResponse)res;
                 Register values[] = data.getRegisters();
 
-                logger.system("Data: %s", Arrays.toString(values));
+                System.out.printf("Data: %s", Arrays.toString(values));
             }
         }
         catch (Exception ex) {

@@ -18,7 +18,8 @@ package com.ghgande.j2mod.modbus.utils;
 import com.ghgande.j2mod.modbus.ModbusCoupler;
 import com.ghgande.j2mod.modbus.net.AbstractModbusListener;
 import com.ghgande.j2mod.modbus.procimg.*;
-import com.ghgande.j2mod.modbus.util.ModbusLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * All the master unit tests extend this class so that the system will automatically
@@ -29,7 +30,7 @@ import com.ghgande.j2mod.modbus.util.ModbusLogger;
  */
 public class AbstractTestModbus {
 
-    private static final ModbusLogger logger = ModbusLogger.getLogger(AbstractTestModbus.class);
+    private static final Logger logger = LoggerFactory.getLogger(AbstractTestModbus.class);
     public static AbstractModbusListener listener = null;
     public static final int UNIT_ID = 15;
     public static final int PORT = 1502;

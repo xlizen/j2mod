@@ -18,7 +18,8 @@ package com.ghgande.j2mod.modbus.net;
 import com.ghgande.j2mod.modbus.Modbus;
 import com.ghgande.j2mod.modbus.io.AbstractModbusTransport;
 import com.ghgande.j2mod.modbus.io.ModbusTCPTransport;
-import com.ghgande.j2mod.modbus.util.ModbusLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -34,7 +35,7 @@ import java.net.Socket;
  */
 public class TCPMasterConnection {
 
-    private static final ModbusLogger logger = ModbusLogger.getLogger(TCPMasterConnection.class);
+    private static final Logger logger = LoggerFactory.getLogger(TCPMasterConnection.class);
 
     // instance attributes
     private Socket socket;

@@ -26,7 +26,8 @@ import com.ghgande.j2mod.modbus.msg.ModbusResponse;
 import com.ghgande.j2mod.modbus.msg.ReadFIFOQueueRequest;
 import com.ghgande.j2mod.modbus.msg.ReadFIFOQueueResponse;
 import com.ghgande.j2mod.modbus.net.ModbusMasterFactory;
-import com.ghgande.j2mod.modbus.util.ModbusLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * ReadFIFOTest -- Exercise the "READ FIFO" Modbus
@@ -38,13 +39,13 @@ import com.ghgande.j2mod.modbus.util.ModbusLogger;
  */
 public class ReadFIFOTest {
 
-    private static final ModbusLogger logger = ModbusLogger.getLogger(ReadFIFOTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(ReadFIFOTest.class);
 
     /**
      * usage -- Print command line arguments and exit.
      */
     private static void usage() {
-        logger.system("Usage: ReadFIFOTest connection unit fifo [repeat]");
+        System.out.printf("Usage: ReadFIFOTest connection unit fifo [repeat]");
 
         System.exit(1);
     }
@@ -84,7 +85,7 @@ public class ReadFIFOTest {
             }
         }
         catch (NumberFormatException x) {
-            logger.system("Invalid parameter");
+            System.out.printf("Invalid parameter");
             usage();
         }
         catch (Exception ex) {
@@ -101,7 +102,7 @@ public class ReadFIFOTest {
                 request.setUnitID(unit);
                 request.setReference(fifo);
 
-                logger.system("Request: %s", request.getHexMessage());
+                System.out.printf("Request: %s", request.getHexMessage());
 
                 // Setup the transaction.
                 trans = transport.createTransaction();
@@ -112,47 +113,47 @@ public class ReadFIFOTest {
                     trans.execute();
                 }
                 catch (ModbusSlaveException x) {
-                    logger.error("Slave Exception: %s", x.getLocalizedMessage());
+                    logger.error("Slave Exception: {}", x.getLocalizedMessage());
                     continue;
                 }
                 catch (ModbusIOException x) {
-                    logger.error("I/O Exception: %s", x.getLocalizedMessage());
+                    logger.error("I/O Exception: {}", x.getLocalizedMessage());
                     continue;
                 }
                 catch (ModbusException x) {
-                    logger.error("Modbus Exception: %s", x.getLocalizedMessage());
+                    logger.error("Modbus Exception: {}", x.getLocalizedMessage());
                     continue;
                 }
 
                 ModbusResponse dummy = trans.getResponse();
                 if (dummy == null) {
-                    logger.system("No response for transaction %d", i);
+                    System.out.printf("No response for transaction %d", i);
                     continue;
                 }
                 if (dummy instanceof ExceptionResponse) {
                     ExceptionResponse exception = (ExceptionResponse)dummy;
 
-                    logger.system(exception.toString());
+                    System.out.printf(exception.toString());
 
                     continue;
                 }
                 else if (dummy instanceof ReadFIFOQueueResponse) {
                     response = (ReadFIFOQueueResponse)dummy;
 
-                    logger.system("Response: %s", response.getHexMessage());
+                    System.out.printf("Response: %s", response.getHexMessage());
 
                     int count = response.getWordCount();
-                    logger.system("%d values", count);
+                    System.out.printf("%d values", count);
 
                     for (int j = 0; j < count; j++) {
                         short value = (short)response.getRegister(j);
-                        logger.system("data[%d] = %f", j, value);
+                        System.out.printf("data[%d] = %f", j, value);
                     }
                     continue;
                 }
 
                 // Unknown message.
-                logger.system("Unknown Response: %s", dummy.getHexMessage());
+                System.out.printf("Unknown Response: %s", dummy.getHexMessage());
             }
 
             // Teardown the connection.

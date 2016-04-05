@@ -18,8 +18,9 @@ package com.ghgande.j2mod.modbus.facade;
 import com.ghgande.j2mod.modbus.Modbus;
 import com.ghgande.j2mod.modbus.io.AbstractModbusTransport;
 import com.ghgande.j2mod.modbus.net.SerialConnection;
-import com.ghgande.j2mod.modbus.util.ModbusLogger;
 import com.ghgande.j2mod.modbus.util.SerialParameters;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Modbus/Serial Master facade.
@@ -31,7 +32,7 @@ import com.ghgande.j2mod.modbus.util.SerialParameters;
  */
 public class ModbusSerialMaster extends AbstractModbusMaster {
 
-    private static final ModbusLogger logger = ModbusLogger.getLogger(ModbusSerialMaster.class);
+    private static final Logger logger = LoggerFactory.getLogger(ModbusSerialMaster.class);
     private SerialConnection connection;
 
     /**

@@ -19,8 +19,9 @@ import com.ghgande.j2mod.modbus.io.ModbusSerialTransaction;
 import com.ghgande.j2mod.modbus.msg.ReadInputRegistersRequest;
 import com.ghgande.j2mod.modbus.msg.ReadInputRegistersResponse;
 import com.ghgande.j2mod.modbus.net.SerialConnection;
-import com.ghgande.j2mod.modbus.util.ModbusLogger;
 import com.ghgande.j2mod.modbus.util.SerialParameters;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Class that implements a simple commandline
@@ -32,7 +33,7 @@ import com.ghgande.j2mod.modbus.util.SerialParameters;
  */
 public class SerialAITest {
 
-    private static final ModbusLogger logger = ModbusLogger.getLogger(SerialAITest.class);
+    private static final Logger logger = LoggerFactory.getLogger(SerialAITest.class);
 
     public static void main(String[] args) {
 
@@ -80,7 +81,7 @@ public class SerialAITest {
             params.setStopbits(1);
             params.setEncoding("ascii");
             params.setEcho(false);
-            logger.system("Encoding [%s]", params.getEncoding());
+            System.out.printf("Encoding [%s]", params.getEncoding());
 
             //4. Open the connection
             con = new SerialConnection(params);
@@ -90,7 +91,7 @@ public class SerialAITest {
             req = new ReadInputRegistersRequest(ref, count);
             req.setUnitID(unitid);
             req.setHeadless();
-            logger.system("Request: %s", req.getHexMessage());
+            System.out.printf("Request: %s", req.getHexMessage());
 
             //6. Prepare the transaction
             trans = new ModbusSerialTransaction(con);
@@ -102,9 +103,9 @@ public class SerialAITest {
                 trans.execute();
 
                 res = (ReadInputRegistersResponse)trans.getResponse();
-                logger.system("Response: %s", res.getHexMessage());
+                System.out.printf("Response: %s", res.getHexMessage());
                 for (int n = 0; n < res.getWordCount(); n++) {
-                    logger.system("Word %d=%d", n, res.getRegisterValue(n));
+                    System.out.printf("Word %d=%d", n, res.getRegisterValue(n));
                 }
                 k++;
             } while (k < repeat);
@@ -123,7 +124,7 @@ public class SerialAITest {
     }
 
     private static void printUsage() {
-        logger.system("\nUsage:\n    java com.ghgande.j2mod.modbus.cmd.SerialAITest <portname [String]>  <Unit Address [int8]> <register [int16]> <wordcount [int16]> {<repeat [int]>}"
+        System.out.printf("\nUsage:\n    java com.ghgande.j2mod.modbus.cmd.SerialAITest <portname [String]>  <Unit Address [int8]> <register [int16]> <wordcount [int16]> {<repeat [int]>}"
         );
     }
 }

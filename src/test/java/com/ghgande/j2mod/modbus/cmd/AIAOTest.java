@@ -24,7 +24,8 @@ import com.ghgande.j2mod.modbus.msg.ReadInputRegistersResponse;
 import com.ghgande.j2mod.modbus.msg.WriteSingleRegisterRequest;
 import com.ghgande.j2mod.modbus.net.TCPMasterConnection;
 import com.ghgande.j2mod.modbus.procimg.SimpleRegister;
-import com.ghgande.j2mod.modbus.util.ModbusLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.InetAddress;
 
@@ -69,10 +70,10 @@ import java.net.InetAddress;
  */
 public class AIAOTest {
 
-    private static final ModbusLogger logger = ModbusLogger.getLogger(AIAOTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(AIAOTest.class);
 
     private static void printUsage() {
-        logger.system("\nUsage:\n    java com.ghgande.j2mod.modbus.cmd.AIAOTest <address{:<port>} [String]> <register a_in [int16]> <register a_out [int16]>");
+        System.out.printf("\nUsage:\n    java com.ghgande.j2mod.modbus.cmd.AIAOTest <address{:<port>} [String]> <register a_in [int16]> <register a_out [int16]>");
     }
 
     public static void main(String[] args) {
@@ -126,7 +127,7 @@ public class AIAOTest {
             con = new TCPMasterConnection(addr);
             con.setPort(port);
             con.connect();
-            logger.system("Connected to %s:%d", addr.toString(), con.getPort());
+            System.out.printf("Connected to %s:%d", addr.toString(), con.getPort());
 
             // 3. Prepare the requests
             ai_req = new ReadInputRegistersRequest(ai_ref, 1);
@@ -157,7 +158,7 @@ public class AIAOTest {
                     new_out.setValue(new_in); // update register
                     ao_trans.execute();
                     last_out = new_in;
-                    logger.system("Updated Output Register with value from Input Register");
+                    System.out.printf("Updated Output Register with value from Input Register");
                 }
             } while (true);
 

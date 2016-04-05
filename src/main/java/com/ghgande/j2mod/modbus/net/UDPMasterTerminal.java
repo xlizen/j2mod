@@ -16,7 +16,8 @@
 package com.ghgande.j2mod.modbus.net;
 
 import com.ghgande.j2mod.modbus.io.ModbusUDPTransport;
-import com.ghgande.j2mod.modbus.util.ModbusLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -31,7 +32,7 @@ import java.net.InetAddress;
  */
 class UDPMasterTerminal extends AbstractUDPTerminal {
 
-    private static final ModbusLogger logger = ModbusLogger.getLogger(UDPMasterTerminal.class);
+    private static final Logger logger = LoggerFactory.getLogger(UDPMasterTerminal.class);
 
     /**
      * Create a UDP master connection to the specified Internet address.
@@ -54,8 +55,8 @@ class UDPMasterTerminal extends AbstractUDPTerminal {
             if (socket == null) {
                 socket = new DatagramSocket();
             }
-            logger.debug("UDPMasterTerminal::haveSocket():%s", socket.toString());
-            logger.debug("UDPMasterTerminal::raddr=:%s:rport:%d", address.toString(), port);
+            logger.debug("UDPMasterTerminal::haveSocket():{}", socket.toString());
+            logger.debug("UDPMasterTerminal::raddr=:{}:rport:{}", address.toString(), port);
 
             socket.setReceiveBufferSize(1024);
             socket.setSendBufferSize(1024);

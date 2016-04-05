@@ -22,9 +22,10 @@ import com.ghgande.j2mod.modbus.msg.*;
 import com.ghgande.j2mod.modbus.net.ModbusUDPListener;
 import com.ghgande.j2mod.modbus.net.UDPMasterConnection;
 import com.ghgande.j2mod.modbus.procimg.SimpleRegister;
-import com.ghgande.j2mod.modbus.util.ModbusLogger;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -40,7 +41,7 @@ import static org.junit.Assert.fail;
  */
 public class AbstractTestModbusUDPMaster extends AbstractTestModbus {
 
-    private static final ModbusLogger logger = ModbusLogger.getLogger(AbstractTestModbusUDPMaster.class);
+    private static final Logger logger = LoggerFactory.getLogger(AbstractTestModbusUDPMaster.class);
     protected static ModbusUDPMaster master;
 
     @BeforeClass

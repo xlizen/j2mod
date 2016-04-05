@@ -19,7 +19,8 @@ import com.ghgande.j2mod.modbus.ModbusCoupler;
 import com.ghgande.j2mod.modbus.net.AbstractModbusListener;
 import com.ghgande.j2mod.modbus.net.ModbusListenerFactory;
 import com.ghgande.j2mod.modbus.procimg.*;
-import com.ghgande.j2mod.modbus.util.ModbusLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Class implementing a simple Modbus/TCP slave. A simple process image is
@@ -31,14 +32,14 @@ import com.ghgande.j2mod.modbus.util.ModbusLogger;
  */
 public class ModbusSlaveTest {
 
-    private static final ModbusLogger logger = ModbusLogger.getLogger(ModbusSlaveTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(ModbusSlaveTest.class);
 
     public static void main(String[] args) {
         AbstractModbusListener listener = null;
         SimpleProcessImage spi;
 
         try {
-            logger.system("j2mod Modbus Slave (Server) v0.97");
+            System.out.printf("j2mod Modbus Slave (Server) v0.97");
 
             // Create the process image for this test.
             spi = new SimpleProcessImage(15);
@@ -70,11 +71,11 @@ public class ModbusSlaveTest {
             ModbusCoupler.getReference().setMaster(false);
 
             // 3. create a listener with 3 threads in pool
-            logger.system("Creating");
+            System.out.printf("Creating");
 
             listener = ModbusListenerFactory.createModbusListener(args[0]);
 
-            logger.system("Listening");
+            System.out.printf("Listening");
 
             while (listener.isListening()) {
                 try {
@@ -85,10 +86,10 @@ public class ModbusSlaveTest {
                     break;
                 }
             }
-            logger.system("Done");
+            System.out.printf("Done");
         }
         catch (Exception x) {
-            logger.system(x.toString());
+            System.out.printf(x.toString());
             if (listener != null) {
                 listener.stop();
             }

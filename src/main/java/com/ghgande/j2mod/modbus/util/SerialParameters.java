@@ -17,6 +17,8 @@ package com.ghgande.j2mod.modbus.util;
 
 import com.fazecast.jSerialComm.SerialPort;
 import com.ghgande.j2mod.modbus.Modbus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Properties;
 
@@ -31,7 +33,7 @@ import java.util.Properties;
  */
 public class SerialParameters {
 
-    private static final ModbusLogger logger = ModbusLogger.getLogger(SerialParameters.class);
+    private static final Logger logger = LoggerFactory.getLogger(SerialParameters.class);
 
     //instance attributes
     private String portName;

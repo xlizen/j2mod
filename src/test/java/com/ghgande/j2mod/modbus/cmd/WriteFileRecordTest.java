@@ -28,7 +28,8 @@ import com.ghgande.j2mod.modbus.msg.WriteFileRecordRequest.RecordRequest;
 import com.ghgande.j2mod.modbus.msg.WriteFileRecordResponse;
 import com.ghgande.j2mod.modbus.msg.WriteFileRecordResponse.RecordResponse;
 import com.ghgande.j2mod.modbus.net.ModbusMasterFactory;
-import com.ghgande.j2mod.modbus.util.ModbusLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -43,13 +44,13 @@ import java.util.Arrays;
  */
 public class WriteFileRecordTest {
 
-    private static final ModbusLogger logger = ModbusLogger.getLogger(WriteFileRecordTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(WriteFileRecordTest.class);
 
     /**
      * usage -- Print command line arguments and exit.
      */
     private static void usage() {
-        logger.system("Usage: WriteFileRecordTest connection unit file record value [value ...]");
+        System.out.printf("Usage: WriteFileRecordTest connection unit file record value [value ...]");
 
         System.exit(1);
     }
@@ -94,7 +95,7 @@ public class WriteFileRecordTest {
             }
         }
         catch (NumberFormatException x) {
-            logger.system("Invalid parameter");
+            System.out.printf("Invalid parameter");
             usage();
         }
         catch (Exception ex) {
@@ -114,7 +115,7 @@ public class WriteFileRecordTest {
             RecordRequest recordRequest = new RecordRequest(file, record, values);
             request.addRequest(recordRequest);
 
-            logger.system("Request: %s", request.getHexMessage());
+            System.out.printf("Request: %s", request.getHexMessage());
 
             // Setup the transaction.
             trans = transport.createTransaction();
@@ -125,32 +126,32 @@ public class WriteFileRecordTest {
                 trans.execute();
             }
             catch (ModbusSlaveException x) {
-                logger.system("Slave Exception: %s", x.getLocalizedMessage());
+                System.out.printf("Slave Exception: %s", x.getLocalizedMessage());
                 System.exit(1);
             }
             catch (ModbusIOException x) {
-                logger.system("I/O Exception: %s", x.getLocalizedMessage());
+                System.out.printf("I/O Exception: %s", x.getLocalizedMessage());
                 System.exit(1);
             }
             catch (ModbusException x) {
-                logger.system("Modbus Exception: %s", x.getLocalizedMessage());
+                System.out.printf("Modbus Exception: %s", x.getLocalizedMessage());
                 System.exit(1);
             }
 
             ModbusResponse dummy = trans.getResponse();
             if (dummy == null) {
-                logger.system("No response for transaction ");
+                System.out.printf("No response for transaction ");
                 System.exit(1);
             }
             if (dummy instanceof ExceptionResponse) {
                 ExceptionResponse exception = (ExceptionResponse)dummy;
 
-                logger.system(exception.toString());
+                System.out.printf(exception.toString());
             }
             else if (dummy instanceof WriteFileRecordResponse) {
                 response = (WriteFileRecordResponse)dummy;
 
-                logger.system("Response: %s", response.getHexMessage());
+                System.out.printf("Response: %s", response.getHexMessage());
 
                 int count = response.getRequestCount();
                 for (int j = 0; j < count; j++) {
@@ -160,7 +161,7 @@ public class WriteFileRecordTest {
                         values[k] = data.getRegister(k).toShort();
                     }
 
-                    logger.system("data[%d] = %s", j, Arrays.toString(values));
+                    System.out.printf("data[%d] = %s", j, Arrays.toString(values));
                 }
             }
         }

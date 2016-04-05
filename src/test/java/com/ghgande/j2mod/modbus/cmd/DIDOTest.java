@@ -22,7 +22,8 @@ import com.ghgande.j2mod.modbus.msg.ReadInputDiscretesRequest;
 import com.ghgande.j2mod.modbus.msg.ReadInputDiscretesResponse;
 import com.ghgande.j2mod.modbus.msg.WriteCoilRequest;
 import com.ghgande.j2mod.modbus.net.TCPMasterConnection;
-import com.ghgande.j2mod.modbus.util.ModbusLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.InetAddress;
 
@@ -47,7 +48,7 @@ import java.net.InetAddress;
  */
 public class DIDOTest {
 
-    private static final ModbusLogger logger = ModbusLogger.getLogger(DIDOTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(DIDOTest.class);
 
     public static void main(String[] args) {
 
@@ -93,7 +94,7 @@ public class DIDOTest {
             con = new TCPMasterConnection(addr);
             con.setPort(port);
             con.connect();
-            logger.system("Connected to %s:%d", addr.toString(), con.getPort());
+            System.out.printf("Connected to %s:%d", addr.toString(), con.getPort());
 
             // 3. Prepare the requests
             di_req = new ReadInputDiscretesRequest(di_ref, 1);
@@ -127,7 +128,7 @@ public class DIDOTest {
                     do_req.setCoil(new_in);
                     do_trans.execute();
                     last_out = new_in;
-                    logger.system("Updated coil with state from DI");
+                    System.out.printf("Updated coil with state from DI");
                 }
             } while (true);
 
@@ -146,6 +147,6 @@ public class DIDOTest {
     }
 
     private static void printUsage() {
-        logger.system("\nUsage:\n    java com.ghgande.j2mod.modbus.cmd.DIDOTest <address{:<port>} [String]> <register d_in [int16]> <register d_out [int16]>");
+        System.out.printf("\nUsage:\n    java com.ghgande.j2mod.modbus.cmd.DIDOTest <address{:<port>} [String]> <register d_in [int16]> <register d_out [int16]>");
     }
 }
