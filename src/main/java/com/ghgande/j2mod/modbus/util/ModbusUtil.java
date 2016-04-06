@@ -18,6 +18,8 @@ package com.ghgande.j2mod.modbus.util;
 import com.ghgande.j2mod.modbus.Modbus;
 import com.ghgande.j2mod.modbus.io.BytesOutputStream;
 import com.ghgande.j2mod.modbus.msg.ModbusMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
@@ -31,7 +33,7 @@ import java.io.IOException;
  */
 public final class ModbusUtil {
 
-    private static final ModbusLogger logger = ModbusLogger.getLogger(ModbusUtil.class);
+    private static final Logger logger = LoggerFactory.getLogger(ModbusUtil.class);
 
     /* Table of CRC values for high-order byte */
     private final static short[] auchCRCHi = {
@@ -176,7 +178,7 @@ public final class ModbusUtil {
             return buf.toString().getBytes("US-ASCII");
         }
         catch (Exception e) {
-            logger.debug("Problem converting bytes to string - %s", e.getMessage());
+            logger.debug("Problem converting bytes to string - {}", e.getMessage());
         }
         return null;
     }

@@ -21,8 +21,9 @@ import com.ghgande.j2mod.modbus.msg.ModbusMessage;
 import com.ghgande.j2mod.modbus.msg.ModbusRequest;
 import com.ghgande.j2mod.modbus.msg.ModbusResponse;
 import com.ghgande.j2mod.modbus.net.TCPMasterConnection;
-import com.ghgande.j2mod.modbus.util.ModbusLogger;
 import com.ghgande.j2mod.modbus.util.ModbusUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.net.Socket;
@@ -38,7 +39,7 @@ import java.net.SocketTimeoutException;
  */
 public class ModbusTCPTransport extends AbstractModbusTransport {
 
-    private static final ModbusLogger logger = ModbusLogger.getLogger(ModbusTCPTransport.class);
+    private static final Logger logger = LoggerFactory.getLogger(ModbusTCPTransport.class);
 
     // instance attributes
     private DataInputStream dataInputStream; // input stream
@@ -142,7 +143,7 @@ public class ModbusTCPTransport extends AbstractModbusTransport {
 
             dataOutputStream.write(byteOutputStream.toByteArray());
             dataOutputStream.flush();
-            logger.debug("Sent: %s", ModbusUtil.toHex(byteOutputStream.toByteArray()));
+            logger.debug("Sent: {}", ModbusUtil.toHex(byteOutputStream.toByteArray()));
             // write more sophisticated exception handling
         }
         catch (SocketException ex) {
@@ -195,7 +196,7 @@ public class ModbusTCPTransport extends AbstractModbusTransport {
                         throw new ModbusIOException("Premature end of stream (Message truncated)");
                     }
 
-                    logger.debug("Read: %s", ModbusUtil.toHex(buffer, 0, count + 6));
+                    logger.debug("Read: {}", ModbusUtil.toHex(buffer, 0, count + 6));
 
                     byteInputStream.reset(buffer, (6 + count));
                     byteInputStream.skip(6);
@@ -230,7 +231,7 @@ public class ModbusTCPTransport extends AbstractModbusTransport {
                     // proper error correction and recovery.
 
                     dataInputStream.readShort();
-                    logger.debug("Read: %s", req.getHexMessage());
+                    logger.debug("Read: {}", req.getHexMessage());
                 }
             }
             return req;
@@ -259,7 +260,7 @@ public class ModbusTCPTransport extends AbstractModbusTransport {
             synchronized (byteInputStream) {
                 // use same buffer
                 byte[] buffer = byteInputStream.getBuffer();
-                logger.debug("Read: %s", ModbusUtil.toHex(buffer, 0, byteInputStream.count));
+                logger.debug("Read: {}", ModbusUtil.toHex(buffer, 0, byteInputStream.count));
                 if (!headless) {
                     // All Modbus TCP transactions start with 6 bytes. Get them.
                     if (dataInputStream.read(buffer, 0, 6) == -1) {

@@ -20,7 +20,8 @@ import com.ghgande.j2mod.modbus.msg.ModbusRequest;
 import com.ghgande.j2mod.modbus.msg.WriteSingleRegisterRequest;
 import com.ghgande.j2mod.modbus.net.ModbusMasterFactory;
 import com.ghgande.j2mod.modbus.procimg.SimpleRegister;
-import com.ghgande.j2mod.modbus.util.ModbusLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
@@ -49,10 +50,10 @@ import java.io.IOException;
  */
 public class WriteHoldingRegisterTest {
 
-    private static final ModbusLogger logger = ModbusLogger.getLogger(WriteHoldingRegisterTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(WriteHoldingRegisterTest.class);
 
     private static void printUsage() {
-        logger.system("\nUsage:\n    java com.ghgande.j2mod.modbus.cmd.WriteHoldingRegisterTest <connection [String]> <register [int]> <value [int]> {<repeat [int]>}");
+        System.out.printf("\nUsage:\n    java com.ghgande.j2mod.modbus.cmd.WriteHoldingRegisterTest <connection [String]> <register [int]> <value [int]> {<repeat [int]>}");
     }
 
     public static void main(String[] args) {
@@ -128,14 +129,14 @@ public class WriteHoldingRegisterTest {
             trans.setRequest(req);
             req.setHeadless(trans instanceof ModbusSerialTransaction);
 
-            logger.system("Request: %s", req.getHexMessage());
+            System.out.printf("Request: %s", req.getHexMessage());
 
             // 4. Execute the transaction repeat times
 
             for (int count = 0; count < repeat; count++) {
                 trans.execute();
 
-                logger.system("Response: %s", trans.getResponse().getHexMessage());
+                System.out.printf("Response: %s", trans.getResponse().getHexMessage());
             }
         }
         catch (Exception ex) {

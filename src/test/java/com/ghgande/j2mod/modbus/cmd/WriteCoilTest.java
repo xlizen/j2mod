@@ -21,7 +21,8 @@ import com.ghgande.j2mod.modbus.io.ModbusTransaction;
 import com.ghgande.j2mod.modbus.msg.WriteCoilRequest;
 import com.ghgande.j2mod.modbus.msg.WriteCoilResponse;
 import com.ghgande.j2mod.modbus.net.ModbusMasterFactory;
-import com.ghgande.j2mod.modbus.util.ModbusLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <p>
@@ -48,10 +49,10 @@ import com.ghgande.j2mod.modbus.util.ModbusLogger;
  */
 public class WriteCoilTest {
 
-    private static final ModbusLogger logger = ModbusLogger.getLogger(WriteCoilTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(WriteCoilTest.class);
 
     private static void printUsage() {
-        logger.system("\nUsage:\n    java com.ghgande.j2mod.modbus.cmd.WriteCoilTest <connection [String]> <unit [int8]> <coil [int16]> <state [boolean]> {<repeat [int]>}");
+        System.out.printf("\nUsage:\n    java com.ghgande.j2mod.modbus.cmd.WriteCoilTest <connection [String]> <unit [int8]> <coil [int16]> <state [boolean]> {<repeat [int]>}");
     }
 
     public static void main(String[] args) {
@@ -103,7 +104,7 @@ public class WriteCoilTest {
             // 3. Prepare the request
             req = new WriteCoilRequest(ref, value);
             req.setUnitID(unit);
-            logger.system("Request: %s", req.getHexMessage());
+            System.out.printf("Request: %s", req.getHexMessage());
 
             // 4. Prepare the transaction
             trans = transport.createTransaction();
@@ -113,11 +114,11 @@ public class WriteCoilTest {
             for (int count = 0; count < repeat; count++) {
                 trans.execute();
 
-                logger.system("Response: %s", trans.getResponse().getHexMessage());
+                System.out.printf("Response: %s", trans.getResponse().getHexMessage());
 
                 WriteCoilResponse data = (WriteCoilResponse)trans.getResponse();
                 if (data != null) {
-                    logger.system("Coil = %b", data.getCoil());
+                    System.out.printf("Coil = %b", data.getCoil());
                 }
             }
 

@@ -20,9 +20,10 @@ import com.ghgande.j2mod.modbus.ModbusException;
 import com.ghgande.j2mod.modbus.io.*;
 import com.ghgande.j2mod.modbus.msg.*;
 import com.ghgande.j2mod.modbus.net.ModbusMasterFactory;
-import com.ghgande.j2mod.modbus.util.ModbusLogger;
 import com.pi4j.io.gpio.GpioFactory;
 import com.pi4j.wiringpi.Gpio;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
@@ -51,11 +52,11 @@ import java.io.IOException;
  */
 public class ReadInputRegistersWithCallbackTest {
 
-    private static final ModbusLogger logger = ModbusLogger.getLogger(ReadInputRegistersWithCallbackTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(ReadInputRegistersWithCallbackTest.class);
     public static final int RTS_PIN = 0;
 
     private static void printUsage() {
-        logger.system("\nUsage:\n    java com.ghgande.j2mod.modbus.cmd.ReadInputRegistersWithCallbackTest <address{:port{:unit}} [String]> <base [int]> <count [int]> {<repeat [int]>}");
+        System.out.printf("\nUsage:\n    java com.ghgande.j2mod.modbus.cmd.ReadInputRegistersWithCallbackTest <address{:port{:unit}} [String]> <base [int]> <count [int]> {<repeat [int]>}");
     }
 
     public static void main(String[] args) {
@@ -82,7 +83,7 @@ public class ReadInputRegistersWithCallbackTest {
                 transport = ModbusMasterFactory.createModbusMaster(args[0]);
 
                 if (transport == null) {
-                    logger.system("Cannot open %s", args[0]);
+                    System.out.printf("Cannot open %s", args[0]);
                     System.exit(1);
                 }
 
@@ -141,7 +142,7 @@ public class ReadInputRegistersWithCallbackTest {
             trans.setRequest(req);
             req.setHeadless(trans instanceof ModbusSerialTransaction);
 
-            logger.system("Request is: %s", req.getHexMessage());
+            System.out.printf("Request is: %s", req.getHexMessage());
 
             // 5. Execute the transaction repeat times
 
@@ -150,22 +151,22 @@ public class ReadInputRegistersWithCallbackTest {
                     trans.execute();
                 }
                 catch (ModbusException x) {
-                    logger.system(x.getMessage());
+                    System.out.printf(x.getMessage());
                     continue;
                 }
                 ModbusResponse res = trans.getResponse();
                 if (res == null) {
-                    logger.system("No response to READ HOLDING request");
+                    System.out.printf("No response to READ HOLDING request");
                 }
                 else {
-                    logger.system("Response: %s", res.getHexMessage());
+                    System.out.printf("Response: %s", res.getHexMessage());
                     if (res instanceof ExceptionResponse) {
                         ExceptionResponse exception = (ExceptionResponse)res;
-                        logger.system(exception.toString());
+                        System.out.printf(exception.toString());
                     }
                     else if (res instanceof ReadInputRegistersResponse) {
                         ReadInputRegistersResponse data = (ReadInputRegistersResponse)res;
-                        logger.system("Data: %3.1f", data.getRegister(0).toShort() / 10.0);
+                        System.out.printf("Data: %3.1f", data.getRegister(0).toShort() / 10.0);
                     }
                 }
             }

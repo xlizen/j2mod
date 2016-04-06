@@ -15,7 +15,8 @@
  */
 package com.ghgande.j2mod.modbus.procimg;
 
-import com.ghgande.j2mod.modbus.util.ModbusLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Vector;
 
@@ -33,7 +34,7 @@ import java.util.Vector;
  */
 public class FIFO {
 
-    private static final ModbusLogger logger = ModbusLogger.getLogger(FIFO.class);
+    private static final Logger logger = LoggerFactory.getLogger(FIFO.class);
 
     private int address;
     private int registerCount;

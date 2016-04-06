@@ -18,7 +18,8 @@ package com.ghgande.j2mod.modbus.net;
 import com.ghgande.j2mod.modbus.Modbus;
 import com.ghgande.j2mod.modbus.io.AbstractModbusTransport;
 import com.ghgande.j2mod.modbus.io.ModbusTCPTransport;
-import com.ghgande.j2mod.modbus.util.ModbusLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -33,7 +34,7 @@ import java.net.Socket;
  */
 public class TCPSlaveConnection {
 
-    private static final ModbusLogger logger = ModbusLogger.getLogger(TCPSlaveConnection.class);
+    private static final Logger logger = LoggerFactory.getLogger(TCPSlaveConnection.class);
 
     // instance attributes
     private Socket socket;
@@ -68,7 +69,7 @@ public class TCPSlaveConnection {
                 socket.close();
             }
             catch (IOException ex) {
-                logger.debug(ex);
+                logger.debug(ex.getMessage());
             }
             connected = false;
         }

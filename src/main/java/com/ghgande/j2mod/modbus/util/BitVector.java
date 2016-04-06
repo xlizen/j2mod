@@ -15,6 +15,9 @@
  */
 package com.ghgande.j2mod.modbus.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Class that implements a collection for
  * bits, storing them packed into bytes.
@@ -27,7 +30,7 @@ package com.ghgande.j2mod.modbus.util;
  */
 public final class BitVector {
 
-    private static final ModbusLogger logger = ModbusLogger.getLogger(BitVector.class);
+    private static final Logger logger = LoggerFactory.getLogger(BitVector.class);
     private static final int[] ODD_OFFSETS = {-1, -3, -5, -7};
     private static final int[] STRAIGHT_OFFSETS = {7, 5, 3, 1};
     //instance attributes
@@ -103,11 +106,11 @@ public final class BitVector {
 
     public static void main(String[] args) {
         BitVector test = new BitVector(24);
-        logger.debug(test.isLSBAccess());
+        logger.debug(test.isLSBAccess() + "");
         test.setBit(7, true);
-        logger.debug(test.getBit(7));
+        logger.debug(test.getBit(7) + "");
         test.toggleAccess(true);
-        logger.debug(test.getBit(7));
+        logger.debug(test.getBit(7) + "");
 
         test.toggleAccess(true);
         test.setBit(6, true);
@@ -118,11 +121,11 @@ public final class BitVector {
         test.setBit(8, true);
         test.setBit(10, true);
 
-        logger.debug(test);
+        logger.debug(test.toString());
         test.toggleAccess(true);
-        logger.debug(test);
+        logger.debug(test.toString());
         test.toggleAccess(true);
-        logger.debug(test);
+        logger.debug(test.toString());
 
         logger.debug(ModbusUtil.toHex(test.getBytes()));
     }
@@ -210,7 +213,7 @@ public final class BitVector {
      */
     public final boolean getBit(int index) throws IndexOutOfBoundsException {
         index = translateIndex(index);
-        logger.debug("Get bit #%d", index);
+        logger.debug("Get bit #{}", index);
         return ((data[byteIndex(index)]
                 & (0x01 << bitIndex(index))) != 0
         );
@@ -228,7 +231,7 @@ public final class BitVector {
      */
     public final void setBit(int index, boolean b) throws IndexOutOfBoundsException {
         index = translateIndex(index);
-        logger.debug("Set bit #%d", index);
+        logger.debug("Set bit #{}", index);
         int value = ((b) ? 1 : 0);
         int byteNum = byteIndex(index);
         int bitNum = bitIndex(index);

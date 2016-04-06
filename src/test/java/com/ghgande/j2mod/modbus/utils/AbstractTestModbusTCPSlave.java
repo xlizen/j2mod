@@ -16,9 +16,10 @@
 package com.ghgande.j2mod.modbus.utils;
 
 import com.ghgande.j2mod.modbus.net.AbstractModbusListener;
-import com.ghgande.j2mod.modbus.util.ModbusLogger;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static org.junit.Assert.fail;
 import static org.junit.Assume.assumeTrue;
@@ -32,7 +33,7 @@ import static org.junit.Assume.assumeTrue;
  */
 public class AbstractTestModbusTCPSlave extends AbstractTestModbusTCPMaster {
 
-    private static final ModbusLogger logger = ModbusLogger.getLogger(AbstractTestModbusTCPSlave.class);
+    private static final Logger logger = LoggerFactory.getLogger(AbstractTestModbusTCPSlave.class);
     private static AbstractModbusListener listener = null;
 
     @BeforeClass

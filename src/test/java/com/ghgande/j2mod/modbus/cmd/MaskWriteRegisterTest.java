@@ -20,7 +20,8 @@ import com.ghgande.j2mod.modbus.io.ModbusTransaction;
 import com.ghgande.j2mod.modbus.msg.MaskWriteRegisterRequest;
 import com.ghgande.j2mod.modbus.msg.ModbusRequest;
 import com.ghgande.j2mod.modbus.net.ModbusMasterFactory;
-import com.ghgande.j2mod.modbus.util.ModbusLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
@@ -49,10 +50,10 @@ import java.io.IOException;
  */
 public class MaskWriteRegisterTest {
 
-    private static final ModbusLogger logger = ModbusLogger.getLogger(MaskWriteRegisterTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(MaskWriteRegisterTest.class);
 
     private static void printUsage() {
-        logger.system("\nUsage:\n    java com.ghgande.j2mod.modbus.cmd.WriteHoldingRegisterTest <address{:<port>{:<unit>}} [String]> <register [int]> <andMask [int]> <orMask [int]> {<repeat [int]>}");
+        System.out.printf("\nUsage:\n    java com.ghgande.j2mod.modbus.cmd.WriteHoldingRegisterTest <address{:<port>{:<unit>}} [String]> <register [int]> <andMask [int]> <orMask [int]> {<repeat [int]>}");
     }
 
     public static void main(String[] args) {
@@ -90,10 +91,10 @@ public class MaskWriteRegisterTest {
 
             // 2. Open the connection
             transport = ModbusMasterFactory.createModbusMaster(args[0]);
-            logger.system("Connected to %s", transport);
+            System.out.printf("Connected to %s", transport);
             req = new MaskWriteRegisterRequest(ref, andMask, orMask);
             req.setUnitID(unit);
-            logger.system("Request: %s", req.getHexMessage());
+            System.out.printf("Request: %s", req.getHexMessage());
 
             // 3. Prepare the transaction
             trans = transport.createTransaction();
@@ -104,10 +105,10 @@ public class MaskWriteRegisterTest {
             for (int count = 0; count < repeat; count++) {
                 trans.execute();
                 if (trans.getResponse() != null) {
-                    logger.system("Response: %s", trans.getResponse().getHexMessage());
+                    System.out.printf("Response: %s", trans.getResponse().getHexMessage());
                 }
                 else {
-                    logger.system("No response");
+                    System.out.printf("No response");
                 }
             }
         }

@@ -25,3 +25,9 @@
 * Fixed an issue with the TCPTransaction class not initialising the Transport correctly
 * Removed all redundant casts
 * Made Transport available from Facade classes so that listeners can be added for Serial events
+
+## Version 2.0-rc5
+* Serial timeouts were being applied to a null transport
+
+## Version 2.0
+* Replaced log4j with slf4j

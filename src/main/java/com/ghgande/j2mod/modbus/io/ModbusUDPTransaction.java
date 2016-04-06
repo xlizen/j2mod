@@ -23,7 +23,8 @@ import com.ghgande.j2mod.modbus.msg.ExceptionResponse;
 import com.ghgande.j2mod.modbus.msg.ModbusRequest;
 import com.ghgande.j2mod.modbus.net.AbstractUDPTerminal;
 import com.ghgande.j2mod.modbus.net.UDPMasterConnection;
-import com.ghgande.j2mod.modbus.util.ModbusLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Class implementing the <tt>ModbusTransaction</tt>
@@ -35,7 +36,7 @@ import com.ghgande.j2mod.modbus.util.ModbusLogger;
  */
 public class ModbusUDPTransaction extends ModbusTransaction {
 
-    private static final ModbusLogger logger = ModbusLogger.getLogger(ModbusUDPTransaction.class);
+    private static final Logger logger = LoggerFactory.getLogger(ModbusUDPTransaction.class);
 
     //instance attributes and associations
     private AbstractUDPTerminal terminal;
@@ -133,7 +134,7 @@ public class ModbusUDPTransaction extends ModbusTransaction {
             catch (ModbusIOException ex) {
                 retryCount++;
                 if (retryCount > retries) {
-                    logger.error("Cannot send UDP message %s", ex.getMessage());
+                    logger.error("Cannot send UDP message {}", ex.getMessage());
                 }
             }
         }

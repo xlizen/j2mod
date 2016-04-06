@@ -19,7 +19,8 @@ import com.ghgande.j2mod.modbus.Modbus;
 import com.ghgande.j2mod.modbus.ModbusCoupler;
 import com.ghgande.j2mod.modbus.net.ModbusTCPListener;
 import com.ghgande.j2mod.modbus.procimg.*;
-import com.ghgande.j2mod.modbus.util.ModbusLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.Inet4Address;
@@ -34,7 +35,7 @@ import java.net.Inet4Address;
  */
 public class TCPSlaveTest {
 
-    private static final ModbusLogger logger = ModbusLogger.getLogger(TCPSlaveTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(TCPSlaveTest.class);
 
     public static void main(String[] args) {
 
@@ -47,7 +48,7 @@ public class TCPSlaveTest {
             if (args != null && args.length == 1) {
                 port = Integer.parseInt(args[0]);
             }
-            logger.system("j2mod Modbus Slave (Server) v0.97");
+            System.out.printf("j2mod Modbus Slave (Server) v0.97");
 
             // Create the process image for this test.
             spi = new SimpleProcessImage(15);
@@ -111,7 +112,7 @@ public class TCPSlaveTest {
             listener = new ModbusTCPListener(3, Inet4Address.getByName("0.0.0.0"));
             listener.setPort(port);
             new Thread(listener).start();
-            logger.system("Listening..");
+            System.out.printf("Listening..");
 
             // Check to see if it started OK
 

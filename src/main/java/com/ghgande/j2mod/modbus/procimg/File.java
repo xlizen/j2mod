@@ -15,7 +15,8 @@
  */
 package com.ghgande.j2mod.modbus.procimg;
 
-import com.ghgande.j2mod.modbus.util.ModbusLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Julie
@@ -27,7 +28,7 @@ import com.ghgande.j2mod.modbus.util.ModbusLogger;
  */
 public class File {
 
-    private static final ModbusLogger logger = ModbusLogger.getLogger(File.class);
+    private static final Logger logger = LoggerFactory.getLogger(File.class);
 
     private int fileNumber;
     private int record_Count;

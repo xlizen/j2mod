@@ -22,7 +22,8 @@ import com.ghgande.j2mod.modbus.io.ModbusSerialTransport;
 import com.ghgande.j2mod.modbus.io.ModbusTransaction;
 import com.ghgande.j2mod.modbus.msg.*;
 import com.ghgande.j2mod.modbus.net.ModbusMasterFactory;
-import com.ghgande.j2mod.modbus.util.ModbusLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
@@ -50,10 +51,10 @@ import java.io.IOException;
  */
 public class ReadCommEventCounterTest {
 
-    private static final ModbusLogger logger = ModbusLogger.getLogger(ReadCommEventCounterTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(ReadCommEventCounterTest.class);
 
     private static void printUsage() {
-        logger.system("\nUsage:\n    java com.ghgande.j2mod.modbus.cmd.ReadCommEventCounterTest <address{:port} [String]> <unit [int]> {<repeat [int]>}");
+        System.out.printf("\nUsage:\n    java com.ghgande.j2mod.modbus.cmd.ReadCommEventCounterTest <address{:port} [String]> <unit [int]> {<repeat [int]>}");
     }
 
     public static void main(String[] args) {
@@ -74,7 +75,7 @@ public class ReadCommEventCounterTest {
                 // 2. Open the connection.
                 transport = ModbusMasterFactory.createModbusMaster(args[0]);
                 if (transport == null) {
-                    logger.system("Cannot open %s", args[0]);
+                    System.out.printf("Cannot open %s", args[0]);
                     System.exit(1);
                 }
 
@@ -114,7 +115,7 @@ public class ReadCommEventCounterTest {
                 req = new ReadCommEventCounterRequest();
                 req.setUnitID(unit);
                 req.setHeadless(trans instanceof ModbusSerialTransaction);
-                logger.system("Request: %s", req.getHexMessage());
+                System.out.printf("Request: %s", req.getHexMessage());
 
                 // 4. Prepare the transaction
                 trans = transport.createTransaction();
@@ -130,19 +131,19 @@ public class ReadCommEventCounterTest {
                     trans.execute();
                 }
                 catch (ModbusException x) {
-                    logger.system(x.getMessage());
+                    System.out.printf(x.getMessage());
                     continue;
                 }
                 ModbusResponse res = trans.getResponse();
                 if (res != null) {
-                    logger.system("Response: %s", res.getHexMessage());
+                    System.out.printf("Response: %s", res.getHexMessage());
                 }
                 else {
-                    logger.system("No response to READ INPUT request");
+                    System.out.printf("No response to READ INPUT request");
                 }
                 if (res instanceof ExceptionResponse) {
                     ExceptionResponse exception = (ExceptionResponse)res;
-                    logger.system(exception.toString());
+                    System.out.printf(exception.toString());
                     continue;
                 }
 
@@ -151,7 +152,7 @@ public class ReadCommEventCounterTest {
                 }
 
                 ReadCommEventCounterResponse data = (ReadCommEventCounterResponse)res;
-                logger.system("Status: %d, Events: %d", data.getStatus(), data.getEventCount());
+                System.out.printf("Status: %d, Events: %d", data.getStatus(), data.getEventCount());
             }
         }
         catch (Exception ex) {

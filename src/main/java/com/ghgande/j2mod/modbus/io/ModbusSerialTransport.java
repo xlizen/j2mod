@@ -20,8 +20,9 @@ import com.ghgande.j2mod.modbus.ModbusIOException;
 import com.ghgande.j2mod.modbus.msg.ModbusMessage;
 import com.ghgande.j2mod.modbus.msg.ModbusRequest;
 import com.ghgande.j2mod.modbus.msg.ModbusResponse;
-import com.ghgande.j2mod.modbus.util.ModbusLogger;
 import com.ghgande.j2mod.modbus.util.ModbusUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -39,7 +40,7 @@ import java.util.Set;
  */
 public abstract class ModbusSerialTransport extends AbstractModbusTransport {
 
-    private static final ModbusLogger logger = ModbusLogger.getLogger(ModbusSerialTransport.class);
+    private static final Logger logger = LoggerFactory.getLogger(ModbusSerialTransport.class);
 
     /**
      * Defines a virtual number for the FRAME START token (COLON).
@@ -288,7 +289,7 @@ public abstract class ModbusSerialTransport extends AbstractModbusTransport {
      */
     public void setBaudRate(int baud) {
         commPort.setBaudRate(baud);
-        logger.debug("baud rate is now %d", commPort.getBaudRate());
+        logger.debug("baud rate is now {}", commPort.getBaudRate());
     }
 
     /**
@@ -304,7 +305,7 @@ public abstract class ModbusSerialTransport extends AbstractModbusTransport {
 
         byte echoBuf[] = new byte[len];
         int echoLen = commPort.readBytes(echoBuf, len);
-        logger.debug("Echo: %s", ModbusUtil.toHex(echoBuf, 0, echoLen));
+        logger.debug("Echo: {}", ModbusUtil.toHex(echoBuf, 0, echoLen));
         if (echoLen != len) {
             logger.debug("Error: Transmit echo not received");
             throw new IOException("Echo not received");
@@ -433,7 +434,7 @@ public abstract class ModbusSerialTransport extends AbstractModbusTransport {
             }
             else {
                 buffer = ModbusUtil.toHex(value);
-                logger.debug("Wrote byte %d=%s", value, ModbusUtil.toHex(value));
+                logger.debug("Wrote byte {}={}", value, ModbusUtil.toHex(value));
             }
             return commPort.writeBytes(buffer, buffer.length);
         }
@@ -478,7 +479,7 @@ public abstract class ModbusSerialTransport extends AbstractModbusTransport {
             int len = commPort.bytesAvailable();
             byte buf[] = new byte[len];
             readBytes(buf, len);
-            logger.debug("Clear input: %s", ModbusUtil.toHex(buf, 0, len));
+            logger.debug("Clear input: {}", ModbusUtil.toHex(buf, 0, len));
         }
     }
 

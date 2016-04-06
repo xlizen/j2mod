@@ -18,7 +18,8 @@ package com.ghgande.j2mod.modbus;
 import com.ghgande.j2mod.modbus.procimg.DefaultProcessImageFactory;
 import com.ghgande.j2mod.modbus.procimg.ProcessImage;
 import com.ghgande.j2mod.modbus.procimg.ProcessImageFactory;
-import com.ghgande.j2mod.modbus.util.ModbusLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Class implemented following a Singleton pattern, to couple the slave side
@@ -34,7 +35,7 @@ import com.ghgande.j2mod.modbus.util.ModbusLogger;
  */
 public class ModbusCoupler {
 
-    private static final ModbusLogger logger = ModbusLogger.getLogger(ModbusCoupler.class);
+    private static final Logger logger = LoggerFactory.getLogger(ModbusCoupler.class);
 
     // class attributes
     private static ModbusCoupler modbusCoupler; // Singleton reference

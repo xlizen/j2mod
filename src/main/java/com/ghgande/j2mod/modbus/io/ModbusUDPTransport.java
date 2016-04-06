@@ -21,7 +21,8 @@ import com.ghgande.j2mod.modbus.msg.ModbusMessage;
 import com.ghgande.j2mod.modbus.msg.ModbusRequest;
 import com.ghgande.j2mod.modbus.msg.ModbusResponse;
 import com.ghgande.j2mod.modbus.net.AbstractUDPTerminal;
-import com.ghgande.j2mod.modbus.util.ModbusLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InterruptedIOException;
@@ -37,7 +38,7 @@ import java.util.Arrays;
  */
 public class ModbusUDPTransport extends AbstractModbusTransport {
 
-    private static final ModbusLogger logger = ModbusLogger.getLogger(ModbusUDPTransport.class);
+    private static final Logger logger = LoggerFactory.getLogger(ModbusUDPTransport.class);
 
     //instance attributes
     private AbstractUDPTerminal terminal;

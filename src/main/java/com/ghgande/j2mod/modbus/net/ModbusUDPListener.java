@@ -17,7 +17,8 @@ package com.ghgande.j2mod.modbus.net;
 
 import com.ghgande.j2mod.modbus.ModbusIOException;
 import com.ghgande.j2mod.modbus.io.ModbusUDPTransport;
-import com.ghgande.j2mod.modbus.util.ModbusLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -32,7 +33,7 @@ import java.net.UnknownHostException;
  */
 public class ModbusUDPListener extends AbstractModbusListener {
 
-    private static final ModbusLogger logger = ModbusLogger.getLogger(ModbusUDPListener.class);
+    private static final Logger logger = LoggerFactory.getLogger(ModbusUDPListener.class);
     private UDPSlaveTerminal terminal;
 
     /**
@@ -101,7 +102,7 @@ public class ModbusUDPListener extends AbstractModbusListener {
         }
         catch (ModbusIOException ex) {
             if (!ex.isEOF()) {
-                logger.error(ex);
+                logger.error(ex.getMessage());
             }
         }
         finally {

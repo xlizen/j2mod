@@ -25,7 +25,8 @@ import com.ghgande.j2mod.modbus.msg.*;
 import com.ghgande.j2mod.modbus.msg.ReadFileRecordRequest.RecordRequest;
 import com.ghgande.j2mod.modbus.msg.ReadFileRecordResponse.RecordResponse;
 import com.ghgande.j2mod.modbus.net.UDPMasterConnection;
-import com.ghgande.j2mod.modbus.util.ModbusLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -41,13 +42,13 @@ import java.util.Arrays;
  */
 public class UDPWriteRecordTest {
 
-    private static final ModbusLogger logger = ModbusLogger.getLogger(UDPWriteRecordTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(UDPWriteRecordTest.class);
 
     /**
      * usage -- Print command line arguments and exit.
      */
     private static void usage() {
-        logger.system("Usage: UDPWriteRecordTest address[:port[:unit]] file record registers [count]");
+        System.out.printf("Usage: UDPWriteRecordTest address[:port[:unit]] file record registers [count]");
 
         System.exit(1);
     }
@@ -106,11 +107,11 @@ public class UDPWriteRecordTest {
             }
         }
         catch (NumberFormatException x) {
-            logger.system("Invalid parameter");
+            System.out.printf("Invalid parameter");
             usage();
         }
         catch (UnknownHostException x) {
-            logger.system("Unknown host: %s", hostName);
+            System.out.printf("Unknown host: %s", hostName);
             System.exit(1);
         }
         catch (Exception ex) {
@@ -127,7 +128,7 @@ public class UDPWriteRecordTest {
             connection.connect();
             connection.setTimeout(500);
 
-            logger.system("Connected to %s:%d", ipAddress.toString(), connection.getPort());
+            System.out.printf("Connected to %s:%d", ipAddress.toString(), connection.getPort());
 
             for (int i = 0; i < requestCount; i++) {
                 // Setup the READ FILE RECORD request.  The record number
@@ -138,7 +139,7 @@ public class UDPWriteRecordTest {
                 RecordRequest recordRequest = new ReadFileRecordRequest.RecordRequest(file, record + i, registers);
                 rdRequest.addRequest(recordRequest);
 
-                logger.system("Request: %s", rdRequest.getHexMessage());
+                System.out.printf("Request: %s", rdRequest.getHexMessage());
 
                 // Setup the transaction.
                 trans = new ModbusUDPTransaction(connection);
@@ -149,15 +150,15 @@ public class UDPWriteRecordTest {
                     trans.execute();
                 }
                 catch (ModbusSlaveException x) {
-                    logger.error("Slave Exception: %s", x.getLocalizedMessage());
+                    logger.error("Slave Exception: {}", x.getLocalizedMessage());
                     continue;
                 }
                 catch (ModbusIOException x) {
-                    logger.error("I/O Exception: %s", x.getLocalizedMessage());
+                    logger.error("I/O Exception: {}", x.getLocalizedMessage());
                     continue;
                 }
                 catch (ModbusException x) {
-                    logger.error("Modbus Exception: %s", x.getLocalizedMessage());
+                    logger.error("Modbus Exception: {}", x.getLocalizedMessage());
                     continue;
                 }
 
@@ -168,20 +169,20 @@ public class UDPWriteRecordTest {
 
                 ModbusResponse dummy = trans.getResponse();
                 if (dummy == null) {
-                    logger.system("No response for transaction %d", i);
+                    System.out.printf("No response for transaction %d", i);
                     continue;
                 }
                 if (dummy instanceof ExceptionResponse) {
                     ExceptionResponse exception = (ExceptionResponse)dummy;
 
-                    logger.system(exception.toString());
+                    System.out.printf(exception.toString());
 
                     continue;
                 }
                 else if (dummy instanceof ReadFileRecordResponse) {
                     rdResponse = (ReadFileRecordResponse)dummy;
 
-                    logger.system("Response: %s", rdResponse.getHexMessage());
+                    System.out.printf("Response: %s", rdResponse.getHexMessage());
 
                     int count = rdResponse.getRecordCount();
                     for (int j = 0; j < count; j++) {
@@ -191,7 +192,7 @@ public class UDPWriteRecordTest {
                             values[k] = data.getRegister(k).toShort();
                         }
 
-                        logger.system("read data[%d] = ", j, Arrays.toString(values));
+                        System.out.printf("read data[%d] = ", j, Arrays.toString(values));
 
                         WriteFileRecordRequest.RecordRequest wrData = new WriteFileRecordRequest.RecordRequest(file, record + i, values);
                         wrRequest.addRequest(wrData);
@@ -199,7 +200,7 @@ public class UDPWriteRecordTest {
                 }
                 else {
                     // Unknown message.
-                    logger.system("Unknown Response: %s", dummy.getHexMessage());
+                    System.out.printf("Unknown Response: %s", dummy.getHexMessage());
                 }
 
                 // Setup the transaction.
@@ -211,33 +212,33 @@ public class UDPWriteRecordTest {
                     trans.execute();
                 }
                 catch (ModbusSlaveException x) {
-                    logger.error("Slave Exception: %s", x.getLocalizedMessage());
+                    logger.error("Slave Exception: {}", x.getLocalizedMessage());
                     continue;
                 }
                 catch (ModbusIOException x) {
-                    logger.error("I/O Exception: %s", x.getLocalizedMessage());
+                    logger.error("I/O Exception: {}", x.getLocalizedMessage());
                     continue;
                 }
                 catch (ModbusException x) {
-                    logger.error("Modbus Exception: %s", x.getLocalizedMessage());
+                    logger.error("Modbus Exception: {}", x.getLocalizedMessage());
                     continue;
                 }
 
                 dummy = trans.getResponse();
                 if (dummy == null) {
-                    logger.system("No response for transaction %d", i);
+                    System.out.printf("No response for transaction %d", i);
                     continue;
                 }
                 if (dummy instanceof ExceptionResponse) {
                     ExceptionResponse exception = (ExceptionResponse)dummy;
 
-                    logger.system(exception.toString());
+                    System.out.printf(exception.toString());
 
                 }
                 else if (dummy instanceof WriteFileRecordResponse) {
                     wrResponse = (WriteFileRecordResponse)dummy;
 
-                    logger.system("Response: %s", wrResponse.getHexMessage());
+                    System.out.printf("Response: %s", wrResponse.getHexMessage());
 
                     int count = wrResponse.getRequestCount();
                     for (int j = 0; j < count; j++) {
@@ -247,12 +248,12 @@ public class UDPWriteRecordTest {
                             values[k] = data.getRegister(k).toShort();
                         }
 
-                        logger.system("write response data[%d] = %s", j, Arrays.toString(values));
+                        System.out.printf("write response data[%d] = %s", j, Arrays.toString(values));
                     }
                 }
                 else {
                     // Unknown message.
-                    logger.system("Unknown Response: %s", dummy.getHexMessage());
+                    System.out.printf("Unknown Response: %s", dummy.getHexMessage());
                 }
             }
 

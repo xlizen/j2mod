@@ -16,8 +16,9 @@
 package com.ghgande.j2mod.modbus.net;
 
 import com.ghgande.j2mod.modbus.io.ModbusUDPTransport;
-import com.ghgande.j2mod.modbus.util.ModbusLogger;
 import com.ghgande.j2mod.modbus.util.ModbusUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -34,7 +35,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  */
 class UDPSlaveTerminal extends AbstractUDPTerminal {
 
-    private static final ModbusLogger logger = ModbusLogger.getLogger(UDPSlaveTerminal.class);
+    private static final Logger logger = LoggerFactory.getLogger(UDPSlaveTerminal.class);
     protected Hashtable<Integer, DatagramPacket> requests = new Hashtable<Integer, DatagramPacket>(342);
     private LinkedBlockingQueue<byte[]> sendQueue = new LinkedBlockingQueue<byte[]>();
     private LinkedBlockingQueue<byte[]> receiveQueue = new LinkedBlockingQueue<byte[]>();
@@ -63,8 +64,8 @@ class UDPSlaveTerminal extends AbstractUDPTerminal {
                 port = socket.getLocalPort();
                 address = socket.getLocalAddress();
             }
-            logger.debug("UDPSlaveTerminal::haveSocket():%s", socket.toString());
-            logger.debug("UDPSlaveTerminal::addr=:%s:port=%d", address.toString(), port);
+            logger.debug("UDPSlaveTerminal::haveSocket():{}", socket.toString());
+            logger.debug("UDPSlaveTerminal::addr=:{}:port={}", address.toString(), port);
 
             socket.setReceiveBufferSize(1024);
             socket.setSendBufferSize(1024);
@@ -180,7 +181,7 @@ class UDPSlaveTerminal extends AbstractUDPTerminal {
                     // Ignore the error if we are no longer listening
 
                     if (running) {
-                        logger.error("Problem reading UDP socket - %s", ex.getMessage());
+                        logger.error("Problem reading UDP socket - {}", ex.getMessage());
                     }
                 }
             } while (running);
@@ -249,7 +250,7 @@ class UDPSlaveTerminal extends AbstractUDPTerminal {
                     // Ignore the error if we are no longer listening
 
                     if (running) {
-                        logger.error("Problem reading UDP socket - %s", ex.getMessage());
+                        logger.error("Problem reading UDP socket - {}", ex.getMessage());
                     }
                 }
             } while (running);

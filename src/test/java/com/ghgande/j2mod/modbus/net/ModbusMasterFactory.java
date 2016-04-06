@@ -20,8 +20,9 @@ import com.ghgande.j2mod.modbus.Modbus;
 import com.ghgande.j2mod.modbus.io.AbstractModbusTransport;
 import com.ghgande.j2mod.modbus.io.ModbusRTUTransport;
 import com.ghgande.j2mod.modbus.io.ModbusTCPTransport;
-import com.ghgande.j2mod.modbus.util.ModbusLogger;
 import com.ghgande.j2mod.modbus.util.SerialParameters;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -37,7 +38,7 @@ import java.net.UnknownHostException;
  */
 public class ModbusMasterFactory {
 
-    private static final ModbusLogger logger = ModbusLogger.getLogger(ModbusMasterFactory.class);
+    private static final Logger logger = LoggerFactory.getLogger(ModbusMasterFactory.class);
 
     public static AbstractModbusTransport createModbusMaster(String address) {
         String parts[] = address.split(" *: *");
@@ -85,7 +86,7 @@ public class ModbusMasterFactory {
 
             try {
                 Socket socket = new Socket(hostName, port);
-                logger.debug("connecting to %s", socket.toString());
+                logger.debug("connecting to {}", socket.toString());
 
                 return new ModbusTCPTransport(socket);
             }

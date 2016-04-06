@@ -21,8 +21,9 @@ import com.ghgande.j2mod.modbus.io.AbstractModbusTransport;
 import com.ghgande.j2mod.modbus.io.ModbusASCIITransport;
 import com.ghgande.j2mod.modbus.io.ModbusRTUTransport;
 import com.ghgande.j2mod.modbus.io.ModbusSerialTransport;
-import com.ghgande.j2mod.modbus.util.ModbusLogger;
 import com.ghgande.j2mod.modbus.util.SerialParameters;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,7 +39,7 @@ import java.io.InputStream;
  */
 public class SerialConnection {
 
-    private static final ModbusLogger logger = ModbusLogger.getLogger(SerialConnection.class);
+    private static final Logger logger = LoggerFactory.getLogger(SerialConnection.class);
 
     private SerialParameters parameters;
     private ModbusSerialTransport transport;
@@ -82,7 +83,8 @@ public class SerialConnection {
             transport = new ModbusRTUTransport();
         }
         else {
-            logger.warn("Unknown transport encoding [%s] - reverting to RTU", parameters.getEncoding());
+            transport = new ModbusRTUTransport();
+            logger.warn("Unknown transport encoding [{}] - reverting to RTU", parameters.getEncoding());
         }
         transport.setEcho(parameters.isEcho());
 

@@ -22,7 +22,8 @@ import com.ghgande.j2mod.modbus.io.ModbusTransaction;
 import com.ghgande.j2mod.modbus.msg.ReadCoilsRequest;
 import com.ghgande.j2mod.modbus.msg.ReadCoilsResponse;
 import com.ghgande.j2mod.modbus.net.ModbusMasterFactory;
-import com.ghgande.j2mod.modbus.util.ModbusLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Class that implements a simple command line tool for reading a digital input.
@@ -33,10 +34,10 @@ import com.ghgande.j2mod.modbus.util.ModbusLogger;
  */
 public class ReadCoilsTest {
 
-    private static final ModbusLogger logger = ModbusLogger.getLogger(ReadCoilsTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(ReadCoilsTest.class);
 
     private static void printUsage() {
-        logger.system("\nUsage:\n    java com.ghgande.j2mod.modbus.cmd.ReadDiscretesTest <connection [String]> <unit [int8]> <register [int16]> <bitcount [int16]> {<repeat [int]>}");
+        System.out.printf("\nUsage:\n    java com.ghgande.j2mod.modbus.cmd.ReadDiscretesTest <connection [String]> <unit [int8]> <register [int16]> <bitcount [int16]> {<repeat [int]>}");
     }
 
     public static void main(String[] args) {
@@ -90,7 +91,7 @@ public class ReadCoilsTest {
 
             req = new ReadCoilsRequest(ref, count);
             req.setUnitID(unit);
-            logger.system("Request: %s", req.getHexMessage());
+            System.out.printf("Request: %s", req.getHexMessage());
 
             // 4. Prepare the transaction
             trans = transport.createTransaction();
@@ -107,9 +108,9 @@ public class ReadCoilsTest {
 
                 res = (ReadCoilsResponse)trans.getResponse();
 
-                logger.system("Response: %s", res.getHexMessage());
+                System.out.printf("Response: %s", res.getHexMessage());
 
-                logger.system("Digital Inputs Status=%s", res.getCoils().toString());
+                System.out.printf("Digital Inputs Status=%s", res.getCoils().toString());
 
                 k++;
             } while (k < repeat);

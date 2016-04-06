@@ -16,11 +16,12 @@
 package com.ghgande.j2mod.modbus.utils;
 
 import com.fazecast.jSerialComm.SerialPort;
-import com.ghgande.j2mod.modbus.util.ModbusLogger;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.exec.ExecuteWatchdog;
 import org.apache.commons.exec.PumpStreamHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.net.Inet4Address;
@@ -38,7 +39,7 @@ import java.util.List;
  */
 public class TestUtils {
 
-    private static final ModbusLogger logger = ModbusLogger.getLogger(TestUtils.class);
+    private static final Logger logger = LoggerFactory.getLogger(TestUtils.class);
     private static final int DEFAULT_BUFFER_SIZE = 32 * 1024;
 
     /**
@@ -100,7 +101,7 @@ public class TestUtils {
                         in.close();
                     }
                     catch (IOException e) {
-                        logger.error("Cannot close stream - %s", e.getMessage());
+                        logger.error("Cannot close stream - {}", e.getMessage());
                     }
                 }
             }
@@ -224,7 +225,7 @@ public class TestUtils {
                         fileStream.close();
                     }
                     catch (IOException ex) {
-                        logger.error("Cannot close stream - %s", ex.getMessage());
+                        logger.error("Cannot close stream - {}", ex.getMessage());
                     }
                 }
                 if (!ignoreErrors) {
@@ -348,12 +349,12 @@ public class TestUtils {
                 byte[] mac = network.getHardwareAddress();
                 if (mac != null && mac.length > 0 && network.getInterfaceAddresses() != null) {
                     returnValue.add(network);
-                    logger.debug("Current MAC address : %s (%s)", returnValue, network.getDisplayName());
+                    logger.debug("Current MAC address : {} ({})", returnValue, network.getDisplayName());
                 }
             }
         }
         catch (Exception e) {
-            logger.error("Cannot determine the local MAC address - %s", e.getMessage());
+            logger.error("Cannot determine the local MAC address - {}", e.getMessage());
         }
         return returnValue;
     }

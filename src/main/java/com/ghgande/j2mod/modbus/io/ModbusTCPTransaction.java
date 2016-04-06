@@ -22,7 +22,8 @@ import com.ghgande.j2mod.modbus.ModbusSlaveException;
 import com.ghgande.j2mod.modbus.msg.ExceptionResponse;
 import com.ghgande.j2mod.modbus.msg.ModbusRequest;
 import com.ghgande.j2mod.modbus.net.TCPMasterConnection;
-import com.ghgande.j2mod.modbus.util.ModbusLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Class implementing the <tt>ModbusTransaction</tt> interface.
@@ -33,7 +34,7 @@ import com.ghgande.j2mod.modbus.util.ModbusLogger;
  */
 public class ModbusTCPTransaction extends ModbusTransaction {
 
-    private static final ModbusLogger logger = ModbusLogger.getLogger(ModbusTCPTransaction.class);
+    private static final Logger logger = LoggerFactory.getLogger(ModbusTCPTransaction.class);
 
     // instance attributes and associations
     private TCPMasterConnection connection;
@@ -130,15 +131,15 @@ public class ModbusTCPTransaction extends ModbusTransaction {
 
         while (retryCounter < retryLimit) {
             try {
-                logger.debug("request transaction ID = %d", request.getTransactionID());
+                logger.debug("request transaction ID = {}", request.getTransactionID());
                 transport.writeMessage(request);
                 response = null;
                 do {
                     response = transport.readResponse();
                     if (logger.isDebugEnabled()) {
-                        logger.debug("response transaction ID = %d", response.getTransactionID());
+                        logger.debug("response transaction ID = {}", response.getTransactionID());
                         if (response.getTransactionID() != request.getTransactionID()) {
-                            logger.debug("expected %d, got %d", request.getTransactionID(), response.getTransactionID());
+                            logger.debug("expected {}, got {}", request.getTransactionID(), response.getTransactionID());
                         }
                     }
                 } while (response != null &&

@@ -18,7 +18,8 @@ package com.ghgande.j2mod.modbus.facade;
 import com.ghgande.j2mod.modbus.Modbus;
 import com.ghgande.j2mod.modbus.io.AbstractModbusTransport;
 import com.ghgande.j2mod.modbus.net.UDPMasterConnection;
-import com.ghgande.j2mod.modbus.util.ModbusLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -32,7 +33,7 @@ import java.net.UnknownHostException;
  */
 public class ModbusUDPMaster extends AbstractModbusMaster {
 
-    private static final ModbusLogger logger = ModbusLogger.getLogger(ModbusUDPMaster.class);
+    private static final Logger logger = LoggerFactory.getLogger(ModbusUDPMaster.class);
 
     private UDPMasterConnection connection;
 

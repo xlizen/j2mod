@@ -15,7 +15,8 @@
  */
 package com.ghgande.j2mod.modbus.io;
 
-import com.ghgande.j2mod.modbus.util.ModbusLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -34,7 +35,7 @@ import java.io.UnsupportedEncodingException;
  */
 public class FastByteArrayOutputStream extends OutputStream {
 
-    private static final ModbusLogger logger = ModbusLogger.getLogger(FastByteArrayOutputStream.class);
+    private static final Logger logger = LoggerFactory.getLogger(FastByteArrayOutputStream.class);
 
     /**
      * Defines the default oputput buffer size (100 bytes).
@@ -180,7 +181,7 @@ public class FastByteArrayOutputStream extends OutputStream {
             return new String(buf, 0, count, "US-ASCII");
         }
         catch (Exception e) {
-            logger.debug("Problem converting bytes to string - %s", e.getMessage());
+            logger.debug("Problem converting bytes to string - {}", e.getMessage());
         }
         return "";
     }

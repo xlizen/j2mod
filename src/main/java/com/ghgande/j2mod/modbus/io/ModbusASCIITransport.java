@@ -22,8 +22,9 @@ import com.ghgande.j2mod.modbus.msg.ModbusMessage;
 import com.ghgande.j2mod.modbus.msg.ModbusRequest;
 import com.ghgande.j2mod.modbus.msg.ModbusResponse;
 import com.ghgande.j2mod.modbus.procimg.ProcessImage;
-import com.ghgande.j2mod.modbus.util.ModbusLogger;
 import com.ghgande.j2mod.modbus.util.ModbusUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
@@ -38,7 +39,7 @@ import java.io.IOException;
  */
 public class ModbusASCIITransport extends ModbusSerialTransport {
 
-    private static final ModbusLogger logger = ModbusLogger.getLogger(ModbusASCIITransport.class);
+    private static final Logger logger = LoggerFactory.getLogger(ModbusASCIITransport.class);
     private final byte[] inBuffer = new byte[Modbus.MAX_MESSAGE_LENGTH];
     private final BytesInputStream byteInputStream = new BytesInputStream(inBuffer);         //to read message from
     private final BytesOutputStream byteInputOutputStream = new BytesOutputStream(inBuffer);     //to buffer message to
@@ -63,7 +64,7 @@ public class ModbusASCIITransport extends ModbusSerialTransport {
                 //write message
                 writeAsciiByte(FRAME_START);               //FRAMESTART
                 writeAsciiBytes(buf, len);                 //PDU
-                logger.debug("Writing: %s", ModbusUtil.toHex(buf, 0, len));
+                logger.debug("Writing: {}", ModbusUtil.toHex(buf, 0, len));
                 writeAsciiByte(calculateLRC(buf, 0, len)); //LRC
                 writeAsciiByte(FRAME_END);                 //FRAMEEND
                 byteOutputStream.reset();
@@ -161,7 +162,7 @@ public class ModbusASCIITransport extends ModbusSerialTransport {
                         byteInputOutputStream.writeByte(in);
                     }
                     int len = byteInputOutputStream.size();
-                    logger.debug("Received: %s", ModbusUtil.toHex(inBuffer, 0, len));
+                    logger.debug("Received: {}", ModbusUtil.toHex(inBuffer, 0, len));
                     //check LRC
                     if (inBuffer[len - 1] != calculateLRC(inBuffer, 0, len, 1)) {
                         continue;

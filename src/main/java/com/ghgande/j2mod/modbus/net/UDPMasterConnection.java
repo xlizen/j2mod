@@ -17,7 +17,8 @@ package com.ghgande.j2mod.modbus.net;
 
 import com.ghgande.j2mod.modbus.Modbus;
 import com.ghgande.j2mod.modbus.io.AbstractModbusTransport;
-import com.ghgande.j2mod.modbus.util.ModbusLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.InetAddress;
 
@@ -30,7 +31,7 @@ import java.net.InetAddress;
  */
 public class UDPMasterConnection {
 
-    private static final ModbusLogger logger = ModbusLogger.getLogger(UDPMasterConnection.class);
+    private static final Logger logger = LoggerFactory.getLogger(UDPMasterConnection.class);
 
     //instance attributes
     private UDPMasterTerminal terminal;
@@ -74,7 +75,7 @@ public class UDPMasterConnection {
                 terminal.deactivate();
             }
             catch (Exception ex) {
-                logger.debug(ex);
+                logger.debug(ex.getMessage());
             }
             connected = false;
         }
