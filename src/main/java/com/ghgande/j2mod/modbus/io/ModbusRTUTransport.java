@@ -62,12 +62,6 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
     }
 
     /**
-     * readRequestData -
-     *
-     * @throws IOException
-     */
-
-    /**
      * getRequest - Read a request, after the unit and function code
      *
      * @param function - Modbus function code

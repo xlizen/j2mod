@@ -29,5 +29,5 @@
 ## Version 2.0-rc5
 * Serial timeouts were being applied to a null transport
 
-## Version 2.0-rc6
+## Version 2.0
 * Replaced log4j with slf4j
