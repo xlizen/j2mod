@@ -5,7 +5,7 @@ j2mod has been actively maintained by [Julie Haugh](https://sourceforge.net/u/jf
 absolutely sterling work in trying to iron out the myriad of wrinkles in this piece of work. It's about time she had some help so this 
 project will endeavour to bring more collaboration and expertise to the fray.
 
-The main driver for doing this work is to get away from the RxTxComm library and to use something that brings it's own native implementations that is actively supported.
+The main driver for doing this work is to get away from the RxTxComm library and to use something that brings it's own native implementations and is actively supported.
 
 The weapon of choice is the [jSerialComm](http://fazecast.github.io/jSerialComm/) library which is extremely well supported by Will Hedgecock and is actively developed.
 

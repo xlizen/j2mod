@@ -31,3 +31,6 @@
 
 ## Version 2.0
 * Replaced log4j with slf4j
+
+## Version 2.1
+* Corrections to ASCII transport - thanks transparentink
