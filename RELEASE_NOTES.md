@@ -36,3 +36,4 @@
 * Corrections to ASCII transport - thanks transparentink
 * Added fix for infinite listening loop - thanks martentamerius
 * Removed duplicate request handling code
+* Fix unit tests on linux #9 - thanks martentamerius
