@@ -125,7 +125,7 @@ public abstract class AbstractModbusListener implements Runnable {
      * @param transport Transport to read request from
      * @throws ModbusIOException
      */
-    protected void handleRequest(AbstractModbusTransport transport) throws ModbusIOException {
+    protected static void handleRequest(AbstractModbusTransport transport) throws ModbusIOException {
 
         // Get the request from the transport. It will be processed
         // using an associated process image.

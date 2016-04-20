@@ -34,3 +34,5 @@
 
 ## Version 2.1
 * Corrections to ASCII transport - thanks transparentink
+* Added fix for infinite listening loop - thanks martentamerius
+* Removed duplicate request handling code
