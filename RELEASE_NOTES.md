@@ -37,3 +37,5 @@
 * Added fix for infinite listening loop - thanks martentamerius
 * Removed duplicate request handling code
 * Fix unit tests on linux #9 - thanks martentamerius
+* Improved logging of errors and warnings with stack trace - thanks martentamerius
+

@@ -11,6 +11,16 @@ The weapon of choice is the [jSerialComm](http://fazecast.github.io/jSerialComm/
 
 The other goal of this project is to bring the codebase into line with JDK 1.6 and to fix all the known bugs.
 
+# Releases
 Stable releases can be downloaded here http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22j2mod%22
 
 Snapshot releases can be downloaded here https://oss.sonatype.org/content/repositories/snapshots/com/ghgande/j2mod/2.0-SNAPSHOT/
+
+# Roadmap
+
+Not very much to add to the system but here are a couple of possibles;
+
+* Register aggregator - at 4energy have created an extended Transaction wrapper that consolidates multiple single register requests into a single, 
+multi-register request by working out the 'distance' between registers and creating larger requests to reduce the comms overhead of multiple requests
+* Handling ASCII payloads - some industrial Modbus slaves use an ASCII payload to represent their data i.e. a sequence of registers represent a floating point number in ASCII
+* Abstracting the serial comms port interface (currently uses jSerialComm) so that other implementations can be used e.g. USBserial

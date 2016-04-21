@@ -64,6 +64,7 @@ public class ModbusASCIITransport extends ModbusSerialTransport {
                 //write message
                 writeAsciiByte(FRAME_START);               //FRAMESTART
                 writeAsciiBytes(buf, len);                 //PDU
+                logger.debug("Writing: {}", ModbusUtil.toHex(buf, 0, len));
                 writeAsciiByte(calculateLRC(buf, 0, len)); //LRC
                 writeAsciiByte(FRAME_END);                 //FRAMEEND
                 byteOutputStream.reset();
