@@ -243,7 +243,7 @@ public final class WriteMultipleCoilsRequest extends ModbusRequest {
             data[k] = din.readByte();
         }
 
-        // decode bytes into BitCector, sets data and bitcount
+        // decode bytes into BitVector, sets data and bitcount
         coils = BitVector.createBitVector(data, bitcount);
 
         // update data length

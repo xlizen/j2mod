@@ -39,3 +39,4 @@
 * Fix unit tests on linux #9 - thanks martentamerius
 * Improved logging of errors and warnings with stack trace #10 - thanks martentamerius
 * Facilitate multiple processimages in ModbusCoupler. #11 - thanks martentamerius
+* WriteMultipleRegisters (Function Code : 0x10) does not work. #14 - chnaged use of signed shorts to unsigned
