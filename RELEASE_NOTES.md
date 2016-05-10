@@ -40,3 +40,4 @@
 * Improved logging of errors and warnings with stack trace #10 - thanks martentamerius
 * Facilitate multiple processimages in ModbusCoupler. #11 - thanks martentamerius
 * WriteMultipleRegisters (Function Code : 0x10) does not work. #14 - chnaged use of signed shorts to unsigned
+* Serial/RTU slower on 2.x #16 - worked around an issue with jSerialComm where setting timeouts on an open port injected a 200ms delay
