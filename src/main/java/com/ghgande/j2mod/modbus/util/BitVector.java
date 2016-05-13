@@ -279,11 +279,11 @@ public final class BitVector {
         StringBuilder sbuf = new StringBuilder();
         for (int i = 0; i < data.length; i++) {
 
-        	int numberOfBitsToPrint = Byte.SIZE;
-        	int remainingBits = size - (i * Byte.SIZE);
-        	if(remainingBits < Byte.SIZE) {
-        		numberOfBitsToPrint = remainingBits;
-        	}
+            int numberOfBitsToPrint = Byte.SIZE;
+            int remainingBits = size - (i * Byte.SIZE);
+            if (remainingBits < Byte.SIZE) {
+                numberOfBitsToPrint = remainingBits;
+            }
 
             sbuf.append(String.format("%" + numberOfBitsToPrint + "s", Integer.toBinaryString(data[i] & 0xFF)).replace(' ', '0'));
             sbuf.append(" ");

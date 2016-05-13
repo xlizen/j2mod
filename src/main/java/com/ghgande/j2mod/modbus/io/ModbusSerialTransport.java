@@ -420,15 +420,15 @@ public abstract class ModbusSerialTransport extends AbstractModbusTransport {
                 return ModbusASCIITransport.FRAME_END;
             }
             else {
-            	logger.debug("Read From buffer: " + buffer[0] + " (" + String.format("%02X", buffer[0]) + ")");
+                logger.debug("Read From buffer: " + buffer[0] + " (" + String.format("%02X", buffer[0]) + ")");
                 byte firstValue = buffer[0];
                 cnt = commPort.readBytes(buffer, 1);
                 if (cnt != 1) {
                     throw new IOException("Cannot read from serial port");
                 }
                 else {
-                	logger.debug("Read From buffer: " + buffer[0] + " (" + String.format("%02X", buffer[0]) + ")");
-                	int combinedValue = (Character.digit(firstValue, 16) << 4) + Character.digit(buffer[0], 16);
+                    logger.debug("Read From buffer: " + buffer[0] + " (" + String.format("%02X", buffer[0]) + ")");
+                    int combinedValue = (Character.digit(firstValue, 16) << 4) + Character.digit(buffer[0], 16);
                     logger.debug("Returning combined value of: " + String.format("%02X", combinedValue));
                     return combinedValue;
                 }
