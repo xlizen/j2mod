@@ -1,9 +1,8 @@
 package com.ghgande.j2mod.modbus.utils;
 
+import com.ghgande.j2mod.modbus.util.BitVector;
 import org.junit.Assert;
 import org.junit.Test;
-
-import com.ghgande.j2mod.modbus.util.BitVector;
 
 public final class BitVectorTest {
 

@@ -1,12 +1,11 @@
 package com.ghgande.j2mod.modbus;
 
-import org.junit.Assert;
-import org.junit.Test;
-
 import com.ghgande.j2mod.modbus.procimg.DefaultProcessImageFactory;
 import com.ghgande.j2mod.modbus.procimg.ProcessImage;
 import com.ghgande.j2mod.modbus.procimg.ProcessImageFactory;
 import com.ghgande.j2mod.modbus.procimg.SimpleProcessImage;
+import org.junit.Assert;
+import org.junit.Test;
 
 public final class ModbusCouplerTest {
     private static final int NOIMAGE_UNITID = 102;
