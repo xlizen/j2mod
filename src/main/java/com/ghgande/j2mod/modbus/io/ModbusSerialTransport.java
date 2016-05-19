@@ -291,6 +291,7 @@ public abstract class ModbusSerialTransport extends AbstractModbusTransport {
      */
     public void setCommPort(SerialPort cp) throws IOException {
         commPort = cp;
+        setTimeout(timeout);
     }
 
     /**

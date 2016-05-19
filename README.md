@@ -28,3 +28,7 @@ Not very much to add to the system but here are a couple of possibles;
 multi-register request by working out the 'distance' between registers and creating larger requests to reduce the comms overhead of multiple requests
 * Handling ASCII payloads - some industrial Modbus slaves use an ASCII payload to represent their data i.e. a sequence of registers represent a floating point number in ASCII
 * Abstracting the serial comms port interface (currently uses jSerialComm) so that other implementations can be used e.g. USBserial
+
+# Known Issues
+
+* The jSerialComm has some oddities with regards to Thread.sleep() calls that slowdown operation of the comms port. Every port open call incurs a 500ms delay and every settings change (baud rate, stop bit etc.) to an open port incurs a 200ms delay
