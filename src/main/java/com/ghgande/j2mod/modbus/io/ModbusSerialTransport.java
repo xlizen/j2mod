@@ -419,7 +419,7 @@ public abstract class ModbusSerialTransport extends AbstractModbusTransport {
             else if (buffer[0] == ':') {
                 return ModbusASCIITransport.FRAME_START;
             }
-            else if (buffer[0] == '\r') {
+            else if (buffer[0] == '\r' || buffer[0] == '\n') {
                 return ModbusASCIITransport.FRAME_END;
             }
             else {
