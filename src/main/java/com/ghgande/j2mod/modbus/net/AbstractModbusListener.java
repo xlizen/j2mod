@@ -63,12 +63,30 @@ public abstract class AbstractModbusListener implements Runnable {
     }
 
     /**
+     * Returns the port being listened on
+     *
+     * @return Port number > 0
+     */
+    public int getPort() {
+        return port;
+    }
+
+    /**
      * Sets the address of the interface to be listened to.
      *
      * @param addr an <tt>InetAddress</tt> instance.
      */
     public void setAddress(InetAddress addr) {
         address = addr;
+    }
+
+    /**
+     * Returns the address bound to this socket
+     *
+     * @return Bound address
+     */
+    public InetAddress getAddress() {
+        return address;
     }
 
     /**
