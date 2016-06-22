@@ -42,13 +42,19 @@ public class ModbusTCPTransport extends AbstractModbusTransport {
     private static final Logger logger = LoggerFactory.getLogger(ModbusTCPTransport.class);
 
     // instance attributes
-    private DataInputStream dataInputStream; // input stream
-    private DataOutputStream dataOutputStream; // output stream
-    private final BytesInputStream byteInputStream = new BytesInputStream(Modbus.MAX_MESSAGE_LENGTH + 6);
-    private final BytesOutputStream byteOutputStream = new BytesOutputStream(Modbus.MAX_MESSAGE_LENGTH + 6); // write frames
-    private Socket socket = null;
-    private TCPMasterConnection master = null;
-    private boolean headless = false; // Some TCP implementations are.
+    protected DataInputStream dataInputStream; // input stream
+    protected DataOutputStream dataOutputStream; // output stream
+    protected final BytesInputStream byteInputStream = new BytesInputStream(Modbus.MAX_MESSAGE_LENGTH + 6);
+    protected final BytesOutputStream byteOutputStream = new BytesOutputStream(Modbus.MAX_MESSAGE_LENGTH + 6); // write frames
+    protected Socket socket = null;
+    protected TCPMasterConnection master = null;
+    protected boolean headless = false; // Some TCP implementations are.
+
+    /**
+     * Default constructor
+     */
+    public ModbusTCPTransport() {
+    }
 
     /**
      * Constructs a new <tt>ModbusTransport</tt> instance, for a given
@@ -94,6 +100,15 @@ public class ModbusTCPTransport extends AbstractModbusTransport {
         headless = true;
     }
 
+    /**
+     * Set the transport to be headless
+     *
+     * @param headless True if headless
+     */
+    public void setHeadless(boolean headless) {
+        this.headless = headless;
+    }
+
     @Override
     public void setTimeout(int time) {
         super.setTimeout(time);
@@ -126,6 +141,22 @@ public class ModbusTCPTransport extends AbstractModbusTransport {
 
     @Override
     public void writeMessage(ModbusMessage msg) throws ModbusIOException {
+        writeMessage(msg, false);
+    }
+
+    /**
+     * Writes a <tt<ModbusMessage</tt> to the
+     * output stream of this <tt>ModbusTransport</tt>.
+     * <p>
+     *
+     * @param msg           a <tt>ModbusMessage</tt>.
+     * @param useRtuOverTcp True if the RTU protocol should be used over TCP
+     *
+     * @throws ModbusIOException data cannot be
+     *                           written properly to the raw output stream of
+     *                           this <tt>ModbusTransport</tt>.
+     */
+    protected void writeMessage(ModbusMessage msg, boolean useRtuOverTcp) throws ModbusIOException {
         try {
             byte message[] = msg.getMessage();
 
@@ -139,6 +170,14 @@ public class ModbusTCPTransport extends AbstractModbusTransport {
             byteOutputStream.writeByte(msg.getFunctionCode());
             if (message != null && message.length > 0) {
                 byteOutputStream.write(message);
+            }
+
+            // Add CRC for RTU over TCP
+            if (useRtuOverTcp) {
+                int len = byteOutputStream.size();
+                int[] crc = ModbusUtil.calculateCRC(byteOutputStream.getBuffer(), 0, len);
+                byteOutputStream.writeByte(crc[0]);
+                byteOutputStream.writeByte(crc[1]);
             }
 
             dataOutputStream.write(byteOutputStream.toByteArray());

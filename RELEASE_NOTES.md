@@ -49,3 +49,6 @@
 * Retrieve the localPort from opened socket if port is set to 0 #19
 * CR characters lost on ModbusSerialTransport #18
 * Corrected timeout setting issues on serial ports and harmonised setting timeout with IP methods
+
+## Version 2.1.3
+* Added support for Modbus RTU over TCP #21 - thanks axuan25
