@@ -52,3 +52,4 @@
 
 ## Version 2.1.3
 * Added support for Modbus RTU over TCP #21 - thanks axuan25
+* Code requires guards around a number of the functions #22
