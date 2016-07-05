@@ -56,3 +56,4 @@
 
 ## Version 2.2.0
 * Modbus Slave Multiple Port Support #23
+* Set ModbusCoupler to deprecated in favour of the new ModbusSlaveFactory and ModbusSlave sub-system
