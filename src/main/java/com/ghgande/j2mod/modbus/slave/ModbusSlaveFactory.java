@@ -47,12 +47,13 @@ public class ModbusSlaveFactory {
      * @throws ModbusException If a problem occurs e.g. port already in use
      */
     public static synchronized ModbusSlave createTCPSlave(int port, int poolSize) throws ModbusException {
-        if (slaves.containsKey(port + "")) {
-            return slaves.get(port + "");
+        String key = ModbusSlaveType.TCP.getKey(port);
+        if (slaves.containsKey(key)) {
+            return slaves.get(key);
         }
         else {
             ModbusSlave slave = new ModbusSlave(port, poolSize);
-            slaves.put(port + "", slave);
+            slaves.put(key, slave);
             return slave;
         }
     }
@@ -65,12 +66,13 @@ public class ModbusSlaveFactory {
      * @throws ModbusException If a problem occurs e.g. port already in use
      */
     public static synchronized ModbusSlave createUDPSlave(int port) throws ModbusException {
-        if (slaves.containsKey(port + "")) {
-            return slaves.get(port + "");
+        String key = ModbusSlaveType.UDP.getKey(port);
+        if (slaves.containsKey(key)) {
+            return slaves.get(key);
         }
         else {
             ModbusSlave slave = new ModbusSlave(port);
-            slaves.put(port + "", slave);
+            slaves.put(key, slave);
             return slave;
         }
     }
@@ -107,7 +109,7 @@ public class ModbusSlaveFactory {
     public static synchronized void close(ModbusSlave slave) {
         if (slave != null) {
             slave.closeListener();
-            slaves.remove(slave.getKey());
+            slaves.remove(slave.getType().getKey(slave.getPort()));
         }
     }
 

@@ -57,3 +57,6 @@
 ## Version 2.2.0
 * Modbus Slave Multiple Port Support #23
 * Set ModbusCoupler to deprecated in favour of the new ModbusSlaveFactory and ModbusSlave sub-system
+* Fixed some javadoc errors - thanks jan
+* Timeout error on socket listener - thanks jan
+* Now allows for slaves to share same socket but different protocols

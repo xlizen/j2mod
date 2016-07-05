@@ -39,4 +39,14 @@ public enum ModbusSlaveType {
         }
         return false;
     }
+
+    /**
+     * Returns a unique key for this port and type
+     *
+     * @param port Port number
+     * @return Unique key
+     */
+    public String getKey(int port) {
+        return toString() + port;
+    }
 }

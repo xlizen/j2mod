@@ -106,7 +106,7 @@ public class ModbusSlave {
 
         listener.setListening(true);
         listener.setPort(port);
-        listener.setTimeout(5000);
+        listener.setTimeout(0);
     }
 
     /**
@@ -205,15 +205,6 @@ public class ModbusSlave {
      */
     protected AbstractModbusListener getListener() {
         return listener;
-    }
-
-    protected String getKey() {
-        if (type.is(ModbusSlaveType.TCP, ModbusSlaveType.UDP)) {
-            return port + "";
-        }
-        else {
-            return serialParams.getPortName();
-        }
     }
 
     /**
