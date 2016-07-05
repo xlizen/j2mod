@@ -68,7 +68,8 @@ public final class MaskWriteRegisterRequest extends ModbusRequest {
     }
 
     /**
-     * getReference -- return the reference field.
+     * getReference
+     * @return the reference field
      */
     public int getReference() {
         return reference;
@@ -76,6 +77,7 @@ public final class MaskWriteRegisterRequest extends ModbusRequest {
 
     /**
      * setReference -- set the reference field.
+     * @param ref the reference field
      */
     public void setReference(int ref) {
         reference = ref;
@@ -92,6 +94,7 @@ public final class MaskWriteRegisterRequest extends ModbusRequest {
 
     /**
      * setAndMask -- set AND mask
+     * @param mask AND mask
      */
     public void setAndMask(int mask) {
         andMask = mask;
@@ -108,6 +111,7 @@ public final class MaskWriteRegisterRequest extends ModbusRequest {
 
     /**
      * setOrMask -- set OR mask
+     * @param mask OR mask
      */
     public void setOrMask(int mask) {
         orMask = mask;
@@ -115,6 +119,7 @@ public final class MaskWriteRegisterRequest extends ModbusRequest {
 
     /**
      * getResponse -- create an empty response for this request.
+     * @return empty response for this request
      */
     public ModbusResponse getResponse() {
         MaskWriteRegisterResponse response;
@@ -170,6 +175,7 @@ public final class MaskWriteRegisterRequest extends ModbusRequest {
 
     /**
      * writeData -- output this Modbus message to dout.
+     * @throws java.io.IOException
      */
     public void writeData(DataOutput dout) throws IOException {
         dout.write(getMessage());
@@ -177,6 +183,7 @@ public final class MaskWriteRegisterRequest extends ModbusRequest {
 
     /**
      * readData -- dummy function.  There is no data with the request.
+     * @throws java.io.IOException
      */
     public void readData(DataInput din) throws IOException {
         reference = din.readUnsignedShort();
@@ -187,6 +194,7 @@ public final class MaskWriteRegisterRequest extends ModbusRequest {
     /**
      * getMessage -- return an empty array as there is no data for
      * this request.
+     * @return message payload
      */
     public byte[] getMessage() {
         byte results[] = new byte[6];

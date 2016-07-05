@@ -372,6 +372,7 @@ public abstract class ModbusSerialTransport extends AbstractModbusTransport {
      * @param bytesToWrite Number of bytes to write
      *
      * @return Number of bytes written
+     * @throws java.io.IOException if writing to invalid port
      */
     protected final int writeBytes(byte[] buffer, long bytesToWrite) throws IOException {
         if (commPort != null && commPort.isOpen()) {
@@ -500,7 +501,7 @@ public abstract class ModbusSerialTransport extends AbstractModbusTransport {
     /**
      * Closes the comms port and any streams associated with it
      *
-     * @throws IOException
+     * @throws IOException Comm port close failed
      */
     public void close() throws IOException {
         commPort.closePort();

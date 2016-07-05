@@ -67,7 +67,7 @@ public abstract class AbstractModbusListener implements Runnable {
     /**
      * Returns the port being listened on
      *
-     * @return Port number > 0
+     * @return Port number &gt; 0
      */
     public int getPort() {
         return port;
@@ -107,7 +107,7 @@ public abstract class AbstractModbusListener implements Runnable {
      * A <tt>ModbusTCPListener</tt> will silently drop any requests if the
      * listening state is set to <tt>false</tt>.
      *
-     * @param b
+     * @param b listening state
      */
     public void setListening(boolean b) {
         listening = b;

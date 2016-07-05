@@ -188,9 +188,9 @@ public abstract class ModbusMessageImpl implements ModbusMessage {
     public abstract void readData(DataInput din) throws IOException;
 
     /**
-     * getOutputLength -- Return the actual packet size in bytes
-     *
      * The actual packet size, plus any CRC or header, will be returned.
+     * 
+     * @return the actual packet size in bytes
      */
     public int getOutputLength() {
         int l = 2 + getDataLength();

@@ -30,8 +30,10 @@ import java.io.IOException;
  * Class implementing a <tt>WriteMultipleCoilsRequest</tt>. The implementation
  * directly correlates with the class 1 function <i>write multiple coils (FC
  * 15)</i>. It encapsulates the corresponding request message.
- * <p/>
+ *
+ * <p>
  * Coils are understood as bits that can be manipulated (i.e. set or cleared).
+ * </p>
  *
  * @author Dieter Wimberger
  * @author Julie Haugh
@@ -64,7 +66,7 @@ public final class WriteMultipleCoilsRequest extends ModbusRequest {
     /**
      * Constructs a new <tt>WriteMultipleCoilsRequest</tt> instance with a given
      * reference and count of coils to be written, followed by the actual byte
-     * count, and then <i>count<i> number of bytes.
+     * count, and then <i>count</i> number of bytes.
      *
      * @param ref   the index of the first coil to be written.
      * @param count the number of coils to be written.
@@ -149,7 +151,6 @@ public final class WriteMultipleCoilsRequest extends ModbusRequest {
     /**
      * setReference - Sets the reference of the coil to start writing to with
      * this <tt>WriteMultipleCoilsRequest</tt>.
-     * <p/>
      *
      * @param ref the reference of the coil to start writing to.
      */

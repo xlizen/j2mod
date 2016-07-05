@@ -136,6 +136,7 @@ public final class ReadMultipleRegistersResponse extends ModbusResponse {
 
     /**
      * Sets the entire block of registers for this response
+     * @param registers
      */
     public void setRegisters(Register[] registers) {
         byteCount = registers.length * 2;

@@ -121,6 +121,7 @@ public abstract class ModbusTransaction {
 
     /**
      * getTransactionID -- get the next transaction ID to use.
+     * @return next transaction ID to use
      */
     public int getTransactionID() {
         /*

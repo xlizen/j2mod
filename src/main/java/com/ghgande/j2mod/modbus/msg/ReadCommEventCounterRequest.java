@@ -73,6 +73,7 @@ public final class ReadCommEventCounterRequest extends ModbusRequest {
 
     /**
      * writeData -- output this Modbus message to dout.
+     * @throws java.io.IOException
      */
     public void writeData(DataOutput dout) throws IOException {
         dout.write(getMessage());
@@ -81,12 +82,14 @@ public final class ReadCommEventCounterRequest extends ModbusRequest {
     /**
      * readData -- dummy function.  There is no additional data
      * to read.
+     * @throws java.io.IOException
      */
     public void readData(DataInput din) throws IOException {
     }
 
     /**
-     * getMessage -- return an empty array as there is no data for this request.
+     * getMessage
+     * @return an empty array as there is no data for this request
      */
     public byte[] getMessage() {
 

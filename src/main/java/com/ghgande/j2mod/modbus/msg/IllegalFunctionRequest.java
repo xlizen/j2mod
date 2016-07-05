@@ -57,6 +57,7 @@ public class IllegalFunctionRequest extends ModbusRequest {
      * <p>Used to implement slave devices when an illegal function code
      * has been requested.
      *
+     * @param unit
      * @param function the function code as <tt>int</tt>.
      */
     public IllegalFunctionRequest(int unit, int function) {
@@ -66,6 +67,7 @@ public class IllegalFunctionRequest extends ModbusRequest {
 
     /**
      * There is no unit number associated with this exception.
+     * @return Modbus excepion response
      */
     public ModbusResponse getResponse() {
         IllegalFunctionExceptionResponse response = new IllegalFunctionExceptionResponse(getFunctionCode());
@@ -87,6 +89,7 @@ public class IllegalFunctionRequest extends ModbusRequest {
      * Read all of the data that can be read.  This is an unsupported
      * function, so it may not be possible to know exactly how much data
      * needs to be read.
+     * @throws java.io.IOException
      */
     public void readData(DataInput din) throws IOException {
         // skip all following bytes

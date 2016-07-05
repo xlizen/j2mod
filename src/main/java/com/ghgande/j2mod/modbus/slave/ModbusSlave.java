@@ -130,6 +130,7 @@ public class ModbusSlave {
     /**
      * Returns the process image for the given Unit ID
      *
+     * @param unitId
      * @return Process image
      */
     public ProcessImage getProcessImage(int unitId) {
@@ -139,6 +140,7 @@ public class ModbusSlave {
     /**
      * Removes the process image for the given Unit ID
      *
+     * @param unitId
      * @return Process image
      */
     public ProcessImage removeProcessImage(int unitId) {
@@ -148,6 +150,8 @@ public class ModbusSlave {
     /**
      * Adds a process image for the given Unit ID
      *
+     * @param unitId
+     * @param processImage
      * @return Process image
      */
     public ProcessImage addProcessImage(int unitId, ProcessImage processImage) {

@@ -68,6 +68,7 @@ public final class ReadFIFOQueueRequest extends ModbusRequest {
 
     /**
      * getResponse -- create an empty response for this request.
+     * @return 
      */
     public ModbusResponse getResponse() {
         ReadFIFOQueueResponse response;
@@ -118,6 +119,7 @@ public final class ReadFIFOQueueRequest extends ModbusRequest {
 
     /**
      * writeData -- output this Modbus message to dout.
+     * @throws java.io.IOException
      */
     public void writeData(DataOutput dout) throws IOException {
         dout.write(getMessage());
@@ -125,13 +127,15 @@ public final class ReadFIFOQueueRequest extends ModbusRequest {
 
     /**
      * readData -- read the reference word.
+     * @throws java.io.IOException
      */
     public void readData(DataInput din) throws IOException {
         reference = din.readUnsignedShort();
     }
 
     /**
-     * getMessage -- return an empty array as there is no data for this request.
+     * getMessage
+     * @return an empty array as there is no data for this request
      */
     public byte[] getMessage() {
         byte results[] = new byte[2];

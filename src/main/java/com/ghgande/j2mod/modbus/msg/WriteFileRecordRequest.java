@@ -69,6 +69,7 @@ public final class WriteFileRecordRequest extends ModbusRequest {
     /**
      * getRequestCount -- return the number of record requests in this
      * message.
+     * @return number of record requests in this message
      */
     public int getRequestCount() {
         if (records == null) {
@@ -80,6 +81,8 @@ public final class WriteFileRecordRequest extends ModbusRequest {
 
     /**
      * getRecord -- return the record request indicated by the reference
+     * @param index
+     * @return the record request indicated by the reference
      */
     public RecordRequest getRecord(int index) {
         return records[index];
@@ -87,6 +90,7 @@ public final class WriteFileRecordRequest extends ModbusRequest {
 
     /**
      * addRequest -- add a new record request.
+     * @param request
      */
     public void addRequest(RecordRequest request) {
         if (request.getRequestSize() + getRequestSize() > 248) {
@@ -109,6 +113,7 @@ public final class WriteFileRecordRequest extends ModbusRequest {
 
     /**
      * createResponse -- create an empty response for this request.
+     * @return 
      */
     public ModbusResponse getResponse() {
         WriteFileRecordResponse response;
@@ -181,6 +186,7 @@ public final class WriteFileRecordRequest extends ModbusRequest {
 
     /**
      * writeData -- output this Modbus message to dout.
+     * @throws java.io.IOException
      */
     public void writeData(DataOutput dout) throws IOException {
         dout.write(getMessage());
@@ -188,6 +194,7 @@ public final class WriteFileRecordRequest extends ModbusRequest {
 
     /**
      * readData -- convert the byte stream into a request.
+     * @throws java.io.IOException
      */
     public void readData(DataInput din) throws IOException {
         int byteCount = din.readUnsignedByte();
@@ -231,6 +238,7 @@ public final class WriteFileRecordRequest extends ModbusRequest {
 
     /**
      * getMessage -- return the raw binary message.
+     * @return the raw binary message
      */
     public byte[] getMessage() {
         byte results[] = new byte[getRequestSize()];
@@ -288,6 +296,7 @@ public final class WriteFileRecordRequest extends ModbusRequest {
 
         /**
          * getRequestSize -- return the size of the response in bytes.
+         * @return the size of the response in bytes
          */
         public int getRequestSize() {
             return 7 + wordCount * 2;
