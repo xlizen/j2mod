@@ -16,8 +16,8 @@
 package com.ghgande.j2mod.modbus.msg;
 
 import com.ghgande.j2mod.modbus.Modbus;
-import com.ghgande.j2mod.modbus.ModbusCoupler;
 import com.ghgande.j2mod.modbus.io.NonWordDataHandler;
+import com.ghgande.j2mod.modbus.net.AbstractModbusListener;
 import com.ghgande.j2mod.modbus.procimg.*;
 
 import java.io.DataInput;
@@ -42,6 +42,11 @@ public final class ReadWriteMultipleRequest extends ModbusRequest {
 
     /**
      * Constructs a new <tt>Read/Write Multiple Registers Request</tt> instance.
+     * @param unit
+     * @param readRef
+     * @param writeCount
+     * @param writeRef
+     * @param readCount
      */
     public ReadWriteMultipleRequest(int unit, int readRef, int readCount, int writeRef, int writeCount) {
         super();
@@ -64,6 +69,7 @@ public final class ReadWriteMultipleRequest extends ModbusRequest {
 
     /**
      * Constructs a new <tt>Read/Write Multiple Registers Request</tt> instance.
+     * @param unit
      */
     public ReadWriteMultipleRequest(int unit) {
         super();
@@ -89,6 +95,7 @@ public final class ReadWriteMultipleRequest extends ModbusRequest {
 
     /**
      * createResponse -- create an empty response for this request.
+     * @return 
      */
     public ModbusResponse getResponse() {
         ReadWriteMultipleResponse response;
@@ -109,13 +116,14 @@ public final class ReadWriteMultipleRequest extends ModbusRequest {
         return response;
     }
 
-    public ModbusResponse createResponse() {
+    @Override
+    public ModbusResponse createResponse(AbstractModbusListener listener) {
         ReadWriteMultipleResponse response;
         InputRegister[] readRegs;
         Register[] writeRegs;
 
         // 1. get process image
-        ProcessImage procimg = ModbusCoupler.getReference().getProcessImage(getUnitID());
+        ProcessImage procimg = listener.getProcessImage(getUnitID());
         // 2. get input registers range
         try {
             readRegs = procimg.getRegisterRange(getReadReference(), getReadWordCount());
@@ -354,6 +362,7 @@ public final class ReadWriteMultipleRequest extends ModbusRequest {
 
     /**
      * getMessage -- return a prepared message.
+     * @return prepared message
      */
     public byte[] getMessage() {
         byte results[] = new byte[9 + 2 * getWriteWordCount()];

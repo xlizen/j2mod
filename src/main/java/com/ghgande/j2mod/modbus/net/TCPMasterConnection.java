@@ -102,6 +102,7 @@ public class TCPMasterConnection {
      * Opens this <tt>TCPMasterConnection</tt>.
      *
      * @param useRtuOverTcp True if the RTU protocol should be used over TCP
+     *
      * @throws Exception if there is a network failure.
      */
     public synchronized void connect(boolean useRtuOverTcp) throws Exception {
@@ -208,6 +209,7 @@ public class TCPMasterConnection {
     /**
      * Set the <tt>ModbusTransport</tt> associated with this
      * <tt>TCPMasterConnection</tt>
+     * @param trans associated transport
      */
     public void setModbusTransport(ModbusTCPTransport trans) {
         transport = trans;

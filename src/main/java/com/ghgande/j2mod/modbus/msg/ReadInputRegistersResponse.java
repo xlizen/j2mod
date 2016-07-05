@@ -83,6 +83,7 @@ public final class ReadInputRegistersResponse extends ModbusResponse {
 
     /**
      * Set the number of words to be written.
+     * @param count
      */
     public void setWordCount(int count) {
         byteCount = count * 2 + 1;
@@ -138,6 +139,7 @@ public final class ReadInputRegistersResponse extends ModbusResponse {
 
     /**
      * Sets the entire block of registers for this response
+     * @param registers
      */
     public void setRegisters(InputRegister[] registers) {
         setDataLength(registers.length * 2 + 1);

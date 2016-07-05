@@ -16,11 +16,11 @@
 package com.ghgande.j2mod.modbus.io;
 
 import com.ghgande.j2mod.modbus.Modbus;
-import com.ghgande.j2mod.modbus.ModbusCoupler;
 import com.ghgande.j2mod.modbus.ModbusIOException;
 import com.ghgande.j2mod.modbus.msg.ModbusMessage;
 import com.ghgande.j2mod.modbus.msg.ModbusRequest;
 import com.ghgande.j2mod.modbus.msg.ModbusResponse;
+import com.ghgande.j2mod.modbus.net.AbstractModbusListener;
 import com.ghgande.j2mod.modbus.util.ModbusUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -277,18 +277,8 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
         }
     }
 
-    /**
-     * readRequest - Read a slave request.
-     *
-     * @return a <tt>ModbusRequest</tt> to be processed by the slave simulator
-     */
-    protected ModbusRequest readRequestIn() throws ModbusIOException {
-        ModbusCoupler coupler = ModbusCoupler.getReference();
-
-        if (coupler == null || coupler.isMaster()) {
-            throw new RuntimeException("Operation not supported");
-        }
-
+    @Override
+    protected ModbusRequest readRequestIn(AbstractModbusListener listener) throws ModbusIOException {
         boolean done;
         ModbusRequest request;
         int dlength;
@@ -358,6 +348,7 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
      * readResponse - Read the bytes for the response from the slave.
      *
      * @return a <tt>ModbusRespose</tt>
+     * @throws com.ghgande.j2mod.modbus.ModbusIOException
      */
     protected ModbusResponse readResponseIn() throws ModbusIOException {
         boolean done;

@@ -43,7 +43,7 @@ public class ModbusRTUTCPTransport extends ModbusTCPTransport {
     /**
      * Constructs a new <tt>ModbusTransport</tt> instance, for a given
      * <tt>Socket</tt>.
-     * <p/>
+     * <p>
      *
      * @param socket the <tt>Socket</tt> used for message transport.
      */

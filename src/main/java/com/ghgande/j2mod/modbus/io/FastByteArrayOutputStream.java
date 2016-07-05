@@ -26,7 +26,6 @@ import java.io.UnsupportedEncodingException;
  * This class is a replacement implementation for ByteArrayOutputStream
  * that does not synchronize every
  * byte written.
- * <p/>
  *
  * @author Mark Hayes
  * @author Dieter Wimberger

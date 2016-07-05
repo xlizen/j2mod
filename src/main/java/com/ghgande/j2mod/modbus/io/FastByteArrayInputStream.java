@@ -24,7 +24,6 @@ import java.io.InputStream;
 /**
  * This class is a replacement for ByteArrayInputStream that does not
  * synchronize every byte read.
- * <p/>
  *
  * @author Mark Hayes
  * @author Dieter Wimberger

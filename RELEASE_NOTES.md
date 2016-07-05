@@ -53,3 +53,10 @@
 ## Version 2.1.3
 * Added support for Modbus RTU over TCP #21 - thanks axuan25
 * Code requires guards around a number of the functions #22
+
+## Version 2.2.0
+* Modbus Slave Multiple Port Support #23
+* Set ModbusCoupler to deprecated in favour of the new ModbusSlaveFactory and ModbusSlave sub-system
+* Fixed some javadoc errors - thanks jan
+* Timeout error on socket listener - thanks jan
+* Now allows for slaves to share same socket but different protocols

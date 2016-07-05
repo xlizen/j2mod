@@ -75,7 +75,7 @@ public class ModbusSerialListener extends AbstractModbusListener {
                 AbstractModbusTransport transport = serialCon.getModbusTransport();
                 if (listening) {
                     try {
-                        handleRequest(transport);
+                        handleRequest(transport, this);
                     }
                     catch (ModbusIOException ex) {
                         logger.debug(ex.getMessage());
@@ -84,7 +84,7 @@ public class ModbusSerialListener extends AbstractModbusListener {
                 else {
                     // Not listening -- read and discard the request so the
                     // input doesn't get clogged up.
-                    transport.readRequest();
+                    transport.readRequest(this);
                 }
             }
         }

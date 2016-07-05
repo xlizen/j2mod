@@ -20,6 +20,7 @@ import com.ghgande.j2mod.modbus.ModbusIOException;
 import com.ghgande.j2mod.modbus.msg.ModbusMessage;
 import com.ghgande.j2mod.modbus.msg.ModbusRequest;
 import com.ghgande.j2mod.modbus.msg.ModbusResponse;
+import com.ghgande.j2mod.modbus.net.AbstractModbusListener;
 import com.ghgande.j2mod.modbus.util.ModbusUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,14 +67,7 @@ public abstract class ModbusSerialTransport extends AbstractModbusTransport {
         return transaction;
     }
 
-    /**
-     * The <code>writeMessage</code> method writes a modbus serial message to
-     * its serial output stream to a specified slave unit ID.
-     *
-     * @param msg a <code>ModbusMessage</code> value
-     *
-     * @throws ModbusIOException if an error occurs
-     */
+    @Override
     public void writeMessage(ModbusMessage msg) throws ModbusIOException {
         open();
         notifyListenersBeforeWrite(msg);
@@ -94,31 +88,16 @@ public abstract class ModbusSerialTransport extends AbstractModbusTransport {
         notifyListenersAfterWrite(msg);
     }
 
-    /**
-     * The <code>readRequest</code> method listens continuously on the serial
-     * input stream for master request messages and replies if the request slave
-     * ID matches its own set in ModbusCoupler.getUnitID().
-     *
-     * @return a <code>ModbusRequest</code> value
-     *
-     * @throws ModbusIOException if an error occurs
-     */
-    public ModbusRequest readRequest() throws ModbusIOException {
+    @Override
+    public ModbusRequest readRequest(AbstractModbusListener listener) throws ModbusIOException {
         open();
         notifyListenersBeforeRequest();
-        ModbusRequest req = readRequestIn();
+        ModbusRequest req = readRequestIn(listener);
         notifyListenersAfterRequest(req);
         return req;
     }
 
-    /**
-     * <code>readResponse</code> reads a response message from the slave
-     * responding to a master writeMessage request.
-     *
-     * @return a <code>ModbusResponse</code> value
-     *
-     * @throws ModbusIOException if an error occurs
-     */
+    @Override
     public ModbusResponse readResponse() throws ModbusIOException {
         notifyListenersBeforeResponse();
         ModbusResponse res = readResponseIn();
@@ -160,13 +139,15 @@ public abstract class ModbusSerialTransport extends AbstractModbusTransport {
     /**
      * The <code>readRequest</code> method listens continuously on the serial
      * input stream for master request messages and replies if the request slave
-     * ID matches its own set in ModbusCoupler.getUnitID().
+     * ID matches its own set in process image
+     *
+     * @param listener Listener that received this request
      *
      * @return a <code>ModbusRequest</code> value
      *
      * @throws ModbusIOException if an error occurs
      */
-    abstract protected ModbusRequest readRequestIn() throws ModbusIOException;
+    abstract protected ModbusRequest readRequestIn(AbstractModbusListener listener) throws ModbusIOException;
 
     /**
      * <code>readResponse</code> reads a response message from the slave
@@ -391,6 +372,7 @@ public abstract class ModbusSerialTransport extends AbstractModbusTransport {
      * @param bytesToWrite Number of bytes to write
      *
      * @return Number of bytes written
+     * @throws java.io.IOException if writing to invalid port
      */
     protected final int writeBytes(byte[] buffer, long bytesToWrite) throws IOException {
         if (commPort != null && commPort.isOpen()) {
@@ -519,7 +501,7 @@ public abstract class ModbusSerialTransport extends AbstractModbusTransport {
     /**
      * Closes the comms port and any streams associated with it
      *
-     * @throws IOException
+     * @throws IOException Comm port close failed
      */
     public void close() throws IOException {
         commPort.closePort();

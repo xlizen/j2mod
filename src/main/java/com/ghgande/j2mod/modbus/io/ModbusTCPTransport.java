@@ -20,6 +20,7 @@ import com.ghgande.j2mod.modbus.ModbusIOException;
 import com.ghgande.j2mod.modbus.msg.ModbusMessage;
 import com.ghgande.j2mod.modbus.msg.ModbusRequest;
 import com.ghgande.j2mod.modbus.msg.ModbusResponse;
+import com.ghgande.j2mod.modbus.net.AbstractModbusListener;
 import com.ghgande.j2mod.modbus.net.TCPMasterConnection;
 import com.ghgande.j2mod.modbus.util.ModbusUtil;
 import org.slf4j.Logger;
@@ -145,12 +146,13 @@ public class ModbusTCPTransport extends AbstractModbusTransport {
     }
 
     /**
-     * Writes a <tt<ModbusMessage</tt> to the
+     * Writes a <tt>ModbusMessage</tt> to the
      * output stream of this <tt>ModbusTransport</tt>.
-     * <p/>
+     * <p>
      *
      * @param msg           a <tt>ModbusMessage</tt>.
      * @param useRtuOverTcp True if the RTU protocol should be used over TCP
+     *
      * @throws ModbusIOException data cannot be
      *                           written properly to the raw output stream of
      *                           this <tt>ModbusTransport</tt>.
@@ -209,7 +211,7 @@ public class ModbusTCPTransport extends AbstractModbusTransport {
      * @throws ModbusIOException
      */
     @Override
-    public ModbusRequest readRequest() throws ModbusIOException {
+    public ModbusRequest readRequest(AbstractModbusListener listener) throws ModbusIOException {
 
         ModbusRequest req;
         try {
