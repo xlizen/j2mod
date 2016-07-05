@@ -63,7 +63,7 @@ public abstract class AbstractModbusTransport {
     public abstract ModbusTransaction createTransaction();
 
     /**
-     * Writes a <tt<ModbusMessage</tt> to the
+     * Writes a <tt>ModbusMessage</tt> to the
      * output stream of this <tt>ModbusTransport</tt>.
      * <p>
      *
@@ -77,7 +77,7 @@ public abstract class AbstractModbusTransport {
 
     /**
      * Reads a <tt>ModbusRequest</tt> from the
-     * input stream of this <tt>ModbusTransport<tt>.
+     * input stream of this <tt>ModbusTransport</tt>.
      * <p>
      *
      * @param listener Listener the request was received by
@@ -92,7 +92,7 @@ public abstract class AbstractModbusTransport {
 
     /**
      * Reads a <tt>ModbusResponse</tt> from the
-     * input stream of this <tt>ModbusTransport<tt>.
+     * input stream of this <tt>ModbusTransport</tt>.
      * <p>
      *
      * @return res the <tt>ModbusResponse</tt> read from the underlying stream.

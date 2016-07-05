@@ -348,6 +348,7 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
      * readResponse - Read the bytes for the response from the slave.
      *
      * @return a <tt>ModbusRespose</tt>
+     * @throws com.ghgande.j2mod.modbus.ModbusIOException
      */
     protected ModbusResponse readResponseIn() throws ModbusIOException {
         boolean done;

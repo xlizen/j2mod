@@ -72,6 +72,7 @@ public final class ReadMEIResponse extends ModbusResponse {
 
     /**
      * Returns the array of strings that were read
+     * @return 
      */
     public synchronized String[] getFields() {
         String[] dest = new String[fields.length];

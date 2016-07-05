@@ -111,6 +111,7 @@ public final class ReadMEIRequest extends ModbusRequest {
 
     /**
      * Gets the MEI subcode associated with this request.
+     * @return 
      */
     public int getSubCode() {
         return subCode;

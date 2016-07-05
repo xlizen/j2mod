@@ -64,7 +64,6 @@ public class ModbusSerialTransaction extends ModbusTransaction {
      * Constructs a new <tt>ModbusSerialTransaction</tt>
      * instance with a given <tt>ModbusRequest</tt> to
      * be send when the transaction is executed.
-     * <p>
      *
      * @param con a <tt>TCPMasterConnection</tt> instance.
      */
@@ -74,8 +73,7 @@ public class ModbusSerialTransaction extends ModbusTransaction {
 
     /**
      * Sets the port on which this <tt>ModbusTransaction</tt>
-     * should be executed.<p>
-     * <p>
+     * should be executed.
      *
      * @param con a <tt>SerialConnection</tt>.
      */

@@ -146,7 +146,7 @@ public class ModbusTCPTransport extends AbstractModbusTransport {
     }
 
     /**
-     * Writes a <tt<ModbusMessage</tt> to the
+     * Writes a <tt>ModbusMessage</tt> to the
      * output stream of this <tt>ModbusTransport</tt>.
      * <p>
      *

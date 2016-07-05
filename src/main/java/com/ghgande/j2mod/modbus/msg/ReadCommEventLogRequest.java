@@ -47,6 +47,7 @@ public final class ReadCommEventLogRequest extends ModbusRequest {
 
     /**
      * createResponse -- create an empty response for this request.
+     * @return 
      */
     public ModbusResponse getResponse() {
         ReadCommEventLogResponse response;
@@ -74,6 +75,7 @@ public final class ReadCommEventLogRequest extends ModbusRequest {
 
     /**
      * writeData -- output this Modbus message to dout.
+     * @throws java.io.IOException
      */
     public void writeData(DataOutput dout) throws IOException {
         dout.write(getMessage());
@@ -81,13 +83,14 @@ public final class ReadCommEventLogRequest extends ModbusRequest {
 
     /**
      * readData -- dummy function.  There is no data with the request.
+     * @throws java.io.IOException
      */
     public void readData(DataInput din) throws IOException {
     }
 
     /**
-     * getMessage -- return an empty array as there is no data for
-     * this request.
+     * getMessage
+     * @return an empty array as there is no data for this request
      */
     public byte[] getMessage() {
 

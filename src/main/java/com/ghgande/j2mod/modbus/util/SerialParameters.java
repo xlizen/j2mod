@@ -63,7 +63,7 @@ public class SerialParameters {
     }
 
     /**
-     * Constructs a new <tt>SerialParameters<tt> instance with
+     * Constructs a new <tt>SerialParameters</tt> instance with
      * given parameters.
      *
      * @param portName       The name of the port.

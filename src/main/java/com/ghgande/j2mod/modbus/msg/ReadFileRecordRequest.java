@@ -66,7 +66,8 @@ public final class ReadFileRecordRequest extends ModbusRequest {
     }
 
     /**
-     * getRequestCount -- return the number of record requests in this message.
+     * getRequestCount
+     * @return the number of record requests in this message
      */
     public int getRequestCount() {
         if (records == null) {
@@ -77,7 +78,9 @@ public final class ReadFileRecordRequest extends ModbusRequest {
     }
 
     /**
-     * getRecord -- return the record request indicated by the reference
+     * getRecord
+     * @param index
+     * @return the record request indicated by the reference
      */
     public RecordRequest getRecord(int index) {
         return records[index];
@@ -85,6 +88,7 @@ public final class ReadFileRecordRequest extends ModbusRequest {
 
     /**
      * addRequest -- add a new record request.
+     * @param request
      */
     public void addRequest(RecordRequest request) {
         if (request.getRequestSize() + getRequestSize() > 248) {
@@ -107,6 +111,7 @@ public final class ReadFileRecordRequest extends ModbusRequest {
 
     /**
      * getResponse -- get an empty response for this message.
+     * @return 
      */
     public ModbusResponse getResponse() {
         ReadFileRecordResponse response;
@@ -178,6 +183,7 @@ public final class ReadFileRecordRequest extends ModbusRequest {
 
     /**
      * writeData -- output this Modbus message to dout.
+     * @throws java.io.IOException
      */
     public void writeData(DataOutput dout) throws IOException {
         dout.write(getMessage());
@@ -185,6 +191,7 @@ public final class ReadFileRecordRequest extends ModbusRequest {
 
     /**
      * readData -- read all the data for this request.
+     * @throws java.io.IOException
      */
     public void readData(DataInput din) throws IOException {
         int byteCount = din.readUnsignedByte();
@@ -210,7 +217,8 @@ public final class ReadFileRecordRequest extends ModbusRequest {
     }
 
     /**
-     * getMessage -- return the PDU message.
+     * getMessage
+     * @return the PDU message
      */
     public byte[] getMessage() {
         byte request[] = new byte[1 + 7 * records.length];
@@ -249,7 +257,8 @@ public final class ReadFileRecordRequest extends ModbusRequest {
         }
 
         /**
-         * getRequestSize -- return the size of the response in bytes.
+         * getRequestSize
+         * @return the size of the response in bytes
          */
         public int getRequestSize() {
             return 7 + wordCount * 2;

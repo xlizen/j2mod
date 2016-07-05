@@ -71,7 +71,7 @@ abstract public class AbstractModbusMaster {
 
     /**
      * Reads a given number of coil states from the slave.
-     * <p/>
+     *
      * Note that the number of bits in the bit vector will be
      * forced to the number originally requested.
      *
@@ -127,7 +127,7 @@ abstract public class AbstractModbusMaster {
 
     /**
      * Writes a given number of coil states to the slave.
-     * <p/>
+     *
      * Note that the number of coils to be written is given
      * implicitly, through {@link BitVector#size()}.
      *
@@ -152,7 +152,7 @@ abstract public class AbstractModbusMaster {
 
     /**
      * Reads a given number of input discrete states from the slave.
-     * <p/>
+     *
      * Note that the number of bits in the bit vector will be
      * forced to the number originally requested.
      *
@@ -183,7 +183,7 @@ abstract public class AbstractModbusMaster {
 
     /**
      * Reads a given number of input registers from the slave.
-     * <p/>
+     *
      * Note that the number of input registers returned (i.e. array length)
      * will be according to the number received in the slave response.
      *
@@ -211,7 +211,7 @@ abstract public class AbstractModbusMaster {
 
     /**
      * Reads a given number of registers from the slave.
-     * <p/>
+     *
      * Note that the number of registers returned (i.e. array length)
      * will be according to the number received in the slave response.
      *
@@ -285,7 +285,7 @@ abstract public class AbstractModbusMaster {
 
     /**
      * Reads a given number of coil states from the slave.
-     * <p/>
+     *
      * Note that the number of bits in the bit vector will be
      * forced to the number originally requested.
      *
@@ -319,7 +319,7 @@ abstract public class AbstractModbusMaster {
 
     /**
      * Writes a given number of coil states to the slave.
-     * <p/>
+     *
      * Note that the number of coils to be written is given
      * implicitly, through {@link BitVector#size()}.
      *
@@ -335,7 +335,7 @@ abstract public class AbstractModbusMaster {
 
     /**
      * Reads a given number of input discrete states from the slave.
-     * <p/>
+     *
      * Note that the number of bits in the bit vector will be
      * forced to the number originally requested.
      *
@@ -354,7 +354,7 @@ abstract public class AbstractModbusMaster {
 
     /**
      * Reads a given number of input registers from the slave.
-     * <p/>
+     *
      * Note that the number of input registers returned (i.e. array length)
      * will be according to the number received in the slave response.
      *
@@ -372,7 +372,7 @@ abstract public class AbstractModbusMaster {
 
     /**
      * Reads a given number of registers from the slave.
-     * <p/>
+     *
      * Note that the number of registers returned (i.e. array length)
      * will be according to the number received in the slave response.
      *
