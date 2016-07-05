@@ -16,6 +16,7 @@
 package com.ghgande.j2mod.modbus.msg;
 
 import com.ghgande.j2mod.modbus.Modbus;
+import com.ghgande.j2mod.modbus.net.AbstractModbusListener;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -73,7 +74,8 @@ public class IllegalFunctionRequest extends ModbusRequest {
         return response;
     }
 
-    public ModbusResponse createResponse() {
+    @Override
+    public ModbusResponse createResponse(AbstractModbusListener listener) {
         return createExceptionResponse(Modbus.ILLEGAL_FUNCTION_EXCEPTION);
     }
 

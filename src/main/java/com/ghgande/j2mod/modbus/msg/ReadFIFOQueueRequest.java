@@ -16,7 +16,7 @@
 package com.ghgande.j2mod.modbus.msg;
 
 import com.ghgande.j2mod.modbus.Modbus;
-import com.ghgande.j2mod.modbus.ModbusCoupler;
+import com.ghgande.j2mod.modbus.net.AbstractModbusListener;
 import com.ghgande.j2mod.modbus.procimg.IllegalAddressException;
 import com.ghgande.j2mod.modbus.procimg.InputRegister;
 import com.ghgande.j2mod.modbus.procimg.ProcessImage;
@@ -88,15 +88,13 @@ public final class ReadFIFOQueueRequest extends ModbusRequest {
         return response;
     }
 
-    /**
-     * Create a response using the named register as the queue length count.
-     */
-    public ModbusResponse createResponse() {
+    @Override
+    public ModbusResponse createResponse(AbstractModbusListener listener) {
         ReadFIFOQueueResponse response;
         InputRegister[] registers;
 
         // Get the process image.
-        ProcessImage procimg = ModbusCoupler.getReference().getProcessImage(getUnitID());
+        ProcessImage procimg = listener.getProcessImage(getUnitID());
 
         try {
             // Get the FIFO queue location and read the count of available

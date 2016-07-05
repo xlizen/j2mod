@@ -16,8 +16,8 @@
 package com.ghgande.j2mod.modbus.msg;
 
 import com.ghgande.j2mod.modbus.Modbus;
-import com.ghgande.j2mod.modbus.ModbusCoupler;
 import com.ghgande.j2mod.modbus.io.NonWordDataHandler;
+import com.ghgande.j2mod.modbus.net.AbstractModbusListener;
 import com.ghgande.j2mod.modbus.procimg.*;
 
 import java.io.DataInput;
@@ -109,13 +109,14 @@ public final class ReadWriteMultipleRequest extends ModbusRequest {
         return response;
     }
 
-    public ModbusResponse createResponse() {
+    @Override
+    public ModbusResponse createResponse(AbstractModbusListener listener) {
         ReadWriteMultipleResponse response;
         InputRegister[] readRegs;
         Register[] writeRegs;
 
         // 1. get process image
-        ProcessImage procimg = ModbusCoupler.getReference().getProcessImage(getUnitID());
+        ProcessImage procimg = listener.getProcessImage(getUnitID());
         // 2. get input registers range
         try {
             readRegs = procimg.getRegisterRange(getReadReference(), getReadWordCount());

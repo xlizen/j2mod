@@ -506,4 +506,14 @@ public final class ModbusUtil {
     public static boolean isBlank(List<Object> list) {
         return list == null || list.isEmpty();
     }
+
+    /**
+     * Return true if the array is null or empty
+     *
+     * @param list Array to check
+     * @return True if the array is blank or empty
+     */
+    public static boolean isBlank(Object[] list) {
+        return list == null || list.length == 0;
+    }
 }

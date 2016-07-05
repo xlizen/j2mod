@@ -27,8 +27,6 @@ import java.io.*;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -71,9 +69,9 @@ public class TestUtils {
 
         // Copy the native modpoll library to a temporary directory in the build workspace to facilitate
         // execution on some platforms.
-        File tmpDir = Files.createTempDirectory(Paths.get("."), "modpoll-").toFile();
+        File tmpDir = new File(new File("").getAbsolutePath(), "modpoll-" + System.currentTimeMillis());
+        tmpDir.mkdirs();
         tmpDir.deleteOnExit();
-
         File nativeFile = new File(tmpDir, exeName);
 
         // Copy the library to the temporary folder

@@ -16,7 +16,7 @@
 package com.ghgande.j2mod.modbus.msg;
 
 import com.ghgande.j2mod.modbus.Modbus;
-import com.ghgande.j2mod.modbus.ModbusCoupler;
+import com.ghgande.j2mod.modbus.net.AbstractModbusListener;
 import com.ghgande.j2mod.modbus.procimg.IllegalAddressException;
 import com.ghgande.j2mod.modbus.procimg.ProcessImage;
 import com.ghgande.j2mod.modbus.procimg.Register;
@@ -135,15 +135,12 @@ public final class MaskWriteRegisterRequest extends ModbusRequest {
         return response;
     }
 
-    /**
-     * The ModbusCoupler doesn't have a means of reporting the slave
-     * state or ID information.
-     */
-    public ModbusResponse createResponse() {
+    @Override
+    public ModbusResponse createResponse(AbstractModbusListener listener) {
         MaskWriteRegisterResponse response;
 
         // Get the process image.
-        ProcessImage procimg = ModbusCoupler.getReference().getProcessImage(getUnitID());
+        ProcessImage procimg = listener.getProcessImage(getUnitID());
         try {
             Register register = procimg.getRegister(reference);
 

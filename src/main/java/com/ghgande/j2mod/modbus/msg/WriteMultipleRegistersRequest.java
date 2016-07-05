@@ -16,8 +16,8 @@
 package com.ghgande.j2mod.modbus.msg;
 
 import com.ghgande.j2mod.modbus.Modbus;
-import com.ghgande.j2mod.modbus.ModbusCoupler;
 import com.ghgande.j2mod.modbus.io.NonWordDataHandler;
+import com.ghgande.j2mod.modbus.net.AbstractModbusListener;
 import com.ghgande.j2mod.modbus.procimg.IllegalAddressException;
 import com.ghgande.j2mod.modbus.procimg.ProcessImage;
 import com.ghgande.j2mod.modbus.procimg.Register;
@@ -87,7 +87,7 @@ public final class WriteMultipleRegistersRequest extends ModbusRequest {
      * <tt>WriteMultipleRegistersRequest</tt>.
      *
      * This method is used to create responses from the process image associated
-     * with the <tt>ModbusCoupler</tt>. It is commonly used to implement Modbus
+     * with the listener. It is commonly used to implement Modbus
      * slave instances.
      *
      * @return the corresponding ModbusResponse.
@@ -98,13 +98,14 @@ public final class WriteMultipleRegistersRequest extends ModbusRequest {
      * where the slave device has data which are not actually
      * <tt>short</tt> values in the range of registers being processed.
      */
-    public ModbusResponse createResponse() {
+    @Override
+    public ModbusResponse createResponse(AbstractModbusListener listener) {
         WriteMultipleRegistersResponse response;
 
         if (nonWordDataHandler == null) {
             Register[] regs;
             // 1. get process image
-            ProcessImage procimg = ModbusCoupler.getReference().getProcessImage(getUnitID());
+            ProcessImage procimg = listener.getProcessImage(getUnitID());
             // 2. get registers
             try {
                 regs = procimg.getRegisterRange(getReference(), getWordCount());

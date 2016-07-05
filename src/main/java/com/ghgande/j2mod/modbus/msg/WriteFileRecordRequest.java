@@ -16,8 +16,8 @@
 package com.ghgande.j2mod.modbus.msg;
 
 import com.ghgande.j2mod.modbus.Modbus;
-import com.ghgande.j2mod.modbus.ModbusCoupler;
 import com.ghgande.j2mod.modbus.msg.WriteFileRecordResponse.RecordResponse;
+import com.ghgande.j2mod.modbus.net.AbstractModbusListener;
 import com.ghgande.j2mod.modbus.procimg.*;
 
 import java.io.DataInput;
@@ -129,15 +129,13 @@ public final class WriteFileRecordRequest extends ModbusRequest {
         return response;
     }
 
-    /**
-     * The ModbusCoupler doesn't have a means of writing file records.
-     */
-    public ModbusResponse createResponse() {
+    @Override
+    public ModbusResponse createResponse(AbstractModbusListener listener) {
         WriteFileRecordResponse response;
         response = (WriteFileRecordResponse)getResponse();
 
         // Get the process image.
-        ProcessImage procimg = ModbusCoupler.getReference().getProcessImage(getUnitID());
+        ProcessImage procimg = listener.getProcessImage(getUnitID());
 
         // There is a list of requests to be resolved.
         try {

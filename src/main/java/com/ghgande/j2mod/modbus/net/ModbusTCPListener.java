@@ -120,7 +120,7 @@ public class ModbusTCPListener extends AbstractModbusListener {
                 Socket incoming = serverSocket.accept();
                 logger.debug("Making new connection {}", incoming.toString());
                 if (listening) {
-                    threadPool.execute(new TCPConnectionHandler(new TCPSlaveConnection(incoming)));
+                    threadPool.execute(new TCPConnectionHandler(this, new TCPSlaveConnection(incoming)));
                 }
                 else {
                     incoming.close();

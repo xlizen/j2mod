@@ -16,6 +16,7 @@
 package com.ghgande.j2mod.modbus.msg;
 
 import com.ghgande.j2mod.modbus.Modbus;
+import com.ghgande.j2mod.modbus.net.AbstractModbusListener;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -66,11 +67,8 @@ public final class ReadExceptionStatusRequest extends ModbusRequest {
         return response;
     }
 
-    /**
-     * The ModbusCoupler doesn't have a means of reporting the serial
-     * device exception status.
-     */
-    public ModbusResponse createResponse() {
+    @Override
+    public ModbusResponse createResponse(AbstractModbusListener listener) {
         return createExceptionResponse(Modbus.ILLEGAL_FUNCTION_EXCEPTION);
     }
 

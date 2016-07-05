@@ -16,8 +16,8 @@
 package com.ghgande.j2mod.modbus.msg;
 
 import com.ghgande.j2mod.modbus.Modbus;
-import com.ghgande.j2mod.modbus.ModbusCoupler;
 import com.ghgande.j2mod.modbus.msg.ReadFileRecordResponse.RecordResponse;
+import com.ghgande.j2mod.modbus.net.AbstractModbusListener;
 import com.ghgande.j2mod.modbus.procimg.*;
 
 import java.io.DataInput;
@@ -127,16 +127,13 @@ public final class ReadFileRecordRequest extends ModbusRequest {
         return response;
     }
 
-    /**
-     * The ModbusCoupler doesn't have a means of reporting the slave state or ID
-     * information.
-     */
-    public ModbusResponse createResponse() {
+    @Override
+    public ModbusResponse createResponse(AbstractModbusListener listener) {
         ReadFileRecordResponse response;
         response = (ReadFileRecordResponse)getResponse();
 
         // Get the process image.
-        ProcessImage procimg = ModbusCoupler.getReference().getProcessImage(getUnitID());
+        ProcessImage procimg = listener.getProcessImage(getUnitID());
 
         // There is a list of requests to be resolved.
         try {

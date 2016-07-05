@@ -20,6 +20,7 @@ import com.ghgande.j2mod.modbus.ModbusIOException;
 import com.ghgande.j2mod.modbus.msg.ModbusMessage;
 import com.ghgande.j2mod.modbus.msg.ModbusRequest;
 import com.ghgande.j2mod.modbus.msg.ModbusResponse;
+import com.ghgande.j2mod.modbus.net.AbstractModbusListener;
 
 import java.io.IOException;
 
@@ -79,13 +80,15 @@ public abstract class AbstractModbusTransport {
      * input stream of this <tt>ModbusTransport<tt>.
      * <p>
      *
+     * @param listener Listener the request was received by
+     *
      * @return req the <tt>ModbusRequest</tt> read from the underlying stream.
      *
      * @throws ModbusIOException data cannot be
      *                           read properly from the raw input stream of
      *                           this <tt>ModbusTransport</tt>.
      */
-    public abstract ModbusRequest readRequest() throws ModbusIOException;
+    public abstract ModbusRequest readRequest(AbstractModbusListener listener) throws ModbusIOException;
 
     /**
      * Reads a <tt>ModbusResponse</tt> from the

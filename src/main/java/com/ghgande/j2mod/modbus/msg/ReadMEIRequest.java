@@ -16,6 +16,7 @@
 package com.ghgande.j2mod.modbus.msg;
 
 import com.ghgande.j2mod.modbus.Modbus;
+import com.ghgande.j2mod.modbus.net.AbstractModbusListener;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -103,11 +104,8 @@ public final class ReadMEIRequest extends ModbusRequest {
         return response;
     }
 
-    /**
-     * The ModbusCoupler interface doesn't have a method for defining MEI for a
-     * device.
-     */
-    public ModbusResponse createResponse() {
+    @Override
+    public ModbusResponse createResponse(AbstractModbusListener listener) {
         return createExceptionResponse(Modbus.ILLEGAL_FUNCTION_EXCEPTION);
     }
 
