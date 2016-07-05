@@ -117,7 +117,12 @@ public class ModbusTCPListener extends AbstractModbusListener {
             // parallel logins
             listening = true;
             while (listening) {
-                Socket incoming = serverSocket.accept();
+                Socket incoming;
+                try {
+                    incoming = serverSocket.accept();
+                } catch (SocketTimeoutException e) {
+                    continue;
+                }
                 logger.debug("Making new connection {}", incoming.toString());
                 if (listening) {
                     threadPool.execute(new TCPConnectionHandler(this, new TCPSlaveConnection(incoming)));
