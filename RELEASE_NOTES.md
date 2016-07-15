@@ -60,3 +60,6 @@
 * Fixed some javadoc errors - thanks jan
 * Timeout error on socket listener - thanks jan
 * Now allows for slaves to share same socket but different protocols
+
+## Version 2.2.1
+* Amend TCPMasterConnection socket handling #27 - thanks David
