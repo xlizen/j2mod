@@ -68,7 +68,7 @@ public final class ReadFIFOQueueRequest extends ModbusRequest {
 
     /**
      * getResponse -- create an empty response for this request.
-     * @return 
+     * @return A suitable response object
      */
     public ModbusResponse getResponse() {
         ReadFIFOQueueResponse response;

@@ -68,7 +68,7 @@ public final class ReadCommEventCounterResponse extends ModbusResponse {
 
     /**
      * getEvents -- get device's event counter.
-     * @return 
+     * @return Event count
      */
     public int getEventCount() {
         return events;
@@ -102,7 +102,7 @@ public final class ReadCommEventCounterResponse extends ModbusResponse {
 
     /**
      * getMessage -- format the message into a byte array.
-     * @return 
+     * @return Response as byte array
      */
     public byte[] getMessage() {
         byte result[] = new byte[4];

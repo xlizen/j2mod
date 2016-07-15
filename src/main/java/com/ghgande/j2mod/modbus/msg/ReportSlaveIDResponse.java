@@ -160,7 +160,7 @@ public final class ReportSlaveIDResponse extends ModbusResponse {
 
     /**
      * getMessage -- format the message into a byte array.
-     * @return 
+     * @return Byte array of message
      */
     public byte[] getMessage() {
         byte result[] = new byte[3 + m_length];

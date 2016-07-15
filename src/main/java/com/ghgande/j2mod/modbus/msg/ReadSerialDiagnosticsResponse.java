@@ -66,7 +66,7 @@ public final class ReadSerialDiagnosticsResponse extends ModbusResponse {
 
     /**
      * getWordCount -- get the number of words in data.
-     * @return 
+     * @return Number of words in the data
      */
     public int getWordCount() {
         return 1;
@@ -92,7 +92,7 @@ public final class ReadSerialDiagnosticsResponse extends ModbusResponse {
      * getData -- Get the data item at the index.
      *
      * @param index - Unused, must be 0.
-     * @return 
+     * @return Data at index 0
      *
      * @deprecated
      */

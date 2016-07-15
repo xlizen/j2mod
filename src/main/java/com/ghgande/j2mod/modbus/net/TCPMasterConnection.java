@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 
 /**
@@ -109,14 +110,21 @@ public class TCPMasterConnection {
         if (!isConnected()) {
             logger.debug("connect()");
 
-            socket = new Socket(address, port);
+            // Create a socket without auto-connecting
+
+            socket = new Socket();
             socket.setReuseAddress(true);
             socket.setSoLinger(true, 1);
             socket.setKeepAlive(true);
-
             setTimeout(timeout);
-            prepareTransport(useRtuOverTcp);
 
+            // Connect - only wait for the timeout number of milliseconds
+
+            socket.connect(new InetSocketAddress(address, port), timeout);
+
+            // Prepare the transport
+
+            prepareTransport(useRtuOverTcp);
             connected = true;
         }
     }
@@ -216,7 +224,7 @@ public class TCPMasterConnection {
     }
 
     /**
-     * Returns the timeout for this <tt>TCPMasterConnection</tt>.
+     * Returns the timeout (msec) for this <tt>TCPMasterConnection</tt>.
      *
      * @return the timeout as <tt>int</tt>.
      */
@@ -225,10 +233,10 @@ public class TCPMasterConnection {
     }
 
     /**
-     * Sets the timeout for this <tt>TCPMasterConnection</tt>.
+     * Sets the timeout (msec) for this <tt>TCPMasterConnection</tt>. This is both the
+     * connection timeout and the transaction timeout
      *
-     * @param timeout -
-     *                the timeout in milliseconds as an <tt>int</tt>.
+     * @param timeout - the timeout in milliseconds as an <tt>int</tt>.
      */
     public synchronized void setTimeout(int timeout) {
         try {

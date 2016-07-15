@@ -111,7 +111,7 @@ public final class ReadFileRecordRequest extends ModbusRequest {
 
     /**
      * getResponse -- get an empty response for this message.
-     * @return 
+     * @return Byte array of message
      */
     public ModbusResponse getResponse() {
         ReadFileRecordResponse response;

@@ -81,16 +81,16 @@ public final class WriteFileRecordRequest extends ModbusRequest {
 
     /**
      * getRecord -- return the record request indicated by the reference
-     * @param index
+     * @param reference Register reference
      * @return the record request indicated by the reference
      */
-    public RecordRequest getRecord(int index) {
-        return records[index];
+    public RecordRequest getRecord(int reference) {
+        return records[reference];
     }
 
     /**
      * addRequest -- add a new record request.
-     * @param request
+     * @param request Request record
      */
     public void addRequest(RecordRequest request) {
         if (request.getRequestSize() + getRequestSize() > 248) {
@@ -113,7 +113,7 @@ public final class WriteFileRecordRequest extends ModbusRequest {
 
     /**
      * createResponse -- create an empty response for this request.
-     * @return 
+     * @return Byte array of message
      */
     public ModbusResponse getResponse() {
         WriteFileRecordResponse response;

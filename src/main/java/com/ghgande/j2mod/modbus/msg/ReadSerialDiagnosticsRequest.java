@@ -67,7 +67,7 @@ public final class ReadSerialDiagnosticsRequest extends ModbusRequest {
 
     /**
      * getWordCount -- get the number of words in data.
-     * @return 
+     * @return Number of words in the data
      */
     public int getWordCount() {
         return 1;
@@ -93,7 +93,7 @@ public final class ReadSerialDiagnosticsRequest extends ModbusRequest {
      * getData -- Get the data item at the index.
      *
      * @param index - Unused, must be 0.
-     * @return 
+     * @return Data at index 0
      *
      * @deprecated
      */
@@ -121,7 +121,7 @@ public final class ReadSerialDiagnosticsRequest extends ModbusRequest {
 
     /**
      * createResponse -- create an empty response for this request.
-     * @return 
+     * @return Empty response
      */
     public ModbusResponse getResponse() {
         ReadSerialDiagnosticsResponse response;
@@ -169,7 +169,7 @@ public final class ReadSerialDiagnosticsRequest extends ModbusRequest {
 
     /**
      * getMessage -- Create the DIAGNOSTICS message paylaod.
-     * @return 
+     * @return Response as byte array
      */
     public byte[] getMessage() {
         byte result[] = new byte[4];
