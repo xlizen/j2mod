@@ -117,7 +117,7 @@ public final class MaskWriteRegisterResponse
 
     /**
      * getMessage -- format the message into a byte array.
-     * @return 
+     * @return Byte array of the message
      */
     public byte[] getMessage() {
         byte results[] = new byte[6];

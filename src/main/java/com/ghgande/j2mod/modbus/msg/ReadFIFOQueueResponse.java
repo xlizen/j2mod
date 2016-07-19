@@ -138,7 +138,7 @@ public final class ReadFIFOQueueResponse extends ModbusResponse {
 
     /**
      * getMessage -- format the message into a byte array.
-     * @return 
+     * @return Byte array of message
      */
     public byte[] getMessage() {
         byte result[] = new byte[count * 2 + 4];

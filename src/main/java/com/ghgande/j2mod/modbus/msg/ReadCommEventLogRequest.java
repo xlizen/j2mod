@@ -47,7 +47,7 @@ public final class ReadCommEventLogRequest extends ModbusRequest {
 
     /**
      * createResponse -- create an empty response for this request.
-     * @return 
+     * @return Empty response object
      */
     public ModbusResponse getResponse() {
         ReadCommEventLogResponse response;

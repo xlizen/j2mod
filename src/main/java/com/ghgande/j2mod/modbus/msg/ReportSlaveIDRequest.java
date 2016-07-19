@@ -47,7 +47,7 @@ public final class ReportSlaveIDRequest extends ModbusRequest {
 
     /**
      * createResponse -- create an empty response for this request.
-     * @return 
+     * @return Byte array of message
      */
     public ModbusResponse getResponse() {
         ReportSlaveIDResponse response;

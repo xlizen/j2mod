@@ -95,7 +95,7 @@ public final class ReadWriteMultipleRequest extends ModbusRequest {
 
     /**
      * createResponse -- create an empty response for this request.
-     * @return 
+     * @return Empty response object
      */
     public ModbusResponse getResponse() {
         ReadWriteMultipleResponse response;

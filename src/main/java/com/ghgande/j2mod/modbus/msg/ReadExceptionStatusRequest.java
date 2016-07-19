@@ -47,7 +47,7 @@ public final class ReadExceptionStatusRequest extends ModbusRequest {
 
     /**
      * createResponse -- create an empty response for this request.
-     * @return 
+     * @return Empty response
      */
     public ModbusResponse getResponse() {
         ReadExceptionStatusResponse response;

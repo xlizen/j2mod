@@ -189,7 +189,7 @@ public abstract class ModbusMessageImpl implements ModbusMessage {
 
     /**
      * The actual packet size, plus any CRC or header, will be returned.
-     *
+     * 
      * @return the actual packet size in bytes
      */
     public int getOutputLength() {
