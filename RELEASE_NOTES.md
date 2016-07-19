@@ -62,4 +62,4 @@
 * Now allows for slaves to share same socket but different protocols
 
 ## Version 2.2.1
-* Amend TCPMasterConnection socket handling #27 - thanks David
+* Amend TCPMasterConnection socket timeout handling #27 - thanks David
