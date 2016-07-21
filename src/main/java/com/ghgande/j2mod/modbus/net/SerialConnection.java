@@ -122,8 +122,12 @@ public class SerialConnection {
         // Check to make sure sPort has reference to avoid a NPE.
         if (serialPort != null) {
             try {
-                transport.close();
-                inputStream.close();
+                if (transport != null) {
+                    transport.close();
+                }
+                if (inputStream != null) {
+                    inputStream.close();
+                }
             }
             catch (IOException e) {
                 logger.debug(e.getMessage());
