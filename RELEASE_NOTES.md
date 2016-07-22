@@ -63,3 +63,6 @@
 
 ## Version 2.2.1
 * Amend TCPMasterConnection socket timeout handling #27 - thanks David
+
+## Version 2.2.2
+* Fixed NPE in close method of SerialConnection if Comms port was never successfully opened
