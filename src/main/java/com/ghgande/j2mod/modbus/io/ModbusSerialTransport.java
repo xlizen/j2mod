@@ -21,6 +21,7 @@ import com.ghgande.j2mod.modbus.msg.ModbusMessage;
 import com.ghgande.j2mod.modbus.msg.ModbusRequest;
 import com.ghgande.j2mod.modbus.msg.ModbusResponse;
 import com.ghgande.j2mod.modbus.net.AbstractModbusListener;
+import com.ghgande.j2mod.modbus.net.AbstractSerialConnection;
 import com.ghgande.j2mod.modbus.util.ModbusUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,7 +53,7 @@ public abstract class ModbusSerialTransport extends AbstractModbusTransport {
      */
     public static final int FRAME_END = 2000;
 
-    protected SerialPort commPort;
+    protected AbstractSerialConnection commPort;
     protected boolean echo = false;     // require RS-485 echo processing
     private final Set<AbstractSerialTransportListener> listeners = Collections.synchronizedSet(new HashSet<AbstractSerialTransportListener>());
 
@@ -72,6 +73,7 @@ public abstract class ModbusSerialTransport extends AbstractModbusTransport {
         open();
         notifyListenersBeforeWrite(msg);
         writeMessageOut(msg);
+        long startTime = System.nanoTime();
 
         // Wait here for the message to have been sent
 
@@ -80,7 +82,22 @@ public abstract class ModbusSerialTransport extends AbstractModbusTransport {
         double delayMilliSeconds = Math.floor(delay / 1000000);
         double delayNanoSeconds = delay % 1000000;
         try {
-            Thread.sleep((int)delayMilliSeconds, (int)delayNanoSeconds);
+
+            // For delays less than a millisecond, we need to chew CPU cycles unfortunately
+            // There are some fiddle factors here to allow for some oddities in the hardware
+
+            if (delayMilliSeconds == 0.0) {
+                int priority = Thread.currentThread().getPriority();
+                Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
+                long end = startTime + ((int) (delayNanoSeconds * 1.3));
+                while (System.nanoTime() < end) {
+                    // noop
+                }
+                Thread.currentThread().setPriority(priority);
+            }
+            else {
+                Thread.sleep((int) (delayMilliSeconds * 1.4), (int) delayNanoSeconds);
+            }
         }
         catch (Exception e) {
             logger.debug("nothing to do");
@@ -112,7 +129,7 @@ public abstract class ModbusSerialTransport extends AbstractModbusTransport {
     private void open() throws ModbusIOException {
         if (commPort != null && !commPort.isOpen()) {
             setTimeout(timeout);
-            if (!commPort.openPort()) {
+            if (!commPort.open()) {
                 throw new ModbusIOException(String.format("Cannot open port %s", commPort.getDescriptivePortName()));
             }
         }
@@ -122,7 +139,7 @@ public abstract class ModbusSerialTransport extends AbstractModbusTransport {
     public void setTimeout(int time) {
         super.setTimeout(time);
         if (commPort != null) {
-            commPort.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING, timeout, 0);
+            commPort.setComPortTimeouts(AbstractSerialConnection.TIMEOUT_READ_BLOCKING, timeout, 0);
         }
     }
 
@@ -270,7 +287,7 @@ public abstract class ModbusSerialTransport extends AbstractModbusTransport {
      *
      * @throws IOException if an I/O related error occurs.
      */
-    public void setCommPort(SerialPort cp) throws IOException {
+    public void setCommPort(AbstractSerialConnection cp) throws IOException {
         commPort = cp;
         setTimeout(timeout);
     }
@@ -451,7 +468,12 @@ public abstract class ModbusSerialTransport extends AbstractModbusTransport {
                 buffer = ModbusUtil.toHex(value);
                 logger.debug("Wrote byte {}={}", value, ModbusUtil.toHex(value));
             }
-            return commPort.writeBytes(buffer, buffer.length);
+            if (buffer != null) {
+                return commPort.writeBytes(buffer, buffer.length);
+            }
+            else {
+                throw new IOException("Message to send is empty");
+            }
         }
         else {
             throw new IOException("Comm port is not valid or not open");
@@ -504,7 +526,7 @@ public abstract class ModbusSerialTransport extends AbstractModbusTransport {
      * @throws IOException Comm port close failed
      */
     public void close() throws IOException {
-        commPort.closePort();
+        commPort.close();
     }
 
 }

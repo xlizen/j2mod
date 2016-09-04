@@ -42,7 +42,7 @@ public class TestModbusTCPMasterTimeout extends AbstractTestModbusTCPMaster {
         }
         catch (Exception e) {
             long time = System.currentTimeMillis() - start;
-            assertTrue(String.format("Timeout is not respected [%d] should be approximately 1000", time), time > 1000 && time < 1200);
+            assertTrue(String.format("Timeout is not respected [%d] should be approximately 1000", time), time >= 1000 && time < 1200);
         }
     }
 
