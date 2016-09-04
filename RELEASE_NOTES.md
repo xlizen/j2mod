@@ -67,5 +67,6 @@
 ## Version 2.2.2
 * Fixed NPE in close method of SerialConnection if Comms port was never successfully opened
 
-## Version 2.2.3
+## Version 2.3.0
 * Adjusted write timers with fiddle factors to allow for idiosyncratic hardware
+* jSerialComm library decoupled from implementation #28 - thanks Felipe
