@@ -66,3 +66,6 @@
 
 ## Version 2.2.2
 * Fixed NPE in close method of SerialConnection if Comms port was never successfully opened
+
+## Version 2.2.3
+* Adjusted write timers with fiddle factors to allow for idiosyncratic hardware

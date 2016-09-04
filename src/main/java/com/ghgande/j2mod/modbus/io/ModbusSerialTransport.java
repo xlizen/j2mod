@@ -72,15 +72,30 @@ public abstract class ModbusSerialTransport extends AbstractModbusTransport {
         open();
         notifyListenersBeforeWrite(msg);
         writeMessageOut(msg);
+        long startTime = System.nanoTime();
 
         // Wait here for the message to have been sent
 
-        double bytesPerSec = commPort.getBaudRate() / (commPort.getNumDataBits() + commPort.getNumStopBits() + (commPort.getParity() == SerialPort.NO_PARITY ? 0 : 1));
-        double delay = 1000000000.0 * msg.getOutputLength() / bytesPerSec;
-        double delayMilliSeconds = Math.floor(delay / 1000000);
-        double delayNanoSeconds = delay % 1000000;
+        double bytesPerSec = (double) commPort.getBaudRate() / (commPort.getNumDataBits() + commPort.getNumStopBits() + (commPort.getParity() == SerialPort.NO_PARITY ? 0 : 1));
+        double delay = (1000000000.0 * msg.getOutputLength()) / bytesPerSec;
+        double delayMilliSeconds = Math.floor(delay / 1000000.0);
+        double delayNanoSeconds = delay % 1000000.0;
         try {
-            Thread.sleep((int)delayMilliSeconds, (int)delayNanoSeconds);
+
+            // For delays less than a millisecond, we need to chew CPU cycles unfortunately
+            // There are some fiddle factors here to allow for some oddities in the hardware
+
+            if (delayMilliSeconds == 0.0) {
+                int priority = Thread.currentThread().getPriority();
+                Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
+                long end = startTime + ((int) (delayNanoSeconds * 1.3));
+                while (System.nanoTime() < end) {
+                }
+                Thread.currentThread().setPriority(priority);
+            }
+            else {
+                Thread.sleep((int) (delayMilliSeconds * 1.4), (int) delayNanoSeconds);
+            }
         }
         catch (Exception e) {
             logger.debug("nothing to do");
