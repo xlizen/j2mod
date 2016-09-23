@@ -271,7 +271,9 @@ public class ModbusTCPTransport extends AbstractModbusTransport {
                     // proper error correction and recovery.
 
                     dataInputStream.readShort();
-                    logger.debug("Read: {}", req.getHexMessage());
+                    if (logger.isDebugEnabled()) {
+                        logger.debug("Read: {}", req.getHexMessage());
+                    }
                 }
             }
             return req;

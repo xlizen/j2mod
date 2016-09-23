@@ -70,3 +70,6 @@
 ## Version 2.3.0
 * Adjusted write timers with fiddle factors to allow for idiosyncratic hardware
 * jSerialComm library decoupled from implementation #28 - thanks Felipe
+
+## Version 2.3.1
+* Length of ReadWriteMultipleResponse indicates 1 byte too much? #31
