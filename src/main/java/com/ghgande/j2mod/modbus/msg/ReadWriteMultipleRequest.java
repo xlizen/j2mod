@@ -124,22 +124,22 @@ public final class ReadWriteMultipleRequest extends ModbusRequest {
 
         // 1. get process image
         ProcessImage procimg = listener.getProcessImage(getUnitID());
+
         // 2. get input registers range
         try {
-            readRegs = procimg.getRegisterRange(getReadReference(), getReadWordCount());
+            // First the write
+            writeRegs = procimg.getRegisterRange(getWriteReference(), getWriteWordCount());
+            for (int i = 0; i < writeRegs.length; i++) {
+                writeRegs[i].setValue(getRegister(i).getValue());
+            }
 
+            // And then the read
+            readRegs = procimg.getRegisterRange(getReadReference(), getReadWordCount());
             InputRegister[] dummy = new InputRegister[readRegs.length];
             for (int i = 0; i < readRegs.length; i++) {
                 dummy[i] = new SimpleInputRegister(readRegs[i].getValue());
             }
-
             readRegs = dummy;
-
-            writeRegs = procimg.getRegisterRange(getWriteReference(), getWriteWordCount());
-
-            for (int i = 0; i < writeRegs.length; i++) {
-                writeRegs[i].setValue(getRegister(i).getValue());
-            }
         }
         catch (IllegalAddressException e) {
             return createExceptionResponse(Modbus.ILLEGAL_ADDRESS_EXCEPTION);
@@ -149,7 +149,6 @@ public final class ReadWriteMultipleRequest extends ModbusRequest {
 
         return response;
     }
-
     /**
      * getReadReference - Returns the reference of the register to start writing
      * to with this <tt>ReadWriteMultipleRequest</tt>.
