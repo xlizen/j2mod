@@ -74,3 +74,4 @@
 ## Version 2.3.1
 * Length of ReadWriteMultipleResponse indicates 1 byte too much? #31 - thanks elasticoder
 * Function code 0x17 first performs a read and then the write. #32 - thanks elasticoder
+* Double socket creation in ModbusTCP. #33 - thanks stoorm5
