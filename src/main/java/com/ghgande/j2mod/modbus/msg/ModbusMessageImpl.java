@@ -99,7 +99,7 @@ public abstract class ModbusMessageImpl implements ModbusMessage {
      *
      * <p>
      * Note that this library, a bit in contrast to the specification, counts
-     * the unit identifier and the function code to the header, because it is
+     * the unit identifier and the function code in the header, because it is
      * part of each and every message. Thus this method will add two (2) to the
      * passed in integer value.
      *

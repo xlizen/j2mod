@@ -58,7 +58,7 @@ public final class ReadInputRegistersResponse extends ModbusResponse {
         setFunctionCode(Modbus.READ_INPUT_REGISTERS);
         setDataLength(registers.length * 2 + 1);
 
-        byteCount = registers.length * 2 + 1;
+        byteCount = registers.length * 2;
         this.registers = registers;
     }
 
@@ -83,10 +83,10 @@ public final class ReadInputRegistersResponse extends ModbusResponse {
 
     /**
      * Set the number of words to be written.
-     * @param count
+     * @param count Number of words in response
      */
     public void setWordCount(int count) {
-        byteCount = count * 2 + 1;
+        byteCount = count * 2;
     }
 
     /**
@@ -139,11 +139,11 @@ public final class ReadInputRegistersResponse extends ModbusResponse {
 
     /**
      * Sets the entire block of registers for this response
-     * @param registers
+     * @param registers Array of registers
      */
     public void setRegisters(InputRegister[] registers) {
         setDataLength(registers.length * 2 + 1);
-        byteCount = registers.length * 2 + 1;
+        byteCount = registers.length * 2;
         this.registers = registers;
     }
 
@@ -164,7 +164,7 @@ public final class ReadInputRegistersResponse extends ModbusResponse {
         }
         this.registers = registers;
 
-        setDataLength(byteCount + 1);
+        setDataLength(byteCount);
     }
 
     public byte[] getMessage() {

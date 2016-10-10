@@ -94,7 +94,6 @@ public final class ModbusUtil {
             0x44, 0x84, 0x85, 0x45, 0x87, 0x47, 0x46, 0x86, 0x82, 0x42,
             0x43, 0x83, 0x41, 0x81, 0x80, 0x40
     };
-    private static BytesOutputStream byteOutputStream = new BytesOutputStream(Modbus.MAX_MESSAGE_LENGTH);
 
     /**
      * Converts a <tt>ModbusMessage</tt> instance into
@@ -105,15 +104,14 @@ public final class ModbusUtil {
      * @return the converted hex encoded string representation of the message.
      */
     public static String toHex(ModbusMessage msg) {
+        BytesOutputStream byteOutputStream = new BytesOutputStream(Modbus.MAX_MESSAGE_LENGTH);
         String ret = "-1";
         try {
-            synchronized (byteOutputStream) {
-                msg.writeTo(byteOutputStream);
-                ret = toHex(byteOutputStream.getBuffer(), 0, byteOutputStream.size());
-                byteOutputStream.reset();
-            }
+            msg.writeTo(byteOutputStream);
+            ret = toHex(byteOutputStream.getBuffer(), 0, byteOutputStream.size());
         }
         catch (IOException ex) {
+            logger.debug("Hex conversion error {}", ex);
         }
         return ret;
     }
@@ -138,20 +136,23 @@ public final class ModbusUtil {
      *
      * @param data   the array of bytes to be converted into a hex-string.
      * @param off    the offset to start converting from.
-     * @param length the number of bytes to be converted.
+     * @param end    the offset of the end of the byte array.
      *
      * @return the generated hexadecimal representation as <code>String</code>.
      */
-    public static String toHex(byte[] data, int off, int length) {
+    public static String toHex(byte[] data, int off, int end) {
         //double size, two bytes (hex range) for one byte
         StringBuilder buf = new StringBuilder(data.length * 2);
-        for (int i = off; i < length; i++) {
+        if (end > data.length) {
+            end = data.length;
+        }
+        for (int i = off; i < end; i++) {
             //don't forget the second hex digit
             if (((int)data[i] & 0xff) < 0x10) {
                 buf.append("0");
             }
             buf.append(Long.toString((int)data[i] & 0xff, 16).toUpperCase());
-            if (i < data.length - 1) {
+            if (i < end - 1) {
                 buf.append(" ");
             }
         }

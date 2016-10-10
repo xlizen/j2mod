@@ -48,7 +48,7 @@ public final class ReadWriteMultipleResponse extends ModbusResponse {
         setDataLength(registers.length * 2 + 1);
 
         this.registers = registers;
-        byteCount = registers.length * 2 + 1;
+        byteCount = registers.length * 2;
     }
 
     /**
@@ -63,7 +63,7 @@ public final class ReadWriteMultipleResponse extends ModbusResponse {
         setDataLength(count * 2 + 1);
 
         registers = new InputRegister[count];
-        byteCount = count * 2 + 1;
+        byteCount = count * 2;
     }
 
     /**
@@ -149,11 +149,11 @@ public final class ReadWriteMultipleResponse extends ModbusResponse {
 
     /**
      * Sets the entire block of registers for this response
-     * @param registers
+     * @param registers Array of registers
      */
     public void setRegisters(InputRegister[] registers) {
-        byteCount = registers.length * 2 + 1;
-        setDataLength(byteCount);
+        byteCount = registers.length * 2;
+        setDataLength(byteCount + 1);
 
         this.registers = registers;
     }

@@ -123,6 +123,10 @@ public class ModbusTCPTransport extends AbstractModbusTransport {
         }
     }
 
+    public void setMaster(TCPMasterConnection master) {
+        this.master = master;
+    }
+
     @Override
     public void close() throws IOException {
         dataInputStream.close();
@@ -271,7 +275,9 @@ public class ModbusTCPTransport extends AbstractModbusTransport {
                     // proper error correction and recovery.
 
                     dataInputStream.readShort();
-                    logger.debug("Read: {}", req.getHexMessage());
+                    if (logger.isDebugEnabled()) {
+                        logger.debug("Read: {}", req.getHexMessage());
+                    }
                 }
             }
             return req;

@@ -163,8 +163,10 @@ public abstract class AbstractModbusListener implements Runnable {
         else {
             response = request.createResponse(this);
         }
-        logger.debug("Request:{}", request.getHexMessage());
-        logger.debug("Response:{}", response.getHexMessage());
+        if (logger.isDebugEnabled()) {
+            logger.debug("Request:{}", request.getHexMessage());
+            logger.debug("Response:{}", response.getHexMessage());
+        }
 
         // Write the response
         transport.writeMessage(response);
