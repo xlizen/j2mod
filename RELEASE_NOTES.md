@@ -78,3 +78,4 @@
 
 ## Version 2.3.2
 * Increased maximum queue length for incoming connections. #38 - thanks martentamerius
+* Incorrect javadoc for ModbusSlaveFactory #35 - thanks bertrik

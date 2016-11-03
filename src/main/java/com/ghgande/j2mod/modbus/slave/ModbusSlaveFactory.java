@@ -27,8 +27,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Class that implements a <tt>ModbusIOException</tt>. Instances of this
- * exception are thrown when errors in the I/O occur.
+ * This is a factory class that allows users to easily create and manages slaves.<br>
+ * Each slave is uniquely identified by the port it is listening on, irrespective of if
+ * the socket type (TCP or UDP)
  *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
