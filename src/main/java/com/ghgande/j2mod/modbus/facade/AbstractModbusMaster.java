@@ -95,7 +95,7 @@ abstract public class AbstractModbusMaster {
         readCoilsRequest.setBitCount(count);
         transaction.setRequest(readCoilsRequest);
         transaction.execute();
-        BitVector bv = ((ReadCoilsResponse)getAndCheckResponse()).getCoils();
+        BitVector bv = ((ReadCoilsResponse) getAndCheckResponse()).getCoils();
         bv.forceSize(count);
         return bv;
     }
@@ -122,7 +122,7 @@ abstract public class AbstractModbusMaster {
         writeCoilRequest.setCoil(state);
         transaction.setRequest(writeCoilRequest);
         transaction.execute();
-        return ((WriteCoilResponse)getAndCheckResponse()).getCoil();
+        return ((WriteCoilResponse) getAndCheckResponse()).getCoil();
     }
 
     /**
@@ -206,7 +206,7 @@ abstract public class AbstractModbusMaster {
         readInputRegistersRequest.setWordCount(count);
         transaction.setRequest(readInputRegistersRequest);
         transaction.execute();
-        return ((ReadInputRegistersResponse)getAndCheckResponse()).getRegisters();
+        return ((ReadInputRegistersResponse) getAndCheckResponse()).getRegisters();
     }
 
     /**
@@ -234,7 +234,7 @@ abstract public class AbstractModbusMaster {
         readMultipleRegistersRequest.setWordCount(count);
         transaction.setRequest(readMultipleRegistersRequest);
         transaction.execute();
-        return ((ReadMultipleRegistersResponse)getAndCheckResponse()).getRegisters();
+        return ((ReadMultipleRegistersResponse) getAndCheckResponse()).getRegisters();
     }
 
     /**
@@ -459,6 +459,30 @@ abstract public class AbstractModbusMaster {
      */
     public void setTimeout(int timeout) {
         this.timeout = timeout;
+    }
+
+    /**
+     * Set the amount of retries for opening
+     * the connection for executing the transaction.
+     *
+     * @param retries the amount of retries as <tt>int</tt>.
+     */
+    public void setRetries(int retries) {
+        if (transaction != null) {
+            transaction.setRetries(retries);
+        }
+    }
+
+    /**
+     * Sets the flag that controls whether the
+     * validity of a transaction will be checked.
+     *
+     * @param b true if checking validity, false otherwise.
+     */
+    public void setCheckingValidity(boolean b) {
+        if (transaction != null) {
+            transaction.setCheckingValidity(b);
+        }
     }
 
     /**
