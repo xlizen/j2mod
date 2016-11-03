@@ -422,7 +422,7 @@ abstract public class AbstractModbusMaster {
      *
      * @return Modbus response
      *
-     * @throws ModbusException
+     * @throws ModbusException If response is null
      */
     private ModbusResponse getAndCheckResponse() throws ModbusException {
         ModbusResponse res = transaction.getResponse();
@@ -435,7 +435,7 @@ abstract public class AbstractModbusMaster {
     /**
      * Checks to make sure there is a transaction to use
      *
-     * @throws ModbusException
+     * @throws ModbusException If transaction is null
      */
     private void checkTransaction() throws ModbusException {
         if (transaction == null) {
@@ -467,7 +467,5 @@ abstract public class AbstractModbusMaster {
      * @return ModbusTransport
      */
     public abstract AbstractModbusTransport getTransport();
-
-
 
 }
