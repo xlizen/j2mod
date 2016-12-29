@@ -80,3 +80,4 @@
 * Increased maximum queue length for incoming connections. #38 - thanks martentamerius
 * Incorrect javadoc for ModbusSlaveFactory #35 - thanks bertrik
 * Adds setRetries and setCheckingValidity services into ModbusTCPMaster #30 - thanks ericauguie
+* Added RTU over TCP #43 - thanks eli-mcgowan
