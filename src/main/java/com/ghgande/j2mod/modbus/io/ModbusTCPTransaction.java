@@ -129,6 +129,7 @@ public class ModbusTCPTransaction extends ModbusTransaction {
         // is read immediately after being written, with no flushing of buffers.
         int retryCounter = 0;
         int retryLimit = (retries > 0 ? retries : 1);
+        transport.setTimeout(connection.getTimeout());
 
         while (retryCounter < retryLimit) {
             try {
