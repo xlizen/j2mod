@@ -128,8 +128,10 @@ public class SerialConnection extends AbstractSerialConnection {
         // Set connection parameters, if set fails return parameters object
         // to original state
 
-        serialPort.setComPortParameters(parameters.getBaudRate(), parameters.getDatabits(), parameters.getStopbits(), parameters.getParity());
-        serialPort.setFlowControl(parameters.getFlowControlIn() | parameters.getFlowControlOut());
+        if (serialPort != null) {
+            serialPort.setComPortParameters(parameters.getBaudRate(), parameters.getDatabits(), parameters.getStopbits(), parameters.getParity());
+            serialPort.setFlowControl(parameters.getFlowControlIn() | parameters.getFlowControlOut());
+        }
     }
 
     @Override
@@ -218,6 +220,8 @@ public class SerialConnection extends AbstractSerialConnection {
 
     @Override
     public void setComPortTimeouts(int newTimeoutMode, int newReadTimeout, int newWriteTimeout) {
-        serialPort.setComPortTimeouts(newTimeoutMode, newReadTimeout, newWriteTimeout);
+        if (serialPort != null) {
+            serialPort.setComPortTimeouts(newTimeoutMode, newReadTimeout, newWriteTimeout);
+        }
     }
 }
