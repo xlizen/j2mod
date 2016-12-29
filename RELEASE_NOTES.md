@@ -81,3 +81,4 @@
 * Incorrect javadoc for ModbusSlaveFactory #35 - thanks bertrik
 * Adds setRetries and setCheckingValidity services into ModbusTCPMaster #30 - thanks ericauguie
 * Added RTU over TCP #43 - thanks eli-mcgowan
+* Fixed setting timeout of TCPMaster does not get applied to transactions #41
