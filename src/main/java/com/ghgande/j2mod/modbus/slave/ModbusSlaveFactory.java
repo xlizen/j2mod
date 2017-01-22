@@ -45,6 +45,7 @@ public class ModbusSlaveFactory {
      * @param port     Port to listen on
      * @param poolSize Pool size of listener threads
      * @return new or existing TCP modbus slave associated with the port
+     *
      * @throws ModbusException If a problem occurs e.g. port already in use
      */
     public static synchronized ModbusSlave createTCPSlave(int port, int poolSize) throws ModbusException {
@@ -78,6 +79,7 @@ public class ModbusSlaveFactory {
      *
      * @param port Port to listen on
      * @return new or existing UDP modbus slave associated with the port
+     *
      * @throws ModbusException If a problem occurs e.g. port already in use
      */
     public static synchronized ModbusSlave createUDPSlave(int port) throws ModbusException {
@@ -97,6 +99,7 @@ public class ModbusSlaveFactory {
      *
      * @param serialParams Serial parameters for serial type slaves
      * @return new or existing Serial modbus slave associated with the port
+     *
      * @throws ModbusException If a problem occurs e.g. port already in use
      */
     public static synchronized ModbusSlave createSerialSlave(SerialParameters serialParams) throws ModbusException {

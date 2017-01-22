@@ -101,9 +101,8 @@ public class TCPSlaveConnection {
      * Prepares the associated <tt>ModbusTransport</tt> of this
      * <tt>TCPMasterConnection</tt> for use.
      *
-     * @param socket the socket to be used for communication.
+     * @param socket        the socket to be used for communication.
      * @param useRtuOverTcp True if the RTU protocol should be used over TCP
-     *
      * @throws IOException if an I/O related error occurs.
      */
     private void setSocket(Socket socket, boolean useRtuOverTcp) throws IOException {

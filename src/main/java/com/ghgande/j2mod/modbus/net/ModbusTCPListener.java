@@ -24,7 +24,7 @@ import java.net.*;
 
 /**
  * Class that implements a ModbusTCPListener.
- *
+ * <p>
  * <p>
  * If listening, it accepts incoming requests passing them on to be handled.
  * If not listening, silently drops the requests.
