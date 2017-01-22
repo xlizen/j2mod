@@ -75,3 +75,11 @@
 * Length of ReadWriteMultipleResponse indicates 1 byte too much? #31 - thanks elasticoder
 * Function code 0x17 first performs a read and then the write. #32 - thanks elasticoder
 * Double socket creation in ModbusTCP. #33 - thanks stoorm5
+
+## Version 2.3.2
+* Increased maximum queue length for incoming connections. #38 - thanks martentamerius
+* Incorrect javadoc for ModbusSlaveFactory #35 - thanks bertrik
+* Adds setRetries and setCheckingValidity services into ModbusTCPMaster #30 - thanks ericauguie
+* Added RTU over TCP #43 - thanks eli-mcgowan
+* Fixed setting timeout of TCPMaster does not get applied to transactions #41
+* Reduce an NPE - Serial port connection #40

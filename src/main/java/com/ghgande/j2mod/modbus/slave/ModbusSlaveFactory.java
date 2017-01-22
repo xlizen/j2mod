@@ -27,8 +27,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Class that implements a <tt>ModbusIOException</tt>. Instances of this
- * exception are thrown when errors in the I/O occur.
+ * This is a factory class that allows users to easily create and manages slaves.<br>
+ * Each slave is uniquely identified by the port it is listening on, irrespective of if
+ * the socket type (TCP or UDP)
  *
  * @author Steve O'Hara (4energy)
  * @version 2.0 (March 2016)
@@ -47,12 +48,26 @@ public class ModbusSlaveFactory {
      * @throws ModbusException If a problem occurs e.g. port already in use
      */
     public static synchronized ModbusSlave createTCPSlave(int port, int poolSize) throws ModbusException {
+        return createTCPSlave(port, poolSize, false);
+    }
+
+    /**
+     * Creates a TCP modbus slave or returns the one already allocated to this port
+     *
+     * @param port          Port to listen on
+     * @param poolSize      Pool size of listener threads
+     * @param useRtuOverTcp True if the RTU protocol should be used over TCP
+     * @return new or existing TCP modbus slave associated with the port
+     *
+     * @throws ModbusException If a problem occurs e.g. port already in use
+     */
+    public static synchronized ModbusSlave createTCPSlave(int port, int poolSize, boolean useRtuOverTcp) throws ModbusException {
         String key = ModbusSlaveType.TCP.getKey(port);
         if (slaves.containsKey(key)) {
             return slaves.get(key);
         }
         else {
-            ModbusSlave slave = new ModbusSlave(port, poolSize);
+            ModbusSlave slave = new ModbusSlave(port, poolSize, useRtuOverTcp);
             slaves.put(key, slave);
             return slave;
         }
@@ -71,7 +86,7 @@ public class ModbusSlaveFactory {
             return slaves.get(key);
         }
         else {
-            ModbusSlave slave = new ModbusSlave(port);
+            ModbusSlave slave = new ModbusSlave(port, false);
             slaves.put(key, slave);
             return slave;
         }

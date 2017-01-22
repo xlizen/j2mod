@@ -129,6 +129,7 @@ public class ModbusTCPTransaction extends ModbusTransaction {
         // is read immediately after being written, with no flushing of buffers.
         int retryCounter = 0;
         int retryLimit = (retries > 0 ? retries : 1);
+        transport.setTimeout(connection.getTimeout());
 
         while (retryCounter < retryLimit) {
             try {
@@ -143,12 +144,17 @@ public class ModbusTCPTransaction extends ModbusTransaction {
                             logger.debug("expected {}, got {}", request.getTransactionID(), response.getTransactionID());
                         }
                     }
-                } while (response != null &&
-                        (!isCheckingValidity() || (request.getTransactionID() != 0 && request.getTransactionID() != response.getTransactionID())) &&
+                }
+                // We need to keep retrying if;
+                //   a) the response is empty or
+                //   b) we have been told to check the validity and the request/response transaction IDs don't match AND
+                //   c) we haven't exceeded the maximum retry count
+                while ((response == null ||
+                        (validityCheck && (request.getTransactionID() != 0 && request.getTransactionID() != response.getTransactionID()))) &&
                         ++retryCounter < retryLimit);
 
                 if (retryCounter >= retryLimit) {
-                    throw new ModbusIOException("Executing transaction failed (tried " + retries + " times)");
+                    throw new ModbusIOException("Executing transaction failed (tried {} times)", retryLimit);
                 }
 
                 // Both methods were successful, so the transaction must
@@ -167,7 +173,7 @@ public class ModbusTCPTransaction extends ModbusTransaction {
                 }
                 retryCounter++;
                 if (retryCounter >= retryLimit) {
-                    throw new ModbusIOException("Executing transaction failed (tried " + retries + " times)", ex);
+                    throw new ModbusIOException("Executing transaction failed (tried {}" + retryLimit + " times)", ex);
                 }
             }
         }
