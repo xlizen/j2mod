@@ -83,3 +83,4 @@
 * Added RTU over TCP #43 - thanks eli-mcgowan
 * Fixed setting timeout of TCPMaster does not get applied to transactions #41
 * Reduce an NPE - Serial port connection #40
+* Fixed issue with serial write bytes delay if data bits not specified
