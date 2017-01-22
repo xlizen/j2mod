@@ -24,7 +24,7 @@ import java.net.*;
 
 /**
  * Class that implements a ModbusTCPListener.
- *
+ * <p>
  * <p>
  * If listening, it accepts incoming requests passing them on to be handled.
  * If not listening, silently drops the requests.
@@ -57,9 +57,9 @@ public class ModbusTCPListener extends AbstractModbusListener {
     /**
      * Constructs a ModbusTCPListener instance.<br>
      *
-     * @param poolsize the size of the <tt>ThreadPool</tt> used to handle incoming
-     *                 requests.
-     * @param addr     the interface to use for listening.
+     * @param poolsize      the size of the <tt>ThreadPool</tt> used to handle incoming
+     *                      requests.
+     * @param addr          the interface to use for listening.
      * @param useRtuOverTcp True if the RTU protocol should be used over TCP
      */
     public ModbusTCPListener(int poolsize, InetAddress addr, boolean useRtuOverTcp) {
@@ -87,8 +87,8 @@ public class ModbusTCPListener extends AbstractModbusListener {
      * to listen on the wildcard address (0.0.0.0), which will accept TCP packets
      * on all available adapters/interfaces
      *
-     * @param poolsize the size of the <tt>ThreadPool</tt> used to handle incoming
-     *                 requests.
+     * @param poolsize      the size of the <tt>ThreadPool</tt> used to handle incoming
+     *                      requests.
      * @param useRtuOverTcp True if the RTU protocol should be used over TCP
      */
     public ModbusTCPListener(int poolsize, boolean useRtuOverTcp) {
@@ -149,7 +149,8 @@ public class ModbusTCPListener extends AbstractModbusListener {
                 Socket incoming;
                 try {
                     incoming = serverSocket.accept();
-                } catch (SocketTimeoutException e) {
+                }
+                catch (SocketTimeoutException e) {
                     continue;
                 }
                 logger.debug("Making new connection {}", incoming.toString());

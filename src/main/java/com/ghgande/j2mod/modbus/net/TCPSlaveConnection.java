@@ -57,7 +57,7 @@ public class TCPSlaveConnection {
      * Constructs a <tt>TCPSlaveConnection</tt> instance using a given socket
      * instance.
      *
-     * @param socket the socket instance to be used for communication.
+     * @param socket        the socket instance to be used for communication.
      * @param useRtuOverTcp True if the RTU protocol should be used over TCP
      */
     public TCPSlaveConnection(Socket socket, boolean useRtuOverTcp) {
@@ -101,22 +101,22 @@ public class TCPSlaveConnection {
      * Prepares the associated <tt>ModbusTransport</tt> of this
      * <tt>TCPMasterConnection</tt> for use.
      *
-     * @param socket the socket to be used for communication.
+     * @param socket        the socket to be used for communication.
      * @param useRtuOverTcp True if the RTU protocol should be used over TCP
-     *
      * @throws IOException if an I/O related error occurs.
      */
     private void setSocket(Socket socket, boolean useRtuOverTcp) throws IOException {
         this.socket = socket;
 
         if (transport == null) {
-        	if(useRtuOverTcp){
+            if (useRtuOverTcp) {
                 logger.trace("setSocket() -> using RTU over TCP transport.");
                 transport = new ModbusRTUTCPTransport(socket);
-        	} else{
+            }
+            else {
                 logger.trace("setSocket() -> using standard TCP transport.");
                 transport = new ModbusTCPTransport(socket);
-        	}
+            }
         }
         else {
             transport.setSocket(socket);
