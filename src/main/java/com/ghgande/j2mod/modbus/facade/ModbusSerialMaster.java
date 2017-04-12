@@ -66,6 +66,10 @@ public class ModbusSerialMaster extends AbstractModbusMaster {
         }
     }
 
+    public AbstractSerialConnection getConnection() {
+        return connection;
+    }
+
     /**
      * Connects this <tt>ModbusSerialMaster</tt> with the slave.
      *
