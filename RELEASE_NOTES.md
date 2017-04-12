@@ -84,3 +84,8 @@
 * Fixed setting timeout of TCPMaster does not get applied to transactions #41
 * Reduce an NPE - Serial port connection #40
 * Fixed issue with serial write bytes delay if data bits not specified
+
+## Version 2.3.3
+* Specify IP address in ModbusSlaveFactory #46 - thanks MindVark
+* Added getConnection() to AbstractSerialConnection - thanks nnadeau
+* Reading full stream instead of parts - thanks liebehentze
