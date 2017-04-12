@@ -225,9 +225,7 @@ public class ModbusTCPTransport extends AbstractModbusTransport {
                 byte[] buffer = byteInputStream.getBuffer();
 
                 if (!headless) {
-                    if (dataInputStream.read(buffer, 0, 6) == -1) {
-                        throw new EOFException("Premature end of stream (Header truncated)");
-                    }
+                    dataInputStream.readFully(buffer, 0, 6);
 
                     // The transaction ID must be treated as an unsigned short in
                     // order for validation to work correctly.
@@ -236,9 +234,7 @@ public class ModbusTCPTransport extends AbstractModbusTransport {
                     int protocol = ModbusUtil.registerToShort(buffer, 2);
                     int count = ModbusUtil.registerToShort(buffer, 4);
 
-                    if (dataInputStream.read(buffer, 6, count) == -1) {
-                        throw new ModbusIOException("Premature end of stream (Message truncated)");
-                    }
+                    dataInputStream.readFully(buffer, 6, count);
 
                     logger.debug("Read: {}", ModbusUtil.toHex(buffer, 0, count + 6));
 
@@ -309,9 +305,7 @@ public class ModbusTCPTransport extends AbstractModbusTransport {
                 logger.debug("Read: {}", ModbusUtil.toHex(buffer, 0, byteInputStream.count));
                 if (!headless) {
                     // All Modbus TCP transactions start with 6 bytes. Get them.
-                    if (dataInputStream.read(buffer, 0, 6) == -1) {
-                        throw new ModbusIOException("Premature end of stream (Header truncated)");
-                    }
+                    dataInputStream.readFully(buffer, 0, 6);
 
                     /*
                      * The transaction ID is the first word (offset 0) in the
@@ -329,9 +323,7 @@ public class ModbusTCPTransport extends AbstractModbusTransport {
                     int protocol = ModbusUtil.registerToShort(buffer, 2);
                     int count = ModbusUtil.registerToShort(buffer, 4);
 
-                    if (dataInputStream.read(buffer, 6, count) == -1) {
-                        throw new ModbusIOException("Premature end of stream (Message truncated)");
-                    }
+                    dataInputStream.readFully(buffer, 6, count);
                     byteInputStream.reset(buffer, (6 + count));
                     byteInputStream.reset();
                     byteInputStream.skip(7);
@@ -364,11 +356,14 @@ public class ModbusTCPTransport extends AbstractModbusTransport {
             }
             return response;
         }
-        catch (SocketTimeoutException ex1) {
-            throw new ModbusIOException("Timeout reading response", ex1);
+        catch (EOFException ex1) {
+            throw new ModbusIOException("Premature end of stream (Message truncated)", ex1);
         }
-        catch (Exception ex2) {
-            throw new ModbusIOException("I/O exception - failed to read", ex2);
+        catch (SocketTimeoutException ex2) {
+            throw new ModbusIOException("Timeout reading response", ex2);
+        }
+        catch (Exception ex3) {
+            throw new ModbusIOException("I/O exception - failed to read", ex3);
         }
     }
 
