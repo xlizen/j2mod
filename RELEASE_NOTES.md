@@ -87,3 +87,5 @@
 
 ## Version 2.3.3
 * Specify IP address in ModbusSlaveFactory #46 - thanks MindVark
+* Added getConnection() to AbstractSerialConnection - thanks nnadeau
+* Reading full stream instead of parts - thanks liebehentze
