@@ -36,9 +36,9 @@ public abstract class ModbusTransaction {
     protected AbstractModbusTransport transport;
     protected ModbusRequest request;
     protected ModbusResponse response;
-    protected boolean validityCheck = Modbus.DEFAULT_VALIDITYCHECK;
-    protected int retries = Modbus.DEFAULT_RETRIES;
-    protected static int transactionID = Modbus.DEFAULT_TRANSACTION_ID;
+    boolean validityCheck = Modbus.DEFAULT_VALIDITYCHECK;
+    int retries = Modbus.DEFAULT_RETRIES;
+    static int transactionID = Modbus.DEFAULT_TRANSACTION_ID;
 
     /**
      * Returns the <tt>ModbusRequest</tt> instance

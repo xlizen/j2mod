@@ -89,3 +89,7 @@
 * Specify IP address in ModbusSlaveFactory #46 - thanks MindVark
 * Added getConnection() to AbstractSerialConnection - thanks nnadeau
 * Reading full stream instead of parts - thanks liebehentze
+
+## Version 2.3.4
+* Fixed NullpointException at handleRequest in AbstractModbusListener #47
+

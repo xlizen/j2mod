@@ -146,13 +146,20 @@ public abstract class AbstractModbusListener implements Runnable {
      *
      * @param transport Transport to read request from
      * @param listener Listener that the request was received by
-     * @throws ModbusIOException
+     * @throws ModbusIOException If there is an issue with the transport or transmission
      */
-    protected void handleRequest(AbstractModbusTransport transport, AbstractModbusListener listener) throws ModbusIOException {
+    void handleRequest(AbstractModbusTransport transport, AbstractModbusListener listener) throws ModbusIOException {
 
         // Get the request from the transport. It will be processed
-        // using an associated process image.
+        // using an associated process image
+
+        if (transport == null) {
+            throw new ModbusIOException("No transport specified");
+        }
         ModbusRequest request = transport.readRequest(listener);
+        if (request == null) {
+            throw new ModbusIOException("Request for transport {} is invalid (null)", transport.getClass().getSimpleName());
+        }
         ModbusResponse response;
 
         // Test if Process image exists and has a correct unit ID
