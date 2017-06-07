@@ -2,6 +2,9 @@ package com.ghgande.j2mod.modbus.net;
 
 import com.ghgande.j2mod.modbus.io.AbstractModbusTransport;
 
+import java.io.IOException;
+import java.util.Set;
+
 /**
  * Interface that represents an public abstract serial port connection
  *
@@ -46,9 +49,9 @@ public abstract class AbstractSerialConnection {
      * Returns the <tt>ModbusTransport</tt> instance to be used for receiving
      * and sending messages.
      *
-     * @return a <tt>ModbusTransport</tt> instance.
+     * @throws IOException If the port is not available or cannot be opened
      */
-    public abstract boolean open();
+    public abstract void open() throws IOException;
 
     /**
      * Returns the <tt>ModbusTransport</tt> instance to be used for receiving
@@ -59,7 +62,7 @@ public abstract class AbstractSerialConnection {
     public abstract AbstractModbusTransport getModbusTransport();
 
     /**
-     * Read a specified number of bytes from the serial bytes.
+     * Read a specified number of bytes from the serial port
      *
      * @param buffer      Buffer to recieve bytes from the port
      * @param bytesToRead Number of bytes to read
@@ -166,5 +169,12 @@ public abstract class AbstractSerialConnection {
      * @param timeout the timeout as <tt>int</tt>.
      */
     public abstract void setTimeout(int timeout);
+
+    /**
+     * Returns a set of all the available comm port names
+     *
+     * @return Set of comm port names
+     */
+    public abstract Set<String> getCommPorts();
 
 }

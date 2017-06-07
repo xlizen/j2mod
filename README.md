@@ -18,7 +18,7 @@ http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22j2mod%22
 
 Snapshot releases can be downloaded here 
 
-https://oss.sonatype.org/content/repositories/snapshots/com/ghgande/j2mod/2.1-SNAPSHOT/
+https://oss.sonatype.org/content/repositories/snapshots/com/ghgande/j2mod
 
 # Roadmap
 

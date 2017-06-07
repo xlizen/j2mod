@@ -27,6 +27,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Class that implements a serial connection which can be used for master and
@@ -83,9 +85,13 @@ public class SerialConnection extends AbstractSerialConnection {
     }
 
     @Override
-    public boolean open() {
+    public void open() throws IOException {
         if (serialPort == null) {
             serialPort = SerialPort.getCommPort(parameters.getPortName());
+            if (serialPort.getDescriptivePortName().contains("Bad Port")) {
+                serialPort = null;
+                throw new IOException(String.format("Port %s is not a valid name for a port on this platform", parameters.getPortName()));
+            }
         }
         serialPort.closePort();
         setConnectionParameters();
@@ -105,21 +111,22 @@ public class SerialConnection extends AbstractSerialConnection {
 
         // Open the input and output streams for the connection. If they won't
         // open, close the port before throwing an exception.
-        try {
-            transport.setCommPort(this);
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
+        transport.setCommPort(this);
 
         // Open the port so that we can get it's input stream.
         if (!serialPort.openPort()) {
             close();
-            return false;
+            Set<String> ports = getCommPorts();
+            StringBuilder portList = new StringBuilder("<NONE>");
+            if (!ports.isEmpty()) {
+                portList = new StringBuilder();
+                for (String port : ports) {
+                    portList.append(portList.length() == 0 ? "" : ",").append(port);
+                }
+            }
+            throw new IOException(String.format("Port [%s] cannot be opened or does not exist - Valid ports are: [%s]", parameters.getPortName(), portList.toString()));
         }
         inputStream = serialPort.getInputStream();
-        return true;
     }
 
     @Override
@@ -223,5 +230,17 @@ public class SerialConnection extends AbstractSerialConnection {
         if (serialPort != null) {
             serialPort.setComPortTimeouts(newTimeoutMode, newReadTimeout, newWriteTimeout);
         }
+    }
+
+    @Override
+    public Set<String> getCommPorts() {
+        Set<String> returnValue = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
+        SerialPort[] ports = SerialPort.getCommPorts();
+        if (ports != null && ports.length > 0) {
+            for (SerialPort port : ports) {
+                returnValue.add(port.getSystemPortName());
+            }
+        }
+        return returnValue;
     }
 }
