@@ -92,4 +92,4 @@
 
 ## Version 2.3.4
 * Fixed NullpointException at handleRequest in AbstractModbusListener #47
-
+* Add checks to see if serial port is available during connect #45
