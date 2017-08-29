@@ -33,7 +33,7 @@ public class TestModbusTCPMasterTimeout extends AbstractTestModbusTCPMaster {
     public static void setUpSlave() {
         long start = 0;
         try {
-            master = new ModbusTCPMaster("mythical-modbus.com", PORT);
+            master = new ModbusTCPMaster("apple.com", PORT);
             start = System.currentTimeMillis();
             master.setTimeout(1000);
             master.connect();
