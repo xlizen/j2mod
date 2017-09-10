@@ -100,3 +100,5 @@
 
 ## Version 2.3.6
 * Debug logger messages causing garbage collections even when DEBUG mode is not enabled #53
+* RS485 echo in RTU mode #51 - thanks david
+

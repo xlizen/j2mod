@@ -268,7 +268,7 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
                 // clears out the echoed message
                 // for RS485
                 if (echo) {
-                    readEcho(len);
+                    readEcho(len + 2);
                 }
                 lastRequest = new byte[len];
                 System.arraycopy(byteOutputStream.getBuffer(), 0, lastRequest, 0, len);
