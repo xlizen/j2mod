@@ -187,7 +187,9 @@ public class ModbusTCPTransport extends AbstractModbusTransport {
 
             dataOutputStream.write(byteOutputStream.toByteArray());
             dataOutputStream.flush();
-            logger.debug("Sent: {}", ModbusUtil.toHex(byteOutputStream.toByteArray()));
+            if (logger.isDebugEnabled()) {
+                logger.debug("Sent: {}", ModbusUtil.toHex(byteOutputStream.toByteArray()));
+            }
             // write more sophisticated exception handling
         }
         catch (SocketException ex1) {
@@ -236,7 +238,9 @@ public class ModbusTCPTransport extends AbstractModbusTransport {
 
                     dataInputStream.readFully(buffer, 6, count);
 
-                    logger.debug("Read: {}", ModbusUtil.toHex(buffer, 0, count + 6));
+                    if (logger.isDebugEnabled()) {
+                        logger.debug("Read: {}", ModbusUtil.toHex(buffer, 0, count + 6));
+                    }
 
                     byteInputStream.reset(buffer, (6 + count));
                     byteInputStream.skip(6);
@@ -302,7 +306,9 @@ public class ModbusTCPTransport extends AbstractModbusTransport {
             synchronized (byteInputStream) {
                 // use same buffer
                 byte[] buffer = byteInputStream.getBuffer();
-                logger.debug("Read: {}", ModbusUtil.toHex(buffer, 0, byteInputStream.count));
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Read: {}", ModbusUtil.toHex(buffer, 0, byteInputStream.count));
+                }
                 if (!headless) {
                     // All Modbus TCP transactions start with 6 bytes. Get them.
                     dataInputStream.readFully(buffer, 0, 6);

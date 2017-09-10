@@ -65,7 +65,9 @@ public class ModbusASCIITransport extends ModbusSerialTransport {
                 //write message
                 writeAsciiByte(FRAME_START);               //FRAMESTART
                 writeAsciiBytes(buf, len);                 //PDU
-                logger.debug("Writing: {}", ModbusUtil.toHex(buf, 0, len));
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Writing: {}", ModbusUtil.toHex(buf, 0, len));
+                }
                 writeAsciiByte(calculateLRC(buf, 0, len)); //LRC
                 writeAsciiByte(FRAME_END);                 //FRAMEEND
                 byteOutputStream.reset();
@@ -165,7 +167,9 @@ public class ModbusASCIITransport extends ModbusSerialTransport {
                         byteInputOutputStream.writeByte(in);
                     }
                     int len = byteInputOutputStream.size();
-                    logger.debug("Received: {}", ModbusUtil.toHex(inBuffer, 0, len));
+                    if (logger.isDebugEnabled()) {
+                        logger.debug("Received: {}", ModbusUtil.toHex(inBuffer, 0, len));
+                    }
                     //check LRC
                     if (inBuffer[len - 1] != calculateLRC(inBuffer, 0, len, 1)) {
                         continue;

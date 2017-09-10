@@ -262,7 +262,9 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
                 byteOutputStream.writeByte(crc[1]);
                 // write message
                 writeBytes(byteOutputStream.getBuffer(), byteOutputStream.size());
-                logger.debug("Sent: {}", ModbusUtil.toHex(byteOutputStream.getBuffer(), 0, byteOutputStream.size()));
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Sent: {}", ModbusUtil.toHex(byteOutputStream.getBuffer(), 0, byteOutputStream.size()));
+                }
                 // clears out the echoed message
                 // for RS485
                 if (echo) {
@@ -309,7 +311,9 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
                          */
                         getRequest(fc, byteInputOutputStream);
                         dlength = byteInputOutputStream.size() - 2; // less the crc
-                        logger.debug("Response: {}", ModbusUtil.toHex(byteInputOutputStream.getBuffer(), 0, dlength + 2));
+                        if (logger.isDebugEnabled()) {
+                            logger.debug("Response: {}", ModbusUtil.toHex(byteInputOutputStream.getBuffer(), 0, dlength + 2));
+                        }
 
                         byteInputStream.reset(inBuffer, dlength);
 
@@ -381,7 +385,9 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
                          */
                         getResponse(fc, byteInputOutputStream);
                         dlength = byteInputOutputStream.size() - 2; // less the crc
-                        logger.debug("Response: {}", ModbusUtil.toHex(byteInputOutputStream.getBuffer(), 0, dlength + 2));
+                        if (logger.isDebugEnabled()) {
+                            logger.debug("Response: {}", ModbusUtil.toHex(byteInputOutputStream.getBuffer(), 0, dlength + 2));
+                        }
                         byteInputStream.reset(inBuffer, dlength);
 
                         // check CRC

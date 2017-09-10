@@ -97,3 +97,6 @@
 ## Version 2.3.5
 * Fixed a typo in the failure debug message
 * Fixed the omission of the bit count when reading a DiscreteInput request
+
+## Version 2.3.6
+* Debug logger messages causing garbage collections even when DEBUG mode is not enabled #53
