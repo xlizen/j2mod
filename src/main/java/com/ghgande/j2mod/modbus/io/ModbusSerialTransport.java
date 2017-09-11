@@ -333,7 +333,9 @@ public abstract class ModbusSerialTransport extends AbstractModbusTransport {
     void readEcho(int len) throws IOException {
         byte echoBuf[] = new byte[len];
         int echoLen = commPort.readBytes(echoBuf, len);
-        logger.debug("Echo: {}", ModbusUtil.toHex(echoBuf, 0, echoLen));
+        if (logger.isDebugEnabled()) {
+            logger.debug("Echo: {}", ModbusUtil.toHex(echoBuf, 0, echoLen));
+        }
         if (echoLen != len) {
             logger.debug("Error: Transmit echo not received");
             throw new IOException("Echo not received");
@@ -465,7 +467,9 @@ public abstract class ModbusSerialTransport extends AbstractModbusTransport {
             }
             else {
                 buffer = ModbusUtil.toHex(value);
-                logger.debug("Wrote byte {}={}", value, ModbusUtil.toHex(value));
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Wrote byte {}={}", value, ModbusUtil.toHex(value));
+                }
             }
             if (buffer != null) {
                 return commPort.writeBytes(buffer, buffer.length);
@@ -514,7 +518,9 @@ public abstract class ModbusSerialTransport extends AbstractModbusTransport {
             int len = commPort.bytesAvailable();
             byte buf[] = new byte[len];
             readBytes(buf, len);
-            logger.debug("Clear input: {}", ModbusUtil.toHex(buf, 0, len));
+            if (logger.isDebugEnabled()) {
+                logger.debug("Clear input: {}", ModbusUtil.toHex(buf, 0, len));
+            }
         }
     }
 

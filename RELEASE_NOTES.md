@@ -93,3 +93,12 @@
 ## Version 2.3.4
 * Fixed NullpointException at handleRequest in AbstractModbusListener #47
 * Add checks to see if serial port is available during connect #45
+
+## Version 2.3.5
+* Fixed a typo in the failure debug message
+* Fixed the omission of the bit count when reading a DiscreteInput request
+
+## Version 2.3.6
+* Debug logger messages causing garbage collections even when DEBUG mode is not enabled #53
+* RS485 echo in RTU mode #51 - thanks david
+

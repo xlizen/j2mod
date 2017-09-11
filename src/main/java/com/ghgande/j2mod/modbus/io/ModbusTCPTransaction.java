@@ -154,7 +154,7 @@ public class ModbusTCPTransaction extends ModbusTransaction {
                         ++retryCounter < retryLimit);
 
                 if (retryCounter >= retryLimit) {
-                    throw new ModbusIOException("Executing transaction failed (tried {} times)", retryLimit);
+                    throw new ModbusIOException("Executing transaction failed (tried %d times)", retryLimit);
                 }
 
                 // Both methods were successful, so the transaction must
@@ -173,7 +173,7 @@ public class ModbusTCPTransaction extends ModbusTransaction {
                 }
                 retryCounter++;
                 if (retryCounter >= retryLimit) {
-                    throw new ModbusIOException("Executing transaction failed (tried {}" + retryLimit + " times)", ex);
+                    throw new ModbusIOException("Executing transaction failed (tried %d times) %d", retryLimit, ex);
                 }
             }
         }
