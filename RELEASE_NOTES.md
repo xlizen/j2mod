@@ -110,4 +110,5 @@
 
 ## Version 2.3.8
 * Added a sleep timer to the TCP/UDP/serial transaction retry loops
-* Added the timeout value to the serial 
+* Added the timeout value to the serial write
+* Responded to vulnerabilities highlighted by FindBugs

@@ -23,6 +23,7 @@ import com.ghgande.j2mod.modbus.procimg.*;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * Class implementing a <tt>Read / Write Multiple Registers</tt> request.
@@ -218,8 +219,8 @@ public final class ReadWriteMultipleRequest extends ModbusRequest {
      * @param registers the registers to be written as <tt>Register[]</tt>.
      */
     public void setRegisters(Register[] registers) {
-        this.registers = registers;
         writeCount = registers != null ? registers.length : 0;
+        this.registers = registers != null ? Arrays.copyOf(registers, registers.length) : null;
     }
 
     /**

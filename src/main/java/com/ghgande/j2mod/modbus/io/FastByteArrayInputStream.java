@@ -65,19 +65,6 @@ public class FastByteArrayInputStream extends InputStream {
         mark = 0;
     }
 
-    /**
-     * Creates an input stream.
-     *
-     * @param buffer the data to read.
-     * @param offset the byte offset at which to begin reading.
-     * @param length the number of bytes to read.
-     */
-    public FastByteArrayInputStream(byte[] buffer, int offset, int length) {
-        buf = buffer;
-        pos = offset;
-        count = length;
-    }
-
     // --- begin ByteArrayInputStream compatible methods ---
 
     public int read() throws IOException {

@@ -23,6 +23,7 @@ import com.ghgande.j2mod.modbus.procimg.SimpleRegister;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * Class implementing a <tt>ReadWriteMultipleResponse</tt>.
@@ -47,7 +48,7 @@ public final class ReadWriteMultipleResponse extends ModbusResponse {
         setFunctionCode(Modbus.READ_WRITE_MULTIPLE);
         setDataLength(registers.length * 2 + 1);
 
-        this.registers = registers;
+        this.registers = Arrays.copyOf(registers, registers.length);
         byteCount = registers.length * 2;
     }
 
@@ -155,7 +156,7 @@ public final class ReadWriteMultipleResponse extends ModbusResponse {
         byteCount = registers.length * 2;
         setDataLength(byteCount + 1);
 
-        this.registers = registers;
+        this.registers = Arrays.copyOf(registers, registers.length);
     }
 
     public void writeData(DataOutput dout) throws IOException {
