@@ -515,4 +515,20 @@ public final class ModbusUtil {
     public static boolean isBlank(Object[] list) {
         return list == null || list.length == 0;
     }
+
+    /**
+     * Sleeps safely for the specified amount of time unless awoken by an interruption
+     *
+     * @param time Time in milliseconds
+     */
+    public static void sleep(long time) {
+        try {
+            Thread.sleep(time);
+        }
+        catch (InterruptedException ex) {
+            logger.warn("Backout sleep timer has been interrupted");
+        }
+
+    }
+
 }

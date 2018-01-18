@@ -467,7 +467,7 @@ abstract public class AbstractModbusMaster {
      *
      * @param retries the amount of retries as <tt>int</tt>.
      */
-    public void setRetries(int retries) {
+    synchronized public void setRetries(int retries) {
         if (transaction != null) {
             transaction.setRetries(retries);
         }
@@ -479,7 +479,7 @@ abstract public class AbstractModbusMaster {
      *
      * @param b true if checking validity, false otherwise.
      */
-    public void setCheckingValidity(boolean b) {
+    synchronized public void setCheckingValidity(boolean b) {
         if (transaction != null) {
             transaction.setCheckingValidity(b);
         }

@@ -19,6 +19,7 @@ import com.ghgande.j2mod.modbus.Modbus;
 import com.ghgande.j2mod.modbus.io.AbstractModbusTransport;
 import com.ghgande.j2mod.modbus.io.ModbusRTUTCPTransport;
 import com.ghgande.j2mod.modbus.io.ModbusTCPTransport;
+import com.ghgande.j2mod.modbus.util.ModbusUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -163,14 +164,7 @@ public class TCPMasterConnection {
                 if (m_useUrgentData) {
                     try {
                         socket.sendUrgentData(0);
-                        try {
-                            // Snooze briefly so the urgent byte isn't
-                            // merged with the next packet.
-                            Thread.sleep(5);
-                        }
-                        catch (InterruptedException e) {
-                            // Do nothing.
-                        }
+                        ModbusUtil.sleep(5);
                     }
                     catch (IOException e) {
                         connected = false;

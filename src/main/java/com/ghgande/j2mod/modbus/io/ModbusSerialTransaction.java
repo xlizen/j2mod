@@ -22,6 +22,7 @@ import com.ghgande.j2mod.modbus.ModbusSlaveException;
 import com.ghgande.j2mod.modbus.msg.ExceptionResponse;
 import com.ghgande.j2mod.modbus.msg.ModbusRequest;
 import com.ghgande.j2mod.modbus.net.AbstractSerialConnection;
+import com.ghgande.j2mod.modbus.util.ModbusUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -131,12 +132,7 @@ public class ModbusSerialTransaction extends ModbusTransaction {
         do {
             try {
                 if (transDelayMS > 0) {
-                    try {
-                        Thread.sleep(transDelayMS);
-                    }
-                    catch (InterruptedException ex) {
-                        logger.debug("InterruptedException: {}", ex.getMessage());
-                    }
+                    ModbusUtil.sleep(transDelayMS);
                 }
                 synchronized (MUTEX) {
                     //write request message
@@ -150,14 +146,14 @@ public class ModbusSerialTransaction extends ModbusTransaction {
                 if (++tries >= retries) {
                     throw e;
                 }
+                ModbusUtil.sleep(getRandomSleepTime(tries));
                 logger.debug("Execute try {} error: {}", tries, e.getMessage());
             }
         } while (!finished);
 
         //4. deal with exceptions
         if (response instanceof ExceptionResponse) {
-            throw new ModbusSlaveException(((ExceptionResponse)response).getExceptionCode()
-            );
+            throw new ModbusSlaveException(((ExceptionResponse) response).getExceptionCode());
         }
 
         if (isCheckingValidity()) {

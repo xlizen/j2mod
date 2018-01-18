@@ -119,7 +119,7 @@ public final class ReadFIFOQueueRequest extends ModbusRequest {
 
     /**
      * writeData -- output this Modbus message to dout.
-     * @throws java.io.IOException
+     * @throws java.io.IOException If cannot write
      */
     public void writeData(DataOutput dout) throws IOException {
         dout.write(getMessage());
@@ -127,7 +127,7 @@ public final class ReadFIFOQueueRequest extends ModbusRequest {
 
     /**
      * readData -- read the reference word.
-     * @throws java.io.IOException
+     * @throws java.io.IOException If cannot read
      */
     public void readData(DataInput din) throws IOException {
         reference = din.readUnsignedShort();
