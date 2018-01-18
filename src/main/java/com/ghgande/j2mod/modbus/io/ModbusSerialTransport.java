@@ -77,8 +77,7 @@ public abstract class ModbusSerialTransport extends AbstractModbusTransport {
 
         // Wait here for the message to have been sent
 
-        double bytesPerSec = commPort.getBaudRate() /
-                ((commPort.getNumDataBits() == 0 ? 8 : commPort.getNumDataBits()) + (commPort.getNumStopBits() == 0 ? 1 : commPort.getNumStopBits()) + (commPort.getParity() == SerialPort.NO_PARITY ? 0 : 1));
+        double bytesPerSec = commPort.getBaudRate() / (((commPort.getNumDataBits() == 0) ? 8 : commPort.getNumDataBits()) + ((commPort.getNumStopBits() == 0) ? 1 : commPort.getNumStopBits()) + ((commPort.getParity() == SerialPort.NO_PARITY) ? 0 : 1));
         double delay = 1000000000.0 * msg.getOutputLength() / bytesPerSec;
         double delayMilliSeconds = Math.floor(delay / 1000000);
         double delayNanoSeconds = delay % 1000000;
@@ -144,7 +143,7 @@ public abstract class ModbusSerialTransport extends AbstractModbusTransport {
     public void setTimeout(int time) {
         super.setTimeout(time);
         if (commPort != null) {
-            commPort.setComPortTimeouts(AbstractSerialConnection.TIMEOUT_READ_BLOCKING, timeout, 0);
+            commPort.setComPortTimeouts(AbstractSerialConnection.TIMEOUT_READ_BLOCKING, timeout, timeout);
         }
     }
 

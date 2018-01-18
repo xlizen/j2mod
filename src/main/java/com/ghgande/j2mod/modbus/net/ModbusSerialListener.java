@@ -49,10 +49,9 @@ public class ModbusSerialListener extends AbstractModbusListener {
     /**
      * Constructs a new <tt>ModbusSerialListener</tt> instance specifying the serial connection interface
      *
-     * @param params
-     * @param serialCon
+     * @param serialCon Serial connection to use
      */
-    public ModbusSerialListener(SerialParameters params, AbstractSerialConnection serialCon) {
+    public ModbusSerialListener(AbstractSerialConnection serialCon) {
         this.serialCon = serialCon;
     }
 
@@ -81,31 +80,26 @@ public class ModbusSerialListener extends AbstractModbusListener {
 
         listening = true;
         try {
+            AbstractModbusTransport transport = serialCon.getModbusTransport();
             while (listening) {
-                AbstractModbusTransport transport = serialCon.getModbusTransport();
-                if (listening) {
-                    try {
-                        handleRequest(transport, this);
-                    }
-                    catch (ModbusIOException ex) {
-                        logger.debug(ex.getMessage());
-                    }
+                try {
+                    handleRequest(transport, this);
                 }
-                else {
-                    // Not listening -- read and discard the request so the
-                    // input doesn't get clogged up.
-                    transport.readRequest(this);
+                catch (ModbusIOException ex) {
+                    logger.debug(ex.getMessage());
                 }
             }
+
+            // Not listening -- read and discard the request so the
+            // input doesn't get clogged up.
+            transport.readRequest(this);
         }
         catch (Exception e) {
             logger.error("Exception occurred while handling request.", e);
         }
         finally {
             listening = false;
-            if (serialCon != null) {
-                serialCon.close();
-            }
+            serialCon.close();
         }
     }
 

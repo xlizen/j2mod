@@ -26,6 +26,7 @@ import com.ghgande.j2mod.modbus.procimg.SimpleRegister;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * Class implementing a <tt>WriteMultipleRegistersRequest</tt>. The
@@ -182,7 +183,7 @@ public final class WriteMultipleRegistersRequest extends ModbusRequest {
      * @param registers the registers to be written as <tt>Register[]</tt>.
      */
     public void setRegisters(Register[] registers) {
-        this.registers = registers;
+        this.registers = registers == null ? null : Arrays.copyOf(registers, registers.length);
     }
 
     /**

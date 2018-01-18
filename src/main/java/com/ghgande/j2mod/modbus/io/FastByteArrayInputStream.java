@@ -42,47 +42,34 @@ public class FastByteArrayInputStream extends InputStream {
     /**
      * Actual position pointer into the input buffer.
      */
-    protected int pos;
+    int pos;
 
     /**
      * Marked position pointer into the input buffer.
      */
-    protected int mark;
+    int mark;
     /**
      * Input buffer <tt>byte[]</tt>.
      */
-    protected byte[] buf;
+    byte[] buf;
 
     /**
      * Creates an input stream.
      *
      * @param buffer the data to read.
      */
-    public FastByteArrayInputStream(byte[] buffer) {
+    FastByteArrayInputStream(byte[] buffer) {
         buf = buffer;
         count = buffer.length;
         pos = 0;
         mark = 0;
     }
 
-    /**
-     * Creates an input stream.
-     *
-     * @param buffer the data to read.
-     * @param offset the byte offset at which to begin reading.
-     * @param length the number of bytes to read.
-     */
-    public FastByteArrayInputStream(byte[] buffer, int offset, int length) {
-        buf = buffer;
-        pos = offset;
-        count = length;
-    }
-
     // --- begin ByteArrayInputStream compatible methods ---
 
     public int read() throws IOException {
         logger.debug("read()");
-        logger.debug("count={}", count, pos);
+        logger.debug("count={} pos={}", count, pos);
         return (pos < count) ? (buf[pos++] & 0xff) : (-1);
     }
 
@@ -126,7 +113,7 @@ public class FastByteArrayInputStream extends InputStream {
     public void mark(int readlimit) {
         logger.debug("mark()");
         mark = pos;
-        logger.debug("mark={}", mark, pos);
+        logger.debug("mark={} pos={}", mark, pos);
     }
 
     public void reset() {
@@ -176,4 +163,4 @@ public class FastByteArrayInputStream extends InputStream {
         return count;
     }
 
-}// class FastByteArrayInputStream
+}

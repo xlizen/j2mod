@@ -22,6 +22,7 @@ import com.ghgande.j2mod.modbus.procimg.SimpleInputRegister;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * Class implementing a <tt>ReadFIFOQueueResponse</tt>.
@@ -87,12 +88,13 @@ public final class ReadFIFOQueueResponse extends ModbusResponse {
      * @param regs Array of registers
      */
     public synchronized void setRegisters(InputRegister[] regs) {
-        registers = regs;
         if (regs == null) {
+            registers = null;
             count = 0;
             return;
         }
 
+        registers = Arrays.copyOf(regs, regs.length);
         if (regs.length > 31) {
             throw new IllegalArgumentException();
         }
