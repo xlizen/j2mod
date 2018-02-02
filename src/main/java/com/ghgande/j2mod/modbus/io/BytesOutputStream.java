@@ -18,7 +18,6 @@ package com.ghgande.j2mod.modbus.io;
 import java.io.DataOutput;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.Arrays;
 
 /**
  * Class implementing a byte array output stream with
@@ -50,7 +49,7 @@ public class BytesOutputStream extends FastByteArrayOutputStream implements Data
      * @param buffer the output buffer as <tt>byte[]</tt>.
      */
     public BytesOutputStream(byte[] buffer) {
-        buf = buffer == null ? null : Arrays.copyOf(buffer, buffer.length);
+        buf = buffer;
         count = 0;
         dataOutputStream = new DataOutputStream(this);
     }
