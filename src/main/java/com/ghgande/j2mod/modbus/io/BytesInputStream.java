@@ -18,7 +18,6 @@ package com.ghgande.j2mod.modbus.io;
 import java.io.DataInput;
 import java.io.DataInputStream;
 import java.io.IOException;
-import java.util.Arrays;
 
 /**
  * Class implementing a byte array input stream with
@@ -64,8 +63,8 @@ public class BytesInputStream
     public void reset(byte[] data) {
         pos = 0;
         mark = 0;
-        buf = data == null ? null : Arrays.copyOf(data, data.length);
-        count = data == null ? 0 : data.length;
+        buf = data;
+        count = data.length;
     }
 
     /**
@@ -79,7 +78,7 @@ public class BytesInputStream
         pos = 0;
         mark = 0;
         count = length;
-        buf = data == null ? null : Arrays.copyOf(data, data.length);
+        buf = data;
     }
 
     /**
