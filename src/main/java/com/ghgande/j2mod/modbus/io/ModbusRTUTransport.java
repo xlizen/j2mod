@@ -319,8 +319,7 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
 
                         // check CRC
                         int[] crc = ModbusUtil.calculateCRC(inBuffer, 0, dlength); // does not include CRC
-                        if (ModbusUtil.unsignedByteToInt(inBuffer[dlength]) != crc[0] &&
-                                ModbusUtil.unsignedByteToInt(inBuffer[dlength + 1]) != crc[1]) {
+                        if (ModbusUtil.unsignedByteToInt(inBuffer[dlength]) != crc[0] || ModbusUtil.unsignedByteToInt(inBuffer[dlength + 1]) != crc[1]) {
                             logger.debug("CRC should be {}, {}", crc[0], crc[1]);
 
                             // Drain the input in case the frame was misread and more
@@ -392,7 +391,7 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
 
                         // check CRC
                         int[] crc = ModbusUtil.calculateCRC(inBuffer, 0, dlength); // does not include CRC
-                        if (ModbusUtil.unsignedByteToInt(inBuffer[dlength]) != crc[0] && ModbusUtil.unsignedByteToInt(inBuffer[dlength + 1]) != crc[1]) {
+                        if (ModbusUtil.unsignedByteToInt(inBuffer[dlength]) != crc[0] || ModbusUtil.unsignedByteToInt(inBuffer[dlength + 1]) != crc[1]) {
                             logger.debug("CRC should be {}, {}", crc[0], crc[1]);
                             throw new IOException("CRC Error in received frame: " + dlength + " bytes: " + ModbusUtil.toHex(byteInputStream.getBuffer(), 0, dlength));
                         }

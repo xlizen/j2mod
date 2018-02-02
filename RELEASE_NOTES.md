@@ -115,3 +115,4 @@
 
 ## Version 2.3.9
 * Critical regression introduced in previous release whereby the sharing of stream buffers was being trampled over
+* Serial CRC was not correctly checking both bytes
