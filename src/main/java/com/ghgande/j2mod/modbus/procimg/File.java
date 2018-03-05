@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
  *
  *         File -- an abstraction of a Modbus File, as supported by the
  *         READ FILE RECORD and WRITE FILE RECORD commands.
- * @author Steve O'Hara (4energy)
+ * @author Steve O'Hara (4NG)
  * @version 2.0 (March 2016)
  */
 public class File {

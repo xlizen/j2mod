@@ -26,7 +26,7 @@ import java.io.IOException;
  * Class implementing a <tt>ReadSerialDiagnosticsRequest</tt>.
  *
  * @author Julie Haugh (jfh@ghgande.com)
- * @author Steve O'Hara (4energy)
+ * @author Steve O'Hara (4NG)
  * @version 2.0 (March 2016)
  */
 public final class ReadSerialDiagnosticsRequest extends ModbusRequest {
@@ -119,30 +119,14 @@ public final class ReadSerialDiagnosticsRequest extends ModbusRequest {
         data = (short)value;
     }
 
-    /**
-     * createResponse -- create an empty response for this request.
-     * @return Empty response
-     */
+    @Override
     public ModbusResponse getResponse() {
-        ReadSerialDiagnosticsResponse response;
-
-        response = new ReadSerialDiagnosticsResponse();
-
-        // Copy any header data from the request.
-        response.setHeadless(isHeadless());
-        if (!isHeadless()) {
-            response.setTransactionID(getTransactionID());
-            response.setProtocolID(getProtocolID());
-        }
-
-        // Copy the unit ID and function code.
-        response.setUnitID(getUnitID());
-        response.setFunctionCode(getFunctionCode());
+        ReadSerialDiagnosticsResponse response = new ReadSerialDiagnosticsResponse();
 
         // Copy the sub-function code.
         response.setFunction(getFunction());
 
-        return response;
+        return updateResponseWithHeader(response);
     }
 
     @Override

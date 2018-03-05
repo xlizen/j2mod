@@ -28,11 +28,10 @@ import java.io.IOException;
  *
  * @author Dieter Wimberger
  * @author Julie Haugh
- * @author Steve O'Hara (4energy)
+ * @author Steve O'Hara (4NG)
  * @version 2.0 (March 2016)
  */
-public final class WriteMultipleCoilsResponse
-        extends ModbusResponse {
+public final class WriteMultipleCoilsResponse extends ModbusResponse {
 
     // instance attributes
     private int reference;
@@ -48,10 +47,8 @@ public final class WriteMultipleCoilsResponse
      */
     public WriteMultipleCoilsResponse(int ref, int count) {
         super();
-
         reference = ref;
         bitCount = count;
-
         setDataLength(4);
     }
 
@@ -60,7 +57,6 @@ public final class WriteMultipleCoilsResponse
      */
     public WriteMultipleCoilsResponse() {
         super();
-
         setDataLength(4);
     }
 

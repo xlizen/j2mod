@@ -35,7 +35,7 @@ import java.net.SocketTimeoutException;
  * Class that implements the Modbus transport flavor.
  *
  * @author Dieter Wimberger
- * @author Steve O'Hara (4energy)
+ * @author Steve O'Hara (4NG)
  * @version 2.0 (March 2016)
  */
 public class ModbusTCPTransport extends AbstractModbusTransport {
@@ -198,7 +198,7 @@ public class ModbusTCPTransport extends AbstractModbusTransport {
         catch (SocketException ex1) {
             if (master != null && !master.isConnected()) {
                 try {
-                    master.connect();
+                    master.connect(useRtuOverTcp);
                 }
                 catch (Exception e) {
                     // Do nothing.

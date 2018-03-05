@@ -27,7 +27,7 @@ import java.io.IOException;
  * Class implementing a <tt>Read MEI Data</tt> request.
  *
  * @author jfhaugh (jfh@ghgande.com)
- * @author Steve O'Hara (4energy)
+ * @author Steve O'Hara (4NG)
  * @version 2.0 (March 2016)
  */
 public final class ReadMEIRequest extends ModbusRequest {
@@ -70,38 +70,15 @@ public final class ReadMEIRequest extends ModbusRequest {
         setFieldId(id);
     }
 
-    /**
-     * Returns the response
-     *
-     * @return Response
-     */
+    @Override
     public ModbusResponse getResponse() {
-        ReadMEIResponse response;
 
         // Any other sub-function is an error.
         if (getSubCode() != 0x0E) {
             IllegalFunctionExceptionResponse error = new IllegalFunctionExceptionResponse();
-
-            error.setUnitID(getUnitID());
-            error.setFunctionCode(getFunctionCode());
-
-            return error;
+            return updateResponseWithHeader(error);
         }
-
-        response = new ReadMEIResponse();
-
-        // transfer header data
-        if (!isHeadless()) {
-            response.setTransactionID(getTransactionID());
-            response.setProtocolID(getProtocolID());
-        }
-        else {
-            response.setHeadless();
-        }
-        response.setUnitID(getUnitID());
-        response.setFunctionCode(Modbus.READ_MEI);
-
-        return response;
+        return updateResponseWithHeader(new ReadMEIResponse());
     }
 
     @Override

@@ -29,7 +29,7 @@ import java.util.Arrays;
  * Class implementing a <tt>ReadWriteMultipleResponse</tt>.
  *
  * @author Julie (jfh@ghgande.com)
- * @author Steve O'Hara (4energy)
+ * @author Steve O'Hara (4NG)
  * @version 2.0 (March 2016)
  */
 public final class ReadWriteMultipleResponse extends ModbusResponse {

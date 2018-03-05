@@ -30,7 +30,7 @@ import java.io.IOException;
  *
  * @author Julie Haugh (jfh@ghgande.com)
  * @author jfhaugh (jfh@ghgande.com)
- * @author Steve O'Hara (4energy)
+ * @author Steve O'Hara (4NG)
  * @version 2.0 (March 2016)
  */
 public final class MaskWriteRegisterRequest extends ModbusRequest {
@@ -121,23 +121,9 @@ public final class MaskWriteRegisterRequest extends ModbusRequest {
      * getResponse -- create an empty response for this request.
      * @return empty response for this request
      */
+    @Override
     public ModbusResponse getResponse() {
-        MaskWriteRegisterResponse response;
-
-        response = new MaskWriteRegisterResponse();
-
-        // Copy any header data from the request.
-        response.setHeadless(isHeadless());
-        if (!isHeadless()) {
-            response.setTransactionID(getTransactionID());
-            response.setProtocolID(getProtocolID());
-        }
-
-        // Copy the unit ID and function code.
-        response.setUnitID(getUnitID());
-        response.setFunctionCode(getFunctionCode());
-
-        return response;
+        return updateResponseWithHeader(new MaskWriteRegisterResponse());
     }
 
     @Override
@@ -155,7 +141,6 @@ public final class MaskWriteRegisterRequest extends ModbusRequest {
              * applied to set them.
              */
             int value = register.getValue();
-
             value = (value & andMask) | (orMask & ~andMask);
 
             // Store the modified value back where it came from.
@@ -165,7 +150,6 @@ public final class MaskWriteRegisterRequest extends ModbusRequest {
             return createExceptionResponse(Modbus.ILLEGAL_ADDRESS_EXCEPTION);
         }
         response = (MaskWriteRegisterResponse)getResponse();
-
         response.setReference(reference);
         response.setAndMask(andMask);
         response.setOrMask(orMask);

@@ -32,7 +32,7 @@ import java.io.IOException;
  * all cases.
  *
  * @author Dieter Wimberger
- * @author Steve O'Hara (4energy)
+ * @author Steve O'Hara (4NG)
  * @version 2.0 (March 2016)
  */
 public class IllegalFunctionRequest extends ModbusRequest {
@@ -69,11 +69,9 @@ public class IllegalFunctionRequest extends ModbusRequest {
      * There is no unit number associated with this exception.
      * @return Modbus excepion response
      */
+    @Override
     public ModbusResponse getResponse() {
-        IllegalFunctionExceptionResponse response = new IllegalFunctionExceptionResponse(getFunctionCode());
-
-        response.setUnitID(getUnitID());
-        return response;
+        return updateResponseWithHeader(new IllegalFunctionExceptionResponse(getFunctionCode()), true);
     }
 
     @Override

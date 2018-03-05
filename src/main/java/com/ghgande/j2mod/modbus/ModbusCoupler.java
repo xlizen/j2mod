@@ -33,7 +33,7 @@ import java.util.Map;
  * image.
  *
  * @author Dieter Wimberger
- * @author Steve O'Hara (4energy)
+ * @author Steve O'Hara (4NG)
  * @version 2.0 (March 2016)
  *
  * @deprecated As of 2.3.4 This mechanism for handling process images has been superseded by a more flexible mechanism {@link com.ghgande.j2mod.modbus.slave.ModbusSlave} and {@link com.ghgande.j2mod.modbus.slave.ModbusSlaveFactory}

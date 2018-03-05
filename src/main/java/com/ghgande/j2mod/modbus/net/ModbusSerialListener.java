@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
  * @author Dieter Wimberger
  * @author Julie Haugh Code cleanup in prep to refactor with ModbusListener
  *         interface
- * @author Steve O'Hara (4energy)
+ * @author Steve O'Hara (4NG)
  * @version 2.0 (March 2016)
  */
 public class ModbusSerialListener extends AbstractModbusListener {

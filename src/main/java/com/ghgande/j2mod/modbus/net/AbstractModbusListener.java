@@ -32,7 +32,7 @@ import java.net.InetAddress;
 /**
  * Definition of a listener class
  *
- * @author Steve O'Hara (4energy)
+ * @author Steve O'Hara (4NG)
  * @version 2.0 (March 2016)
  */
 public abstract class AbstractModbusListener implements Runnable {

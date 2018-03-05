@@ -37,7 +37,7 @@ import java.io.IOException;
  *
  * @author Dieter Wimberger
  * @author Julie Haugh
- * @author Steve O'Hara (4energy)
+ * @author Steve O'Hara (4NG)
  * @version 2.0 (March 2016)
  */
 public final class WriteMultipleCoilsRequest extends ModbusRequest {
@@ -98,18 +98,9 @@ public final class WriteMultipleCoilsRequest extends ModbusRequest {
         coils = new BitVector(1);
     }
 
+    @Override
     public ModbusResponse getResponse() {
-        WriteMultipleCoilsResponse response = new WriteMultipleCoilsResponse();
-
-        response.setHeadless(isHeadless());
-        if (!isHeadless()) {
-            response.setProtocolID(getProtocolID());
-            response.setTransactionID(getTransactionID());
-        }
-        response.setFunctionCode(getFunctionCode());
-        response.setUnitID(getUnitID());
-
-        return response;
+        return updateResponseWithHeader(new WriteMultipleCoilsResponse());
     }
 
     @Override
@@ -131,7 +122,6 @@ public final class WriteMultipleCoilsRequest extends ModbusRequest {
             return createExceptionResponse(Modbus.ILLEGAL_ADDRESS_EXCEPTION);
         }
         response = (WriteMultipleCoilsResponse)getResponse();
-
         response.setBitCount(coils.size());
         response.setReference(reference);
 

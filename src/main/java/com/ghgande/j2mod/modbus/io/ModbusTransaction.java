@@ -30,7 +30,7 @@ import java.util.Random;
  * related response message.
  *
  * @author Dieter Wimberger
- * @author Steve O'Hara (4energy)
+ * @author Steve O'Hara (4NG)
  * @version 2.0 (March 2016)
  */
 public abstract class ModbusTransaction {
@@ -65,6 +65,9 @@ public abstract class ModbusTransaction {
      */
     public void setRequest(ModbusRequest req) {
         request = req;
+        if (req != null) {
+            request.setTransactionID(getTransactionID());
+        }
     }
 
     /**
@@ -129,14 +132,14 @@ public abstract class ModbusTransaction {
     synchronized public int getTransactionID() {
         /*
          * Ensure that the transaction ID is in the valid range between
-         * 1 and MAX_TRANSACTION_ID (65534).  If not, the value will be forced
-         * to 1.
+         * 0 and MAX_TRANSACTION_ID (65534).  If not, the value will be forced
+         * to 0.
          */
-        if (transactionID <= 0 && isCheckingValidity()) {
-            transactionID = 1;
+        if (transactionID < Modbus.DEFAULT_TRANSACTION_ID && isCheckingValidity()) {
+            transactionID = Modbus.DEFAULT_TRANSACTION_ID;
         }
         if (transactionID >= Modbus.MAX_TRANSACTION_ID) {
-            transactionID = 1;
+            transactionID = Modbus.DEFAULT_TRANSACTION_ID;
         }
         return transactionID;
     }

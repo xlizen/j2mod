@@ -27,7 +27,7 @@ import java.net.UnknownHostException;
  * Modbus/TCP Master facade.
  *
  * @author Dieter Wimberger
- * @author Steve O'Hara (4energy)
+ * @author Steve O'Hara (4NG)
  * @version 2.0 (March 2016)
  */
 public class ModbusTCPMaster extends AbstractModbusMaster {

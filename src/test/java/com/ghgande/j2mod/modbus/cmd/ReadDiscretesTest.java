@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
  * Class that implements a simple command line tool for reading a digital input.
  *
  * @author Dieter Wimberger
- * @author Steve O'Hara (4energy)
+ * @author Steve O'Hara (4NG)
  * @version 2.0 (March 2016)
  */
 public class ReadDiscretesTest {

@@ -31,7 +31,7 @@ import java.util.Arrays;
  *
  * @author Dieter Wimberger
  * @author Julie (jfh@ghgande.com)
- * @author Steve O'Hara (4energy)
+ * @author Steve O'Hara (4NG)
  * @version 2.0 (March 2016)
  */
 public final class ReadMultipleRegistersResponse extends ModbusResponse {

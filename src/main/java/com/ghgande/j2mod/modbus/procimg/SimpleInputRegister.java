@@ -21,7 +21,7 @@ package com.ghgande.j2mod.modbus.procimg;
  * The <tt>setValue()</tt> method is synchronized, which ensures atomic access, * but no specific access order.
  *
  * @author Dieter Wimberger
- * @author Steve O'Hara (4energy)
+ * @author Steve O'Hara (4NG)
  * @version 2.0 (March 2016)
  */
 public class SimpleInputRegister extends SynchronizedAbstractRegister implements InputRegister {

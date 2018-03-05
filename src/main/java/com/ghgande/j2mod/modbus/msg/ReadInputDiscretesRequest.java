@@ -35,7 +35,7 @@ import java.io.IOException;
  *
  * @author Dieter Wimberger
  * @author jfhaugh
- * @author Steve O'Hara (4energy)
+ * @author Steve O'Hara (4NG)
  * @version 2.0 (March 2016)
  */
 public final class ReadInputDiscretesRequest extends ModbusRequest {
@@ -74,26 +74,9 @@ public final class ReadInputDiscretesRequest extends ModbusRequest {
         setBitCount(count);
     }
 
-    /**
-     * Constructs a response to match this request.
-     *
-     * <p>Used by slave implementations to construct the appropriate
-     * response.
-     *
-     * @return Discretes response
-     */
-    public ReadInputDiscretesResponse getResponse() {
-        ReadInputDiscretesResponse response = new ReadInputDiscretesResponse(getBitCount());
-
-        response.setUnitID(getUnitID());
-        response.setFunctionCode(getFunctionCode());
-
-        response.setHeadless(isHeadless());
-        if (!isHeadless()) {
-            response.setTransactionID(getTransactionID());
-            response.setProtocolID(getProtocolID());
-        }
-        return response;
+    @Override
+    public ModbusResponse getResponse() {
+        return updateResponseWithHeader(new ReadInputDiscretesResponse(getBitCount()));
     }
 
     @Override
@@ -110,7 +93,7 @@ public final class ReadInputDiscretesRequest extends ModbusRequest {
         catch (IllegalAddressException e) {
             return createExceptionResponse(Modbus.ILLEGAL_ADDRESS_EXCEPTION);
         }
-        response = getResponse();
+        response = (ReadInputDiscretesResponse)getResponse();
 
         // Populate the discrete values from the process image.
         for (int i = 0; i < dins.length; i++) {

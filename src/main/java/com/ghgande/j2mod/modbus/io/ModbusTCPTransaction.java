@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
  * Class implementing the <tt>ModbusTransaction</tt> interface.
  *
  * @author Dieter Wimberger
- * @author Steve O'Hara (4energy)
+ * @author Steve O'Hara (4NG)
  * @version 2.0 (March 2016)
  */
 public class ModbusTCPTransaction extends ModbusTransaction {
@@ -118,7 +118,7 @@ public class ModbusTCPTransaction extends ModbusTransaction {
         if (!connection.isConnected()) {
             try {
                 logger.debug("connecting to: {}", connection.getAddress().toString());
-                connection.connect();
+                connection.connect(connection.getModbusTransport() instanceof ModbusRTUTCPTransport);
                 transport = connection.getModbusTransport();
             }
             catch (Exception ex) {
@@ -152,7 +152,7 @@ public class ModbusTCPTransaction extends ModbusTransaction {
                     //   a) the response is empty or
                     //   b) we have been told to check the validity and the request/response transaction IDs don't match AND
                     //   c) we haven't exceeded the maximum retry count
-                    if (response == null || (validityCheck && (request.getTransactionID() != 0 && request.getTransactionID() != response.getTransactionID()))) {
+                    if (responseIsInValid()) {
                         retryCounter++;
                         if (retryCounter >= retryLimit) {
                             throw new ModbusIOException("Executing transaction failed (tried {} times)", retryLimit);
@@ -204,27 +204,25 @@ public class ModbusTCPTransaction extends ModbusTransaction {
         if (isReconnecting()) {
             connection.close();
         }
-
-        // See if packets require validity checking.
-        if (isCheckingValidity()) {
-            checkValidity();
-        }
         incrementTransactionID();
     }
 
     /**
-     * checkValidity -- Verify the transaction IDs match or are zero.
+     * Returns true if the response is not valid
+     * This can be if the response is null or the transaction ID of the request
+     * doesn't match the reponse
      *
-     * @throws ModbusException if the transaction was not valid.
+     * @return True if invalid
      */
-    private void checkValidity() throws ModbusException {
-        if (request.getTransactionID() == 0
-                || response.getTransactionID() == 0) {
-            return;
+    private boolean responseIsInValid() {
+        if (response == null) {
+            return true;
         }
-
-        if (request.getTransactionID() != response.getTransactionID()) {
-            throw new ModbusException("Transaction ID mismatch");
+        else if (!response.isHeadless() && validityCheck) {
+            return request.getTransactionID() != response.getTransactionID();
+        }
+        else {
+            return false;
         }
     }
 
@@ -239,7 +237,7 @@ public class ModbusTCPTransaction extends ModbusTransaction {
     private synchronized void incrementTransactionID() {
         if (isCheckingValidity()) {
             if (transactionID >= Modbus.MAX_TRANSACTION_ID) {
-                transactionID = 1;
+                transactionID = Modbus.DEFAULT_TRANSACTION_ID;
             }
             else {
                 transactionID++;

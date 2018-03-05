@@ -26,7 +26,7 @@ import java.io.IOException;
  * Class implementing a <tt>WriteFileRecordResponse</tt>.
  *
  * @author Julie
- * @author Steve O'Hara (4energy)
+ * @author Steve O'Hara (4NG)
  * @version 2.0 (March 2016)
  */
 public final class WriteFileRecordResponse extends ModbusResponse {
