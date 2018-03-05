@@ -32,7 +32,7 @@ import java.util.Map;
  * Each slave is uniquely identified by the port it is listening on, irrespective of if
  * the socket type (TCP or UDP)
  *
- * @author Steve O'Hara (4energy)
+ * @author Steve O'Hara (4NG)
  * @version 2.0 (March 2016)
  */
 public class ModbusSlaveFactory {

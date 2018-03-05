@@ -27,7 +27,7 @@ import java.io.IOException;
  *
  * @author Julie Haugh (jfh@ghgande.com)
  * @author jfhaugh (jfh@ghgande.com)
- * @author Steve O'Hara (4energy)
+ * @author Steve O'Hara (4NG)
  * @version 2.0 (March 2016)
  */
 public final class ReadExceptionStatusRequest extends ModbusRequest {
@@ -45,27 +45,9 @@ public final class ReadExceptionStatusRequest extends ModbusRequest {
         setDataLength(0);
     }
 
-    /**
-     * createResponse -- create an empty response for this request.
-     * @return Empty response
-     */
+    @Override
     public ModbusResponse getResponse() {
-        ReadExceptionStatusResponse response;
-
-        response = new ReadExceptionStatusResponse();
-
-        // Copy any header data from the request.
-        response.setHeadless(isHeadless());
-        if (!isHeadless()) {
-            response.setTransactionID(getTransactionID());
-            response.setProtocolID(getProtocolID());
-        }
-
-        // Copy the unit ID and function code.
-        response.setUnitID(getUnitID());
-        response.setFunctionCode(getFunctionCode());
-
-        return response;
+        return updateResponseWithHeader(new ReadExceptionStatusResponse());
     }
 
     @Override

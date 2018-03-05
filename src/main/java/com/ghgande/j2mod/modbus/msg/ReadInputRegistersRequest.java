@@ -31,7 +31,7 @@ import java.io.IOException;
  * 4)</i>. It encapsulates the corresponding request message.
  *
  * @author Dieter Wimberger
- * @author Steve O'Hara (4energy)
+ * @author Steve O'Hara (4NG)
  * @version 2.0 (March 2016)
  */
 public final class ReadInputRegistersRequest extends ModbusRequest {
@@ -71,16 +71,8 @@ public final class ReadInputRegistersRequest extends ModbusRequest {
     }
 
     public ReadInputRegistersResponse getResponse() {
-        ReadInputRegistersResponse response = new ReadInputRegistersResponse();
-
-        response.setUnitID(getUnitID());
-        response.setHeadless(isHeadless());
+        ReadInputRegistersResponse response = (ReadInputRegistersResponse)updateResponseWithHeader(new ReadInputRegistersResponse());
         response.setWordCount(getWordCount());
-
-        if (!isHeadless()) {
-            response.setProtocolID(getProtocolID());
-            response.setTransactionID(getTransactionID());
-        }
         return response;
     }
 

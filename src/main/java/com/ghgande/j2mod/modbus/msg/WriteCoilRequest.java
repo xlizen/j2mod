@@ -31,7 +31,7 @@ import java.io.IOException;
  * encapsulates the corresponding request message.
  *
  * @author Dieter Wimberger
- * @author Steve O'Hara (4energy)
+ * @author Steve O'Hara (4NG)
  * @version 2.0 (March 2016)
  */
 public final class WriteCoilRequest extends ModbusRequest {
@@ -67,18 +67,9 @@ public final class WriteCoilRequest extends ModbusRequest {
         setCoil(b);
     }
 
+    @Override
     public ModbusResponse getResponse() {
-        WriteCoilResponse response = new WriteCoilResponse();
-
-        response.setHeadless(isHeadless());
-        if (!isHeadless()) {
-            response.setProtocolID(getProtocolID());
-            response.setTransactionID(getTransactionID());
-        }
-        response.setFunctionCode(getFunctionCode());
-        response.setUnitID(getUnitID());
-
-        return response;
+        return updateResponseWithHeader(new WriteCoilResponse());
     }
 
     @Override

@@ -35,7 +35,7 @@ import java.io.IOException;
  *
  * @author Dieter Wimberger
  * @author jfhaugh
- * @author Steve O'Hara (4energy)
+ * @author Steve O'Hara (4NG)
  * @version 2.0 (March 2016)
  */
 public final class ReadCoilsRequest extends ModbusRequest {
@@ -73,21 +73,8 @@ public final class ReadCoilsRequest extends ModbusRequest {
     }
 
     @Override
-    public ReadCoilsResponse getResponse() {
-        ReadCoilsResponse response;
-        response = new ReadCoilsResponse(bitCount);
-
-        // transfer header data
-        if (!isHeadless()) {
-            response.setTransactionID(getTransactionID());
-            response.setProtocolID(getProtocolID());
-        }
-        else {
-            response.setHeadless();
-        }
-        response.setUnitID(getUnitID());
-
-        return response;
+    public ModbusResponse getResponse() {
+        return updateResponseWithHeader(new ReadCoilsResponse(bitCount));
     }
 
     @Override
@@ -97,16 +84,13 @@ public final class ReadCoilsRequest extends ModbusRequest {
 
         // 1. get process image
         ProcessImage procimg = listener.getProcessImage(getUnitID());
+
         // 2. get input discretes range
         try {
             douts = procimg.getDigitalOutRange(getReference(), getBitCount());
         }
         catch (IllegalAddressException e) {
-            response = new IllegalAddressExceptionResponse();
-            response.setUnitID(getUnitID());
-            response.setFunctionCode(getFunctionCode());
-
-            return response;
+            return createExceptionResponse(Modbus.ILLEGAL_ADDRESS_EXCEPTION);
         }
         response = getResponse();
 

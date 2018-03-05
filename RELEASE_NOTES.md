@@ -116,3 +116,8 @@
 ## Version 2.3.9
 * Critical regression introduced in previous release whereby the sharing of stream buffers was being trampled over
 * Serial CRC was not correctly checking both bytes
+
+## Version 2.4.0
+* The transport RTU over TCP was not being set correctly after a comms failure
+* The Slave interface was not always correctly assigning the headers (Transaction ID, Function Code. Unit ID) for all types of requests
+* Fully tested the RTU over TCP transport with some real hardware

@@ -32,7 +32,7 @@ import java.io.IOException;
  * 6)</i>. It encapsulates the corresponding request message.
  *
  * @author Dieter Wimberger
- * @author Steve O'Hara (4energy)
+ * @author Steve O'Hara (4NG)
  * @version 2.0 (March 2016)
  */
 public final class WriteSingleRegisterRequest extends ModbusRequest {
@@ -68,49 +68,29 @@ public final class WriteSingleRegisterRequest extends ModbusRequest {
         register = reg;
     }
 
+    @Override
     public ModbusResponse getResponse() {
-        WriteSingleRegisterResponse response = new WriteSingleRegisterResponse();
-
-        response.setHeadless(isHeadless());
-        if (!isHeadless()) {
-            response.setProtocolID(getProtocolID());
-            response.setTransactionID(getTransactionID());
-        }
-        response.setFunctionCode(getFunctionCode());
-        response.setUnitID(getUnitID());
-
-        return response;
+        return updateResponseWithHeader(new WriteSingleRegisterResponse());
     }
 
     @Override
     public ModbusResponse createResponse(AbstractModbusListener listener) {
-        WriteSingleRegisterResponse response;
         Register reg;
 
         // 1. get process image
         ProcessImage procimg = listener.getProcessImage(getUnitID());
+
         // 2. get register
         try {
             reg = procimg.getRegister(reference);
+
             // 3. set Register
             reg.setValue(register.toBytes());
         }
         catch (IllegalAddressException iaex) {
             return createExceptionResponse(Modbus.ILLEGAL_ADDRESS_EXCEPTION);
         }
-        response = new WriteSingleRegisterResponse(this.getReference(), reg.getValue());
-        // transfer header data
-        if (!isHeadless()) {
-            response.setTransactionID(this.getTransactionID());
-            response.setProtocolID(this.getProtocolID());
-        }
-        else {
-            response.setHeadless();
-        }
-        response.setUnitID(this.getUnitID());
-        response.setFunctionCode(this.getFunctionCode());
-
-        return response;
+        return updateResponseWithHeader(new WriteSingleRegisterResponse(this.getReference(), reg.getValue()));
     }
 
     /**

@@ -31,7 +31,7 @@ import java.io.IOException;
  * registers (FC 3)</i>. It encapsulates the corresponding request message.
  *
  * @author Dieter Wimberger
- * @author Steve O'Hara (4energy)
+ * @author Steve O'Hara (4NG)
  * @version 2.0 (March 2016)
  */
 public final class ReadMultipleRegistersRequest extends ModbusRequest {
@@ -72,17 +72,7 @@ public final class ReadMultipleRegistersRequest extends ModbusRequest {
 
     @Override
     public ModbusResponse getResponse() {
-        ReadMultipleRegistersResponse response;
-
-        response = new ReadMultipleRegistersResponse();
-
-        response.setUnitID(getUnitID());
-        response.setHeadless(isHeadless());
-        if (!isHeadless()) {
-            response.setProtocolID(getProtocolID());
-            response.setTransactionID(getTransactionID());
-        }
-        return response;
+        return updateResponseWithHeader(new ReadMultipleRegistersResponse());
     }
 
     @Override

@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
  * the LSB (rightmost) bit.
  *
  * @author Dieter Wimberger
- * @author Steve O'Hara (4energy)
+ * @author Steve O'Hara (4NG)
  * @version 2.0 (March 2016)
  */
 public final class BitVector {

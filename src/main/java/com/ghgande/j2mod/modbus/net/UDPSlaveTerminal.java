@@ -30,7 +30,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  * Class implementing a <tt>UDPSlaveTerminal</tt>.
  *
  * @author Dieter Wimberger
- * @author Steve O'Hara (4energy)
+ * @author Steve O'Hara (4NG)
  * @version 2.0 (March 2016)
  */
 class UDPSlaveTerminal extends AbstractUDPTerminal {

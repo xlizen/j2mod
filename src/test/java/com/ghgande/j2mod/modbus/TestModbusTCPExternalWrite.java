@@ -26,7 +26,7 @@ import static org.junit.Assert.assertTrue;
  * Once this is verified, the j2mod slave code can be used to test the features of the
  * master
  *
- * @author Steve O'Hara (4energy)
+ * @author Steve O'Hara (4NG)
  * @version 2.0 (March 2016)
  */
 public class TestModbusTCPExternalWrite extends AbstractTestModbusTCPSlave {

@@ -37,7 +37,7 @@ import java.util.Set;
  *
  * @author Dieter Wimberger
  * @author John Charlton
- * @author Steve O'Hara (4energy)
+ * @author Steve O'Hara (4NG)
  * @version 2.0 (March 2016)
  */
 public abstract class ModbusSerialTransport extends AbstractModbusTransport {

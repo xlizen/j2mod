@@ -24,7 +24,7 @@ import com.ghgande.j2mod.modbus.net.AbstractSerialConnection;
  * Any class that wants to listen for the begining and ending of read/writes
  * to the Serial channel need to implement this interface
  *
- * @author Steve O'Hara (4energy)
+ * @author Steve O'Hara (4NG)
  * @version 2.0 (March 2016)
  */
 abstract public class AbstractSerialTransportListener {

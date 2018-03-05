@@ -24,7 +24,7 @@ import com.ghgande.j2mod.modbus.net.AbstractModbusListener;
  *
  * @author Dieter Wimberger
  * @author jfhaugh (jfh@ghgande.com)
- * @author Steve O'Hara (4energy)
+ * @author Steve O'Hara (4NG)
  * @version 2.0 (March 2016)
  */
 public abstract class ModbusRequest extends ModbusMessageImpl {
@@ -149,7 +149,30 @@ public abstract class ModbusRequest extends ModbusMessageImpl {
      * @return a ModbusResponse instance representing the exception response.
      */
     public ModbusResponse createExceptionResponse(int code) {
-        ExceptionResponse response = new ExceptionResponse(getFunctionCode(), code);
+        return updateResponseWithHeader(new ExceptionResponse(getFunctionCode(), code), true);
+    }
+
+    /**
+     * Updates the response with the header information to match the request
+     *
+     * @param response Response to update
+     * @return Updated response
+     */
+    ModbusResponse updateResponseWithHeader(ModbusResponse response) {
+        return updateResponseWithHeader(response, false);
+    }
+
+    /**
+     * Updates the response with the header information to match the request
+     *
+     * @param response Response to update
+     * @param ignoreFunctionCode True if the function code should stay unmolested
+     * @return Updated response
+     */
+    ModbusResponse updateResponseWithHeader(ModbusResponse response, boolean ignoreFunctionCode) {
+
+        // transfer header data
+        response.setHeadless(isHeadless());
         if (!isHeadless()) {
             response.setTransactionID(getTransactionID());
             response.setProtocolID(getProtocolID());
@@ -158,6 +181,9 @@ public abstract class ModbusRequest extends ModbusMessageImpl {
             response.setHeadless();
         }
         response.setUnitID(getUnitID());
+        if (!ignoreFunctionCode) {
+            response.setFunctionCode(getFunctionCode());
+        }
         return response;
     }
 }

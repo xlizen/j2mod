@@ -30,7 +30,7 @@ import com.ghgande.j2mod.modbus.util.BitVector;
  * for the most common Function Codes.
  * This class makes sure that no NPE is raised and that the methods are thread-safe.
  *
- * @author Steve O'Hara (4energy)
+ * @author Steve O'Hara (4NG)
  * @version 2.0 (March 2016)
  */
 abstract public class AbstractModbusMaster {

@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
  * interface for the UDP transport mechanism.
  *
  * @author Dieter Wimberger
- * @author Steve O'Hara (4energy)
+ * @author Steve O'Hara (4NG)
  * @version 2.0 (March 2016)
  */
 public class ModbusUDPTransaction extends ModbusTransaction {
@@ -147,10 +147,6 @@ public class ModbusUDPTransaction extends ModbusTransaction {
             throw new ModbusSlaveException(((ExceptionResponse)response).getExceptionCode());
         }
 
-        if (isCheckingValidity()) {
-            checkValidity();
-        }
-
         //toggle the id
         incrementTransactionID();
     }
@@ -169,21 +165,6 @@ public class ModbusUDPTransaction extends ModbusTransaction {
     }
 
     /**
-     * Checks the validity of the transaction, by
-     * checking if the values of the response correspond
-     * to the values of the request.
-     *
-     * @throws ModbusException if this transaction has not been valid.
-     */
-    private void checkValidity() throws ModbusException {
-        //1.check transaction number
-        //if(request.getTransactionID()!=response.getTransactionID()) {
-
-        //}
-
-    }
-
-    /**
      * Toggles the transaction identifier, to ensure
      * that each transaction has a distinctive
      * identifier.<br>
@@ -193,7 +174,7 @@ public class ModbusUDPTransaction extends ModbusTransaction {
     private void incrementTransactionID() {
         if (isCheckingValidity()) {
             if (transactionID >= Modbus.MAX_TRANSACTION_ID) {
-                transactionID = 1;
+                transactionID = Modbus.DEFAULT_TRANSACTION_ID;
             }
             else {
                 transactionID++;

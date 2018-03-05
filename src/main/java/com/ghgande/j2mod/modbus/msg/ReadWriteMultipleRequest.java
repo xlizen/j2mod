@@ -30,7 +30,7 @@ import java.util.Arrays;
  *
  * @author Julie Haugh
  * @author Julie Haugh
- * @author Steve O'Hara (4energy)
+ * @author Steve O'Hara (4NG)
  * @version 2.0 (March 2016)
  */
 public final class ReadWriteMultipleRequest extends ModbusRequest {
@@ -94,27 +94,9 @@ public final class ReadWriteMultipleRequest extends ModbusRequest {
         setDataLength(9);
     }
 
-    /**
-     * createResponse -- create an empty response for this request.
-     * @return Empty response object
-     */
+    @Override
     public ModbusResponse getResponse() {
-        ReadWriteMultipleResponse response;
-
-        response = new ReadWriteMultipleResponse();
-
-        // Copy any header data from the request.
-        response.setHeadless(isHeadless());
-        if (!isHeadless()) {
-            response.setTransactionID(getTransactionID());
-            response.setProtocolID(getProtocolID());
-        }
-
-        // Copy the unit ID and function code.
-        response.setUnitID(getUnitID());
-        response.setFunctionCode(getFunctionCode());
-
-        return response;
+        return updateResponseWithHeader(new ReadWriteMultipleResponse());
     }
 
     @Override

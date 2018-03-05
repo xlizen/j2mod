@@ -36,7 +36,7 @@ import java.util.Arrays;
  *
  * @author Dieter Wimberger
  * @author jfhaugh
- * @author Steve O'Hara (4energy)
+ * @author Steve O'Hara (4NG)
  * @version 2.0 (March 2016)
  */
 public final class WriteMultipleRegistersRequest extends ModbusRequest {
@@ -66,18 +66,9 @@ public final class WriteMultipleRegistersRequest extends ModbusRequest {
         setFunctionCode(Modbus.WRITE_MULTIPLE_REGISTERS);
     }
 
+    @Override
     public ModbusResponse getResponse() {
-        WriteMultipleRegistersResponse response = new WriteMultipleRegistersResponse();
-
-        response.setHeadless(isHeadless());
-        if (!isHeadless()) {
-            response.setProtocolID(getProtocolID());
-            response.setTransactionID(getTransactionID());
-        }
-        response.setFunctionCode(getFunctionCode());
-        response.setUnitID(getUnitID());
-
-        return response;
+        return updateResponseWithHeader(new WriteMultipleRegistersResponse());
     }
 
     /**
@@ -119,7 +110,6 @@ public final class WriteMultipleRegistersRequest extends ModbusRequest {
                 return createExceptionResponse(Modbus.ILLEGAL_ADDRESS_EXCEPTION);
             }
             response = (WriteMultipleRegistersResponse)getResponse();
-
             response.setReference(getReference());
             response.setWordCount(getWordCount());
         }
@@ -130,7 +120,6 @@ public final class WriteMultipleRegistersRequest extends ModbusRequest {
             }
 
             response = (WriteMultipleRegistersResponse)getResponse();
-
             response.setReference(getReference());
             response.setWordCount(nonWordDataHandler.getWordCount());
         }

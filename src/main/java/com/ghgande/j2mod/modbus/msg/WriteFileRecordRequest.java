@@ -28,7 +28,7 @@ import java.io.IOException;
  * Class implementing a <tt>Write File Record</tt> request.
  *
  * @author Julie Haugh (jfh@ghgande.com)
- * @author Steve O'Hara (4energy)
+ * @author Steve O'Hara (4NG)
  * @version 2.0 (March 2016)
  */
 public final class WriteFileRecordRequest extends ModbusRequest {
@@ -111,33 +111,14 @@ public final class WriteFileRecordRequest extends ModbusRequest {
         setDataLength(getRequestSize());
     }
 
-    /**
-     * createResponse -- create an empty response for this request.
-     * @return Byte array of message
-     */
+    @Override
     public ModbusResponse getResponse() {
-        WriteFileRecordResponse response;
-
-        response = new WriteFileRecordResponse();
-
-        // Copy any header data from the request.
-        response.setHeadless(isHeadless());
-        if (!isHeadless()) {
-            response.setTransactionID(getTransactionID());
-            response.setProtocolID(getProtocolID());
-        }
-
-        // Copy the unit ID and function code.
-        response.setUnitID(getUnitID());
-        response.setFunctionCode(getFunctionCode());
-
-        return response;
+        return updateResponseWithHeader(new WriteFileRecordResponse());
     }
 
     @Override
     public ModbusResponse createResponse(AbstractModbusListener listener) {
-        WriteFileRecordResponse response;
-        response = (WriteFileRecordResponse)getResponse();
+        WriteFileRecordResponse response = (WriteFileRecordResponse)getResponse();
 
         // Get the process image.
         ProcessImage procimg = listener.getProcessImage(getUnitID());
@@ -146,15 +127,13 @@ public final class WriteFileRecordRequest extends ModbusRequest {
         try {
             for (int i = 0; i < getRequestCount(); i++) {
                 RecordRequest recordRequest = getRecord(i);
-                if (recordRequest.getFileNumber() < 0 ||
-                        recordRequest.getFileNumber() >= procimg.getFileCount()) {
+                if (recordRequest.getFileNumber() < 0 || recordRequest.getFileNumber() >= procimg.getFileCount()) {
                     return createExceptionResponse(Modbus.ILLEGAL_ADDRESS_EXCEPTION);
                 }
 
                 File file = procimg.getFileByNumber(recordRequest.getFileNumber());
 
-                if (recordRequest.getRecordNumber() < 0 ||
-                        recordRequest.getRecordNumber() >= file.getRecordCount()) {
+                if (recordRequest.getRecordNumber() < 0 || recordRequest.getRecordNumber() >= file.getRecordCount()) {
                     return createExceptionResponse(Modbus.ILLEGAL_ADDRESS_EXCEPTION);
                 }
 

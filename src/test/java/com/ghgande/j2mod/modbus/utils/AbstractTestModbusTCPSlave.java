@@ -30,7 +30,7 @@ import static org.junit.Assume.assumeTrue;
  * All the slave unit tests extend this class so that the system will automatically
  * create a test slave to work with and tear it down after a run
  *
- * @author Steve O'Hara (4energy)
+ * @author Steve O'Hara (4NG)
  * @version 2.0 (March 2016)
  */
 public class AbstractTestModbusTCPSlave extends AbstractTestModbusTCPMaster {

@@ -20,7 +20,7 @@ package com.ghgande.j2mod.modbus;
  * exception are thrown when the slave returns a Modbus exception.
  *
  * @author Dieter Wimberger
- * @author Steve O'Hara (4energy)
+ * @author Steve O'Hara (4NG)
  * @version 2.0 (March 2016)
  */
 public class ModbusSlaveException extends ModbusException {

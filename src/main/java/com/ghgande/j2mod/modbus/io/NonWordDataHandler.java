@@ -28,7 +28,7 @@ import java.io.IOException;
  * items which are floating point values or string.
  *
  * @author Dieter Wimberger
- * @author Steve O'Hara (4energy)
+ * @author Steve O'Hara (4NG)
  * @version 2.0 (March 2016)
  */
 public interface NonWordDataHandler {
