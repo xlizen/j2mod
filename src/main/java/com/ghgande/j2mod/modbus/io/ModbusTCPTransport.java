@@ -204,10 +204,10 @@ public class ModbusTCPTransport extends AbstractModbusTransport {
                     // Do nothing.
                 }
             }
-            throw new ModbusIOException("I/O socket exception - failed to write - {}", ex1.getMessage());
+            throw new ModbusIOException("I/O socket exception - failed to write - %s", ex1.getMessage());
         }
         catch (Exception ex2) {
-            throw new ModbusIOException("General exception - failed to write - {}", ex2.getMessage());
+            throw new ModbusIOException("General exception - failed to write - %s", ex2.getMessage());
         }
     }
 
@@ -367,13 +367,13 @@ public class ModbusTCPTransport extends AbstractModbusTransport {
             return response;
         }
         catch (EOFException ex1) {
-            throw new ModbusIOException("Premature end of stream (Message truncated) - {}", ex1.getMessage());
+            throw new ModbusIOException("Premature end of stream (Message truncated) - %s", ex1.getMessage());
         }
         catch (SocketTimeoutException ex2) {
-            throw new ModbusIOException("Socket timeout reading response - {}", ex2.getMessage());
+            throw new ModbusIOException("Socket timeout reading response - %s", ex2.getMessage());
         }
         catch (Exception ex3) {
-            throw new ModbusIOException("General exception - failed to read - {}", ex3.getMessage());
+            throw new ModbusIOException("General exception - failed to read - %s", ex3.getMessage());
         }
     }
 

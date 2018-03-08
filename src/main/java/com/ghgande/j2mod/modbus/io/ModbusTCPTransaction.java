@@ -155,7 +155,7 @@ public class ModbusTCPTransaction extends ModbusTransaction {
                     if (responseIsInValid()) {
                         retryCounter++;
                         if (retryCounter >= retryLimit) {
-                            throw new ModbusIOException("Executing transaction failed (tried {} times)", retryLimit);
+                            throw new ModbusIOException("Executing transaction failed (tried %d times)", retryLimit);
                         }
                         keepTrying = true;
                         long sleepTime = getRandomSleepTime(retryCounter);
@@ -185,7 +185,7 @@ public class ModbusTCPTransaction extends ModbusTransaction {
                 }
                 retryCounter++;
                 if (retryCounter >= retryLimit) {
-                    throw new ModbusIOException("Executing transaction failed (tried {} times) {}", retryLimit, ex.getMessage());
+                    throw new ModbusIOException("Executing transaction failed (tried %d times) %s", retryLimit, ex.getMessage());
                 }
                 else {
                     long sleepTime = getRandomSleepTime(retryCounter);
