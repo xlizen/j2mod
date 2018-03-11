@@ -124,3 +124,4 @@
 
 ## Version 2.4.1
 * Fixed some error messages
+* Added more logging and made the TCP transaction a little more robust
