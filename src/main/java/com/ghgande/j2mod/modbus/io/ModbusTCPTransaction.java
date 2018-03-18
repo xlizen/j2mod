@@ -114,90 +114,88 @@ public class ModbusTCPTransaction extends ModbusTransaction {
             throw new ModbusException("Invalid request or connection");
         }
 
-        // Automatically re-connect if disconnected.
-        if (!connection.isConnected()) {
-            try {
-                logger.debug("connecting to: {}", connection.getAddress().toString());
-                connection.connect(connection.getModbusTransport() instanceof ModbusRTUTCPTransport);
-                transport = connection.getModbusTransport();
-            }
-            catch (Exception ex) {
-                throw new ModbusIOException("Connection failed", ex);
-            }
-        }
-
         // Try sending the message up to retries time. Note that the message
         // is read immediately after being written, with no flushing of buffers.
         int retryCounter = 0;
         int retryLimit = (retries > 0 ? retries : Modbus.DEFAULT_RETRIES);
-        transport.setTimeout(connection.getTimeout());
         boolean keepTrying = true;
 
+        // While we haven't exhausted all the retry attempts
         while (keepTrying) {
-            try {
-                logger.debug("Writing message (try: {}) request transaction ID = {}", retryCounter, request.getTransactionID());
-                transport.writeMessage(request);
-                response = null;
-                while (keepTrying) {
-                    response = transport.readResponse();
-                    if (logger.isDebugEnabled()) {
-                        logger.debug("Response transaction ID = {}, RESPONSE: {}", response.getTransactionID(), response.getHexMessage());
-                        if (response.getTransactionID() != request.getTransactionID()) {
-                            logger.debug("Expected {}, got {}", request.getTransactionID(), response.getTransactionID());
-                        }
-                    }
-                    keepTrying = false;
 
-                    // We need to keep retrying if;
-                    //   a) the response is empty or
-                    //   b) we have been told to check the validity and the request/response transaction IDs don't match AND
-                    //   c) we haven't exceeded the maximum retry count
-                    if (responseIsInValid()) {
-                        retryCounter++;
-                        if (retryCounter >= retryLimit) {
-                            throw new ModbusIOException("Executing transaction failed (tried {} times)", retryLimit);
-                        }
-                        keepTrying = true;
-                        long sleepTime = getRandomSleepTime(retryCounter);
-                        if (response == null) {
-                            logger.debug("Failed to get any response (try: {}) - retrying after {} milliseconds", retryCounter, sleepTime);
-                        }
-                        else {
-                            logger.debug("Failed to get a valid response, transaction IDs do not match (try: {}) - retrying after {} milliseconds", retryCounter, sleepTime);
-                        }
-                        ModbusUtil.sleep(sleepTime);
+            // Automatically connect if we aren't already connected
+            if (!connection.isConnected()) {
+                try {
+                    logger.debug("Connecting to: {}:{}", connection.getAddress().toString(), connection.getPort());
+                    connection.connect(connection.getModbusTransport() instanceof ModbusRTUTCPTransport);
+                    transport = connection.getModbusTransport();
+                }
+                catch (Exception ex) {
+                    throw new ModbusIOException("Connection failed for %s:%d", connection.getAddress().toString(), connection.getPort(), ex.getMessage());
+                }
+            }
+
+            // Make sure the timeout is set
+            transport.setTimeout(connection.getTimeout());
+
+            try {
+
+                // Write the message to the endpoint
+                logger.debug("Writing request: {} (try: {}) request transaction ID = {} to {}:{}", request.getHexMessage(), retryCounter, request.getTransactionID(), connection.getAddress().toString(), connection.getPort());
+                transport.writeMessage(request);
+
+                // Read the response
+                response = transport.readResponse();
+                logger.debug("Read response: {} (try: {}) response transaction ID = {} from {}:{}", response.getHexMessage(), retryCounter, response.getTransactionID(), connection.getAddress().toString(), connection.getPort());
+                keepTrying = false;
+
+                // The slave may have returned an exception -- check for that.
+                if (response instanceof ExceptionResponse) {
+                    throw new ModbusSlaveException(((ExceptionResponse)response).getExceptionCode());
+                }
+
+                // We need to keep retrying if;
+                //   a) the response is empty OR
+                //   b) we have been told to check the validity and the request/response transaction IDs don't match AND
+                //   c) we haven't exceeded the maximum retry count
+                if (responseIsInValid()) {
+                    retryCounter++;
+                    if (retryCounter >= retryLimit) {
+                        throw new ModbusIOException("Executing transaction failed (tried %d times)", retryLimit);
                     }
+                    keepTrying = true;
+                    long sleepTime = getRandomSleepTime(retryCounter);
+                    if (response == null) {
+                        logger.debug("Failed to get any response (try: {}) - retrying after {} milliseconds", retryCounter, sleepTime);
+                    }
+                    else {
+                        logger.debug("Failed to get a valid response, transaction IDs do not match (try: {}) - retrying after {} milliseconds", retryCounter, sleepTime);
+                    }
+                    ModbusUtil.sleep(sleepTime);
                 }
             }
             catch (ModbusIOException ex) {
 
-                // If this has happened, then we should close and re-open the connection
-                // before re-trying
-
-                try {
-                    logger.debug("Failed transaction (try: {}) - {} closing and re-opening connection", retryCounter, ex.getMessage());
-                    boolean usingRtuOverTCP = transport instanceof ModbusRTUTCPTransport;
-                    connection.close();
-                    connection.connect(usingRtuOverTCP);
-                }
-                catch (Exception e) {
-                    throw new ModbusIOException("Connection lost", e);
-                }
+                // Up the retry counter and check if we are exhausted
                 retryCounter++;
                 if (retryCounter >= retryLimit) {
-                    throw new ModbusIOException("Executing transaction failed (tried {} times) {}", retryLimit, ex.getMessage());
+                    throw new ModbusIOException("Executing transaction %s failed (tried %d times) %s", request.getHexMessage(), retryLimit, ex.getMessage());
                 }
                 else {
                     long sleepTime = getRandomSleepTime(retryCounter);
-                    logger.debug("Failed transaction (try: {}) - retrying after {} milliseconds", retryCounter, sleepTime);
+                    logger.debug("Failed transaction Request: {} (try: {}) - retrying after {} milliseconds", request.getHexMessage(), retryCounter, sleepTime);
                     ModbusUtil.sleep(sleepTime);
                 }
-            }
-        }
 
-        // The slave may have returned an exception -- check for that.
-        if (response instanceof ExceptionResponse) {
-            throw new ModbusSlaveException(((ExceptionResponse)response).getExceptionCode());
+                // If this has happened, then we should close and re-open the connection before re-trying
+                logger.debug("Failed request {} (try: {}) request transaction ID = {} - {} closing and re-opening connection {}:{}", request.getHexMessage(), retryCounter, request.getTransactionID(), ex.getMessage(), connection.getAddress().toString(), connection.getPort());
+                connection.close();
+            }
+
+            // Increment the transaction ID if we are still trying
+            if (keepTrying) {
+                incrementTransactionID();
+            }
         }
 
         // Close the connection if it isn't supposed to stick around.

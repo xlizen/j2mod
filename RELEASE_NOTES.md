@@ -121,3 +121,7 @@
 * The transport RTU over TCP was not being set correctly after a comms failure
 * The Slave interface was not always correctly assigning the headers (Transaction ID, Function Code. Unit ID) for all types of requests
 * Fully tested the RTU over TCP transport with some real hardware
+
+## Version 2.4.1
+* Fixed some error messages
+* Added more logging and made the TCP transaction a little more robust

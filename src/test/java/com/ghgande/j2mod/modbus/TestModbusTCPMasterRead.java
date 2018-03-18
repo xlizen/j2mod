@@ -18,6 +18,8 @@ package com.ghgande.j2mod.modbus;
 import com.ghgande.j2mod.modbus.procimg.InputRegister;
 import com.ghgande.j2mod.modbus.utils.AbstractTestModbusTCPMaster;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static junit.framework.TestCase.assertFalse;
 import static org.junit.Assert.*;
@@ -27,6 +29,8 @@ import static org.junit.Assert.*;
  */
 @SuppressWarnings("ConstantConditions")
 public class TestModbusTCPMasterRead extends AbstractTestModbusTCPMaster {
+
+    private static final Logger logger = LoggerFactory.getLogger(AbstractTestModbusTCPMaster.class);
 
     @Test
     public void testReadCoils() {
@@ -46,7 +50,7 @@ public class TestModbusTCPMasterRead extends AbstractTestModbusTCPMaster {
             fail("Invalid address not thrown");
         }
         catch (ModbusSlaveException e) {
-            // Expected
+            logger.info("Got expected error response (testReadInvalidCoil) - {}", e.getMessage());
         }
         catch (Exception e) {
             fail(String.format("Cannot read - %s", e.getMessage()));
@@ -71,7 +75,7 @@ public class TestModbusTCPMasterRead extends AbstractTestModbusTCPMaster {
             fail("Failed check for missing discrete 9");
         }
         catch (ModbusSlaveException e) {
-            // Expected
+            logger.info("Got expected error response (testReadInvalidDiscretes) - {}", e.getMessage());
         }
         catch (Exception e) {
             fail(String.format("Cannot read - %s", e.getMessage()));
@@ -95,7 +99,7 @@ public class TestModbusTCPMasterRead extends AbstractTestModbusTCPMaster {
             fail("Failed check for missing register 6");
         }
         catch (ModbusSlaveException e) {
-            // Expected
+            logger.info("Got expected error response (testReadInvalidInputRegisters) - {}", e.getMessage());
         }
         catch (Exception e) {
             fail(String.format("Cannot read - %s", e.getMessage()));
@@ -119,7 +123,7 @@ public class TestModbusTCPMasterRead extends AbstractTestModbusTCPMaster {
             fail("Failed check for missing holding register 5");
         }
         catch (ModbusSlaveException e) {
-            // Expected
+            logger.info("Got expected error response (testReadInvalidHoldingRegisters) - {}", e.getMessage());
         }
         catch (Exception e) {
             fail(String.format("Cannot read - %s", e.getMessage()));
@@ -163,7 +167,7 @@ public class TestModbusTCPMasterRead extends AbstractTestModbusTCPMaster {
             fail("Failed check for invalid Unit ID");
         }
         catch (Exception e) {
-            // expected
+            logger.info("Got expected error response (testBadUnitIdRequest) - {}", e.getMessage());
         }
     }
 

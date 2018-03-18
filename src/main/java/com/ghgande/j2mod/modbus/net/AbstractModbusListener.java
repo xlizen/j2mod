@@ -158,7 +158,7 @@ public abstract class AbstractModbusListener implements Runnable {
         }
         ModbusRequest request = transport.readRequest(listener);
         if (request == null) {
-            throw new ModbusIOException("Request for transport {} is invalid (null)", transport.getClass().getSimpleName());
+            throw new ModbusIOException("Request for transport %s is invalid (null)", transport.getClass().getSimpleName());
         }
         ModbusResponse response;
 

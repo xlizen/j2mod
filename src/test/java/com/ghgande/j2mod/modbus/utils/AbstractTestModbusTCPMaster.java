@@ -144,7 +144,7 @@ public class AbstractTestModbusTCPMaster extends AbstractTestModbus {
             return trans.getResponse();
         }
         catch (Exception e) {
-            logger.debug(e.getMessage());
+            logger.info("Got error for request to {}:{} (FC:{}, Reg:{}, Cnt:{}) - {}", LOCALHOST, PORT, functionCode, register, count, e.getMessage());
         }
         finally {
             if (transport != null) {
