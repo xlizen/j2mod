@@ -127,7 +127,7 @@ public class ModbusTCPTransaction extends ModbusTransaction {
             if (!connection.isConnected()) {
                 try {
                     logger.debug("Connecting to: {}:{}", connection.getAddress().toString(), connection.getPort());
-                    connection.connect(connection.getModbusTransport() instanceof ModbusRTUTCPTransport);
+                    connection.connect();
                     transport = connection.getModbusTransport();
                 }
                 catch (Exception ex) {

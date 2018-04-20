@@ -50,11 +50,13 @@ public class TCPMasterConnection {
 
     private ModbusTCPTransport transport;
 
+    private boolean useRtuOverTcp = false;
+
     /**
-     * m_useUrgentData - sent a byte of urgent data when testing the TCP
+     * useUrgentData - sent a byte of urgent data when testing the TCP
      * connection.
      */
-    private boolean m_useUrgentData = false;
+    private boolean useUrgentData = false;
 
     /**
      * Constructs a <tt>TCPMasterConnection</tt> instance with a given
@@ -75,7 +77,14 @@ public class TCPMasterConnection {
      * @throws IOException if an I/O related error occurs.
      */
     private void prepareTransport(boolean useRtuOverTcp) throws IOException {
-        if (transport == null) {
+
+        // If we don't have a transport, or the transport type has changed
+        if (transport == null || (this.useRtuOverTcp != useRtuOverTcp)) {
+
+            // Save the flag to tell us which transport type to use
+            this.useRtuOverTcp = useRtuOverTcp;
+
+            // Select the correct transport
             if (useRtuOverTcp) {
                 logger.trace("prepareTransport() -> using RTU over TCP transport.");
                 transport = new ModbusRTUTCPTransport(socket);
@@ -100,7 +109,7 @@ public class TCPMasterConnection {
      * @throws Exception if there is a network failure.
      */
     public synchronized void connect() throws Exception {
-        connect(false);
+        connect(useRtuOverTcp);
     }
 
     /**
@@ -153,7 +162,7 @@ public class TCPMasterConnection {
             }
             else {
                 /*
-                 * When m_useUrgentData is set, a byte of urgent data
+                 * When useUrgentData is set, a byte of urgent data
                  * will be sent to the server to test the connection. If
                  * the connection is actually broken, an IException will
                  * occur and the connection will be closed.
@@ -161,7 +170,7 @@ public class TCPMasterConnection {
                  * Note: RFC 6093 has decreed that we stop using urgent
                  * data.
                  */
-                if (m_useUrgentData) {
+                if (useUrgentData) {
                     try {
                         socket.sendUrgentData(0);
                         ModbusUtil.sleep(5);
@@ -196,9 +205,6 @@ public class TCPMasterConnection {
                 connected = false;
             }
         }
-
-        // Just in case users open it with a different protocol second time round (RTU over TCP)
-        transport = null;
     }
 
     /**
@@ -293,7 +299,7 @@ public class TCPMasterConnection {
      * @return Status
      */
     public boolean getUseUrgentData() {
-        return m_useUrgentData;
+        return useUrgentData;
     }
 
     /**
@@ -303,6 +309,30 @@ public class TCPMasterConnection {
      * @param useUrgentData - Connections are testing using urgent data.
      */
     public void setUseUrgentData(boolean useUrgentData) {
-        m_useUrgentData = useUrgentData;
+        this.useUrgentData = useUrgentData;
+    }
+
+    /**
+     * Returns true if this connection is an RTU over TCP type
+     * 
+     * @return True if RTU over TCP
+     */
+    public boolean isUseRtuOverTcp() {
+        return useRtuOverTcp;
+    }
+
+    /**
+     * Sets the transport type to use
+     * Normally set during the connection but can also be set after a connection has been established
+     *
+     * @param useRtuOverTcp True if the transport should be interpreted as RTU over tCP
+     *
+     * @throws Exception If the connection is not valid
+     */
+    public void setUseRtuOverTcp(boolean useRtuOverTcp) throws Exception {
+        this.useRtuOverTcp = useRtuOverTcp;
+        if (isConnected()) {
+            prepareTransport(useRtuOverTcp);
+        }
     }
 }
