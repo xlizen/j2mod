@@ -89,10 +89,6 @@ public class ModbusSerialListener extends AbstractModbusListener {
                     logger.debug(ex.getMessage());
                 }
             }
-
-            // Not listening -- read and discard the request so the
-            // input doesn't get clogged up.
-            transport.readRequest(this);
         }
         catch (Exception e) {
             logger.error("Exception occurred while handling request.", e);
@@ -105,10 +101,10 @@ public class ModbusSerialListener extends AbstractModbusListener {
 
     @Override
     public void stop() {
-        listening = false;
         if (serialCon != null) {
             serialCon.close();
         }
+        listening = false;
     }
 
 }

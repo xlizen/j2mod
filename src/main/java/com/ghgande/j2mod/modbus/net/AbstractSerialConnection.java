@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.Set;
 
 /**
- * Interface that represents an public abstract serial port connection
+ * Interface that represents a public abstract serial port connection
  *
  * @author Felipe Herranz
  * @version 2.0 (March 2016)
@@ -41,9 +41,19 @@ public abstract class AbstractSerialConnection {
     public static final int FLOW_CONTROL_XONXOFF_OUT_ENABLED = 1048576;
 
     /**
+     * Open delay (msec)
+     */
+    public static final int OPEN_DELAY = 0;
+
+    /**
      * Timeout
      */
-    public static final int TIMEOUT_READ_BLOCKING = 256;
+    static final public int TIMEOUT_NONBLOCKING = 0x00000000;
+   	static final public int TIMEOUT_READ_SEMI_BLOCKING = 0x00000001;
+   	static final public int TIMEOUT_WRITE_SEMI_BLOCKING = 0x00000010;
+   	static final public int TIMEOUT_READ_BLOCKING = 0x00000100;
+   	static final public int TIMEOUT_WRITE_BLOCKING = 0x00001000;
+   	static final public int TIMEOUT_SCANNER = 0x00010000;
 
     /**
      * Returns the <tt>ModbusTransport</tt> instance to be used for receiving

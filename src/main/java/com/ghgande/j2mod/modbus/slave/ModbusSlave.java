@@ -21,6 +21,7 @@ import com.ghgande.j2mod.modbus.net.ModbusSerialListener;
 import com.ghgande.j2mod.modbus.net.ModbusTCPListener;
 import com.ghgande.j2mod.modbus.net.ModbusUDPListener;
 import com.ghgande.j2mod.modbus.procimg.ProcessImage;
+import com.ghgande.j2mod.modbus.util.ModbusUtil;
 import com.ghgande.j2mod.modbus.util.SerialParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,6 +45,7 @@ public class ModbusSlave {
     private SerialParameters serialParams;
     private AbstractModbusListener listener;
     private boolean isRunning;
+    private Thread listenerThread;
 
     private Map<Integer, ProcessImage> processImages = new HashMap<Integer, ProcessImage>();
 
@@ -199,7 +201,7 @@ public class ModbusSlave {
     }
 
     /**
-     * Opens the lsitener to service requests
+     * Opens the listener to service requests
      *
      * @throws ModbusException If we cannot listen
      */
@@ -209,13 +211,12 @@ public class ModbusSlave {
 
         if (!isRunning) {
             try {
-                new Thread(listener).start();
+                listenerThread = new Thread(listener);
+                listenerThread.start();
                 isRunning = true;
             }
             catch (Exception x) {
-                if (listener != null) {
-                    listener.stop();
-                }
+                closeListener();
                 throw new ModbusException(x.getMessage());
             }
         }
@@ -244,6 +245,18 @@ public class ModbusSlave {
     protected void closeListener() {
         if (listener != null && listener.isListening()) {
             listener.stop();
+
+            // Wait until the listener says it has stopped, but don't wait forever
+            int count = 0;
+            while (listenerThread != null && listenerThread.isAlive() && count < 50) {
+                ModbusUtil.sleep(100);
+                count++;
+            }
+            // If the listener is still not stopped, kill the thread
+            if (listenerThread != null && listenerThread.isAlive()) {
+                listenerThread.stop();
+            }
+            listenerThread = null;
         }
         isRunning = false;
     }

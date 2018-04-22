@@ -122,4 +122,12 @@ public class AbstractTestModbus {
         return spi;
     }
 
+    /**
+     * Returns true if the OS is windows
+     *
+     * @return True if Windows OS
+     */
+    boolean isWindows() {
+      return System.getProperty("os.name").startsWith("Windows");
+    }
 }

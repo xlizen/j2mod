@@ -114,7 +114,7 @@ public class SerialConnection extends AbstractSerialConnection {
         transport.setCommPort(this);
 
         // Open the port so that we can get it's input stream.
-        if (!serialPort.openPort()) {
+        if (!serialPort.openPort(parameters.getOpenDelay())) {
             close();
             Set<String> ports = getCommPorts();
             StringBuilder portList = new StringBuilder("<NONE>");
@@ -222,7 +222,7 @@ public class SerialConnection extends AbstractSerialConnection {
 
     @Override
     public String getDescriptivePortName() {
-        return serialPort.getDescriptivePortName();
+        return serialPort == null ? "" : serialPort.getDescriptivePortName();
     }
 
     @Override
