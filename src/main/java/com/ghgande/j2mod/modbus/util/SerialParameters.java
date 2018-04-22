@@ -415,7 +415,6 @@ public class SerialParameters {
      *
      * @see Modbus#SERIAL_ENCODING_ASCII
      * @see Modbus#SERIAL_ENCODING_RTU
-     * @see Modbus#SERIAL_ENCODING_BIN
      */
     public String getEncoding() {
         return encoding;
