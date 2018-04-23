@@ -131,9 +131,10 @@
 Initial connection correctly uses `ModbusRTUTCPTransport` but subsequent connections use `ModbusTCPTransport` - RTU Over TCP Resend Bug #71
 
 ## Version 2.5.0
-* Upgraded to the latest version of JSerialComm - this fixes issues with closing Windows COM ports and many other problems
-It also allows us to manage the built-in latency timeouts within JSerialComm
+* Upgraded to the latest version of `JSerialComm` - this fixes issues with closing Windows COM ports and many other problems
+It also allows us to manage the built-in latency timeouts within `JSerialComm`
 * Add unit tests for the serial implementation of RTU and ASCII (Windows only)
 * Made the closing and shutdown of a Serial Listener more robust
 * Fixed an issue whereby if a Serial Slave was created using the `ModbusSlaveFactory` is closed independently, and the then the slave
-is reused with different serial parameters, the old parameters would have been used instead 
+is reused with different serial parameters, the old parameters would have been used instead
+* Removed all JavaDoc compilation warnings 

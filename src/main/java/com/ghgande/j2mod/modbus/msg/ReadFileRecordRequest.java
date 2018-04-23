@@ -79,7 +79,7 @@ public final class ReadFileRecordRequest extends ModbusRequest {
 
     /**
      * getRecord
-     * @param index
+     * @param index Reference
      * @return the record request indicated by the reference
      */
     public RecordRequest getRecord(int index) {
@@ -88,7 +88,7 @@ public final class ReadFileRecordRequest extends ModbusRequest {
 
     /**
      * addRequest -- add a new record request.
-     * @param request
+     * @param request Record request to add
      */
     public void addRequest(RecordRequest request) {
         if (request.getRequestSize() + getRequestSize() > 248) {
@@ -162,7 +162,7 @@ public final class ReadFileRecordRequest extends ModbusRequest {
 
     /**
      * writeData -- output this Modbus message to dout.
-     * @throws java.io.IOException
+     * @throws java.io.IOException If the data cannot be written
      */
     public void writeData(DataOutput dout) throws IOException {
         dout.write(getMessage());
@@ -170,7 +170,7 @@ public final class ReadFileRecordRequest extends ModbusRequest {
 
     /**
      * readData -- read all the data for this request.
-     * @throws java.io.IOException
+     * @throws java.io.IOException If the data cannot be read
      */
     public void readData(DataInput din) throws IOException {
         int byteCount = din.readUnsignedByte();

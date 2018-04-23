@@ -217,7 +217,7 @@ public class ModbusTCPTransport extends AbstractModbusTransport {
      *
      * @return response for message
      *
-     * @throws ModbusIOException
+     * @throws ModbusIOException If the request cannot be read from the socket/port
      */
     @Override
     public ModbusRequest readRequest(AbstractModbusListener listener) throws ModbusIOException {

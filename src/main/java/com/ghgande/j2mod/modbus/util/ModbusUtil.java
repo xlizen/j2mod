@@ -216,7 +216,7 @@ public final class ModbusUtil {
      * This conversion has been taken from the documentation of
      * the <tt>DataOutput</tt> interface.
      *
-     * @param v
+     * @param v Value to convert
      *
      * @return the register as <tt>byte[2]</tt>.
      *
@@ -281,7 +281,7 @@ public final class ModbusUtil {
      * (byte)(0xff &amp; v)
      * </code></pre>
      *
-     * @param s
+     * @param s Value to convert
      *
      * @return a register containing the given short value.
      */

@@ -91,7 +91,7 @@ public class ExceptionResponse extends ModbusResponse {
      * readData()
      *
      * read the single byte of data, which is the exception code.
-     * @throws java.io.IOException
+     * @throws java.io.IOException If the data cannot be read from the socket/port
      */
     public void readData(DataInput din) throws IOException {
         exceptionCode = din.readUnsignedByte();

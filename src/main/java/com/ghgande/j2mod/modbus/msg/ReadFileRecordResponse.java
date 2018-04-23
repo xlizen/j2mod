@@ -78,7 +78,7 @@ public final class ReadFileRecordResponse extends ModbusResponse {
 
     /**
      * getRecord
-     * @param index
+     * @param index Record to get
      * @return the record response indicated by the reference
      */
     public RecordResponse getRecord(int index) {
@@ -87,7 +87,7 @@ public final class ReadFileRecordResponse extends ModbusResponse {
 
     /**
      * addResponse -- add a new record response.
-     * @param response
+     * @param response Record response to add
      */
     public void addResponse(RecordResponse response) {
         if (records == null) {

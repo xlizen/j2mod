@@ -76,7 +76,7 @@ public final class WriteFileRecordResponse extends ModbusResponse {
 
     /**
      * getRecord -- return the record request indicated by the reference
-     * @param index
+     * @param index Record to get
      * @return the record request indicated by the reference
      */
     public RecordResponse getRecord(int index) {
@@ -85,7 +85,7 @@ public final class WriteFileRecordResponse extends ModbusResponse {
 
     /**
      * addResponse -- add a new record response.
-     * @param response
+     * @param response Add record response
      */
     public void addResponse(RecordResponse response) {
         if (response.getResponseSize() + getResponseSize() > 248) {

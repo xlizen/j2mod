@@ -122,7 +122,7 @@ public final class ReadSerialDiagnosticsResponse extends ModbusResponse {
 
     /**
      * writeData -- output the completed Modbus message to dout
-     * @throws java.io.IOException
+     * @throws java.io.IOException If the data cannot be written
      */
     public void writeData(DataOutput dout) throws IOException {
         dout.write(getMessage());
@@ -130,7 +130,7 @@ public final class ReadSerialDiagnosticsResponse extends ModbusResponse {
 
     /**
      * readData -- Read the function code and data value
-     * @throws java.io.IOException
+     * @throws java.io.IOException If the data cannot be read
      */
     public void readData(DataInput din) throws IOException {
         function = din.readUnsignedShort();

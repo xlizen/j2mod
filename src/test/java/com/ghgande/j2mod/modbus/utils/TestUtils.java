@@ -47,7 +47,7 @@ public class TestUtils {
      * temp folder so that it can be used later
      *
      * @return The temporary location of the Modbus master tool.
-     * @throws Exception
+     * @throws Exception If tool cannot be extracted
      */
     public static File loadModPollTool() throws Exception {
 
@@ -228,7 +228,7 @@ public class TestUtils {
      *
      * @return Screen output
      *
-     * @throws Exception
+     * @throws Exception If command cannot be run
      */
     public static String execToString(String command) throws Exception {
 

@@ -58,10 +58,10 @@ public final class ReportSlaveIDResponse extends ModbusResponse {
     /**
      * setSlaveID -- initialize the slave identifier when constructing
      * a response message.
-     * @param i
+     * @param unitID UnitID of the slave
      */
-    public void setSlaveID(int i) {
-        m_slaveId = i;
+    public void setSlaveID(int unitID) {
+        m_slaveId = unitID;
     }
 
     /**
@@ -77,7 +77,7 @@ public final class ReportSlaveIDResponse extends ModbusResponse {
      * setStatus -- initialize the slave's "run" status when constructing
      * a response message.
      *
-     * @param b
+     * @param b Status value
      */
     public void setStatus(boolean b) {
         m_status = b ? 0xff : 0x00;
@@ -123,7 +123,7 @@ public final class ReportSlaveIDResponse extends ModbusResponse {
 
     /**
      * writeData -- output the completed Modbus message to dout
-     * @throws java.io.IOException
+     * @throws java.io.IOException If the data cannot be written
      */
     public void writeData(DataOutput dout) throws IOException {
         dout.write(getMessage());
@@ -133,7 +133,7 @@ public final class ReportSlaveIDResponse extends ModbusResponse {
      * readData -- input the Modbus message from din.  If there was a
      * header, such as for Modbus/TCP, it will have been read
      * already.
-     * @throws java.io.IOException
+     * @throws java.io.IOException If the data cannot be read
      */
     public void readData(DataInput din) throws IOException {
 

@@ -83,7 +83,7 @@ public final class ReadSerialDiagnosticsRequest extends ModbusRequest {
 
     /**
      * setData -- Set the optional data value
-     * @param value
+     * @param value Diagnostics value
      */
     public void setData(int value) {
         data = (short)value;
@@ -136,7 +136,7 @@ public final class ReadSerialDiagnosticsRequest extends ModbusRequest {
 
     /**
      * writeData -- output the completed Modbus message to dout
-     * @throws java.io.IOException
+     * @throws java.io.IOException If the data cannot be written
      */
     public void writeData(DataOutput dout) throws IOException {
         dout.write(getMessage());
@@ -144,7 +144,7 @@ public final class ReadSerialDiagnosticsRequest extends ModbusRequest {
 
     /**
      * readData -- Read the function code and data value
-     * @throws java.io.IOException
+     * @throws java.io.IOException If the data cannot be read
      */
     public void readData(DataInput din) throws IOException {
         function = din.readUnsignedShort();

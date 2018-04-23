@@ -36,8 +36,8 @@ public class IllegalAddressExceptionResponse extends ExceptionResponse {
     }
 
     /**
-     *
-     * @param fc
+     * Sets the function code
+     * @param fc Function code
      */
     public void setFunctionCode(int fc) {
         super.setFunctionCode(fc | Modbus.EXCEPTION_OFFSET);

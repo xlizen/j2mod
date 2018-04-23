@@ -83,6 +83,8 @@ public final class ReadCommEventLogResponse extends ModbusResponse {
 
     /**
      * getMessageCount -- get device's message counter.
+     *
+     * @return Number of messages
      */
     public int getMessageCount() {
         return messageCount;
@@ -141,8 +143,8 @@ public final class ReadCommEventLogResponse extends ModbusResponse {
 
     /**
      * setEvent -- store an event number in the event log
-     * @param index
-     * @param event
+     * @param index Event position
+     * @param event Event ID
      */
     public void setEvent(int index, int event) {
         if (events == null || index < 0 || index >= events.length) {
@@ -154,7 +156,7 @@ public final class ReadCommEventLogResponse extends ModbusResponse {
 
     /**
      * writeData -- output the completed Modbus message to dout
-     * @throws java.io.IOException
+     * @throws java.io.IOException If the data cannot be written
      */
     public void writeData(DataOutput dout) throws IOException {
         dout.write(getMessage());
@@ -163,7 +165,7 @@ public final class ReadCommEventLogResponse extends ModbusResponse {
     /**
      * readData -- input the Modbus message from din. If there was a header,
      * such as for Modbus/TCP, it will have been read already.
-     * @throws java.io.IOException
+     * @throws java.io.IOException If the data cannot be read
      */
     public void readData(DataInput din) throws IOException {
         byteCount = din.readByte();
