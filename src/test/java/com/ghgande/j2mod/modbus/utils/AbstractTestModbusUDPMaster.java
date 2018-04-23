@@ -72,7 +72,7 @@ public class AbstractTestModbusUDPMaster extends AbstractTestModbus {
      *
      * @return Listener of the slave
      *
-     * @throws IOException
+     * @throws IOException If slave cannot be created
      */
     public static ModbusUDPListener createUDPSlave() throws Exception {
         ModbusUDPListener listener = null;

@@ -75,7 +75,7 @@ public final class WriteMultipleCoilsResponse extends ModbusResponse {
      * setReference - Sets the reference to the coil that is the first coil in
      * this response.
      *
-     * @param ref
+     * @param ref Rgister address of coil
      */
     public void setReference(int ref) {
         reference = ref;
@@ -103,7 +103,7 @@ public final class WriteMultipleCoilsResponse extends ModbusResponse {
     /**
      * writeData - Copy the attribute values for this message to the output
      * buffer.
-     * @throws java.io.IOException
+     * @throws java.io.IOException If the data cannot be written
      */
     public void writeData(DataOutput dout) throws IOException {
 
@@ -114,7 +114,7 @@ public final class WriteMultipleCoilsResponse extends ModbusResponse {
     /**
      * readData - Initialize the attribute values for this message from the
      * input buffer.
-     * @throws java.io.IOException
+     * @throws java.io.IOException If the data cannot be read
      */
     public void readData(DataInput din) throws IOException {
 

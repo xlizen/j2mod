@@ -57,6 +57,7 @@ public final class MaskWriteRegisterResponse
 
     /**
      * setReference -- set the reference field.
+     * @param ref Register value
      */
     public void setReference(int ref) {
         reference = ref;
@@ -73,6 +74,7 @@ public final class MaskWriteRegisterResponse
 
     /**
      * setAndMask -- set AND mask
+     * @param mask Mask to use
      */
     public void setAndMask(int mask) {
         andMask = mask;
@@ -89,7 +91,7 @@ public final class MaskWriteRegisterResponse
 
     /**
      * setOrMask -- set OR mask
-     * @param mask
+     * @param mask OR bit mask
      */
     public void setOrMask(int mask) {
         orMask = mask;
@@ -97,7 +99,7 @@ public final class MaskWriteRegisterResponse
 
     /**
      * writeData -- output the completed Modbus message to dout
-     * @throws java.io.IOException
+     * @throws java.io.IOException If the data cannot be written to the socket/port
      */
     public void writeData(DataOutput dout) throws IOException {
         dout.write(getMessage());
@@ -107,7 +109,7 @@ public final class MaskWriteRegisterResponse
      * readData -- input the Modbus message from din.  If there was a
      * header, such as for Modbus/TCP, it will have been read
      * already.
-     * @throws java.io.IOException
+     * @throws java.io.IOException If the data cannot be read from the socket/port
      */
     public void readData(DataInput din) throws IOException {
         reference = din.readUnsignedShort();

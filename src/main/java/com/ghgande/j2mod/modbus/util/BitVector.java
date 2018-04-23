@@ -65,7 +65,7 @@ public final class BitVector {
      * wrapping the given byte data.
      *
      * @param data a byte[] containing packed bits.
-     * @param size
+     * @param size Size to set the bit vector to
      *
      * @return the newly created <tt>BitVector</tt> instance.
      */
@@ -179,7 +179,7 @@ public final class BitVector {
      * <p>
      *
      * @param data a <tt>byte[]</tt>.
-     * @param size
+     * @param size Size to set the bit vector to
      */
     public final void setBytes(byte[] data, int size) {
         System.arraycopy(data, 0, this.data, 0, data.length);
@@ -241,7 +241,7 @@ public final class BitVector {
     /**
      * Forces the number of bits in this <tt>BitVector</tt>.
      *
-     * @param size
+     * @param size Size to set the bit vector to
      *
      * @throws IllegalArgumentException if the size exceeds
      *                                  the byte[] store size multiplied by 8.

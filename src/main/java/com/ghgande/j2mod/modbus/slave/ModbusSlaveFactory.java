@@ -28,9 +28,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * This is a factory class that allows users to easily create and manages slaves.<br>
+ * This is a factory class that allows users to easily create and manage slaves.<br>
  * Each slave is uniquely identified by the port it is listening on, irrespective of if
- * the socket type (TCP or UDP)
+ * the socket type (TCP, UDP or Serial)
  *
  * @author Steve O'Hara (4NG)
  * @version 2.0 (March 2016)
@@ -132,20 +132,32 @@ public class ModbusSlaveFactory {
      * @throws ModbusException If a problem occurs e.g. port already in use
      */
     public static synchronized ModbusSlave createSerialSlave(SerialParameters serialParams) throws ModbusException {
+        ModbusSlave slave = null;
         if (serialParams == null) {
             throw new ModbusException("Serial parameters are null");
         }
         else if (ModbusUtil.isBlank(serialParams.getPortName())) {
             throw new ModbusException("Serial port name is empty");
         }
+
+        // If we have a slave already assigned to this port
         if (slaves.containsKey(serialParams.getPortName())) {
-            return slaves.get(serialParams.getPortName());
+            slave = slaves.get(serialParams.getPortName());
+
+            // Check if any of the parameters have changed
+            if (!serialParams.toString().equals(slave.getSerialParams().toString())) {
+                close(slave);
+                slave = null;
+            }
         }
-        else {
-            ModbusSlave slave = new ModbusSlave(serialParams);
+
+        // If we don;t have a slave, create one
+        if (slave == null) {
+            slave = new ModbusSlave(serialParams);
             slaves.put(serialParams.getPortName(), slave);
             return slave;
         }
+        return slave;
     }
 
     /**

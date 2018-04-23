@@ -52,7 +52,7 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
      * @param byteCount Byte count excluding the 2 byte CRC
      * @param out       Output buffer to populate
      *
-     * @throws IOException
+     * @throws IOException If data cannot be read from the port
      */
     private void readRequestData(int byteCount, BytesOutputStream out) throws IOException {
         byteCount += 2;
@@ -139,7 +139,7 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
      * @param function The function code of the request
      * @param out      The output buffer to put the result
      *
-     * @throws IOException
+     * @throws IOException If data cannot be read from the port
      */
     private void getResponse(int function, BytesOutputStream out) throws IOException {
         byte inpBuf[] = new byte[256];
@@ -351,7 +351,7 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
      * readResponse - Read the bytes for the response from the slave.
      *
      * @return a <tt>ModbusRespose</tt>
-     * @throws com.ghgande.j2mod.modbus.ModbusIOException
+     * @throws com.ghgande.j2mod.modbus.ModbusIOException If the response cannot be read from the socket/port
      */
     protected ModbusResponse readResponseIn() throws ModbusIOException {
         boolean done;

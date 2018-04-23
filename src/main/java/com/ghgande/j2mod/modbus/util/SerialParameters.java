@@ -44,6 +44,7 @@ public class SerialParameters {
     private int parity;
     private String encoding;
     private boolean echo;
+    private int openDelay;
 
     /**
      * Constructs a new <tt>SerialParameters</tt> instance with
@@ -59,6 +60,7 @@ public class SerialParameters {
         parity = AbstractSerialConnection.NO_PARITY;
         encoding = Modbus.DEFAULT_SERIAL_ENCODING;
         echo = false;
+        openDelay = AbstractSerialConnection.OPEN_DELAY;
     }
 
     /**
@@ -112,6 +114,7 @@ public class SerialParameters {
         setStopbits(props.getProperty(prefix + "stopbits", "" + AbstractSerialConnection.ONE_STOP_BIT));
         setEncoding(props.getProperty(prefix + "encoding", Modbus.DEFAULT_SERIAL_ENCODING));
         setEcho("true".equals(props.getProperty(prefix + "echo")));
+        setOpenDelay(props.getProperty(prefix + "openDelay", "" + AbstractSerialConnection.OPEN_DELAY));
     }
 
     /**
@@ -412,7 +415,6 @@ public class SerialParameters {
      *
      * @see Modbus#SERIAL_ENCODING_ASCII
      * @see Modbus#SERIAL_ENCODING_RTU
-     * @see Modbus#SERIAL_ENCODING_BIN
      */
     public String getEncoding() {
         return encoding;
@@ -504,6 +506,39 @@ public class SerialParameters {
         }
     }
 
+    /**
+     * Gets the open delay used to prevent some OS from losing the comms port
+     *
+     * @return Sleep before an open is attempted on a comms port
+     */
+    public int getOpenDelay() {
+        return openDelay;
+    }
+
+    /**
+     * Sets the sleep time tat occurs just prior to opening a coms port
+     * Some OS don't like to have their comms ports opened/closed in very quick succession
+     * particularly, virtual ports. This delay is a rather crude way of stopping the problem that
+     * a comms port doesn't re-appear immediately after a close
+     *
+     * @param openDelay Sleep time in millieseconds
+     */
+    public void setOpenDelay(int openDelay) {
+        this.openDelay = openDelay;
+    }
+
+    /**
+     * Sets the sleep time tat occurs just prior to opening a coms port
+     * Some OS don't like to have their comms ports opened/closed in very quick succession
+     * particularly, virtual ports. This delay is a rather crude way of stopping the problem that
+     * a comms port doesn't re-appear immediately after a close
+     *
+     * @param openDelay Sleep time in millieseconds
+     */
+    public void setOpenDelay(String openDelay) {
+        this.openDelay = Integer.parseInt(openDelay);
+    }
+
     @Override
     public String toString() {
         return "SerialParameters{" +
@@ -516,6 +551,7 @@ public class SerialParameters {
                 ", parity=" + parity +
                 ", encoding='" + encoding + '\'' +
                 ", echo=" + echo +
+                ", openDelay=" + openDelay +
                 '}';
     }
 }

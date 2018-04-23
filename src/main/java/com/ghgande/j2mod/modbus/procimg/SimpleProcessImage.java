@@ -52,7 +52,7 @@ public class SimpleProcessImage implements ProcessImageImplementation {
     /**
      * Constructs a new <tt>SimpleProcessImage</tt> instance having a
      * (potentially) non-zero unit ID.
-     * @param unit
+     * @param unit Unit ID of this image
      */
     public SimpleProcessImage(int unit) {
         unitID = unit;
@@ -79,7 +79,7 @@ public class SimpleProcessImage implements ProcessImageImplementation {
      * is still based on the jamod paradigm, you will ignore the return value
      * and your code will function as before.
      * </p>
-     * @param locked
+     * @param locked True if the image is to be locked
      * @return setting lock succeded
      */
     public synchronized boolean setLocked(boolean locked) {

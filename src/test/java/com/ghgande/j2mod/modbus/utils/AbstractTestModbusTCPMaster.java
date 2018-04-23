@@ -74,7 +74,7 @@ public class AbstractTestModbusTCPMaster extends AbstractTestModbus {
      *
      * @return Listener of the slave
      *
-     * @throws IOException
+     * @throws IOException If slave cannot be created
      */
     public static ModbusTCPListener createTCPSlave() throws Exception {
         ModbusTCPListener listener = null;
