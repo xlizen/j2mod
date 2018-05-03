@@ -151,3 +151,4 @@ _(**NOT BACKWARDS COMPATIBLE**)_
 * Moved the useRtuOverTcp flag to constructor #75
 _(**NOT BACKWARDS COMPATIBLE**)_
 * Fixed getConnection.isOpen() still true after serial-port removal #74
+* Implemented inter-frame delays for serial transactions to match the Modbus specification #62

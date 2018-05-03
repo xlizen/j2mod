@@ -16,6 +16,7 @@
 package com.ghgande.j2mod.modbus.io;
 
 import com.fazecast.jSerialComm.SerialPort;
+import com.ghgande.j2mod.modbus.Modbus;
 import com.ghgande.j2mod.modbus.ModbusIOException;
 import com.ghgande.j2mod.modbus.msg.ModbusMessage;
 import com.ghgande.j2mod.modbus.msg.ModbusRequest;
@@ -75,6 +76,10 @@ public abstract class ModbusSerialTransport extends AbstractModbusTransport {
             logger.debug("Ignoring response not meant for us");
         }
         else {
+            // We need to pause before sending the response
+            waitBetweenFrames();
+
+            // Send the response
             writeMessage(msg);
         }
     }
@@ -315,6 +320,15 @@ public abstract class ModbusSerialTransport extends AbstractModbusTransport {
     }
 
     /**
+     * Returns the comms port being used for this transport
+     *
+     * @return Comms port
+     */
+    public AbstractSerialConnection getCommPort() {
+        return commPort;
+    }
+
+    /**
      * <code>isEcho</code> method returns the output echo state.
      *
      * @return a <code>boolean</code> value
@@ -551,6 +565,45 @@ public abstract class ModbusSerialTransport extends AbstractModbusTransport {
      */
     public void close() throws IOException {
         commPort.close();
+    }
+
+    /**
+     * Injects a delay dependent on the baud rate
+     */
+    private void waitBetweenFrames() {
+        waitBetweenFrames(0, 0);
+    }
+
+    /**
+     * Injects a delay dependent on the last time we received a response or
+     * if a fixed delay has been specified
+     *
+     * @param transDelayMS             Fixed transaction delay (milliseconds)
+     * @param lastTransactionTimestamp Timestamp of last transaction
+     */
+    void waitBetweenFrames(int transDelayMS, long lastTransactionTimestamp) {
+
+        // If a fixed delay has been set
+        if (transDelayMS > 0) {
+            ModbusUtil.sleep(transDelayMS);
+        }
+        else {
+            // Make use we have a gap of 3.5 characters between adjacent requests
+            // We have to do the calculations here because it is possible that the caller may have changed
+            // the connection characteristics if they provided the connection instance
+            int delay = (int) (Modbus.INTER_MESSAGE_GAP * (commPort.getNumDataBits() + commPort.getNumStopBits()) * 1000 / commPort.getBaudRate());
+
+            // If the delay is below the miimum, set it to the minimum
+            if (delay > Modbus.MINIMUM_TRANSMIT_DELAY) {
+                delay = Modbus.MINIMUM_TRANSMIT_DELAY;
+            }
+
+            // How long since the last message we received
+            long gapSinceLastMessage = System.currentTimeMillis() - lastTransactionTimestamp;
+            if (delay > gapSinceLastMessage) {
+                ModbusUtil.sleep(delay - gapSinceLastMessage);
+            }
+        }
     }
 
 }
