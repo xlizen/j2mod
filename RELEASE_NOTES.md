@@ -145,3 +145,4 @@ The new implementation means that `ProcessImage` is not coupled to a slave and c
 * Added a method `getError` to `ModbusSlave` to enable users to get any startup errors after a slave is opened #72
 * Fixed the issue whereby serial slaves will respond with error messages for requests that are targeted for them #62
 * Updated the documentation and byline
+* Move the useRtuOverTcp flag to constructor #75
