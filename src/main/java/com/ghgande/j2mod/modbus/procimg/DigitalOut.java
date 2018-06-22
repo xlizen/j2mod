@@ -28,15 +28,7 @@ package com.ghgande.j2mod.modbus.procimg;
  * @author Steve O'Hara (4NG)
  * @version 2.0 (March 2016)
  */
-public interface DigitalOut {
-
-    /**
-     * Tests if this <tt>DigitalOut</tt> is set.
-     * <p>
-     *
-     * @return true if set, false otherwise.
-     */
-    boolean isSet();
+public interface DigitalOut extends DigitalIn {
 
     /**
      * Sets the state of this <tt>DigitalOut</tt>.
@@ -45,5 +37,4 @@ public interface DigitalOut {
      * @param b true if to be set, false otherwise.
      */
     void set(boolean b);
-
 }
