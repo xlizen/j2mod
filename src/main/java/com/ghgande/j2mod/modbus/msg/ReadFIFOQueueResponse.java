@@ -31,7 +31,7 @@ import java.util.Arrays;
  * @author Steve O'Hara (4NG)
  * @version 2.0 (March 2016)
  */
-public final class ReadFIFOQueueResponse extends ModbusResponse {
+public class ReadFIFOQueueResponse extends ModbusResponse {
 
     // Message fields.
     private int count;

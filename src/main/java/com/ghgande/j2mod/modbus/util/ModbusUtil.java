@@ -32,7 +32,7 @@ import java.util.List;
  * @author Steve O'Hara (4NG)
  * @version 2.0 (March 2016)
  */
-public final class ModbusUtil {
+public class ModbusUtil {
 
     private static final Logger logger = LoggerFactory.getLogger(ModbusUtil.class);
 

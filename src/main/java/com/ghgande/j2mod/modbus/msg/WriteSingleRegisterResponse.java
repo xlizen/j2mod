@@ -31,7 +31,7 @@ import java.io.IOException;
  * @author Steve O'Hara (4NG)
  * @version 2.0 (March 2016)
  */
-public final class WriteSingleRegisterResponse
+public class WriteSingleRegisterResponse
         extends ModbusResponse {
 
     //instance attributes

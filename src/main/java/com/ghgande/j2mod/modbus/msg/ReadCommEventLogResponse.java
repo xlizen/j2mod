@@ -28,7 +28,7 @@ import java.io.IOException;
  * @author Steve O'Hara (4NG)
  * @version 2.0 (March 2016)
  */
-public final class ReadCommEventLogResponse extends ModbusResponse {
+public class ReadCommEventLogResponse extends ModbusResponse {
 
     // Message fields.
     private int byteCount;

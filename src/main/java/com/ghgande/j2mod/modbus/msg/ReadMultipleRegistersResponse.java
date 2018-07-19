@@ -34,7 +34,7 @@ import java.util.Arrays;
  * @author Steve O'Hara (4NG)
  * @version 2.0 (March 2016)
  */
-public final class ReadMultipleRegistersResponse extends ModbusResponse {
+public class ReadMultipleRegistersResponse extends ModbusResponse {
 
     // instance attributes
     private int byteCount;

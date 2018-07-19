@@ -29,7 +29,7 @@ import java.io.IOException;
  * @author Steve O'Hara (4NG)
  * @version 2.0 (March 2016)
  */
-public final class ReadSerialDiagnosticsRequest extends ModbusRequest {
+public class ReadSerialDiagnosticsRequest extends ModbusRequest {
 
     // Message fields.
     private int function;

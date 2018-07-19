@@ -28,7 +28,7 @@ import java.io.IOException;
  * @author Steve O'Hara (4NG)
  * @version 2.0 (March 2016)
  */
-public final class ReadCommEventCounterResponse extends ModbusResponse {
+public class ReadCommEventCounterResponse extends ModbusResponse {
 
     // Message fields.
     private int status;

@@ -35,11 +35,11 @@ public class ObservableRegister extends Observable implements Register {
         return register & 0xFFFF;
     }
 
-    public final int toUnsignedShort() {
+    public int toUnsignedShort() {
         return register & 0xFFFF;
     }
 
-    public final short toShort() {
+    public short toShort() {
         return register;
     }
 
@@ -47,12 +47,12 @@ public class ObservableRegister extends Observable implements Register {
         return new byte[]{(byte)(register >> 8), (byte)(register & 0xFF)};
     }
 
-    public final synchronized void setValue(short s) {
+    public synchronized void setValue(short s) {
         register = s;
         notifyObservers("value");
     }
 
-    public final synchronized void setValue(byte[] bytes) {
+    public synchronized void setValue(byte[] bytes) {
         if (bytes.length < 2) {
             throw new IllegalArgumentException();
         }
@@ -62,7 +62,7 @@ public class ObservableRegister extends Observable implements Register {
         }
     }
 
-    public final synchronized void setValue(int v) {
+    public synchronized void setValue(int v) {
         register = (short)v;
         notifyObservers("value");
     }

@@ -38,7 +38,7 @@ import java.io.IOException;
  * @author Steve O'Hara (4NG)
  * @version 2.0 (March 2016)
  */
-public final class ReadCoilsRequest extends ModbusRequest {
+public class ReadCoilsRequest extends ModbusRequest {
 
     // instance attributes
     private int reference;

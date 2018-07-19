@@ -31,7 +31,7 @@ import java.io.IOException;
  * @author Steve O'Hara (4NG)
  * @version 2.0 (March 2016)
  */
-public final class WriteFileRecordRequest extends ModbusRequest {
+public class WriteFileRecordRequest extends ModbusRequest {
     private RecordRequest[] records;
 
     /**

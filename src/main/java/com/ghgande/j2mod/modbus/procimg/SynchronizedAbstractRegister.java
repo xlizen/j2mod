@@ -40,7 +40,7 @@ public abstract class SynchronizedAbstractRegister implements Register {
         return ((register[0] & 0xff) << 8 | (register[1] & 0xff));
     }
 
-    public final int toUnsignedShort() {
+    public int toUnsignedShort() {
         if (register == null) {
             throw new IllegalAddressException();
         }
@@ -48,7 +48,7 @@ public abstract class SynchronizedAbstractRegister implements Register {
         return ((register[0] & 0xff) << 8 | (register[1] & 0xff));
     }
 
-    public final short toShort() {
+    public short toShort() {
         if (register == null) {
             throw new IllegalAddressException();
         }
@@ -62,7 +62,7 @@ public abstract class SynchronizedAbstractRegister implements Register {
         return dest;
     }
 
-    public final synchronized void setValue(short s) {
+    public synchronized void setValue(short s) {
         if (register == null) {
             throw new IllegalAddressException();
         }
@@ -71,7 +71,7 @@ public abstract class SynchronizedAbstractRegister implements Register {
         register[1] = (byte)(0xff & s);
     }
 
-    public final synchronized void setValue(byte[] bytes) {
+    public synchronized void setValue(byte[] bytes) {
         if (bytes.length < 2) {
             throw new IllegalArgumentException();
         }
@@ -85,7 +85,7 @@ public abstract class SynchronizedAbstractRegister implements Register {
         }
     }
 
-    public final synchronized void setValue(int v) {
+    public synchronized void setValue(int v) {
         if (register == null) {
             throw new IllegalAddressException();
         }

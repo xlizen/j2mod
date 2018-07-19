@@ -33,11 +33,11 @@ public abstract class AbstractRegister implements Register {
         return ((register[0] & 0xff) << 8 | (register[1] & 0xff));
     }
 
-    public final int toUnsignedShort() {
+    public int toUnsignedShort() {
         return ((register[0] & 0xff) << 8 | (register[1] & 0xff));
     }
 
-    public final short toShort() {
+    public short toShort() {
         return (short)((register[0] << 8) | (register[1] & 0xff));
     }
 
@@ -47,12 +47,12 @@ public abstract class AbstractRegister implements Register {
         return dest;
     }
 
-    public final void setValue(short s) {
+    public void setValue(short s) {
         register[0] = (byte)(0xff & (s >> 8));
         register[1] = (byte)(0xff & s);
     }
 
-    public final void setValue(byte[] bytes) {
+    public void setValue(byte[] bytes) {
         if (bytes.length < 2) {
             throw new IllegalArgumentException();
         }
@@ -62,7 +62,7 @@ public abstract class AbstractRegister implements Register {
         }
     }
 
-    public final void setValue(int v) {
+    public void setValue(int v) {
         register[0] = (byte)(0xff & (v >> 8));
         register[1] = (byte)(0xff & v);
     }

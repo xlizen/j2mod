@@ -30,7 +30,7 @@ import java.io.IOException;
  * @author Steve O'Hara (4NG)
  * @version 2.0 (March 2016)
  */
-public final class ReadMEIRequest extends ModbusRequest {
+public class ReadMEIRequest extends ModbusRequest {
 
     // instance attributes
     private int subCode;

@@ -30,7 +30,7 @@ import java.io.IOException;
  * @author Steve O'Hara (4NG)
  * @version 2.0 (March 2016)
  */
-public final class ReportSlaveIDResponse extends ModbusResponse {
+public class ReportSlaveIDResponse extends ModbusResponse {
 
     // Message fields.
     int m_length;

@@ -39,7 +39,7 @@ import java.util.Arrays;
  * @author Steve O'Hara (4NG)
  * @version 2.0 (March 2016)
  */
-public final class WriteMultipleRegistersRequest extends ModbusRequest {
+public class WriteMultipleRegistersRequest extends ModbusRequest {
     private int reference;
     private Register[] registers;
     private NonWordDataHandler nonWordDataHandler = null;

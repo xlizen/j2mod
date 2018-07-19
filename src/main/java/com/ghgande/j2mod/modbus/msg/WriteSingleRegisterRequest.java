@@ -35,7 +35,7 @@ import java.io.IOException;
  * @author Steve O'Hara (4NG)
  * @version 2.0 (March 2016)
  */
-public final class WriteSingleRegisterRequest extends ModbusRequest {
+public class WriteSingleRegisterRequest extends ModbusRequest {
 
     // instance attributes
     private int reference;
