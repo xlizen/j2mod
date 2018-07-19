@@ -68,6 +68,13 @@ public class ModbusSerialListener extends AbstractModbusListener {
 
     @Override
     public void run() {
+
+        // Set a suitable thread name
+        if (threadName == null || threadName.isEmpty()) {
+            threadName = String.format("Modbus Serial Listener [port:%s]", serialCon.getDescriptivePortName());
+        }
+        Thread.currentThread().setName(threadName);
+
         try {
             serialCon.open();
         }

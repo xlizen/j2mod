@@ -270,4 +270,22 @@ public class ModbusSlave {
         }
         isRunning = false;
     }
+
+    /**
+     * Gets the name of the thread used by the listener
+     * @return Name of thread or null if not assigned
+     */
+    public String getThreadName() {
+        return listener == null ? null : listener.getThreadName();
+    }
+
+    /**
+     * Sets the name of the thread used by the listener
+     * @param threadName Name to use for the thread
+     */
+    public void setThreadName(String threadName) {
+        if (listener != null) {
+            listener.setThreadName(threadName);
+        }
+    }
 }

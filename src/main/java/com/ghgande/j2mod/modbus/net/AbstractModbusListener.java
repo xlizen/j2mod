@@ -42,6 +42,7 @@ public abstract class AbstractModbusListener implements Runnable {
     protected InetAddress address;
     protected String error;
     protected int timeout = Modbus.DEFAULT_TIMEOUT;
+    protected String threadName;
 
     /**
      * Main execution loop for this Modbus interface listener - this is called by
@@ -193,4 +194,19 @@ public abstract class AbstractModbusListener implements Runnable {
         return null;
     }
 
+    /**
+     * Gets the name of the thread used by the listener
+     * @return Name of thread or null if not assigned
+     */
+    public String getThreadName() {
+        return threadName;
+    }
+
+    /**
+     * Sets the name of the thread used by the listener
+     * @param threadName Name to use for the thread
+     */
+    public void setThreadName(String threadName) {
+        this.threadName = threadName;
+    }
 }

@@ -46,7 +46,6 @@ public class ThreadPool {
     public ThreadPool(int size) {
         this.size = size;
         taskPool = new LinkedBlockingQueue<Runnable>();
-        initPool();
     }
 
     /**
@@ -69,12 +68,14 @@ public class ThreadPool {
     /**
      * Initializes the pool, populating it with
      * n started threads.
+     * @param name Name to give each thread
      */
-    protected void initPool() {
+    public void initPool(String name) {
         running = true;
         for (int i = size; --i >= 0; ) {
             PoolThread thread = new PoolThread();
             threadPool.add(thread);
+            thread.setName(String.format("%s Handler", name));
             thread.start();
         }
     }

@@ -155,3 +155,4 @@ _(**NOT BACKWARDS COMPATIBLE**)_
 * Fixed - Why doesn't DigitalOut extend DigitalIn #86
 * Made library an OSGi bundle #67 thanks amitjoy
 * Removed all `final` qualifiers where it prevents extensibility and doesn't add any value #85
+* Added default thread names to listeners and methods to get/set it on the slave #80

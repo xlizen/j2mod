@@ -116,6 +116,13 @@ public class ModbusTCPListener extends AbstractModbusListener {
 
     @Override
     public void run() {
+
+        // Set a suitable thread name
+        if (threadName == null || threadName.isEmpty()) {
+            threadName = String.format("Modbus TCP Listener [port:%d]", port);
+        }
+        Thread.currentThread().setName(threadName);
+
         try {
             /*
              * A server socket is opened with a connectivity queue of a size
@@ -141,6 +148,9 @@ public class ModbusTCPListener extends AbstractModbusListener {
         listening = true;
         try {
 
+            // Initialise the message handling pool
+            threadPool.initPool(threadName);
+
             // Infinite loop, taking care of resources in case of a lot of
             // parallel logins
             while (listening) {
@@ -164,6 +174,11 @@ public class ModbusTCPListener extends AbstractModbusListener {
         }
         catch (IOException e) {
             error = String.format("Problem starting listener - %s", e.getMessage());
+        }
+        finally {
+            if (threadPool != null) {
+                threadPool.close();
+            }
         }
     }
 

@@ -73,6 +73,13 @@ public class ModbusUDPListener extends AbstractModbusListener {
      */
     @Override
     public void run() {
+
+        // Set a suitable thread name
+        if (threadName == null || threadName.isEmpty()) {
+            threadName = String.format("Modbus UDP Listener [port:%d]", port);
+        }
+        Thread.currentThread().setName(threadName);
+
         ModbusUDPTransport transport;
         try {
             if (address == null) {
