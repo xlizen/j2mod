@@ -15,6 +15,7 @@
  */
 package com.ghgande.j2mod.modbus;
 
+import com.ghgande.j2mod.modbus.facade.ModbusSerialMaster;
 import com.ghgande.j2mod.modbus.io.AbstractSerialTransportListener;
 import com.ghgande.j2mod.modbus.io.ModbusSerialTransport;
 import com.ghgande.j2mod.modbus.msg.ModbusMessage;
@@ -22,6 +23,7 @@ import com.ghgande.j2mod.modbus.msg.ModbusRequest;
 import com.ghgande.j2mod.modbus.msg.ModbusResponse;
 import com.ghgande.j2mod.modbus.net.AbstractSerialConnection;
 import com.ghgande.j2mod.modbus.procimg.InputRegister;
+import com.ghgande.j2mod.modbus.util.SerialParameters;
 import com.ghgande.j2mod.modbus.utils.AbstractTestModbusSerialRTUMaster;
 import com.ghgande.j2mod.modbus.utils.AbstractTestModbusTCPMaster;
 import org.junit.Test;
@@ -175,6 +177,23 @@ public class TestModbusSerialRTUMasterRead extends AbstractTestModbusSerialRTUMa
         }
         catch (Exception e) {
             logger.info("Got expected error response (testBadUnitIdRequest) - {}", e.getMessage());
+        }
+    }
+
+    @Test
+    public void testBadCommsPort() {
+        // Create master
+        SerialParameters parameters = new SerialParameters();
+        parameters.setPortName("COM1");
+        parameters.setOpenDelay(1000);
+        parameters.setEncoding(Modbus.SERIAL_ENCODING_RTU);
+        ModbusSerialMaster master = new ModbusSerialMaster(parameters, 1000);
+        try {
+            master.connect();
+            master.readInputRegisters(UNIT_ID, 0, 5);
+        }
+        catch (Exception e) {
+            fail(String.format("Cannot open port - %s", e.getMessage()));
         }
     }
 
