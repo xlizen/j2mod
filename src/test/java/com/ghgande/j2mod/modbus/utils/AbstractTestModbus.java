@@ -68,6 +68,8 @@ public class AbstractTestModbus {
         spi.addDigitalIn(new SimpleDigitalIn(true));
         spi.addDigitalIn(new SimpleDigitalIn(true));
 
+        spi.addDigitalIn(65535, new SimpleDigitalIn(true));
+
         // A couple of files
         spi.addFile(new com.ghgande.j2mod.modbus.procimg.File(0, 10)
                 .setRecord(0, new Record(0, 10))

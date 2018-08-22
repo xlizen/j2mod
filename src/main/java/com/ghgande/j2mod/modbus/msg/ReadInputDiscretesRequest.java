@@ -147,7 +147,7 @@ public class ReadInputDiscretesRequest extends ModbusRequest {
      * @param count the number of bits to be read.
      */
     public void setBitCount(int count) {
-        if (count < 0 || count > 2000 || count + reference >= 65536) {
+        if (count < 0 || count > 2000 || count + reference > 65536) {
             throw new IllegalArgumentException();
         }
 

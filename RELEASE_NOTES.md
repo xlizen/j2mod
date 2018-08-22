@@ -156,3 +156,4 @@ _(**NOT BACKWARDS COMPATIBLE**)_
 * Made library an OSGi bundle #67 thanks amitjoy
 * Removed all `final` qualifiers where it prevents extensibility and doesn't add any value #85
 * Added default thread names to listeners and methods to get/set it on the slave #80
+* Fixed Error in ReadInputDiscretesRequest class SetBitCount() method. Can't access the last address. #87

@@ -10,7 +10,7 @@ For instructions on how to use the library, visit the wiki [here](https://github
 # Releases
 Stable releases can be downloaded here 
 
-http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22j2mod%22
+https://search.maven.org/search?q=g:com.ghgande
 
 Snapshot releases can be downloaded here 
 
