@@ -122,7 +122,7 @@ public class ReadInputDiscretesRequest extends ModbusRequest {
      * @param ref the reference of the register to start reading from.
      */
     public void setReference(int ref) {
-        if (ref < 0 || bitCount + ref >= 65536) {
+        if (ref < 0 || bitCount + ref > 65536) {
             throw new IllegalArgumentException();
         }
 

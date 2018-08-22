@@ -184,16 +184,16 @@ public class TestModbusSerialRTUMasterRead extends AbstractTestModbusSerialRTUMa
     public void testBadCommsPort() {
         // Create master
         SerialParameters parameters = new SerialParameters();
-        parameters.setPortName("COM1");
+        parameters.setPortName("COM99");
         parameters.setOpenDelay(1000);
         parameters.setEncoding(Modbus.SERIAL_ENCODING_RTU);
         ModbusSerialMaster master = new ModbusSerialMaster(parameters, 1000);
         try {
             master.connect();
-            master.readInputRegisters(UNIT_ID, 0, 5);
+            fail("Shoudn't be able to open port");
         }
         catch (Exception e) {
-            fail(String.format("Cannot open port - %s", e.getMessage()));
+            logger.info("Got expected error response - {}", e.getMessage());
         }
     }
 

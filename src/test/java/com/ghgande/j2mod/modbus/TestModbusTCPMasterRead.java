@@ -178,7 +178,7 @@ public class TestModbusTCPMasterRead extends AbstractTestModbusTCPMaster {
             assertTrue("Correct status for discrete 1", master.readInputDiscretes(UNIT_ID, 65535, 1).getBit(0));
         }
         catch (Exception e) {
-            fail("Got expected error response (testBadUnitIdRequest) - " + e.getMessage());
+            fail("Request for 65535 should be fine - " + e.getMessage());
         }
     }
 
