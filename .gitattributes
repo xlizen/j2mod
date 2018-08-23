@@ -1,2 +1,6 @@
-*.java          text
-*.txt           text
+text=auto
+*.java text
+*.txt text
+*.md text
+*.MF text
+*.xml text
