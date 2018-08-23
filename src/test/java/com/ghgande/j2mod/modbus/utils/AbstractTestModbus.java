@@ -15,9 +15,10 @@
  */
 package com.ghgande.j2mod.modbus.utils;
 
-import com.ghgande.j2mod.modbus.ModbusCoupler;
-import com.ghgande.j2mod.modbus.net.AbstractModbusListener;
 import com.ghgande.j2mod.modbus.procimg.*;
+import com.ghgande.j2mod.modbus.slave.ModbusSlave;
+import com.ghgande.j2mod.modbus.util.Observable;
+import com.ghgande.j2mod.modbus.util.Observer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,17 +30,20 @@ import org.slf4j.LoggerFactory;
  * @version 2.0 (March 2016)
  */
 public class AbstractTestModbus {
-
     private static final Logger logger = LoggerFactory.getLogger(AbstractTestModbus.class);
-    public static AbstractModbusListener listener = null;
+    public static ModbusSlave slave = null;
     public static final int UNIT_ID = 15;
     public static final int PORT = 1502;
     public static final String LOCALHOST = "localhost";
 
+    private static Observer observer = new ObserverMonitor();
+    protected static Observable updatedRegister;
+    protected static String updatedArgument;
+
     /**
      * Creates a process image to use for slave testing
      *
-     * @return Prcess image for testing
+     * @return Process image for testing
      */
     protected static SimpleProcessImage getSimpleProcessImage() {
         // Create a Slave that we can use to exercise each and every register type
@@ -63,6 +67,8 @@ public class AbstractTestModbus {
         spi.addDigitalIn(new SimpleDigitalIn(true));
         spi.addDigitalIn(new SimpleDigitalIn(true));
         spi.addDigitalIn(new SimpleDigitalIn(true));
+
+        spi.addDigitalIn(65535, new SimpleDigitalIn(true));
 
         // A couple of files
         spi.addFile(new com.ghgande.j2mod.modbus.procimg.File(0, 10)
@@ -99,29 +105,57 @@ public class AbstractTestModbus {
                 .setRecord(19, new Record(19, 20)));
 
         // Some input registers
-        spi.addRegister(new SimpleRegister(251));
-        spi.addRegister(new SimpleRegister(1111));
-        spi.addRegister(new SimpleRegister(2222));
-        spi.addRegister(new SimpleRegister(3333));
-        spi.addRegister(new SimpleRegister(4444));
-        spi.addRegister(40000, new SimpleRegister(1234));
-        spi.addRegister(40001, new SimpleRegister(2345));
-        spi.addRegister(40002, new SimpleRegister(3456));
+        ObservableRegister or = new ObservableRegister();
+        or.setValue(251);
+        or.addObserver(observer);
+        spi.addRegister(or);
 
+        or = new ObservableRegister();
+        or.setValue(1111);
+        or.addObserver(observer);
+        spi.addRegister(or);
+
+        or = new ObservableRegister();
+        or.setValue(2222);
+        or.addObserver(observer);
+        spi.addRegister(or);
+
+        or = new ObservableRegister();
+        or.setValue(3333);
+        or.addObserver(observer);
+        spi.addRegister(or);  
+
+        or = new ObservableRegister();
+        or.setValue(4444);
+        or.addObserver(observer);
+        spi.addRegister(or);
+
+        or = new ObservableRegister();
+        or.setValue(1234);
+        or.addObserver(observer);
+        spi.addRegister(40000,or);
+
+        or = new ObservableRegister();          
+        or.setValue(2345);
+        or.addObserver(observer);
+        spi.addRegister(40001,or);
+
+        or = new ObservableRegister();        
+        or.setValue(3456);
+        or.addObserver(observer);
+        spi.addRegister(40002,or);
+       
         // Some holding registers
         spi.addInputRegister(new SimpleInputRegister(45));
         spi.addInputRegister(new SimpleInputRegister(9999));
         spi.addInputRegister(new SimpleInputRegister(8888));
         spi.addInputRegister(new SimpleInputRegister(7777));
         spi.addInputRegister(new SimpleInputRegister(6666));
-
-        // Create the coupler holding the image
-        ModbusCoupler.getReference().setProcessImage(spi);
-        ModbusCoupler.getReference().setMaster(false);
-
+        
         return spi;
     }
-
+    
+    
     /**
      * Returns true if the OS is windows
      *
@@ -129,5 +163,13 @@ public class AbstractTestModbus {
      */
     boolean isWindows() {
       return System.getProperty("os.name").startsWith("Windows");
+    }
+
+    private static class ObserverMonitor implements Observer {
+        @Override
+        public void update(Observable o, Object arg) {
+            updatedRegister = o;
+            updatedArgument = (String)arg;
+        }
     }
 }

@@ -34,7 +34,7 @@ import java.io.IOException;
  * @author Steve O'Hara (4NG)
  * @version 2.0 (March 2016)
  */
-public final class ReadFIFOQueueRequest extends ModbusRequest {
+public class ReadFIFOQueueRequest extends ModbusRequest {
 
     private int reference;
 

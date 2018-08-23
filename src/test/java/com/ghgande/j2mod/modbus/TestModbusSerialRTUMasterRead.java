@@ -15,7 +15,15 @@
  */
 package com.ghgande.j2mod.modbus;
 
+import com.ghgande.j2mod.modbus.facade.ModbusSerialMaster;
+import com.ghgande.j2mod.modbus.io.AbstractSerialTransportListener;
+import com.ghgande.j2mod.modbus.io.ModbusSerialTransport;
+import com.ghgande.j2mod.modbus.msg.ModbusMessage;
+import com.ghgande.j2mod.modbus.msg.ModbusRequest;
+import com.ghgande.j2mod.modbus.msg.ModbusResponse;
+import com.ghgande.j2mod.modbus.net.AbstractSerialConnection;
 import com.ghgande.j2mod.modbus.procimg.InputRegister;
+import com.ghgande.j2mod.modbus.util.SerialParameters;
 import com.ghgande.j2mod.modbus.utils.AbstractTestModbusSerialRTUMaster;
 import com.ghgande.j2mod.modbus.utils.AbstractTestModbusTCPMaster;
 import org.junit.Test;
@@ -164,11 +172,101 @@ public class TestModbusSerialRTUMasterRead extends AbstractTestModbusSerialRTUMa
     @Test
     public void testBadUnitIdRequest() {
         try {
-            master.readCoils(UNIT_ID + 10, 0, 1).getBit(0);
+            master.readCoils(UNIT_ID + 10, 0, 1);
             fail("Failed check for invalid Unit ID");
         }
         catch (Exception e) {
             logger.info("Got expected error response (testBadUnitIdRequest) - {}", e.getMessage());
+        }
+    }
+
+    @Test
+    public void testBadCommsPort() {
+        // Create master
+        SerialParameters parameters = new SerialParameters();
+        parameters.setPortName("COM99");
+        parameters.setOpenDelay(1000);
+        parameters.setEncoding(Modbus.SERIAL_ENCODING_RTU);
+        ModbusSerialMaster master = new ModbusSerialMaster(parameters, 1000);
+        try {
+            master.connect();
+            fail("Shoudn't be able to open port");
+        }
+        catch (Exception e) {
+            logger.info("Got expected error response - {}", e.getMessage());
+        }
+    }
+
+    @Test
+    public void testBadCommsPortNotConnected() {
+        // Create master
+        SerialParameters parameters = new SerialParameters();
+        parameters.setPortName("COM1");
+        parameters.setOpenDelay(1000);
+        parameters.setEncoding(Modbus.SERIAL_ENCODING_RTU);
+        ModbusSerialMaster master = new ModbusSerialMaster(parameters, 1000);
+        try {
+            master.connect();
+            master.readInputRegisters(UNIT_ID, 0, 5);
+            fail("Shoudn't be able to read port");
+        }
+        catch (Exception e) {
+            logger.info("Got expected error response - {}", e.getMessage());
+        }
+    }
+
+    @Test
+    public void testCallback() {
+        EventListener eventListener = new EventListener();
+        ((ModbusSerialTransport) master.getTransport()).addListener(eventListener);
+        try {
+            master.readCoils(UNIT_ID, 0, 1);
+        }
+        catch (Exception e) {
+            fail(String.format("Cannot read - %s", e.getMessage()));
+        }
+        ((ModbusSerialTransport) master.getTransport()).removeListener(eventListener);
+    }
+
+    private class EventListener extends AbstractSerialTransportListener {
+        int step;
+
+        EventListener() {
+            step = 0;
+        }
+
+        @Override
+        public void beforeMessageWrite(AbstractSerialConnection port, ModbusMessage msg) {
+            assertEquals("Before message is written to port", 0, step);
+            step++;
+        }
+
+        @Override
+        public void afterMessageWrite(AbstractSerialConnection port, ModbusMessage msg) {
+            assertEquals("After message has been written to port", 1, step);
+            step++;
+        }
+
+        @Override
+        public void beforeRequestRead(AbstractSerialConnection port) {
+            fail("Should only be called for slaves");
+        }
+
+        @Override
+        public void afterRequestRead(AbstractSerialConnection port, ModbusRequest req) {
+            fail("Should only be called for slaves");
+        }
+
+        @Override
+        public void beforeResponseRead(AbstractSerialConnection port) {
+            assertEquals("Before response message is read from port", 2, step);
+            step++;
+        }
+
+        @Override
+        public void afterResponseRead(AbstractSerialConnection port, ModbusResponse res) {
+            assertEquals("After response message has been read from port", 3, step);
+            step++;
         }
     }
 

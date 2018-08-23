@@ -16,7 +16,6 @@
 package com.ghgande.j2mod.modbus.net;
 
 import com.ghgande.j2mod.modbus.Modbus;
-import com.ghgande.j2mod.modbus.ModbusCoupler;
 import com.ghgande.j2mod.modbus.ModbusIOException;
 import com.ghgande.j2mod.modbus.io.AbstractModbusTransport;
 import com.ghgande.j2mod.modbus.msg.ModbusRequest;
@@ -43,6 +42,7 @@ public abstract class AbstractModbusListener implements Runnable {
     protected InetAddress address;
     protected String error;
     protected int timeout = Modbus.DEFAULT_TIMEOUT;
+    protected String threadName;
 
     /**
      * Main execution loop for this Modbus interface listener - this is called by
@@ -148,7 +148,7 @@ public abstract class AbstractModbusListener implements Runnable {
      * @param listener Listener that the request was received by
      * @throws ModbusIOException If there is an issue with the transport or transmission
      */
-    protected void handleRequest(AbstractModbusTransport transport, AbstractModbusListener listener) throws ModbusIOException {
+    void handleRequest(AbstractModbusTransport transport, AbstractModbusListener listener) throws ModbusIOException {
 
         // Get the request from the transport. It will be processed
         // using an associated process image
@@ -162,10 +162,11 @@ public abstract class AbstractModbusListener implements Runnable {
         }
         ModbusResponse response;
 
-        // Test if Process image exists and has a correct unit ID
+        // Test if Process image exists for this Unit ID
         ProcessImage spi = getProcessImage(request.getUnitID());
-        if (spi == null || (spi.getUnitID() != 0 && request.getUnitID() != spi.getUnitID())) {
+        if (spi == null) {
             response = request.createExceptionResponse(Modbus.ILLEGAL_ADDRESS_EXCEPTION);
+            response.setAuxiliaryType(ModbusResponse.AuxiliaryMessageTypes.UNIT_ID_MISSMATCH);
         }
         else {
             response = request.createResponse(this);
@@ -176,7 +177,7 @@ public abstract class AbstractModbusListener implements Runnable {
         }
 
         // Write the response
-        transport.writeMessage(response);
+        transport.writeResponse(response);
     }
 
     /**
@@ -190,13 +191,22 @@ public abstract class AbstractModbusListener implements Runnable {
         if (slave != null) {
             return slave.getProcessImage(unitId);
         }
-        else {
-
-            // Legacy: Use the ModbusCoupler if no image was associated with the listener
-            //         This will be removed when the ModbusCoupler is removed
-
-            return ModbusCoupler.getReference().getProcessImage(unitId);
-        }
+        return null;
     }
 
+    /**
+     * Gets the name of the thread used by the listener
+     * @return Name of thread or null if not assigned
+     */
+    public String getThreadName() {
+        return threadName;
+    }
+
+    /**
+     * Sets the name of the thread used by the listener
+     * @param threadName Name to use for the thread
+     */
+    public void setThreadName(String threadName) {
+        this.threadName = threadName;
+    }
 }

@@ -35,8 +35,7 @@ import java.io.IOException;
  * @author Steve O'Hara (4NG)
  * @version 2.0 (March 2016)
  */
-public final class ReadInputDiscretesResponse
-        extends ModbusResponse {
+public class ReadInputDiscretesResponse extends ModbusResponse {
 
     //instance attributes
     private int bitCount;

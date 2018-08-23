@@ -301,10 +301,25 @@ public interface Modbus {
     int DEFAULT_RETRIES = 5;
 
     /**
-     * Defines the default number of msec to delay before transmission
-     * (=<tt>50</tt>).
+     * Defines the default number of msec to delay before transmission<br>
+     * Inter-message delays are managed by the SerialTransaction object automatically based on the
+     * baud rate. Setting this value to anything other than zero will bypass that process and force
+     * a specific inter-message delay
+     * (=<tt>0</tt>).
      */
     int DEFAULT_TRANSMIT_DELAY = 0;
+
+    /**
+     * Defines the default number of msec to delay before transmission if not overridden by DEFAULT_TRANSMIT_DELAY
+     * (=<tt>2</tt>).
+     */
+    int MINIMUM_TRANSMIT_DELAY = 2;
+
+    /**
+     * The number of characters delay that must be maintained between adjacent requests on
+     * the same serial port (within the same transaction)
+     */
+    double INTER_MESSAGE_GAP = 4;
 
     /**
      * Defines the maximum value of the transaction identifier.

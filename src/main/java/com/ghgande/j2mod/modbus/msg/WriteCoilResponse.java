@@ -30,7 +30,7 @@ import java.io.IOException;
  * @author Steve O'Hara (4NG)
  * @version 2.0 (March 2016)
  */
-public final class WriteCoilResponse extends ModbusResponse {
+public class WriteCoilResponse extends ModbusResponse {
     private boolean coil = false;
     private int reference;
 

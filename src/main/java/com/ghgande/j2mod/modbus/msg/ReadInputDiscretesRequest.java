@@ -38,7 +38,7 @@ import java.io.IOException;
  * @author Steve O'Hara (4NG)
  * @version 2.0 (March 2016)
  */
-public final class ReadInputDiscretesRequest extends ModbusRequest {
+public class ReadInputDiscretesRequest extends ModbusRequest {
 
     // instance attributes
     private int reference;
@@ -122,7 +122,7 @@ public final class ReadInputDiscretesRequest extends ModbusRequest {
      * @param ref the reference of the register to start reading from.
      */
     public void setReference(int ref) {
-        if (ref < 0 || bitCount + ref >= 65536) {
+        if (ref < 0 || bitCount + ref > 65536) {
             throw new IllegalArgumentException();
         }
 
@@ -147,7 +147,7 @@ public final class ReadInputDiscretesRequest extends ModbusRequest {
      * @param count the number of bits to be read.
      */
     public void setBitCount(int count) {
-        if (count < 0 || count > 2000 || count + reference >= 65536) {
+        if (count < 0 || count > 2000 || count + reference > 65536) {
             throw new IllegalArgumentException();
         }
 

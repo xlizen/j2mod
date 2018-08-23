@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
  * @author Steve O'Hara (4NG)
  * @version 2.0 (March 2016)
  */
-public final class BitVector {
+public class BitVector {
 
     private static final Logger logger = LoggerFactory.getLogger(BitVector.class);
     private static final int[] ODD_OFFSETS = {-1, -3, -5, -7};
@@ -169,7 +169,7 @@ public final class BitVector {
      *
      * @param data a <tt>byte[]</tt>.
      */
-    public final void setBytes(byte[] data) {
+    public void setBytes(byte[] data) {
         System.arraycopy(data, 0, this.data, 0, data.length);
     }
 
@@ -181,7 +181,7 @@ public final class BitVector {
      * @param data a <tt>byte[]</tt>.
      * @param size Size to set the bit vector to
      */
-    public final void setBytes(byte[] data, int size) {
+    public void setBytes(byte[] data, int size) {
         System.arraycopy(data, 0, this.data, 0, data.length);
         this.size = size;
     }
@@ -198,7 +198,7 @@ public final class BitVector {
      *
      * @throws IndexOutOfBoundsException if the index is out of bounds.
      */
-    public final boolean getBit(int index) throws IndexOutOfBoundsException {
+    public boolean getBit(int index) throws IndexOutOfBoundsException {
         index = translateIndex(index);
         logger.debug("Get bit #{}", index);
         return ((data[byteIndex(index)]
@@ -216,7 +216,7 @@ public final class BitVector {
      *
      * @throws IndexOutOfBoundsException if the index is out of bounds.
      */
-    public final void setBit(int index, boolean b) throws IndexOutOfBoundsException {
+    public void setBit(int index, boolean b) throws IndexOutOfBoundsException {
         index = translateIndex(index);
         logger.debug("Set bit #{}", index);
         int value = ((b) ? 1 : 0);
@@ -234,7 +234,7 @@ public final class BitVector {
      *
      * @return the number of bits in this <tt>BitVector</tt>.
      */
-    public final int size() {
+    public int size() {
         return size;
     }
 
@@ -246,7 +246,7 @@ public final class BitVector {
      * @throws IllegalArgumentException if the size exceeds
      *                                  the byte[] store size multiplied by 8.
      */
-    public final void forceSize(int size) {
+    public void forceSize(int size) {
         if (size > data.length * 8) {
             throw new IllegalArgumentException("Size exceeds byte[] store");
         }
@@ -262,7 +262,7 @@ public final class BitVector {
      *
      * @return the number of bits in this <tt>BitVector</tt>.
      */
-    public final int byteSize() {
+    public int byteSize() {
         return data.length;
     }
 

@@ -16,6 +16,7 @@
 package com.ghgande.j2mod.modbus.io;
 
 import com.fazecast.jSerialComm.SerialPort;
+import com.ghgande.j2mod.modbus.Modbus;
 import com.ghgande.j2mod.modbus.ModbusIOException;
 import com.ghgande.j2mod.modbus.msg.ModbusMessage;
 import com.ghgande.j2mod.modbus.msg.ModbusRequest;
@@ -69,7 +70,32 @@ public abstract class ModbusSerialTransport extends AbstractModbusTransport {
     }
 
     @Override
-    public void writeMessage(ModbusMessage msg) throws ModbusIOException {
+    public void writeResponse(ModbusResponse msg) throws ModbusIOException {
+        // If this isn't a Slave ID missmatch message
+        if (msg.getAuxiliaryType().equals(ModbusResponse.AuxiliaryMessageTypes.UNIT_ID_MISSMATCH)) {
+            logger.debug("Ignoring response not meant for us");
+        }
+        else {
+            // We need to pause before sending the response
+            waitBetweenFrames();
+
+            // Send the response
+            writeMessage(msg);
+        }
+    }
+
+    @Override
+    public void writeRequest(ModbusRequest msg) throws ModbusIOException {
+        writeMessage(msg);
+    }
+
+    /**
+     * Writes the request/response message to the port
+     *
+     * @param msg Message to write
+     * @throws ModbusIOException If the port throws an error
+     */
+    private void writeMessage(ModbusMessage msg) throws ModbusIOException {
         open();
         notifyListenersBeforeWrite(msg);
         writeMessageOut(msg);
@@ -148,7 +174,7 @@ public abstract class ModbusSerialTransport extends AbstractModbusTransport {
     }
 
     /**
-     * The <code>writeMessage</code> method writes a modbus serial message to
+     * The <code>writeRequest</code> method writes a modbus serial message to
      * its serial output stream to a specified slave unit ID.
      *
      * @param msg a <code>ModbusMessage</code> value
@@ -170,7 +196,7 @@ public abstract class ModbusSerialTransport extends AbstractModbusTransport {
 
     /**
      * <code>readResponse</code> reads a response message from the slave
-     * responding to a master writeMessage request.
+     * responding to a master writeRequest request.
      *
      * @return a <code>ModbusResponse</code> value
      *
@@ -291,6 +317,15 @@ public abstract class ModbusSerialTransport extends AbstractModbusTransport {
     public void setCommPort(AbstractSerialConnection cp) throws IOException {
         commPort = cp;
         setTimeout(timeout);
+    }
+
+    /**
+     * Returns the comms port being used for this transport
+     *
+     * @return Comms port
+     */
+    public AbstractSerialConnection getCommPort() {
+        return commPort;
     }
 
     /**
@@ -530,6 +565,45 @@ public abstract class ModbusSerialTransport extends AbstractModbusTransport {
      */
     public void close() throws IOException {
         commPort.close();
+    }
+
+    /**
+     * Injects a delay dependent on the baud rate
+     */
+    private void waitBetweenFrames() {
+        waitBetweenFrames(0, 0);
+    }
+
+    /**
+     * Injects a delay dependent on the last time we received a response or
+     * if a fixed delay has been specified
+     *
+     * @param transDelayMS             Fixed transaction delay (milliseconds)
+     * @param lastTransactionTimestamp Timestamp of last transaction
+     */
+    void waitBetweenFrames(int transDelayMS, long lastTransactionTimestamp) {
+
+        // If a fixed delay has been set
+        if (transDelayMS > 0) {
+            ModbusUtil.sleep(transDelayMS);
+        }
+        else {
+            // Make use we have a gap of 3.5 characters between adjacent requests
+            // We have to do the calculations here because it is possible that the caller may have changed
+            // the connection characteristics if they provided the connection instance
+            int delay = (int) (Modbus.INTER_MESSAGE_GAP * (commPort.getNumDataBits() + commPort.getNumStopBits()) * 1000 / commPort.getBaudRate());
+
+            // If the delay is below the miimum, set it to the minimum
+            if (delay > Modbus.MINIMUM_TRANSMIT_DELAY) {
+                delay = Modbus.MINIMUM_TRANSMIT_DELAY;
+            }
+
+            // How long since the last message we received
+            long gapSinceLastMessage = System.currentTimeMillis() - lastTransactionTimestamp;
+            if (delay > gapSinceLastMessage) {
+                ModbusUtil.sleep(delay - gapSinceLastMessage);
+            }
+        }
     }
 
 }

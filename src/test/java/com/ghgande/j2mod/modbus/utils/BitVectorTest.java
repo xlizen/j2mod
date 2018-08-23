@@ -4,7 +4,7 @@ import com.ghgande.j2mod.modbus.util.BitVector;
 import org.junit.Assert;
 import org.junit.Test;
 
-public final class BitVectorTest {
+public class BitVectorTest {
 
     @Test
     public void testBitVector() {

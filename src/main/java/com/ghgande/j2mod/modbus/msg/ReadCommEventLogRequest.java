@@ -30,7 +30,7 @@ import java.io.IOException;
  * @author Steve O'Hara (4NG)
  * @version 2.0 (March 2016)
  */
-public final class ReadCommEventLogRequest extends ModbusRequest {
+public class ReadCommEventLogRequest extends ModbusRequest {
 
     /**
      * Constructs a new <tt>Get Comm Event Log</tt>

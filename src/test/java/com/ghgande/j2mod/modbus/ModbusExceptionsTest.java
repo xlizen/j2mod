@@ -3,7 +3,7 @@ package com.ghgande.j2mod.modbus;
 import org.junit.Assert;
 import org.junit.Test;
 
-public final class ModbusExceptionsTest {
+public class ModbusExceptionsTest {
 
     @Test
     public void testModbusException() {

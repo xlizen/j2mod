@@ -171,4 +171,15 @@ public class TestModbusTCPMasterRead extends AbstractTestModbusTCPMaster {
         }
     }
 
+
+    @Test
+    public void testReadDiscreteExtremeRequest() {
+        try {
+            assertTrue("Correct status for discrete 1", master.readInputDiscretes(UNIT_ID, 65535, 1).getBit(0));
+        }
+        catch (Exception e) {
+            fail("Request for 65535 should be fine - " + e.getMessage());
+        }
+    }
+
 }

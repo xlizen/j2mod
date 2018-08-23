@@ -34,7 +34,7 @@ import java.io.IOException;
  * @author Steve O'Hara (4NG)
  * @version 2.0 (March 2016)
  */
-public final class ReadMultipleRegistersRequest extends ModbusRequest {
+public class ReadMultipleRegistersRequest extends ModbusRequest {
 
     // instance attributes
     private int reference;

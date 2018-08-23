@@ -138,3 +138,22 @@ It also allows us to manage the built-in latency timeouts within `JSerialComm`
 * Fixed an issue whereby if a Serial Slave was created using the `ModbusSlaveFactory` is closed independently, and the then the slave
 is reused with different serial parameters, the old parameters would have been used instead
 * Removed all JavaDoc compilation warnings 
+
+## Version 2.5.1
+##### _Note:- v2.5.1 is not backwards compatible with v2.5.0_
+Some changes may be required for applications using this version. The changes bellow detail where a non-compatible change has been made.
+* Removed the deprecated `ModbusCoupler` implementation - users should switch their code to use `SlaveFactory` and apply their `ProcessImage` instances to the slave directly
+The new implementation means that `ProcessImage` is not coupled to a slave and can be shared across slaves and unit IDs
+_(**NOT BACKWARDS COMPATIBLE**)_
+* Added a method `getError` to `ModbusSlave` to enable users to get any startup errors after a slave is opened #72
+* Fixed the issue whereby serial slaves will respond with error messages for requests that are targeted for them #62
+* Updated the documentation and byline
+* Moved the useRtuOverTcp flag to constructor #75
+_(**NOT BACKWARDS COMPATIBLE**)_
+* Fixed getConnection.isOpen() still true after serial-port removal #74
+* Implemented inter-frame delays for serial transactions to match the Modbus specification #62
+* Fixed - Why doesn't DigitalOut extend DigitalIn #86
+* Made library an OSGi bundle #67 thanks amitjoy
+* Removed all `final` qualifiers where it prevents extensibility and doesn't add any value #85
+* Added default thread names to listeners and methods to get/set it on the slave #80
+* Fixed Error in ReadInputDiscretesRequest class SetBitCount() method. Can't access the last address. #87

@@ -231,6 +231,15 @@ public class ModbusSlave {
     }
 
     /**
+     * Returns the last error accrued by the listener
+     *
+     * @return Error if there is one
+     */
+    public String getError() {
+        return listener != null ? listener.getError() : null;
+    }
+
+    /**
      * Returns the listener used for this port
      *
      * @return Listener
@@ -242,7 +251,8 @@ public class ModbusSlave {
     /**
      * Closes the listener of this slave
      */
-    protected void closeListener() {
+    @SuppressWarnings("deprecation")
+    void closeListener() {
         if (listener != null && listener.isListening()) {
             listener.stop();
 
@@ -259,5 +269,23 @@ public class ModbusSlave {
             listenerThread = null;
         }
         isRunning = false;
+    }
+
+    /**
+     * Gets the name of the thread used by the listener
+     * @return Name of thread or null if not assigned
+     */
+    public String getThreadName() {
+        return listener == null ? null : listener.getThreadName();
+    }
+
+    /**
+     * Sets the name of the thread used by the listener
+     * @param threadName Name to use for the thread
+     */
+    public void setThreadName(String threadName) {
+        if (listener != null) {
+            listener.setThreadName(threadName);
+        }
     }
 }

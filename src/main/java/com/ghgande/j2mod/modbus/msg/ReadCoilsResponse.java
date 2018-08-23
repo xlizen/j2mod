@@ -45,7 +45,7 @@ import java.io.IOException;
  * @author Steve O'Hara (4NG)
  * @version 2.0 (March 2016)
  */
-public final class ReadCoilsResponse extends ModbusResponse {
+public class ReadCoilsResponse extends ModbusResponse {
     private BitVector coils;
 
     /**

@@ -32,7 +32,7 @@ import java.util.Arrays;
  * @author Steve O'Hara (4NG)
  * @version 2.0 (March 2016)
  */
-public final class ReadWriteMultipleResponse extends ModbusResponse {
+public class ReadWriteMultipleResponse extends ModbusResponse {
 
     private int byteCount;
     private InputRegister[] registers;
