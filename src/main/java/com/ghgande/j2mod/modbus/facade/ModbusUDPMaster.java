@@ -87,7 +87,7 @@ public class ModbusUDPMaster extends AbstractModbusMaster {
      *
      * @throws Exception if the connection cannot be established.
      */
-    public synchronized void connect() throws Exception {
+    public void connect() throws Exception {
         if (connection != null && !connection.isConnected()) {
             connection.connect();
             transaction = connection.getModbusTransport().createTransaction();
@@ -98,7 +98,7 @@ public class ModbusUDPMaster extends AbstractModbusMaster {
     /**
      * Disconnects this <tt>ModbusTCPMaster</tt> from the slave.
      */
-    public synchronized void disconnect() {
+    public void disconnect() {
         if (connection != null && connection.isConnected()) {
             connection.close();
             transaction = null;

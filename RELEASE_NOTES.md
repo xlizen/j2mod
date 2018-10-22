@@ -157,3 +157,6 @@ _(**NOT BACKWARDS COMPATIBLE**)_
 * Removed all `final` qualifiers where it prevents extensibility and doesn't add any value #85
 * Added default thread names to listeners and methods to get/set it on the slave #80
 * Fixed Error in ReadInputDiscretesRequest class SetBitCount() method. Can't access the last address. #87
+
+## Version 2.5.2
+* Removed a lot of synchronized decorated methods to put the onus on the caller and speed up processing. #88 

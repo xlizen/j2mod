@@ -85,7 +85,7 @@ abstract public class AbstractModbusMaster {
      * @throws ModbusException if an I/O error, a slave exception or
      *                         a transaction error occurs.
      */
-    public synchronized BitVector readCoils(int unitId, int ref, int count) throws ModbusException {
+    public BitVector readCoils(int unitId, int ref, int count) throws ModbusException {
         checkTransaction();
         if (readCoilsRequest == null) {
             readCoilsRequest = new ReadCoilsRequest();
@@ -112,7 +112,7 @@ abstract public class AbstractModbusMaster {
      * @throws ModbusException if an I/O error, a slave exception or
      *                         a transaction error occurs.
      */
-    public synchronized boolean writeCoil(int unitId, int ref, boolean state) throws ModbusException {
+    public boolean writeCoil(int unitId, int ref, boolean state) throws ModbusException {
         checkTransaction();
         if (writeCoilRequest == null) {
             writeCoilRequest = new WriteCoilRequest();
@@ -138,7 +138,7 @@ abstract public class AbstractModbusMaster {
      * @throws ModbusException if an I/O error, a slave exception or
      *                         a transaction error occurs.
      */
-    public synchronized void writeMultipleCoils(int unitId, int ref, BitVector coils) throws ModbusException {
+    public void writeMultipleCoils(int unitId, int ref, BitVector coils) throws ModbusException {
         checkTransaction();
         if (writeMultipleCoilsRequest == null) {
             writeMultipleCoilsRequest = new WriteMultipleCoilsRequest();
@@ -166,7 +166,7 @@ abstract public class AbstractModbusMaster {
      * @throws ModbusException if an I/O error, a slave exception or
      *                         a transaction error occurs.
      */
-    public synchronized BitVector readInputDiscretes(int unitId, int ref, int count) throws ModbusException {
+    public BitVector readInputDiscretes(int unitId, int ref, int count) throws ModbusException {
         checkTransaction();
         if (readInputDiscretesRequest == null) {
             readInputDiscretesRequest = new ReadInputDiscretesRequest();
@@ -196,7 +196,7 @@ abstract public class AbstractModbusMaster {
      * @throws ModbusException if an I/O error, a slave exception or
      *                         a transaction error occurs.
      */
-    public synchronized InputRegister[] readInputRegisters(int unitId, int ref, int count) throws ModbusException {
+    public InputRegister[] readInputRegisters(int unitId, int ref, int count) throws ModbusException {
         checkTransaction();
         if (readInputRegistersRequest == null) {
             readInputRegistersRequest = new ReadInputRegistersRequest();
@@ -224,7 +224,7 @@ abstract public class AbstractModbusMaster {
      * @throws ModbusException if an I/O error, a slave exception or
      *                         a transaction error occurs.
      */
-    public synchronized Register[] readMultipleRegisters(int unitId, int ref, int count) throws ModbusException {
+    public Register[] readMultipleRegisters(int unitId, int ref, int count) throws ModbusException {
         checkTransaction();
         if (readMultipleRegistersRequest == null) {
             readMultipleRegistersRequest = new ReadMultipleRegistersRequest();
@@ -248,7 +248,7 @@ abstract public class AbstractModbusMaster {
      * @throws ModbusException if an I/O error, a slave exception or
      *                         a transaction error occurs.
      */
-    public synchronized void writeSingleRegister(int unitId, int ref, Register register) throws ModbusException {
+    public void writeSingleRegister(int unitId, int ref, Register register) throws ModbusException {
         checkTransaction();
         if (writeSingleRegisterRequest == null) {
             writeSingleRegisterRequest = new WriteSingleRegisterRequest();
@@ -271,7 +271,7 @@ abstract public class AbstractModbusMaster {
      * @throws ModbusException if an I/O error, a slave exception or
      *                         a transaction error occurs.
      */
-    public synchronized void writeMultipleRegisters(int unitId, int ref, Register[] registers) throws ModbusException {
+    public void writeMultipleRegisters(int unitId, int ref, Register[] registers) throws ModbusException {
         checkTransaction();
         if (writeMultipleRegistersRequest == null) {
             writeMultipleRegistersRequest = new WriteMultipleRegistersRequest();
@@ -298,7 +298,7 @@ abstract public class AbstractModbusMaster {
      * @throws ModbusException if an I/O error, a slave exception or
      *                         a transaction error occurs.
      */
-    public synchronized BitVector readCoils(int ref, int count) throws ModbusException {
+    public BitVector readCoils(int ref, int count) throws ModbusException {
         return readCoils(DEFAULT_UNIT_ID, ref, count);
     }
 
@@ -313,7 +313,7 @@ abstract public class AbstractModbusMaster {
      * @throws ModbusException if an I/O error, a slave exception or
      *                         a transaction error occurs.
      */
-    public synchronized boolean writeCoil(int ref, boolean state) throws ModbusException {
+    public boolean writeCoil(int ref, boolean state) throws ModbusException {
         return writeCoil(DEFAULT_UNIT_ID, ref, state);
     }
 
@@ -329,7 +329,7 @@ abstract public class AbstractModbusMaster {
      * @throws ModbusException if an I/O error, a slave exception or
      *                         a transaction error occurs.
      */
-    public synchronized void writeMultipleCoils(int ref, BitVector coils) throws ModbusException {
+    public void writeMultipleCoils(int ref, BitVector coils) throws ModbusException {
         writeMultipleCoils(DEFAULT_UNIT_ID, ref, coils);
     }
 
@@ -348,7 +348,7 @@ abstract public class AbstractModbusMaster {
      * @throws ModbusException if an I/O error, a slave exception or
      *                         a transaction error occurs.
      */
-    public synchronized BitVector readInputDiscretes(int ref, int count) throws ModbusException {
+    public BitVector readInputDiscretes(int ref, int count) throws ModbusException {
         return readInputDiscretes(DEFAULT_UNIT_ID, ref, count);
     }
 
@@ -366,7 +366,7 @@ abstract public class AbstractModbusMaster {
      * @throws ModbusException if an I/O error, a slave exception or
      *                         a transaction error occurs.
      */
-    public synchronized InputRegister[] readInputRegisters(int ref, int count) throws ModbusException {
+    public InputRegister[] readInputRegisters(int ref, int count) throws ModbusException {
         return readInputRegisters(DEFAULT_UNIT_ID, ref, count);
     }
 
@@ -384,7 +384,7 @@ abstract public class AbstractModbusMaster {
      * @throws ModbusException if an I/O error, a slave exception or
      *                         a transaction error occurs.
      */
-    public synchronized Register[] readMultipleRegisters(int ref, int count) throws ModbusException {
+    public Register[] readMultipleRegisters(int ref, int count) throws ModbusException {
         return readMultipleRegisters(DEFAULT_UNIT_ID, ref, count);
     }
 
@@ -398,7 +398,7 @@ abstract public class AbstractModbusMaster {
      * @throws ModbusException if an I/O error, a slave exception or
      *                         a transaction error occurs.
      */
-    public synchronized void writeSingleRegister(int ref, Register register) throws ModbusException {
+    public void writeSingleRegister(int ref, Register register) throws ModbusException {
         writeSingleRegister(DEFAULT_UNIT_ID, ref, register);
     }
 
@@ -412,7 +412,7 @@ abstract public class AbstractModbusMaster {
      * @throws ModbusException if an I/O error, a slave exception or
      *                         a transaction error occurs.
      */
-    public synchronized void writeMultipleRegisters(int ref, Register[] registers) throws ModbusException {
+    public void writeMultipleRegisters(int ref, Register[] registers) throws ModbusException {
         writeMultipleRegisters(DEFAULT_UNIT_ID, ref, registers);
     }
 
