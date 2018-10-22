@@ -84,13 +84,13 @@ class UDPMasterTerminal extends AbstractUDPTerminal {
     }
 
     @Override
-    public synchronized void sendMessage(byte[] msg) throws Exception {
+    public void sendMessage(byte[] msg) throws Exception {
         DatagramPacket req = new DatagramPacket(msg, msg.length, address, port);
         socket.send(req);
     }
 
     @Override
-    public synchronized byte[] receiveMessage() throws Exception {
+    public byte[] receiveMessage() throws Exception {
 
         // The longest possible DatagramPacket is 256 bytes (Modbus message
         // limit) plus the 6 byte header.

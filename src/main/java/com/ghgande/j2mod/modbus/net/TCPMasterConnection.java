@@ -108,7 +108,7 @@ public class TCPMasterConnection {
      *
      * @throws Exception if there is a network failure.
      */
-    public synchronized void connect() throws Exception {
+    public void connect() throws Exception {
         connect(useRtuOverTcp);
     }
 
@@ -119,7 +119,7 @@ public class TCPMasterConnection {
      *
      * @throws Exception if there is a network failure.
      */
-    public synchronized void connect(boolean useRtuOverTcp) throws Exception {
+    public void connect(boolean useRtuOverTcp) throws Exception {
         if (!isConnected()) {
             logger.debug("connect()");
 

@@ -17,9 +17,6 @@ package com.ghgande.j2mod.modbus.procimg;
 
 /**
  * Class implementing a simple <tt>DigitalOut</tt>.
- * <p>
- * The set method is synchronized, which ensures atomic
- * access, but no specific access order.
  *
  * @author Dieter Wimberger
  * @author Steve O'Hara (4NG)
@@ -53,7 +50,7 @@ public class SimpleDigitalOut implements DigitalOut {
         return set;
     }
 
-    public synchronized void set(boolean b) {
+    public void set(boolean b) {
         set = b;
     }
 

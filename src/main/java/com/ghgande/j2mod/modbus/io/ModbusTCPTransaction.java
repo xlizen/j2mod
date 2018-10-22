@@ -80,7 +80,7 @@ public class ModbusTCPTransaction extends ModbusTransaction {
      *
      * @param con a <tt>TCPMasterConnection</tt>.
      */
-    public synchronized void setConnection(TCPMasterConnection con) {
+    public void setConnection(TCPMasterConnection con) {
         connection = con;
         transport = con.getModbusTransport();
     }

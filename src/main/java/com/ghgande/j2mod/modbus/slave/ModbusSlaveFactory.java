@@ -165,7 +165,7 @@ public class ModbusSlaveFactory {
      *
      * @param slave Slave to remove
      */
-    public static synchronized void close(ModbusSlave slave) {
+    public static void close(ModbusSlave slave) {
         if (slave != null) {
             slave.closeListener();
             slaves.remove(slave.getType().getKey(slave.getPort()));
@@ -175,7 +175,7 @@ public class ModbusSlaveFactory {
     /**
      * Closes all slaves and removes them from the running list
      */
-    public static synchronized void close() {
+    public static  void close() {
         for (ModbusSlave slave : new ArrayList<ModbusSlave>(slaves.values())) {
             slave.close();
         }

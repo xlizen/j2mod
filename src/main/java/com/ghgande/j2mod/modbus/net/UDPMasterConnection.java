@@ -56,7 +56,7 @@ public class UDPMasterConnection {
      *
      * @throws Exception if there is a network failure.
      */
-    public synchronized void connect() throws Exception {
+    public void connect() throws Exception {
         if (!connected) {
             terminal = new UDPMasterTerminal(address);
             terminal.setPort(port);
