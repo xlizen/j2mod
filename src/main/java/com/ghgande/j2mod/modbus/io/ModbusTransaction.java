@@ -17,6 +17,7 @@ package com.ghgande.j2mod.modbus.io;
 
 import com.ghgande.j2mod.modbus.Modbus;
 import com.ghgande.j2mod.modbus.ModbusException;
+import com.ghgande.j2mod.modbus.ModbusIOException;
 import com.ghgande.j2mod.modbus.msg.ModbusRequest;
 import com.ghgande.j2mod.modbus.msg.ModbusResponse;
 
@@ -152,6 +153,24 @@ public abstract class ModbusTransaction {
      */
     long getRandomSleepTime(int count) {
         return (Modbus.RETRY_SLEEP_TIME / 2) + (long) (random.nextDouble() * Modbus.RETRY_SLEEP_TIME * count);
+    }
+
+    /**
+     * Checks the validity of the transaction, by
+     * checking if the values of the response correspond
+     * to the values of the request.
+     *
+     * @throws ModbusException if the transaction is not valid.
+     */
+    void checkValidity() throws ModbusException {
+        if (request != null && response != null) {
+            if (request.getUnitID() != response.getUnitID()) {
+                throw new ModbusIOException("Unit ID mismatch - Request [%s] Response [%s]", request.getHexMessage(), response.getHexMessage());
+            }
+            if (request.getFunctionCode() != response.getFunctionCode()) {
+                throw new ModbusIOException("Function code mismatch - Request [%s] Response [%s]", request.getHexMessage(), response.getHexMessage());
+            }
+        }
     }
 
     /**
