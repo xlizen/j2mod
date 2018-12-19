@@ -160,3 +160,10 @@ _(**NOT BACKWARDS COMPATIBLE**)_
 
 ## Version 2.5.2
 * Removed a lot of synchronized decorated methods to put the onus on the caller and speed up processing. #88 
+
+## Version 2.5.3
+* Added check of serial response to make sure it is from the same unit and function code as the request
+* Return the new value of the register after writing to it (#91)
+* Fix data length in MaskWriteRegisterResponse. Add facade methods for Mask Write Response function. Add unit tests. (#92)
+* Upgraded jserialcomm to v2.3.0  
+

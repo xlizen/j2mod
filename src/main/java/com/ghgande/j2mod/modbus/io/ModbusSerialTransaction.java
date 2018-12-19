@@ -157,44 +157,13 @@ public class ModbusSerialTransaction extends ModbusTransaction {
             throw new ModbusSlaveException(((ExceptionResponse) response).getExceptionCode());
         }
 
+        // Check that the response is for this request
         if (isCheckingValidity()) {
             checkValidity();
         }
-        //toggle the id
-        toggleTransactionID();
 
         // Set the last transaction timestamp
         lastTransactionTimestamp = System.currentTimeMillis();
-    }
-
-    /**
-     * Checks the validity of the transaction, by
-     * checking if the values of the response correspond
-     * to the values of the request.
-     *
-     * @throws ModbusException if the transaction is not valid.
-     */
-    private void checkValidity() throws ModbusException {
-
-    }
-
-    /**
-     * Toggles the transaction identifier, to ensure
-     * that each transaction has a distinctive
-     * identifier.<br>
-     * When the maximum value of 65535 has been reached,
-     * the identifiers will start from zero again.
-     */
-    private void toggleTransactionID() {
-        if (isCheckingValidity()) {
-            if (transactionID == (Short.MAX_VALUE * 2)) {
-                transactionID = 0;
-            }
-            else {
-                transactionID++;
-            }
-        }
-        request.setTransactionID(getTransactionID());
     }
 
 }

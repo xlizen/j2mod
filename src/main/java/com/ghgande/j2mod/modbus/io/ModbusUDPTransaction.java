@@ -147,6 +147,11 @@ public class ModbusUDPTransaction extends ModbusTransaction {
             throw new ModbusSlaveException(((ExceptionResponse)response).getExceptionCode());
         }
 
+        // Check that the response is for this request
+        if (isCheckingValidity()) {
+            checkValidity();
+        }
+
         //toggle the id
         incrementTransactionID();
     }

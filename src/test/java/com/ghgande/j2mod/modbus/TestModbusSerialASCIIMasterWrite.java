@@ -21,7 +21,9 @@ import com.ghgande.j2mod.modbus.msg.ModbusMessage;
 import com.ghgande.j2mod.modbus.msg.ModbusRequest;
 import com.ghgande.j2mod.modbus.msg.ModbusResponse;
 import com.ghgande.j2mod.modbus.net.AbstractSerialConnection;
+import com.ghgande.j2mod.modbus.procimg.Register;
 import com.ghgande.j2mod.modbus.procimg.SimpleInputRegister;
+import com.ghgande.j2mod.modbus.procimg.SimpleRegister;
 import com.ghgande.j2mod.modbus.utils.AbstractTestModbusSerialASCIIMaster;
 import org.junit.Test;
 
@@ -50,15 +52,64 @@ public class TestModbusSerialASCIIMasterWrite extends AbstractTestModbusSerialAS
     public void testWriteHoldingRegisters() {
         try {
             int before = master.readInputRegisters(UNIT_ID, 1, 1)[0].getValue();
-            master.writeSingleRegister(UNIT_ID, 1, new SimpleInputRegister(9999));
-            assertEquals("Incorrect status for register 1", 9999, master.readInputRegisters(UNIT_ID, 1, 1)[0].getValue());
-            master.writeSingleRegister(UNIT_ID, 1, new SimpleInputRegister(before));
+            int newValue = 9999;
+
+            assertEquals("Incorrect status after write new value for register 1", newValue,
+                    master.writeSingleRegister(UNIT_ID, 1, new SimpleInputRegister(newValue)));
+            assertEquals("Incorrect status after read new value for register 1", newValue,
+                    master.readInputRegisters(UNIT_ID, 1, 1)[0].getValue());
+            assertEquals("Incorrect status after write previous value for register 1", before,
+                    master.writeSingleRegister(UNIT_ID, 1, new SimpleInputRegister(before)));
         }
         catch (Exception e) {
             fail(String.format("Cannot write to register 1 - %s", e.getMessage()));
         }
     }
 
+    @Test
+    public void testWriteMultipleRegisters() {
+        try {
+            int registerCount = 3;
+            Register[] beforeRegisters = master.readMultipleRegisters(UNIT_ID, 1, registerCount);
+
+            Register[] writeRegisters = new Register[registerCount];
+            for (int i = 0; i < registerCount; ++i) {
+                writeRegisters[i] = new SimpleRegister(Double.valueOf(Math.random()).intValue());
+            }
+
+            assertEquals("Incorrect status for register",
+                    registerCount, master.writeMultipleRegisters(UNIT_ID, 1, writeRegisters));
+
+            Register[] afterRegisters = master.readMultipleRegisters(UNIT_ID, 1, registerCount);
+
+            for (int i = 0; i < registerCount; ++i) {
+                assertEquals("Incorrect status for register",
+                        writeRegisters[i].getValue(), afterRegisters[i].getValue());
+            }
+
+            master.writeMultipleRegisters(UNIT_ID, 1, beforeRegisters);
+        }
+        catch (Exception e) {
+            fail(String.format("Cannot write to registers - %s", e.getMessage()));
+        }
+    }
+
+    @Test
+    public void testMaskWriteRegister() {
+        try {
+            int before = master.readMultipleRegisters(UNIT_ID, 1, 1)[0].getValue();
+            int andMask = 0xABCD;
+            int orMask = 0xBCDA;
+            int newValue = (before & andMask) | (orMask & ~andMask);
+
+            assertTrue("Incorrect mask write status for register 1", master.maskWriteRegister(UNIT_ID, 1, andMask, orMask));
+            assertEquals("Incorrect status for register 1", newValue, master.readMultipleRegisters(UNIT_ID, 1, 1)[0].getValue());
+            master.writeSingleRegister(UNIT_ID, 1, new SimpleInputRegister(before));
+        }
+        catch (Exception e) {
+            fail(String.format("Cannot mask write to register 1 - %s", e.getMessage()));
+        }
+    }
 
     @Test
     public void testCallback() {
