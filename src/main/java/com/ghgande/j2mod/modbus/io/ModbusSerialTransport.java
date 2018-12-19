@@ -169,7 +169,7 @@ public abstract class ModbusSerialTransport extends AbstractModbusTransport {
     public void setTimeout(int time) {
         super.setTimeout(time);
         if (commPort != null) {
-            commPort.setComPortTimeouts(AbstractSerialConnection.TIMEOUT_READ_BLOCKING, timeout, timeout);
+            commPort.setComPortTimeouts(AbstractSerialConnection.TIMEOUT_READ_SEMI_BLOCKING, timeout, timeout);
         }
     }
 
