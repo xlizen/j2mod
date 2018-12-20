@@ -165,5 +165,7 @@ _(**NOT BACKWARDS COMPATIBLE**)_
 * Added check of serial response to make sure it is from the same unit and function code as the request
 * Return the new value of the register after writing to it (#91)
 * Fix data length in MaskWriteRegisterResponse. Add facade methods for Mask Write Response function. Add unit tests. (#92)
-* Upgraded jserialcomm to v2.3.0  
+* Upgraded jserialcomm to v2.3.0
 
+## Version 2.5.4
+* Upgraded jserialcomm to v2.4.0
