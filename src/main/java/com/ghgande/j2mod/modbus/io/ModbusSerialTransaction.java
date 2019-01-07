@@ -163,7 +163,7 @@ public class ModbusSerialTransaction extends ModbusTransaction {
         }
 
         // Set the last transaction timestamp
-        lastTransactionTimestamp = System.currentTimeMillis();
+        lastTransactionTimestamp = System.nanoTime();
     }
 
 }

@@ -18,8 +18,10 @@ package com.ghgande.j2mod.modbus.net;
 import com.ghgande.j2mod.modbus.Modbus;
 import com.ghgande.j2mod.modbus.ModbusIOException;
 import com.ghgande.j2mod.modbus.io.AbstractModbusTransport;
+import com.ghgande.j2mod.modbus.io.ModbusRTUTransport;
 import com.ghgande.j2mod.modbus.msg.ModbusRequest;
 import com.ghgande.j2mod.modbus.msg.ModbusResponse;
+import com.ghgande.j2mod.modbus.msg.ModbusResponse.AuxiliaryMessageTypes;
 import com.ghgande.j2mod.modbus.procimg.ProcessImage;
 import com.ghgande.j2mod.modbus.slave.ModbusSlave;
 import com.ghgande.j2mod.modbus.slave.ModbusSlaveFactory;
@@ -145,7 +147,7 @@ public abstract class AbstractModbusListener implements Runnable {
      * and sends back a response
      *
      * @param transport Transport to read request from
-     * @param listener Listener that the request was received by
+     * @param listener  Listener that the request was received by
      * @throws ModbusIOException If there is an issue with the transport or transmission
      */
     void handleRequest(AbstractModbusTransport transport, AbstractModbusListener listener) throws ModbusIOException {
@@ -171,9 +173,16 @@ public abstract class AbstractModbusListener implements Runnable {
         else {
             response = request.createResponse(this);
         }
+
         if (logger.isDebugEnabled()) {
             logger.debug("Request:{}", request.getHexMessage());
-            logger.debug("Response:{}", response.getHexMessage());
+
+            if (transport instanceof ModbusRTUTransport && response.getAuxiliaryType() == AuxiliaryMessageTypes.UNIT_ID_MISSMATCH) {
+                logger.debug("Not sending response because it was not meant for us.");
+            }
+            else {
+                logger.debug("Response:{}", response.getHexMessage());
+            }
         }
 
         // Write the response
@@ -196,6 +205,7 @@ public abstract class AbstractModbusListener implements Runnable {
 
     /**
      * Gets the name of the thread used by the listener
+     *
      * @return Name of thread or null if not assigned
      */
     public String getThreadName() {
@@ -204,6 +214,7 @@ public abstract class AbstractModbusListener implements Runnable {
 
     /**
      * Sets the name of the thread used by the listener
+     *
      * @param threadName Name to use for the thread
      */
     public void setThreadName(String threadName) {
