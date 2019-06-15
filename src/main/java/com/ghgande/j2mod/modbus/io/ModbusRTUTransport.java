@@ -51,7 +51,6 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
      *
      * @param byteCount Byte count excluding the 2 byte CRC
      * @param out       Output buffer to populate
-     *
      * @throws IOException If data cannot be read from the port
      */
     private void readRequestData(int byteCount, BytesOutputStream out) throws IOException {
@@ -138,7 +137,6 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
      *
      * @param function The function code of the request
      * @param out      The output buffer to put the result
-     *
      * @throws IOException If data cannot be read from the port
      */
     private void getResponse(int function, BytesOutputStream out) throws IOException {
@@ -186,9 +184,9 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
 
                     case Modbus.READ_FIFO_QUEUE:
                         int b1, b2;
-                        b1 = (byte)(readByte() & 0xFF);
+                        b1 = (byte) (readByte() & 0xFF);
                         out.write(b1);
-                        b2 = (byte)(readByte() & 0xFF);
+                        b2 = (byte) (readByte() & 0xFF);
                         out.write(b2);
                         int byteCount = ModbusUtil.makeWord(b1, b2);
                         readRequestData(byteCount, out);
@@ -205,7 +203,7 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
                         int id, fieldCount;
                         readBytes(inpBuf, 5);
                         out.write(inpBuf, 0, 5);
-                        fieldCount = (int)inpBuf[4];
+                        fieldCount = (int) inpBuf[4];
                         for (int i = 0; i < fieldCount; i++) {
                             id = readByte();
                             out.write(id);
@@ -242,7 +240,6 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
      * Writes the Modbus message to the comms port
      *
      * @param msg a <code>ModbusMessage</code> value
-     *
      * @throws ModbusIOException If an error occurred bundling the message
      */
     protected void writeMessageOut(ModbusMessage msg) throws ModbusIOException {
@@ -281,23 +278,23 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
 
     @Override
     protected ModbusRequest readRequestIn(AbstractModbusListener listener) throws ModbusIOException {
-        boolean done;
-        ModbusRequest request;
-        int dlength;
+        ModbusRequest request = null;
 
         try {
-            do {
-                // 1. read to function code, create request and read function
-                // specific bytes
+            while (request == null) {
                 synchronized (byteInputStream) {
                     int uid = readByte();
-                    if (uid != -1) {
+
+                    byteInputOutputStream.reset();
+                    byteInputOutputStream.writeByte(uid);
+
+                    if (listener.getProcessImage(uid) != null) {
+                        // Read a proper request
+
                         int fc = readByte();
-                        byteInputOutputStream.reset();
-                        byteInputOutputStream.writeByte(uid);
                         byteInputOutputStream.writeByte(fc);
 
-                        // create response to acquire length of message
+                        // create request to acquire length of message
                         request = ModbusRequest.createModbusRequest(fc);
                         request.setHeadless();
 
@@ -310,9 +307,9 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
                          * specific parsing to read a response.
                          */
                         getRequest(fc, byteInputOutputStream);
-                        dlength = byteInputOutputStream.size() - 2; // less the crc
+                        int dlength = byteInputOutputStream.size() - 2; // less the crc
                         if (logger.isDebugEnabled()) {
-                            logger.debug("Response: {}", ModbusUtil.toHex(byteInputOutputStream.getBuffer(), 0, dlength + 2));
+                            logger.debug("Request: {}", ModbusUtil.toHex(byteInputOutputStream.getBuffer(), 0, dlength + 2));
                         }
 
                         byteInputStream.reset(inBuffer, dlength);
@@ -320,29 +317,81 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
                         // check CRC
                         int[] crc = ModbusUtil.calculateCRC(inBuffer, 0, dlength); // does not include CRC
                         if (ModbusUtil.unsignedByteToInt(inBuffer[dlength]) != crc[0] || ModbusUtil.unsignedByteToInt(inBuffer[dlength + 1]) != crc[1]) {
-                            logger.debug("CRC should be {}, {}", crc[0], crc[1]);
+                            if (logger.isDebugEnabled()) {
+                                logger.debug("CRC should be {}, {}", Integer.toHexString(crc[0]), Integer.toHexString(crc[1]));
+                            }
 
                             // Drain the input in case the frame was misread and more
                             // was to follow.
                             clearInput();
                             throw new IOException("CRC Error in received frame: " + dlength + " bytes: " + ModbusUtil.toHex(byteInputStream.getBuffer(), 0, dlength));
                         }
+
+                        // read request
+                        byteInputStream.reset(inBuffer, dlength);
+                        request.readFrom(byteInputStream);
+
+                        return request;
+
                     }
                     else {
-                        throw new IOException("Error reading response");
-                    }
+                        // This message is not for us, read and wait for the 3.5t delay
 
-                    // read response
-                    byteInputStream.reset(inBuffer, dlength);
-                    request.readFrom(byteInputStream);
-                    done = true;
+                        // Wait for max 1.5t for data to be available
+                        while (true) {
+                            boolean bytesAvailable = availableBytes() > 0;
+                            if (!bytesAvailable) {
+                                // Sleep the 1.5t to see if there will be more data
+                                if (logger.isDebugEnabled()) {
+                                    logger.debug("Waiting for {} microsec", getMaxCharDelay());
+                                }
+                                bytesAvailable = spinUntilBytesAvailable(getMaxCharDelay());
+                            }
+
+                            if (bytesAvailable) {
+                                // Read the available data
+                                while (availableBytes() > 0) {
+                                    byteInputOutputStream.writeByte(readByte());
+                                }
+                            }
+                            else {
+                                // Transition to wait for the 3.5t interval
+                                break;
+                            }
+                        }
+
+                        // Wait for 2t to complete the 3.5t wait
+                        // Is there is data available the interval was not respected, we should discard the message
+                        if (logger.isDebugEnabled()) {
+                            logger.debug("Waiting for {} microsec", getCharIntervalMicro(2));
+                        }
+                        if (spinUntilBytesAvailable(getCharIntervalMicro(2))) {
+                            // Discard the message
+                            if (logger.isDebugEnabled()) {
+                                logger.debug("Discarding message (More than 1.5t between characters!) - {}", ModbusUtil.toHex(byteInputOutputStream.getBuffer(), 0, byteInputOutputStream.size()));
+                            }
+                        }
+                        else {
+                            // This message is complete
+                            if (logger.isDebugEnabled()) {
+                                logger.debug("Read message not meant for us: {}", ModbusUtil.toHex(byteInputOutputStream.getBuffer(), 0, byteInputOutputStream.size()));
+                            }
+                        }
+                    }
                 }
-            } while (!done);
-            return request;
+            }
+
+            // We will never get here
+            return null;
         }
         catch (IOException ex) {
             // An exception mostly means there is no request. The master should
             // retry the request.
+
+            if (logger.isDebugEnabled()) {
+                logger.debug("Failed to read response! {}", ex.getMessage());
+            }
+
             return null;
         }
     }
@@ -351,6 +400,7 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
      * readResponse - Read the bytes for the response from the slave.
      *
      * @return a <tt>ModbusRespose</tt>
+     *
      * @throws com.ghgande.j2mod.modbus.ModbusIOException If the response cannot be read from the socket/port
      */
     protected ModbusResponse readResponseIn() throws ModbusIOException {
@@ -364,6 +414,7 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
                 // specific bytes
                 synchronized (byteInputStream) {
                     int uid = readByte();
+
                     if (uid != -1) {
                         int fc = readByte();
                         byteInputOutputStream.reset();
@@ -409,6 +460,7 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
             return response;
         }
         catch (IOException ex) {
+            // FIXME: This printout is wrong when reading response from other slave
             throw new ModbusIOException("I/O exception - failed to read response for request [%s] - %s", ModbusUtil.toHex(lastRequest), ex.getMessage());
         }
     }

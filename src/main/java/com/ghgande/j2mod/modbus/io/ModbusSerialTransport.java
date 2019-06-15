@@ -54,6 +54,11 @@ public abstract class ModbusSerialTransport extends AbstractModbusTransport {
      */
     static final int FRAME_END = 2000;
 
+    /**
+     * The number of nanoseconds there is in a millisecond
+     */
+    static final int NS_IN_A_MS = 1000000;
+
     private AbstractSerialConnection commPort;
     boolean echo = false;     // require RS-485 echo processing
     private final Set<AbstractSerialTransportListener> listeners = Collections.synchronizedSet(new HashSet<AbstractSerialTransportListener>());
@@ -169,7 +174,7 @@ public abstract class ModbusSerialTransport extends AbstractModbusTransport {
     public void setTimeout(int time) {
         super.setTimeout(time);
         if (commPort != null) {
-            commPort.setComPortTimeouts(AbstractSerialConnection.TIMEOUT_READ_SEMI_BLOCKING, timeout, timeout);
+            commPort.setComPortTimeouts(AbstractSerialConnection.TIMEOUT_READ_BLOCKING, timeout, timeout);
         }
     }
 
@@ -364,7 +369,7 @@ public abstract class ModbusSerialTransport extends AbstractModbusTransport {
      *            echo is not received in the time specified in the SerialConnection.
      * @throws IOException if a I/O error occurred.
      */
-    void readEcho(int len) throws IOException {
+    protected void readEcho(int len) throws IOException {
         byte echoBuf[] = new byte[len];
         int echoLen = commPort.readBytes(echoBuf, len);
         if (logger.isDebugEnabled()) {
@@ -374,6 +379,10 @@ public abstract class ModbusSerialTransport extends AbstractModbusTransport {
             logger.debug("Error: Transmit echo not received");
             throw new IOException("Echo not received");
         }
+    }
+
+    protected int availableBytes() {
+        return commPort.bytesAvailable();
     }
 
     /**
@@ -591,19 +600,90 @@ public abstract class ModbusSerialTransport extends AbstractModbusTransport {
             // Make use we have a gap of 3.5 characters between adjacent requests
             // We have to do the calculations here because it is possible that the caller may have changed
             // the connection characteristics if they provided the connection instance
-            int delay = (int) (Modbus.INTER_MESSAGE_GAP * (commPort.getNumDataBits() + commPort.getNumStopBits()) * 1000 / commPort.getBaudRate());
-
-            // If the delay is below the miimum, set it to the minimum
-            if (delay > Modbus.MINIMUM_TRANSMIT_DELAY) {
-                delay = Modbus.MINIMUM_TRANSMIT_DELAY;
-            }
+            int delay = getInterFrameDelay() / 1000;
 
             // How long since the last message we received
-            long gapSinceLastMessage = System.currentTimeMillis() - lastTransactionTimestamp;
+            long gapSinceLastMessage = (System.nanoTime() - lastTransactionTimestamp) / NS_IN_A_MS;
             if (delay > gapSinceLastMessage) {
-                ModbusUtil.sleep(delay - gapSinceLastMessage);
+                long sleepTime = delay - gapSinceLastMessage;
+
+                ModbusUtil.sleep(sleepTime);
+
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Waited between frames for {} ms", sleepTime);
+                }
             }
         }
     }
 
+    /**
+     * In microseconds
+     *
+     * @return Delay between frames
+     */
+    int getInterFrameDelay() {
+        if (commPort.getBaudRate() > 19200) {
+            return 1750;
+        }
+        else {
+            return Math.max(getCharInterval(Modbus.INTER_MESSAGE_GAP), Modbus.MINIMUM_TRANSMIT_DELAY);
+        }
+    }
+
+    /**
+     * The maximum delay between characters in microseconds
+     *
+     * @return microseconds
+     */
+    long getMaxCharDelay() {
+        if (commPort.getBaudRate() > 19200) {
+            return 1750;
+        }
+        else {
+            return getCharIntervalMicro(Modbus.INTER_CHARACTER_GAP);
+        }
+    }
+
+    /**
+     * Calculates an interval based on a set number of characters.
+     * Used for message timings.
+     *
+     * @param chars Number of characters
+     * @return char interval in milliseconds
+     */
+    int getCharInterval(double chars) {
+        return (int) (getCharIntervalMicro(chars) / 1000);
+    }
+
+    /**
+     * Calculates an interval based on a set number of characters.
+     * Used for message timings.
+     *
+     * @param chars Number of caracters
+     * @return microseconds
+     */
+    long getCharIntervalMicro(double chars) {
+        // Make use we have a gap of 3.5 characters between adjacent requests
+        // We have to do the calculations here because it is possible that the caller may have changed
+        // the connection characteristics if they provided the connection instance
+        return (long) chars * NS_IN_A_MS * (1 + commPort.getNumDataBits() + commPort.getNumStopBits() + (commPort.getParity() == AbstractSerialConnection.NO_PARITY ? 0 : 1)) / commPort.getBaudRate();
+    }
+
+    /**
+     * Spins until the timeout or the condition is met.
+     * This method will repeatedly poll the available bytes, so it should not have any side effects.
+     *
+     * @param waitTimeMicroSec The time to wait for the condition to be true in microseconds
+     * @return true if the condition ended the spin, false if the tim
+     */
+    boolean spinUntilBytesAvailable(long waitTimeMicroSec) {
+        long start = System.nanoTime();
+        while (availableBytes() < 1) {
+            long delta = System.nanoTime() - start;
+            if (delta > waitTimeMicroSec * 1000) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

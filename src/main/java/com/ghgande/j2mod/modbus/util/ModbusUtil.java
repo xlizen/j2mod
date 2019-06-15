@@ -528,7 +528,6 @@ public class ModbusUtil {
         catch (InterruptedException ex) {
             logger.warn("Backout sleep timer has been interrupted");
         }
-
     }
-
+    
 }

@@ -1,5 +1,6 @@
 package com.ghgande.j2mod.modbus.net;
 
+import com.fazecast.jSerialComm.SerialPort;
 import com.ghgande.j2mod.modbus.io.AbstractModbusTransport;
 
 import java.io.IOException;
@@ -16,29 +17,29 @@ public abstract class AbstractSerialConnection {
     /**
      * Parity values
      */
-    public static final int NO_PARITY = 0;
-    public static final int ODD_PARITY = 1;
-    public static final int EVEN_PARITY = 2;
-    public static final int MARK_PARITY = 3;
-    public static final int SPACE_PARITY = 4;
+    public static final int NO_PARITY = SerialPort.NO_PARITY;
+    public static final int ODD_PARITY = SerialPort.ODD_PARITY;
+    public static final int EVEN_PARITY = SerialPort.EVEN_PARITY;
+    public static final int MARK_PARITY = SerialPort.MARK_PARITY;
+    public static final int SPACE_PARITY = SerialPort.SPACE_PARITY;
 
     /**
      * Stop bits values
      */
-    public static final int ONE_STOP_BIT = 1;
-    public static final int ONE_POINT_FIVE_STOP_BITS = 2;
-    public static final int TWO_STOP_BITS = 3;
+    public static final int ONE_STOP_BIT = SerialPort.ONE_STOP_BIT;
+    public static final int ONE_POINT_FIVE_STOP_BITS = SerialPort.ONE_POINT_FIVE_STOP_BITS;
+    public static final int TWO_STOP_BITS = SerialPort.TWO_STOP_BITS;
 
     /**
      * Flow control values
      */
-    public static final int FLOW_CONTROL_DISABLED = 0;
-    public static final int FLOW_CONTROL_RTS_ENABLED = 1;
-    public static final int FLOW_CONTROL_CTS_ENABLED = 16;
-    public static final int FLOW_CONTROL_DSR_ENABLED = 256;
-    public static final int FLOW_CONTROL_DTR_ENABLED = 4096;
-    public static final int FLOW_CONTROL_XONXOFF_IN_ENABLED = 65536;
-    public static final int FLOW_CONTROL_XONXOFF_OUT_ENABLED = 1048576;
+    public static final int FLOW_CONTROL_DISABLED = SerialPort.FLOW_CONTROL_DISABLED;
+    public static final int FLOW_CONTROL_RTS_ENABLED = SerialPort.FLOW_CONTROL_RTS_ENABLED;
+    public static final int FLOW_CONTROL_CTS_ENABLED = SerialPort.FLOW_CONTROL_CTS_ENABLED;
+    public static final int FLOW_CONTROL_DSR_ENABLED = SerialPort.FLOW_CONTROL_DSR_ENABLED;
+    public static final int FLOW_CONTROL_DTR_ENABLED = SerialPort.FLOW_CONTROL_DTR_ENABLED;
+    public static final int FLOW_CONTROL_XONXOFF_IN_ENABLED = SerialPort.FLOW_CONTROL_XONXOFF_IN_ENABLED;
+    public static final int FLOW_CONTROL_XONXOFF_OUT_ENABLED = SerialPort.FLOW_CONTROL_XONXOFF_OUT_ENABLED;
 
     /**
      * Open delay (msec)
@@ -48,12 +49,11 @@ public abstract class AbstractSerialConnection {
     /**
      * Timeout
      */
-    static final public int TIMEOUT_NONBLOCKING = 0x00000000;
-   	static final public int TIMEOUT_READ_SEMI_BLOCKING = 0x00000001;
-   	static final public int TIMEOUT_WRITE_SEMI_BLOCKING = 0x00000010;
-   	static final public int TIMEOUT_READ_BLOCKING = 0x00000100;
-   	static final public int TIMEOUT_WRITE_BLOCKING = 0x00001000;
-   	static final public int TIMEOUT_SCANNER = 0x00010000;
+    static final public int TIMEOUT_NONBLOCKING = SerialPort.TIMEOUT_NONBLOCKING;
+   	static final public int TIMEOUT_READ_SEMI_BLOCKING = SerialPort.TIMEOUT_READ_SEMI_BLOCKING;
+   	static final public int TIMEOUT_READ_BLOCKING = SerialPort.TIMEOUT_READ_BLOCKING;
+   	static final public int TIMEOUT_WRITE_BLOCKING = SerialPort.TIMEOUT_WRITE_BLOCKING;
+   	static final public int TIMEOUT_SCANNER = SerialPort.TIMEOUT_SCANNER;
 
     /**
      * Returns the <tt>ModbusTransport</tt> instance to be used for receiving
