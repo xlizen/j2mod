@@ -170,3 +170,6 @@ _(**NOT BACKWARDS COMPATIBLE**)_
 ## Version 2.5.4
 * Serial slave not reading response from other slave #76
 * Upgraded jserialcomm to v2.4.1
+
+## Version 2.5.5
+* Upgraded jserialcomm to v2.5.1
