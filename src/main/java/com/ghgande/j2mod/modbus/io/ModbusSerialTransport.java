@@ -103,37 +103,41 @@ public abstract class ModbusSerialTransport extends AbstractModbusTransport {
     private void writeMessage(ModbusMessage msg) throws ModbusIOException {
         open();
         notifyListenersBeforeWrite(msg);
-        writeMessageOut(msg);
-        long startTime = System.nanoTime();
-
-        // Wait here for the message to have been sent
-
-        double bytesPerSec = commPort.getBaudRate() / (((commPort.getNumDataBits() == 0) ? 8 : commPort.getNumDataBits()) + ((commPort.getNumStopBits() == 0) ? 1 : commPort.getNumStopBits()) + ((commPort.getParity() == SerialPort.NO_PARITY) ? 0 : 1));
-        double delay = 1000000000.0 * msg.getOutputLength() / bytesPerSec;
-        double delayMilliSeconds = Math.floor(delay / 1000000);
-        double delayNanoSeconds = delay % 1000000;
         try {
+            writeMessageOut(msg);
+            long startTime = System.nanoTime();
 
-            // For delays less than a millisecond, we need to chew CPU cycles unfortunately
-            // There are some fiddle factors here to allow for some oddities in the hardware
+            // Wait here for the message to have been sent
 
-            if (delayMilliSeconds == 0.0) {
-                int priority = Thread.currentThread().getPriority();
-                Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
-                long end = startTime + ((int) (delayNanoSeconds * 1.3));
-                while (System.nanoTime() < end) {
-                    // noop
+            double bytesPerSec = commPort.getBaudRate() / (((commPort.getNumDataBits() == 0) ? 8 : commPort.getNumDataBits()) + ((commPort.getNumStopBits() == 0) ? 1 : commPort.getNumStopBits()) + ((commPort.getParity() == SerialPort.NO_PARITY) ? 0 : 1));
+            double delay = 1000000000.0 * msg.getOutputLength() / bytesPerSec;
+            double delayMilliSeconds = Math.floor(delay / 1000000);
+            double delayNanoSeconds = delay % 1000000;
+            try {
+
+                // For delays less than a millisecond, we need to chew CPU cycles unfortunately
+                // There are some fiddle factors here to allow for some oddities in the hardware
+
+                if (delayMilliSeconds == 0.0) {
+                    int priority = Thread.currentThread().getPriority();
+                    Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
+                    long end = startTime + ((int) (delayNanoSeconds * 1.3));
+                    while (System.nanoTime() < end) {
+                        // noop
+                    }
+                    Thread.currentThread().setPriority(priority);
                 }
-                Thread.currentThread().setPriority(priority);
+                else {
+                    Thread.sleep((int) (delayMilliSeconds * 1.4), (int) delayNanoSeconds);
+                }
             }
-            else {
-                Thread.sleep((int) (delayMilliSeconds * 1.4), (int) delayNanoSeconds);
+            catch (Exception e) {
+                logger.debug("nothing to do");
             }
         }
-        catch (Exception e) {
-            logger.debug("nothing to do");
+        finally {
+            notifyListenersAfterWrite(msg);
         }
-        notifyListenersAfterWrite(msg);
     }
 
     @Override

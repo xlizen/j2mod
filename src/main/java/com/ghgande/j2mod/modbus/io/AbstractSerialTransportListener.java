@@ -39,7 +39,8 @@ abstract public class AbstractSerialTransportListener {
     }
 
     /**
-     * Will be called whenever a message has been written
+     * Will be called whenever a message has been written either successfully or unsuccessfully
+     * Although a message may not be sent (throws and error), this even is guaranteed to occur
      *
      * @param port Port being used
      * @param msg  Message written

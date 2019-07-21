@@ -173,3 +173,6 @@ _(**NOT BACKWARDS COMPATIBLE**)_
 
 ## Version 2.5.5
 * Upgraded jserialcomm to v2.5.1
+
+## Version 2.5.6
+* Added a finally block to ensure that `afterMessageWrite` event handler is invoked, even if the message fails to write
