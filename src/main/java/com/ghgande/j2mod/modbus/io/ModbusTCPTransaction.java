@@ -131,7 +131,7 @@ public class ModbusTCPTransaction extends ModbusTransaction {
                     transport = connection.getModbusTransport();
                 }
                 catch (Exception ex) {
-                    throw new ModbusIOException("Connection failed for %s:%d", connection.getAddress().toString(), connection.getPort(), ex.getMessage());
+                    throw new ModbusIOException("Connection failed for %s:%d %s", connection.getAddress().toString(), connection.getPort(), ex.getMessage());
                 }
             }
 

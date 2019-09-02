@@ -176,3 +176,6 @@ _(**NOT BACKWARDS COMPATIBLE**)_
 
 ## Version 2.5.6
 * Added a finally block to ensure that `afterMessageWrite` event handler is invoked, even if the message fails to write
+
+## Version 2.5.7
+* `ModbusTCPTransaction` Error message is not shown in a specific case #100
