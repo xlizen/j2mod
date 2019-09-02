@@ -36,7 +36,7 @@ public class BitVector {
     //instance attributes
     private int size;
     private byte[] data;
-    private boolean MSBAccess = false;
+    private boolean msbAccess = false;
 
     /**
      * Constructs a new <tt>BitVector</tt> instance
@@ -90,32 +90,6 @@ public class BitVector {
         return bv;
     }
 
-    public static void main(String[] args) {
-        BitVector test = new BitVector(24);
-        logger.debug(test.isLSBAccess() + "");
-        test.setBit(7, true);
-        logger.debug(test.getBit(7) + "");
-        test.toggleAccess(true);
-        logger.debug(test.getBit(7) + "");
-
-        test.toggleAccess(true);
-        test.setBit(6, true);
-        test.setBit(3, true);
-        test.setBit(2, true);
-
-        test.setBit(0, true);
-        test.setBit(8, true);
-        test.setBit(10, true);
-
-        logger.debug(test.toString());
-        test.toggleAccess(true);
-        logger.debug(test.toString());
-        test.toggleAccess(true);
-        logger.debug(test.toString());
-
-        logger.debug(ModbusUtil.toHex(test.getBytes()));
-    }
-
     /**
      * Toggles the flag deciding whether the LSB
      * or the MSB of the byte corresponds to the
@@ -124,7 +98,7 @@ public class BitVector {
      * @param b true if LSB=0 up to MSB=7, false otherwise.
      */
     public void toggleAccess(boolean b) {
-        MSBAccess = !MSBAccess;
+        msbAccess = !msbAccess;
     }
 
     /**
@@ -135,7 +109,7 @@ public class BitVector {
      * @return true if LSB=0 up to MSB=7, false otherwise.
      */
     public boolean isLSBAccess() {
-        return !MSBAccess;
+        return !msbAccess;
     }
 
     /**
@@ -146,7 +120,7 @@ public class BitVector {
      * @return true if LSB=0 up to MSB=7, false otherwise.
      */
     public boolean isMSBAccess() {
-        return MSBAccess;
+        return msbAccess;
     }
 
     /**
@@ -156,7 +130,7 @@ public class BitVector {
      *
      * @return the <tt>byte[]</tt> used to store the bits.
      */
-    public synchronized final byte[] getBytes() {
+    public final synchronized byte[] getBytes() {
         byte[] dest = new byte[data.length];
         System.arraycopy(data, 0, dest, 0, dest.length);
         return dest;
@@ -169,7 +143,7 @@ public class BitVector {
      *
      * @param data a <tt>byte[]</tt>.
      */
-    public void setBytes(byte[] data) {
+    public synchronized void setBytes(byte[] data) {
         System.arraycopy(data, 0, this.data, 0, data.length);
     }
 
@@ -201,9 +175,7 @@ public class BitVector {
     public boolean getBit(int index) throws IndexOutOfBoundsException {
         index = translateIndex(index);
         logger.debug("Get bit #{}", index);
-        return ((data[byteIndex(index)]
-                & (0x01 << bitIndex(index))) != 0
-        );
+        return (((data[byteIndex(index)] & 0xff) & (0x01 << bitIndex(index))) != 0);
     }
 
     /**
@@ -339,7 +311,7 @@ public class BitVector {
     }
 
     private int translateIndex(int idx) {
-        if (MSBAccess) {
+        if (msbAccess) {
             int mod4 = idx % 4;
             int div4 = idx / 4;
 

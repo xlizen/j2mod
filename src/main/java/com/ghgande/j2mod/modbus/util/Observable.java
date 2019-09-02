@@ -15,10 +15,8 @@
  */
 package com.ghgande.j2mod.modbus.util;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A cleanroom implementation of the Observable pattern.
@@ -29,15 +27,13 @@ import java.util.Vector;
  */
 public class Observable {
 
-    private static final Logger logger = LoggerFactory.getLogger(Observable.class);
-
-    private Vector<Observer> observers;
+    private List<Observer> observers;
 
     /**
      * Constructs a new Observable instance.
      */
     public Observable() {
-        observers = new Vector<Observer>(10);
+        observers = new ArrayList<Observer>(10);
     }
 
     public synchronized int getObserverCount() {
@@ -52,7 +48,7 @@ public class Observable {
      */
     public synchronized void addObserver(Observer o) {
         if (!observers.contains(o)) {
-            observers.addElement(o);
+            observers.add(o);
         }
     }
 
@@ -63,7 +59,7 @@ public class Observable {
      * @param o an observer instance to be removed.
      */
     public synchronized void removeObserver(Observer o) {
-        observers.removeElement(o);
+        observers.remove(o);
     }
 
     /**
@@ -71,7 +67,7 @@ public class Observable {
      * <tt>Observable</tt>.
      */
     public synchronized void removeObservers() {
-        observers.removeAllElements();
+        observers.clear();
     }
 
     /**
@@ -81,8 +77,8 @@ public class Observable {
      * @param arg an arbitrary argument to be passed.
      */
     public synchronized void notifyObservers(Object arg) {
-        for (int i = 0; i < observers.size(); i++) {
-            observers.elementAt(i).update(this, arg);
+        for (Observer observer : observers) {
+            observer.update(this, arg);
         }
     }
 }

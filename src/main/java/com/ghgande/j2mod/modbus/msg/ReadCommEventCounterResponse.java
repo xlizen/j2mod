@@ -105,7 +105,7 @@ public class ReadCommEventCounterResponse extends ModbusResponse {
      * @return Response as byte array
      */
     public byte[] getMessage() {
-        byte result[] = new byte[4];
+        byte[] result = new byte[4];
 
         result[0] = (byte)(status >> 8);
         result[1] = (byte)(status & 0xFF);

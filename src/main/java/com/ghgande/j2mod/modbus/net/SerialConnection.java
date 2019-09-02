@@ -85,7 +85,7 @@ public class SerialConnection extends AbstractSerialConnection {
     }
 
     @Override
-    public void open() throws IOException {
+    public synchronized void open() throws IOException {
         if (serialPort == null) {
             serialPort = SerialPort.getCommPort(parameters.getPortName());
             if (serialPort.getDescriptivePortName().contains("Bad Port")) {

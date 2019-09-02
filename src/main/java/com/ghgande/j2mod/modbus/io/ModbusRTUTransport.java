@@ -55,7 +55,7 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
      */
     private void readRequestData(int byteCount, BytesOutputStream out) throws IOException {
         byteCount += 2;
-        byte inpBuf[] = new byte[byteCount];
+        byte[] inpBuf = new byte[byteCount];
         readBytes(inpBuf, byteCount);
         out.write(inpBuf, 0, byteCount);
     }
@@ -68,7 +68,7 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
      */
     private void getRequest(int function, BytesOutputStream out) throws IOException {
         int byteCount;
-        byte inpBuf[] = new byte[256];
+        byte[] inpBuf = new byte[256];
         try {
             if ((function & 0x80) == 0) {
                 switch (function) {
@@ -140,7 +140,7 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
      * @throws IOException If data cannot be read from the port
      */
     private void getResponse(int function, BytesOutputStream out) throws IOException {
-        byte inpBuf[] = new byte[256];
+        byte[] inpBuf = new byte[256];
         try {
             if ((function & 0x80) == 0) {
                 switch (function) {
@@ -183,7 +183,8 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
                         break;
 
                     case Modbus.READ_FIFO_QUEUE:
-                        int b1, b2;
+                        int b1;
+                        int b2;
                         b1 = (byte) (readByte() & 0xFF);
                         out.write(b1);
                         b2 = (byte) (readByte() & 0xFF);
@@ -200,7 +201,8 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
                         }
                         out.write(sc);
                         // next few bytes are just copied.
-                        int id, fieldCount;
+                        int id;
+                        int fieldCount;
                         readBytes(inpBuf, 5);
                         out.write(inpBuf, 0, 5);
                         fieldCount = (int) inpBuf[4];
@@ -404,59 +406,55 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
      * @throws com.ghgande.j2mod.modbus.ModbusIOException If the response cannot be read from the socket/port
      */
     protected ModbusResponse readResponseIn() throws ModbusIOException {
-        boolean done;
         ModbusResponse response;
         int dlength;
 
         try {
-            do {
-                // 1. read to function code, create request and read function
-                // specific bytes
-                synchronized (byteInputStream) {
-                    int uid = readByte();
+            // 1. read to function code, create request and read function
+            // specific bytes
+            synchronized (byteInputStream) {
+                int uid = readByte();
 
-                    if (uid != -1) {
-                        int fc = readByte();
-                        byteInputOutputStream.reset();
-                        byteInputOutputStream.writeByte(uid);
-                        byteInputOutputStream.writeByte(fc);
+                if (uid != -1) {
+                    int fc = readByte();
+                    byteInputOutputStream.reset();
+                    byteInputOutputStream.writeByte(uid);
+                    byteInputOutputStream.writeByte(fc);
 
-                        // create response to acquire length of message
-                        response = ModbusResponse.createModbusResponse(fc);
-                        response.setHeadless();
+                    // create response to acquire length of message
+                    response = ModbusResponse.createModbusResponse(fc);
+                    response.setHeadless();
 
-                        /*
-                         * With Modbus RTU, there is no end frame. Either we
-                         * assume the message is complete as is or we must do
-                         * function specific processing to know the correct
-                         * length. To avoid moving frame timing to the serial
-                         * input functions, we set the timeout and to message
-                         * specific parsing to read a response.
-                         */
-                        getResponse(fc, byteInputOutputStream);
-                        dlength = byteInputOutputStream.size() - 2; // less the crc
-                        if (logger.isDebugEnabled()) {
-                            logger.debug("Response: {}", ModbusUtil.toHex(byteInputOutputStream.getBuffer(), 0, dlength + 2));
-                        }
-                        byteInputStream.reset(inBuffer, dlength);
-
-                        // check CRC
-                        int[] crc = ModbusUtil.calculateCRC(inBuffer, 0, dlength); // does not include CRC
-                        if (ModbusUtil.unsignedByteToInt(inBuffer[dlength]) != crc[0] || ModbusUtil.unsignedByteToInt(inBuffer[dlength + 1]) != crc[1]) {
-                            logger.debug("CRC should be {}, {}", crc[0], crc[1]);
-                            throw new IOException("CRC Error in received frame: " + dlength + " bytes: " + ModbusUtil.toHex(byteInputStream.getBuffer(), 0, dlength));
-                        }
+                    /*
+                     * With Modbus RTU, there is no end frame. Either we
+                     * assume the message is complete as is or we must do
+                     * function specific processing to know the correct
+                     * length. To avoid moving frame timing to the serial
+                     * input functions, we set the timeout and to message
+                     * specific parsing to read a response.
+                     */
+                    getResponse(fc, byteInputOutputStream);
+                    dlength = byteInputOutputStream.size() - 2; // less the crc
+                    if (logger.isDebugEnabled()) {
+                        logger.debug("Response: {}", ModbusUtil.toHex(byteInputOutputStream.getBuffer(), 0, dlength + 2));
                     }
-                    else {
-                        throw new IOException("Error reading response");
-                    }
-
-                    // read response
                     byteInputStream.reset(inBuffer, dlength);
-                    response.readFrom(byteInputStream);
-                    done = true;
+
+                    // check CRC
+                    int[] crc = ModbusUtil.calculateCRC(inBuffer, 0, dlength); // does not include CRC
+                    if (ModbusUtil.unsignedByteToInt(inBuffer[dlength]) != crc[0] || ModbusUtil.unsignedByteToInt(inBuffer[dlength + 1]) != crc[1]) {
+                        logger.debug("CRC should be {}, {}", crc[0], crc[1]);
+                        throw new IOException("CRC Error in received frame: " + dlength + " bytes: " + ModbusUtil.toHex(byteInputStream.getBuffer(), 0, dlength));
+                    }
                 }
-            } while (!done);
+                else {
+                    throw new IOException("Error reading response");
+                }
+
+                // read response
+                byteInputStream.reset(inBuffer, dlength);
+                response.readFrom(byteInputStream);
+            }
             return response;
         }
         catch (IOException ex) {

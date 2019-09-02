@@ -26,12 +26,13 @@ import com.ghgande.j2mod.modbus.util.Observable;
  */
 public class ObservableRegister extends Observable implements Register {
 
+    private static final String VALUE_PARAM = "value";
     /**
      * The word holding the content of this register.
      */
     protected short register;
 
-    synchronized public int getValue() {
+    public synchronized int getValue() {
         return register & 0xFFFF;
     }
 
@@ -49,7 +50,7 @@ public class ObservableRegister extends Observable implements Register {
 
     public synchronized void setValue(short s) {
         register = s;
-        notifyObservers("value");
+        notifyObservers(VALUE_PARAM);
     }
 
     public synchronized void setValue(byte[] bytes) {
@@ -57,13 +58,13 @@ public class ObservableRegister extends Observable implements Register {
             throw new IllegalArgumentException();
         }
         else {
-            register = (short)(((short)((bytes[0] << 8))) | (((short)(bytes[1])) & 0xFF));
-            notifyObservers("value");
+            register = (short)(((short)(bytes[0] << 8)) | (((short)(bytes[1])) & 0xFF));
+            notifyObservers(VALUE_PARAM);
         }
     }
 
     public synchronized void setValue(int v) {
         register = (short)v;
-        notifyObservers("value");
+        notifyObservers(VALUE_PARAM);
     }
 }

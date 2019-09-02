@@ -23,7 +23,8 @@ import org.slf4j.LoggerFactory;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
@@ -36,7 +37,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 class UDPSlaveTerminal extends AbstractUDPTerminal {
 
     private static final Logger logger = LoggerFactory.getLogger(UDPSlaveTerminal.class);
-    protected Hashtable<Integer, DatagramPacket> requests = new Hashtable<Integer, DatagramPacket>(342);
+    protected Map<Integer, DatagramPacket> requests = new HashMap<Integer, DatagramPacket>(342);
     private LinkedBlockingQueue<byte[]> sendQueue = new LinkedBlockingQueue<byte[]>();
     private LinkedBlockingQueue<byte[]> receiveQueue = new LinkedBlockingQueue<byte[]>();
     private PacketSender packetSender;
@@ -64,8 +65,8 @@ class UDPSlaveTerminal extends AbstractUDPTerminal {
                 port = socket.getLocalPort();
                 address = socket.getLocalAddress();
             }
-            logger.debug("UDPSlaveTerminal::haveSocket():{}", socket.toString());
-            logger.debug("UDPSlaveTerminal::addr=:{}:port={}", address.toString(), port);
+            logger.debug("UDPSlaveTerminal::haveSocket():{}", socket);
+            logger.debug("UDPSlaveTerminal::addr=:{}:port={}", address, port);
 
             socket.setReceiveBufferSize(1024);
             socket.setSendBufferSize(1024);

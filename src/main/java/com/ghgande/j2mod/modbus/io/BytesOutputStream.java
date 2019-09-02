@@ -65,6 +65,7 @@ public class BytesOutputStream extends FastByteArrayOutputStream implements Data
         return dest;
     }
 
+    @Override
     public void reset() {
         count = 0;
     }

@@ -15,9 +15,6 @@
  */
 package com.ghgande.j2mod.modbus.procimg;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * @author Julie
  *
@@ -28,11 +25,9 @@ import org.slf4j.LoggerFactory;
  */
 public class Record {
 
-    private static final Logger logger = LoggerFactory.getLogger(Record.class);
-
     private int recordNumber;
     private int registerCount;
-    private Register registers[];
+    private Register[] registers;
 
     public Record(int recordNumber, int registers) {
         this.recordNumber = recordNumber;

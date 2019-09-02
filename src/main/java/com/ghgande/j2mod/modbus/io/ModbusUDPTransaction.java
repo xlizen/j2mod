@@ -41,7 +41,6 @@ public class ModbusUDPTransaction extends ModbusTransaction {
 
     //instance attributes and associations
     private AbstractUDPTerminal terminal;
-    private final Object MUTEX = new Object();
 
     /**
      * Constructs a new <tt>ModbusUDPTransaction</tt>
@@ -123,7 +122,7 @@ public class ModbusUDPTransaction extends ModbusTransaction {
             try {
                 //3. write request, and read response,
                 //   while holding the lock on the IO object
-                synchronized (MUTEX) {
+                synchronized (ModbusUDPTransaction.class) {
                     //write request message
                     transport.writeRequest(request);
                     //read response message
@@ -176,7 +175,7 @@ public class ModbusUDPTransaction extends ModbusTransaction {
      * When the maximum value of 65535 has been reached,
      * the identifiers will start from zero again.
      */
-    private void incrementTransactionID() {
+    private synchronized void incrementTransactionID() {
         if (isCheckingValidity()) {
             if (transactionID >= Modbus.MAX_TRANSACTION_ID) {
                 transactionID = Modbus.DEFAULT_TRANSACTION_ID;

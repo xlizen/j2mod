@@ -83,7 +83,7 @@ public class ReadExceptionStatusResponse extends ModbusResponse {
      * @return Response as byte array
      */
     public byte[] getMessage() {
-        byte result[] = new byte[1];
+        byte[] result = new byte[1];
 
         result[0] = (byte)(status & 0xFF);
 

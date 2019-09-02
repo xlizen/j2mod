@@ -101,7 +101,7 @@ public class AIAOTest {
 
             try {
                 String serverAddress = args[0];
-                String parts[] = serverAddress.split(" *: *");
+                String[] parts = serverAddress.split(" *: *");
 
                 String address = parts[0];
                 if (parts.length > 1) {

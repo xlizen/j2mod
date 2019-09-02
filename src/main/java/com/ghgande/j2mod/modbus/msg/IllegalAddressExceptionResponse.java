@@ -25,12 +25,16 @@ import com.ghgande.j2mod.modbus.Modbus;
 public class IllegalAddressExceptionResponse extends ExceptionResponse {
 
     /**
-     *
+     * Raised when there is a problem with the address of a register/coil etc
      */
     public IllegalAddressExceptionResponse() {
         super(0, Modbus.ILLEGAL_ADDRESS_EXCEPTION);
     }
 
+    /**
+     * Raised when there is a problem with the address of a register/coil etc
+     * @param function Function associated with the address
+     */
     public IllegalAddressExceptionResponse(int function) {
         super(function, Modbus.ILLEGAL_ADDRESS_EXCEPTION);
     }
@@ -39,6 +43,7 @@ public class IllegalAddressExceptionResponse extends ExceptionResponse {
      * Sets the function code
      * @param fc Function code
      */
+    @Override
     public void setFunctionCode(int fc) {
         super.setFunctionCode(fc | Modbus.EXCEPTION_OFFSET);
     }

@@ -141,7 +141,7 @@ public class ReadCoilsResponse extends ModbusResponse {
     }
 
     public void writeData(DataOutput output) throws IOException {
-        byte result[] = getMessage();
+        byte[] result = getMessage();
 
         output.write(result);
     }
@@ -157,7 +157,7 @@ public class ReadCoilsResponse extends ModbusResponse {
 
     public byte[] getMessage() {
         int len = 1 + coils.byteSize();
-        byte result[] = new byte[len];
+        byte[] result = new byte[len];
 
         result[0] = (byte)coils.byteSize();
         System.arraycopy(coils.getBytes(), 0, result, 1, coils.byteSize());

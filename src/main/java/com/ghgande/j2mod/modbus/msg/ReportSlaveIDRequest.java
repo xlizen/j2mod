@@ -59,6 +59,7 @@ public class ReportSlaveIDRequest extends ModbusRequest {
      * writeData -- output this Modbus message to dout.
      * @throws java.io.IOException If the data cannot be written
      */
+    @Override
     public void writeData(DataOutput dout) throws IOException {
         dout.write(getMessage());
     }
@@ -67,15 +68,17 @@ public class ReportSlaveIDRequest extends ModbusRequest {
      * readData -- dummy function.  There is no data with the request.
      * @throws java.io.IOException If the data cannot be read
      */
+    @Override
     public void readData(DataInput din) throws IOException {
+        // No data
     }
 
     /**
      * getMessage
      * @return an empty array as there is no data for this request
      */
+    @Override
     public byte[] getMessage() {
-
         return new byte[0];
     }
 }

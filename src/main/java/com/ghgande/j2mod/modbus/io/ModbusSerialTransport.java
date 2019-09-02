@@ -58,6 +58,8 @@ public abstract class ModbusSerialTransport extends AbstractModbusTransport {
      * The number of nanoseconds there is in a millisecond
      */
     static final int NS_IN_A_MS = 1000000;
+    private static final String CANNOT_READ_FROM_SERIAL_PORT = "Cannot read from serial port";
+    private static final String COMM_PORT_IS_NOT_VALID_OR_NOT_OPEN = "Comm port is not valid or not open";
 
     private AbstractSerialConnection commPort;
     boolean echo = false;     // require RS-485 echo processing
@@ -109,7 +111,7 @@ public abstract class ModbusSerialTransport extends AbstractModbusTransport {
 
             // Wait here for the message to have been sent
 
-            double bytesPerSec = commPort.getBaudRate() / (((commPort.getNumDataBits() == 0) ? 8 : commPort.getNumDataBits()) + ((commPort.getNumStopBits() == 0) ? 1 : commPort.getNumStopBits()) + ((commPort.getParity() == SerialPort.NO_PARITY) ? 0 : 1));
+            double bytesPerSec = (double)commPort.getBaudRate() / (((commPort.getNumDataBits() == 0) ? 8 : commPort.getNumDataBits()) + ((commPort.getNumStopBits() == 0) ? 1 : commPort.getNumStopBits()) + ((commPort.getParity() == SerialPort.NO_PARITY) ? 0 : 1));
             double delay = 1000000000.0 * msg.getOutputLength() / bytesPerSec;
             double delayMilliSeconds = Math.floor(delay / 1000000);
             double delayNanoSeconds = delay % 1000000;
@@ -189,7 +191,7 @@ public abstract class ModbusSerialTransport extends AbstractModbusTransport {
      * @param msg a <code>ModbusMessage</code> value
      * @throws ModbusIOException if an error occurs
      */
-    abstract protected void writeMessageOut(ModbusMessage msg) throws ModbusIOException;
+    protected abstract void writeMessageOut(ModbusMessage msg) throws ModbusIOException;
 
     /**
      * The <code>readRequest</code> method listens continuously on the serial
@@ -201,7 +203,7 @@ public abstract class ModbusSerialTransport extends AbstractModbusTransport {
      *
      * @throws ModbusIOException if an error occurs
      */
-    abstract protected ModbusRequest readRequestIn(AbstractModbusListener listener) throws ModbusIOException;
+    protected abstract ModbusRequest readRequestIn(AbstractModbusListener listener) throws ModbusIOException;
 
     /**
      * <code>readResponse</code> reads a response message from the slave
@@ -211,7 +213,7 @@ public abstract class ModbusSerialTransport extends AbstractModbusTransport {
      *
      * @throws ModbusIOException if an error occurs
      */
-    abstract protected ModbusResponse readResponseIn() throws ModbusIOException;
+    protected abstract ModbusResponse readResponseIn() throws ModbusIOException;
 
     /**
      * Adds a listener to the transport to be called when an event occurs
@@ -374,7 +376,7 @@ public abstract class ModbusSerialTransport extends AbstractModbusTransport {
      * @throws IOException if a I/O error occurred.
      */
     protected void readEcho(int len) throws IOException {
-        byte echoBuf[] = new byte[len];
+        byte[] echoBuf = new byte[len];
         int echoLen = commPort.readBytes(echoBuf, len);
         if (logger.isDebugEnabled()) {
             logger.debug("Echo: {}", ModbusUtil.toHex(echoBuf, 0, echoLen));
@@ -401,14 +403,14 @@ public abstract class ModbusSerialTransport extends AbstractModbusTransport {
             byte[] buffer = new byte[1];
             int cnt = commPort.readBytes(buffer, 1);
             if (cnt != 1) {
-                throw new IOException("Cannot read from serial port");
+                throw new IOException(CANNOT_READ_FROM_SERIAL_PORT);
             }
             else {
                 return buffer[0] & 0xff;
             }
         }
         else {
-            throw new IOException("Comm port is not valid or not open");
+            throw new IOException(COMM_PORT_IS_NOT_VALID_OR_NOT_OPEN);
         }
     }
 
@@ -427,7 +429,7 @@ public abstract class ModbusSerialTransport extends AbstractModbusTransport {
             }
         }
         else {
-            throw new IOException("Comm port is not valid or not open");
+            throw new IOException(COMM_PORT_IS_NOT_VALID_OR_NOT_OPEN);
         }
     }
 
@@ -445,7 +447,7 @@ public abstract class ModbusSerialTransport extends AbstractModbusTransport {
             return commPort.writeBytes(buffer, bytesToWrite);
         }
         else {
-            throw new IOException("Comm port is not valid or not open");
+            throw new IOException(COMM_PORT_IS_NOT_VALID_OR_NOT_OPEN);
         }
     }
 
@@ -462,31 +464,37 @@ public abstract class ModbusSerialTransport extends AbstractModbusTransport {
             byte[] buffer = new byte[1];
             int cnt = commPort.readBytes(buffer, 1);
             if (cnt != 1) {
-                throw new IOException("Cannot read from serial port");
+                throw new IOException(CANNOT_READ_FROM_SERIAL_PORT);
             }
             else if (buffer[0] == ':') {
-                return ModbusASCIITransport.FRAME_START;
+                return FRAME_START;
             }
             else if (buffer[0] == '\r' || buffer[0] == '\n') {
-                return ModbusASCIITransport.FRAME_END;
+                return FRAME_END;
             }
             else {
-                logger.debug("Read From buffer: " + buffer[0] + " (" + String.format("%02X", buffer[0]) + ")");
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Read From buffer: {} ({})", buffer[0], String.format("%02X", buffer[0]));
+                }
                 byte firstValue = buffer[0];
                 cnt = commPort.readBytes(buffer, 1);
                 if (cnt != 1) {
-                    throw new IOException("Cannot read from serial port");
+                    throw new IOException(CANNOT_READ_FROM_SERIAL_PORT);
                 }
                 else {
-                    logger.debug("Read From buffer: " + buffer[0] + " (" + String.format("%02X", buffer[0]) + ")");
+                    if (logger.isDebugEnabled()) {
+                        logger.debug("Read From buffer: {} ({})", buffer[0], String.format("%02X", buffer[0]));
+                    }
                     int combinedValue = (Character.digit(firstValue, 16) << 4) + Character.digit(buffer[0], 16);
-                    logger.debug("Returning combined value of: " + String.format("%02X", combinedValue));
+                    if (logger.isDebugEnabled()) {
+                        logger.debug("Returning combined value of: {}", String.format("%02X", combinedValue));
+                    }
                     return combinedValue;
                 }
             }
         }
         else {
-            throw new IOException("Comm port is not valid or not open");
+            throw new IOException(COMM_PORT_IS_NOT_VALID_OR_NOT_OPEN);
         }
     }
 
@@ -504,11 +512,11 @@ public abstract class ModbusSerialTransport extends AbstractModbusTransport {
         if (commPort != null && commPort.isOpen()) {
             byte[] buffer;
 
-            if (value == ModbusASCIITransport.FRAME_START) {
+            if (value == FRAME_START) {
                 buffer = new byte[]{58};
                 logger.debug("Wrote FRAME_START");
             }
-            else if (value == ModbusASCIITransport.FRAME_END) {
+            else if (value == FRAME_END) {
                 buffer = new byte[]{13, 10};
                 logger.debug("Wrote FRAME_END");
             }
@@ -526,7 +534,7 @@ public abstract class ModbusSerialTransport extends AbstractModbusTransport {
             }
         }
         else {
-            throw new IOException("Comm port is not valid or not open");
+            throw new IOException(COMM_PORT_IS_NOT_VALID_OR_NOT_OPEN);
         }
     }
 
@@ -551,7 +559,7 @@ public abstract class ModbusSerialTransport extends AbstractModbusTransport {
             return cnt;
         }
         else {
-            throw new IOException("Comm port is not valid or not open");
+            throw new IOException(COMM_PORT_IS_NOT_VALID_OR_NOT_OPEN);
         }
     }
 
@@ -563,7 +571,7 @@ public abstract class ModbusSerialTransport extends AbstractModbusTransport {
     void clearInput() throws IOException {
         if (commPort.bytesAvailable() > 0) {
             int len = commPort.bytesAvailable();
-            byte buf[] = new byte[len];
+            byte[] buf = new byte[len];
             readBytes(buf, len);
             if (logger.isDebugEnabled()) {
                 logger.debug("Clear input: {}", ModbusUtil.toHex(buf, 0, len));

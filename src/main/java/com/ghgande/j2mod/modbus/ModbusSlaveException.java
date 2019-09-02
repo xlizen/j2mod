@@ -80,8 +80,9 @@ public class ModbusSlaveException extends ModbusException {
                 return "Gateway Path Unavailable";
             case 11:
                 return "Gateway Target Device Failed to Respond";
+            default:
+                return "Error Code = " + type;
         }
-        return "Error Code = " + type;
     }
 
     /**
@@ -104,14 +105,14 @@ public class ModbusSlaveException extends ModbusException {
      * Types are defined according to the protocol specification in
      * <tt>net.wimpi.modbus.Modbus</tt>.
      *
-     * @param TYPE the type to test this <tt>ModbusSlaveException</tt> type
+     * @param type the type to test this <tt>ModbusSlaveException</tt> type
      *             against.
      *
      * @return true if this <tt>ModbusSlaveException</tt> is of the given type,
      * false otherwise.
      */
-    public boolean isType(int TYPE) {
-        return (TYPE == type);
+    public boolean isType(int type) {
+        return (type == this.type);
     }
 
     /**
@@ -119,6 +120,7 @@ public class ModbusSlaveException extends ModbusException {
      *
      * @return a String indicating the type of slave exception.
      */
+    @Override
     public String getMessage() {
         return getMessage(type);
     }

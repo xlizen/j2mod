@@ -94,7 +94,7 @@ public class ReadFileRecordResponse extends ModbusResponse {
             records = new RecordResponse[1];
         }
         else {
-            RecordResponse old[] = records;
+            RecordResponse[] old = records;
             records = new RecordResponse[old.length + 1];
 
             System.arraycopy(old, 0, records, 0, old.length);
@@ -140,7 +140,7 @@ public class ReadFileRecordResponse extends ModbusResponse {
     }
 
     public byte[] getMessage() {
-        byte result[];
+        byte[] result;
 
         result = new byte[getByteCount()];
 
@@ -158,7 +158,7 @@ public class ReadFileRecordResponse extends ModbusResponse {
         private int wordCount;
         private byte[] data;
 
-        public RecordResponse(short data[]) {
+        public RecordResponse(short[] data) {
             wordCount = data.length;
             this.data = new byte[wordCount * 2];
 

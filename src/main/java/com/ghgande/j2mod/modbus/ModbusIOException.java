@@ -25,9 +25,6 @@ package com.ghgande.j2mod.modbus;
  */
 public class ModbusIOException extends ModbusException {
 
-    /**
-     *
-     */
     private static final long serialVersionUID = 1L;
     private boolean eof = false;
 

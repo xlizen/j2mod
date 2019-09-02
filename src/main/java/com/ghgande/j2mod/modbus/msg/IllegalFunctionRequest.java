@@ -98,6 +98,6 @@ public class IllegalFunctionRequest extends ModbusRequest {
     }
 
     public byte[] getMessage() {
-        return null;
+        return new byte[0];
     }
 }

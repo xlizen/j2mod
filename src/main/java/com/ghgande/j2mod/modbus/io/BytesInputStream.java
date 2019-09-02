@@ -117,15 +117,16 @@ public class BytesInputStream
         return dest;
     }
 
+    @Override
     public int getBufferLength() {
         return buf.length;
     }
 
-    public void readFully(byte b[]) throws IOException {
+    public void readFully(byte[] b) throws IOException {
         dataInputStream.readFully(b);
     }
 
-    public void readFully(byte b[], int off, int len) throws IOException {
+    public void readFully(byte[] b, int off, int len) throws IOException {
         dataInputStream.readFully(b, off, len);
     }
 

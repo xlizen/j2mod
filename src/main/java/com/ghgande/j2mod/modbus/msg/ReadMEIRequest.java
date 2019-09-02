@@ -140,7 +140,7 @@ public class ReadMEIRequest extends ModbusRequest {
     }
 
     public void writeData(DataOutput dout) throws IOException {
-        byte results[] = new byte[3];
+        byte[] results = new byte[3];
 
         results[0] = (byte)subCode;
         results[1] = (byte)fieldLevel;
@@ -155,6 +155,7 @@ public class ReadMEIRequest extends ModbusRequest {
         if (subCode != 0xE) {
             try {
                 while (din.readByte() >= 0) {
+                    // Nothing to do
                 }
             }
             catch (EOFException x) {
@@ -167,7 +168,7 @@ public class ReadMEIRequest extends ModbusRequest {
     }
 
     public byte[] getMessage() {
-        byte results[] = new byte[3];
+        byte[] results = new byte[3];
 
         results[0] = (byte)subCode;
         results[1] = (byte)fieldLevel;

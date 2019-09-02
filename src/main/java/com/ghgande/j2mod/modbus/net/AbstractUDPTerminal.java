@@ -42,7 +42,7 @@ public abstract class AbstractUDPTerminal {
      *
      * @return Adapter address
      */
-    public InetAddress getAddress() {
+    public synchronized InetAddress getAddress() {
         return address;
     }
 
@@ -86,7 +86,7 @@ public abstract class AbstractUDPTerminal {
      * Get the transport
      * @return Transport
      */
-    public ModbusUDPTransport getTransport() {
+    public synchronized ModbusUDPTransport getTransport() {
         return transport;
     }
 

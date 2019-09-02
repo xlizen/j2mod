@@ -16,7 +16,6 @@
 package com.ghgande.j2mod.modbus.msg;
 
 import com.ghgande.j2mod.modbus.Modbus;
-import com.ghgande.j2mod.modbus.io.NonWordDataHandler;
 import com.ghgande.j2mod.modbus.net.AbstractModbusListener;
 import com.ghgande.j2mod.modbus.procimg.IllegalAddressException;
 import com.ghgande.j2mod.modbus.procimg.ProcessImage;
@@ -42,7 +41,6 @@ import java.util.Arrays;
 public class WriteMultipleRegistersRequest extends ModbusRequest {
     private int reference;
     private Register[] registers;
-    private NonWordDataHandler nonWordDataHandler = null;
 
     /**
      * Constructs a new <tt>WriteMultipleRegistersRequest</tt> instance with a
@@ -96,35 +94,23 @@ public class WriteMultipleRegistersRequest extends ModbusRequest {
     public ModbusResponse createResponse(AbstractModbusListener listener) {
         WriteMultipleRegistersResponse response;
 
-        if (nonWordDataHandler == null) {
-            Register[] regs;
-            // 1. get process image
-            ProcessImage procimg = listener.getProcessImage(getUnitID());
-            // 2. get registers
-            try {
-                regs = procimg.getRegisterRange(getReference(), getWordCount());
-                // 3. set Register values
-                for (int i = 0; i < regs.length; i++) {
-                    regs[i].setValue(this.getRegister(i).getValue());
-                }
+        Register[] regs;
+        // 1. get process image
+        ProcessImage procimg = listener.getProcessImage(getUnitID());
+        // 2. get registers
+        try {
+            regs = procimg.getRegisterRange(getReference(), getWordCount());
+            // 3. set Register values
+            for (int i = 0; i < regs.length; i++) {
+                regs[i].setValue(this.getRegister(i).getValue());
             }
-            catch (IllegalAddressException iaex) {
-                return createExceptionResponse(Modbus.ILLEGAL_ADDRESS_EXCEPTION);
-            }
-            response = (WriteMultipleRegistersResponse)getResponse();
-            response.setReference(getReference());
-            response.setWordCount(getWordCount());
         }
-        else {
-            int result = nonWordDataHandler.commitUpdate();
-            if (result > 0) {
-                return createExceptionResponse(result);
-            }
-
-            response = (WriteMultipleRegistersResponse)getResponse();
-            response.setReference(getReference());
-            response.setWordCount(nonWordDataHandler.getWordCount());
+        catch (IllegalAddressException iaex) {
+            return createExceptionResponse(Modbus.ILLEGAL_ADDRESS_EXCEPTION);
         }
+        response = (WriteMultipleRegistersResponse)getResponse();
+        response.setReference(getReference());
+        response.setWordCount(getWordCount());
 
         return response;
     }
@@ -173,7 +159,7 @@ public class WriteMultipleRegistersRequest extends ModbusRequest {
      *
      * @param registers the registers to be written as <tt>Register[]</tt>.
      */
-    public void setRegisters(Register[] registers) {
+    public synchronized void setRegisters(Register[] registers) {
         if (registers == null) {
             this.registers = null;
             setDataLength(5);
@@ -242,52 +228,30 @@ public class WriteMultipleRegistersRequest extends ModbusRequest {
         return registers.length;
     }
 
-    /**
-     * getNonWordDataHandler - Returns the actual non word data handler.
-     *
-     * @return the actual <tt>NonWordDataHandler</tt>.
-     */
-    public NonWordDataHandler getNonWordDataHandler() {
-        return nonWordDataHandler;
-    }
-
-    /**
-     * setNonWordHandler - Sets a non word data handler. A non-word data handler
-     * is responsible for converting words from a Modbus packet into the
-     * non-word values associated with the actual device's registers.
-     *
-     * @param dhandler a <tt>NonWordDataHandler</tt> instance.
-     */
-    public void setNonWordDataHandler(NonWordDataHandler dhandler) {
-        nonWordDataHandler = dhandler;
-    }
-
+    @Override
     public void writeData(DataOutput output) throws IOException {
         output.write(getMessage());
     }
 
+    @Override
     public void readData(DataInput input) throws IOException {
         reference = input.readUnsignedShort();
         int registerCount = input.readUnsignedShort();
         int byteCount = input.readUnsignedByte();
 
-        if (nonWordDataHandler == null) {
-            byte buffer[] = new byte[byteCount];
-            input.readFully(buffer, 0, byteCount);
+        byte[] buffer = new byte[byteCount];
+        input.readFully(buffer, 0, byteCount);
 
-            int offset = 0;
-            registers = new Register[registerCount];
+        int offset = 0;
+        registers = new Register[registerCount];
 
-            for (int register = 0; register < registerCount; register++) {
-                registers[register] = new SimpleRegister(buffer[offset], buffer[offset + 1]);
-                offset += 2;
-            }
-        }
-        else {
-            nonWordDataHandler.readData(input, reference, registerCount);
+        for (int register = 0; register < registerCount; register++) {
+            registers[register] = new SimpleRegister(buffer[offset], buffer[offset + 1]);
+            offset += 2;
         }
     }
 
+    @Override
     public byte[] getMessage() {
         int len = 5;
 
@@ -295,7 +259,7 @@ public class WriteMultipleRegistersRequest extends ModbusRequest {
             len += registers.length * 2;
         }
 
-        byte result[] = new byte[len];
+        byte[] result = new byte[len];
         int registerCount = registers != null ? registers.length : 0;
 
         result[0] = (byte)((reference >> 8) & 0xff);
@@ -306,24 +270,10 @@ public class WriteMultipleRegistersRequest extends ModbusRequest {
 
         int offset = 5;
 
-        if (nonWordDataHandler == null) {
-            for (int i = 0; i < registerCount; i++) {
-                byte bytes[] = registers[i].toBytes();
-                result[offset++] = bytes[0];
-                result[offset++] = bytes[1];
-            }
-        }
-        else {
-            nonWordDataHandler.prepareData(reference, registerCount);
-            byte bytes[] = nonWordDataHandler.getData();
-            if (bytes != null) {
-                int nonWordBytes = bytes.length;
-                if (nonWordBytes > registerCount * 2) {
-                    nonWordBytes = registerCount * 2;
-                }
-
-                System.arraycopy(bytes, 0, result, offset, nonWordBytes);
-            }
+        for (int i = 0; i < registerCount; i++) {
+            byte[] bytes = registers[i].toBytes();
+            result[offset++] = bytes[0];
+            result[offset++] = bytes[1];
         }
         return result;
     }

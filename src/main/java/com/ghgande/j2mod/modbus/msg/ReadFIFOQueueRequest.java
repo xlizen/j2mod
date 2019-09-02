@@ -119,7 +119,7 @@ public class ReadFIFOQueueRequest extends ModbusRequest {
      * @return an empty array as there is no data for this request
      */
     public byte[] getMessage() {
-        byte results[] = new byte[2];
+        byte[] results = new byte[2];
 
         results[0] = (byte)(reference >> 8);
         results[1] = (byte)(reference & 0xFF);

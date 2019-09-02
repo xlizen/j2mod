@@ -151,7 +151,7 @@ public class ReadInputDiscretesResponse extends ModbusResponse {
     }
 
     public byte[] getMessage() {
-        byte result[];
+        byte[] result;
         int len = 1 + discretes.byteSize();
 
         result = new byte[len];

@@ -64,7 +64,7 @@ public class WriteFileRecordTest {
         int file = 0;
         int record = 0;
         int registers;
-        short values[] = null;
+        short[] values = null;
         boolean isSerial = false;
 
         // Get the command line parameters.

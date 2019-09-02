@@ -123,7 +123,7 @@ public class WriteMultipleCoilsResponse extends ModbusResponse {
     }
 
     public byte[] getMessage() {
-        byte results[] = new byte[4];
+        byte[] results = new byte[4];
 
         results[0] = (byte)((reference >> 8) & 0xff);
         results[1] = (byte)(reference & 0xff);

@@ -16,7 +16,6 @@
 package com.ghgande.j2mod.modbus.msg;
 
 import com.ghgande.j2mod.modbus.Modbus;
-import com.ghgande.j2mod.modbus.io.NonWordDataHandler;
 import com.ghgande.j2mod.modbus.net.AbstractModbusListener;
 import com.ghgande.j2mod.modbus.procimg.*;
 
@@ -34,12 +33,11 @@ import java.util.Arrays;
  * @version 2.0 (March 2016)
  */
 public class ReadWriteMultipleRequest extends ModbusRequest {
-    private NonWordDataHandler nonWordDataHandler;
     private int readReference;
     private int readCount;
     private int writeReference;
     private int writeCount;
-    private Register registers[];
+    private Register[] registers;
 
     /**
      * Constructs a new <tt>Read/Write Multiple Registers Request</tt> instance.
@@ -200,7 +198,7 @@ public class ReadWriteMultipleRequest extends ModbusRequest {
      *
      * @param registers the registers to be written as <tt>Register[]</tt>.
      */
-    public void setRegisters(Register[] registers) {
+    public synchronized void setRegisters(Register[] registers) {
         writeCount = registers != null ? registers.length : 0;
         this.registers = registers != null ? Arrays.copyOf(registers, registers.length) : null;
     }
@@ -214,7 +212,7 @@ public class ReadWriteMultipleRequest extends ModbusRequest {
      *
      * @throws IndexOutOfBoundsException if the index is out of bounds.
      */
-    public Register getRegister(int index) throws IndexOutOfBoundsException {
+    public synchronized Register getRegister(int index) throws IndexOutOfBoundsException {
         if (index < 0) {
             throw new IndexOutOfBoundsException(index + " < 0");
         }
@@ -286,30 +284,10 @@ public class ReadWriteMultipleRequest extends ModbusRequest {
     public void setReadWordCount(int count) {
         readCount = count;
     }
-
-    /**
-     * getNonWordDataHandler - Returns the actual non word data handler.
-     *
-     * @return the actual <tt>NonWordDataHandler</tt>.
-     */
-    public NonWordDataHandler getNonWordDataHandler() {
-        return nonWordDataHandler;
-    }
-
-    /**
-     * setNonWordDataHandler - Sets a non word data handler. A non-word data
-     * handler is responsible for converting words from a Modbus packet into the
-     * non-word values associated with the actual device's registers.
-     *
-     * @param dhandler a <tt>NonWordDataHandler</tt> instance.
-     */
-    public void setNonWordDataHandler(NonWordDataHandler dhandler) {
-        nonWordDataHandler = dhandler;
-    }
-
     /**
      * writeData -- output this Modbus message to dout.
      */
+    @Override
     public void writeData(DataOutput dout) throws IOException {
         dout.write(getMessage());
     }
@@ -318,6 +296,7 @@ public class ReadWriteMultipleRequest extends ModbusRequest {
      * readData -- read the values of the registers to be written, along with
      * the reference and count for the registers to be read.
      */
+    @Override
     public void readData(DataInput input) throws IOException {
         readReference = input.readUnsignedShort();
         readCount = input.readUnsignedShort();
@@ -325,20 +304,15 @@ public class ReadWriteMultipleRequest extends ModbusRequest {
         writeCount = input.readUnsignedShort();
         int byteCount = input.readUnsignedByte();
 
-        if (nonWordDataHandler == null) {
-            byte buffer[] = new byte[byteCount];
-            input.readFully(buffer, 0, byteCount);
+        byte[] buffer = new byte[byteCount];
+        input.readFully(buffer, 0, byteCount);
 
-            int offset = 0;
-            registers = new Register[writeCount];
+        int offset = 0;
+        registers = new Register[writeCount];
 
-            for (int register = 0; register < writeCount; register++) {
-                registers[register] = new SimpleRegister(buffer[offset], buffer[offset + 1]);
-                offset += 2;
-            }
-        }
-        else {
-            nonWordDataHandler.readData(input, writeReference, writeCount);
+        for (int register = 0; register < writeCount; register++) {
+            registers[register] = new SimpleRegister(buffer[offset], buffer[offset + 1]);
+            offset += 2;
         }
     }
 
@@ -346,8 +320,9 @@ public class ReadWriteMultipleRequest extends ModbusRequest {
      * getMessage -- return a prepared message.
      * @return prepared message
      */
+    @Override
     public byte[] getMessage() {
-        byte results[] = new byte[9 + 2 * getWriteWordCount()];
+        byte[] results = new byte[9 + 2 * getWriteWordCount()];
 
         results[0] = (byte)(readReference >> 8);
         results[1] = (byte)(readReference & 0xFF);

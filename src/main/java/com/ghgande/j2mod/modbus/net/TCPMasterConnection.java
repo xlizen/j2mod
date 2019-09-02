@@ -76,7 +76,7 @@ public class TCPMasterConnection {
      *
      * @throws IOException if an I/O related error occurs.
      */
-    private void prepareTransport(boolean useRtuOverTcp) throws IOException {
+    private synchronized void prepareTransport(boolean useRtuOverTcp) throws IOException {
 
         // If we don't have a transport, or the transport type has changed
         if (transport == null || (this.useRtuOverTcp != useRtuOverTcp)) {
@@ -119,7 +119,7 @@ public class TCPMasterConnection {
      *
      * @throws Exception if there is a network failure.
      */
-    public void connect(boolean useRtuOverTcp) throws Exception {
+    public synchronized void connect(boolean useRtuOverTcp) throws Exception {
         if (!isConnected()) {
             logger.debug("connect()");
 

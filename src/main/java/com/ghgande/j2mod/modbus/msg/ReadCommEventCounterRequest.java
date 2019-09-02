@@ -68,6 +68,7 @@ public class ReadCommEventCounterRequest extends ModbusRequest {
      * @throws java.io.IOException If the data cannot be read
      */
     public void readData(DataInput din) throws IOException {
+        // No data
     }
 
     /**

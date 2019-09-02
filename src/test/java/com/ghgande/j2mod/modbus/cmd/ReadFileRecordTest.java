@@ -150,7 +150,7 @@ public class ReadFileRecordTest {
                     int count = response.getRecordCount();
                     for (int j = 0; j < count; j++) {
                         RecordResponse data = response.getRecord(j);
-                        short values[] = new short[data.getWordCount()];
+                        short[] values = new short[data.getWordCount()];
                         for (int k = 0; k < data.getWordCount(); k++) {
                             values[k] = data.getRegister(k).toShort();
                         }

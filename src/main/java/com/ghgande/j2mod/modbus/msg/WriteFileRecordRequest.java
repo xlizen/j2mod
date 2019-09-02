@@ -101,7 +101,7 @@ public class WriteFileRecordRequest extends ModbusRequest {
             records = new RecordRequest[1];
         }
         else {
-            RecordRequest old[] = records;
+            RecordRequest[] old = records;
             records = new RecordRequest[old.length + 1];
 
             System.arraycopy(old, 0, records, 0, old.length);
@@ -143,7 +143,7 @@ public class WriteFileRecordRequest extends ModbusRequest {
                     return createExceptionResponse(Modbus.ILLEGAL_ADDRESS_EXCEPTION);
                 }
 
-                short data[] = new short[registers];
+                short[] data = new short[registers];
                 for (int j = 0; j < registers; j++) {
                     Register register = record.getRegister(j);
                     if (register == null) {
@@ -200,12 +200,12 @@ public class WriteFileRecordRequest extends ModbusRequest {
                 throw new IOException();
             }
 
-            short registers[] = new short[count];
+            short[] registers = new short[count];
             for (int j = 0; j < count; j++) {
                 registers[j] = din.readShort();
                 offset += 2;
             }
-            RecordRequest dummy[] = new RecordRequest[records.length + 1];
+            RecordRequest[] dummy = new RecordRequest[records.length + 1];
             if (records.length > 0) {
                 System.arraycopy(records, 0, dummy, 0, records.length);
             }
@@ -220,7 +220,7 @@ public class WriteFileRecordRequest extends ModbusRequest {
      * @return the raw binary message
      */
     public byte[] getMessage() {
-        byte results[] = new byte[getRequestSize()];
+        byte[] results = new byte[getRequestSize()];
 
         results[0] = (byte)(getRequestSize() - 1);
 
@@ -236,7 +236,7 @@ public class WriteFileRecordRequest extends ModbusRequest {
         private int fileNumber;
         private int recordNumber;
         private int wordCount;
-        private byte data[];
+        private byte[] data;
 
         public RecordRequest(int file, int record, short[] values) {
             fileNumber = file;

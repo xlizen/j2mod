@@ -157,7 +157,7 @@ public class ModbusTCPMaster extends AbstractModbusMaster {
      * @return true if a new connection should be established for each
      * transaction, false otherwise.
      */
-    public boolean isReconnecting() {
+    public synchronized boolean isReconnecting() {
         return reconnecting;
     }
 

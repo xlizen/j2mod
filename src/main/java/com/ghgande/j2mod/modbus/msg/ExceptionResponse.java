@@ -105,7 +105,7 @@ public class ExceptionResponse extends ModbusResponse {
      * @return -- byte array containing the 1 byte exception code.
      */
     public byte[] getMessage() {
-        byte result[] = new byte[1];
+        byte[] result = new byte[1];
         result[0] = (byte)getExceptionCode();
         return result;
     }

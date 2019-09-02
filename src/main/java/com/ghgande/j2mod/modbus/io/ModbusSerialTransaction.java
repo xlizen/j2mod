@@ -40,7 +40,6 @@ public class ModbusSerialTransaction extends ModbusTransaction {
 
     //instance attributes and associations
     private int transDelayMS = Modbus.DEFAULT_TRANSMIT_DELAY;
-    private final Object MUTEX = new Object();
     private long lastTransactionTimestamp = 0;
 
     /**
@@ -80,13 +79,13 @@ public class ModbusSerialTransaction extends ModbusTransaction {
      * @param con a <tt>SerialConnection</tt>.
      */
     public void setSerialConnection(AbstractSerialConnection con) {
-        synchronized (MUTEX) {
+        synchronized (ModbusSerialTransaction.class) {
             transport = con.getModbusTransport();
         }
     }
 
     public void setTransport(ModbusSerialTransport transport) {
-        synchronized (MUTEX) {
+        synchronized (ModbusSerialTransaction.class) {
             this.transport = transport;
         }
     }
@@ -135,7 +134,7 @@ public class ModbusSerialTransaction extends ModbusTransaction {
                 // Wait between adjacent requests
                 ((ModbusSerialTransport) transport).waitBetweenFrames(transDelayMS, lastTransactionTimestamp);
 
-                synchronized (MUTEX) {
+                synchronized (ModbusSerialTransaction.class) {
                     //write request message
                     transport.writeRequest(request);
                     //read response message

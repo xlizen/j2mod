@@ -35,7 +35,7 @@ public class ReadFIFOQueueResponse extends ModbusResponse {
 
     // Message fields.
     private int count;
-    private InputRegister registers[];
+    private InputRegister[] registers;
 
     /**
      * Constructs a new <tt>ReadFIFOQueueResponse</tt> instance.
@@ -56,7 +56,7 @@ public class ReadFIFOQueueResponse extends ModbusResponse {
      *
      * @return Word count int
      */
-    synchronized public int getWordCount() {
+    public synchronized int getWordCount() {
         return count;
     }
 
@@ -72,8 +72,8 @@ public class ReadFIFOQueueResponse extends ModbusResponse {
         count = ref;
     }
 
-    synchronized public int[] getRegisters() {
-        int values[] = new int[count];
+    public synchronized int[] getRegisters() {
+        int[] values = new int[count];
 
         for (int i = 0; i < count; i++) {
             values[i] = getRegister(i);
@@ -143,7 +143,7 @@ public class ReadFIFOQueueResponse extends ModbusResponse {
      * @return Byte array of message
      */
     public byte[] getMessage() {
-        byte result[] = new byte[count * 2 + 4];
+        byte[] result = new byte[count * 2 + 4];
 
         int len = count * 2 + 2;
         result[0] = (byte)(len >> 8);
@@ -152,7 +152,7 @@ public class ReadFIFOQueueResponse extends ModbusResponse {
         result[3] = (byte)(count & 0xFF);
 
         for (int i = 0; i < count; i++) {
-            byte value[] = registers[i].toBytes();
+            byte[] value = registers[i].toBytes();
             result[i * 2 + 4] = value[0];
             result[i * 2 + 5] = value[1];
         }

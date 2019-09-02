@@ -34,7 +34,7 @@ public class ThreadPool {
     private static final Logger logger = LoggerFactory.getLogger(ThreadPool.class);
 
     private LinkedBlockingQueue<Runnable> taskPool;
-    private List<PoolThread> threadPool = new ArrayList<PoolThread>();
+    private List<PoolThread> poolThreads = new ArrayList<PoolThread>();
     private int size = 1;
     private boolean running;
 
@@ -74,7 +74,7 @@ public class ThreadPool {
         running = true;
         for (int i = size; --i >= 0; ) {
             PoolThread thread = new PoolThread();
-            threadPool.add(thread);
+            poolThreads.add(thread);
             thread.setName(String.format("%s Handler", name));
             thread.start();
         }
@@ -87,7 +87,7 @@ public class ThreadPool {
         if (running) {
             taskPool.clear();
             running = false;
-            for (PoolThread thread : threadPool) {
+            for (PoolThread thread : poolThreads) {
                 thread.interrupt();
             }
         }
@@ -108,11 +108,12 @@ public class ThreadPool {
          * This method will infinitely loop, picking
          * up available tasks from the <tt>LinkedQueue</tt>.
          */
+        @Override
         public void run() {
             logger.debug("Running PoolThread");
             do {
                 try {
-                    logger.debug(this.toString());
+                    logger.debug("Running thread {}", this);
                     taskPool.take().run();
                 }
                 catch (Exception ex) {

@@ -181,7 +181,7 @@ public class MaskWriteRegisterRequest extends ModbusRequest {
      * @return message payload
      */
     public byte[] getMessage() {
-        byte results[] = new byte[6];
+        byte[] results = new byte[6];
 
         results[0] = (byte)(reference >> 8);
         results[1] = (byte)(reference & 0xFF);

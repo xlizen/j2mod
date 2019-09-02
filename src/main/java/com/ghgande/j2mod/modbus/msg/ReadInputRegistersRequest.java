@@ -152,7 +152,7 @@ public class ReadInputRegistersRequest extends ModbusRequest {
     }
 
     public byte[] getMessage() {
-        byte result[] = new byte[4];
+        byte[] result = new byte[4];
         result[0] = (byte)((reference >> 8) & 0xff);
         result[1] = (byte)(reference & 0xff);
         result[2] = (byte)((wordCount >> 8) & 0xff);

@@ -74,7 +74,7 @@ public class UDPWriteRecordTest {
         }
 
         String serverAddress = args[0];
-        String parts[] = serverAddress.split(" *: *");
+        String[] parts = serverAddress.split(" *: *");
         String hostName = parts[0];
 
         try {
@@ -162,7 +162,7 @@ public class UDPWriteRecordTest {
                     continue;
                 }
 
-                short values[];
+                short[] values;
 
                 wrRequest = new WriteFileRecordRequest();
                 wrRequest.setUnitID(unit);

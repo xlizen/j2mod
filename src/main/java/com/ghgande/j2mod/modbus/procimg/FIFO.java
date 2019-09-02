@@ -15,10 +15,8 @@
  */
 package com.ghgande.j2mod.modbus.procimg;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Julie
@@ -34,16 +32,14 @@ import java.util.Vector;
  */
 public class FIFO {
 
-    private static final Logger logger = LoggerFactory.getLogger(FIFO.class);
-
     private int address;
     private int registerCount;
-    private Vector<Register> registers;
+    private List<Register> registers;
 
     public FIFO(int address) {
         this.address = address;
         registerCount = 0;
-        registers = new Vector<Register>();
+        registers = new ArrayList<Register>();
     }
 
     public synchronized int getRegisterCount() {
@@ -51,7 +47,7 @@ public class FIFO {
     }
 
     public synchronized Register[] getRegisters() {
-        Register result[] = new Register[registerCount + 1];
+        Register[] result = new Register[registerCount + 1];
 
         result[0] = new SimpleRegister(registerCount);
         for (int i = 0; i < registerCount; i++) {
@@ -73,7 +69,7 @@ public class FIFO {
     }
 
     public synchronized void resetRegisters() {
-        registers.removeAllElements();
+        registers.clear();
         registerCount = 0;
     }
 

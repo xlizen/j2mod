@@ -235,7 +235,7 @@ public class SimpleProcessImage implements ProcessImageImplementation {
     }
 
     public File getFileByNumber(int ref) {
-        if (ref < 0 || ref >= 10000 || files == null) {
+        if (ref < 0 || ref >= 10000) {
             throw new IllegalAddressException();
         }
 
@@ -279,20 +279,16 @@ public class SimpleProcessImage implements ProcessImageImplementation {
     }
 
     public int getFIFOCount() {
-        if (fifos == null) {
-            return 0;
-        }
-
         return fifos.size();
     }
 
-    public void setDigitalOut(int ref, DigitalOut _do) throws IllegalAddressException {
+    public void setDigitalOut(int ref, DigitalOut digitalOut) throws IllegalAddressException {
         if (!isLocked()) {
             try {
                 if (digitalOuts.get(ref) == null) {
                     throw new IllegalAddressException();
                 }
-                digitalOuts.setElementAt(_do, ref);
+                digitalOuts.setElementAt(digitalOut, ref);
             }
             catch (IndexOutOfBoundsException ex) {
                 throw new IllegalAddressException();
@@ -300,9 +296,9 @@ public class SimpleProcessImage implements ProcessImageImplementation {
         }
     }
 
-    public void addDigitalOut(DigitalOut _do) {
+    public void addDigitalOut(DigitalOut digitalOut) {
         if (!isLocked()) {
-            digitalOuts.addElement(_do);
+            digitalOuts.addElement(digitalOut);
         }
     }
 
@@ -323,9 +319,9 @@ public class SimpleProcessImage implements ProcessImageImplementation {
         }
     }
 
-    public void removeDigitalOut(DigitalOut _do) {
+    public void removeDigitalOut(DigitalOut digitalOut) {
         if (!isLocked()) {
-            digitalOuts.removeElement(_do);
+            digitalOuts.removeElement(digitalOut);
         }
     }
 

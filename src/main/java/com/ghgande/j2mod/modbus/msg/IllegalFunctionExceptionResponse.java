@@ -25,12 +25,16 @@ import com.ghgande.j2mod.modbus.Modbus;
 public class IllegalFunctionExceptionResponse extends ExceptionResponse {
 
     /**
-     *
+     * Raised when there is a problem with the function code e.g. not supported
      */
     public IllegalFunctionExceptionResponse() {
         super(0, Modbus.ILLEGAL_FUNCTION_EXCEPTION);
     }
 
+    /**
+     * Raised when there is a problem with the function code e.g. not supported
+     * @param function Associated function code
+     */
     public IllegalFunctionExceptionResponse(int function) {
         super(function | Modbus.EXCEPTION_OFFSET, Modbus.ILLEGAL_FUNCTION_EXCEPTION);
     }
@@ -39,6 +43,7 @@ public class IllegalFunctionExceptionResponse extends ExceptionResponse {
      * Sets the function code
      * @param fc Function code
      */
+    @Override
     public void setFunctionCode(int fc) {
         super.setFunctionCode(fc | Modbus.EXCEPTION_OFFSET);
     }

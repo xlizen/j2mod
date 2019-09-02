@@ -39,6 +39,7 @@ import java.io.IOException;
 public class ModbusASCIITransport extends ModbusSerialTransport {
 
     private static final Logger logger = LoggerFactory.getLogger(ModbusASCIITransport.class);
+    private static final String I_O_EXCEPTION_SERIAL_PORT_TIMEOUT = "I/O exception - Serial port timeout";
     private final byte[] inBuffer = new byte[Modbus.MAX_MESSAGE_LENGTH];
     private final BytesInputStream byteInputStream = new BytesInputStream(inBuffer);         //to read message from
     private final BytesOutputStream byteInputOutputStream = new BytesOutputStream(inBuffer);     //to buffer message to
@@ -48,6 +49,7 @@ public class ModbusASCIITransport extends ModbusSerialTransport {
      * Constructs a new <tt>MobusASCIITransport</tt> instance.
      */
     public ModbusASCIITransport() {
+        // Do nothing
     }
 
     @Override
@@ -100,7 +102,7 @@ public class ModbusASCIITransport extends ModbusSerialTransport {
                     byteInputOutputStream.reset();
                     while ((in = readAsciiByte()) != FRAME_END) {
                         if (in == -1) {
-                            throw new IOException("I/O exception - Serial port timeout");
+                            throw new IOException(I_O_EXCEPTION_SERIAL_PORT_TIMEOUT);
                         }
                         byteInputOutputStream.writeByte(in);
                     }
@@ -109,7 +111,9 @@ public class ModbusASCIITransport extends ModbusSerialTransport {
                         continue;
                     }
                     byteInputStream.reset(inBuffer, byteInputOutputStream.size());
-                    int unitID = byteInputStream.readUnsignedByte();
+
+                    // Read the unit ID
+                    byteInputStream.readUnsignedByte();
 
                     int functionCode = byteInputStream.readUnsignedByte();
                     //create request
@@ -141,7 +145,7 @@ public class ModbusASCIITransport extends ModbusSerialTransport {
                 //1. Skip to FRAME_START
                 while ((in = readAsciiByte()) != FRAME_START) {
                     if (in == -1) {
-                        throw new IOException("I/O exception - Serial port timeout");
+                        throw new IOException(I_O_EXCEPTION_SERIAL_PORT_TIMEOUT);
                     }
                 }
                 //2. Read to FRAME_END
@@ -149,7 +153,7 @@ public class ModbusASCIITransport extends ModbusSerialTransport {
                     byteInputOutputStream.reset();
                     while ((in = readAsciiByte()) != FRAME_END) {
                         if (in == -1) {
-                            throw new IOException("I/O exception - Serial port timeout");
+                            throw new IOException(I_O_EXCEPTION_SERIAL_PORT_TIMEOUT);
                         }
                         byteInputOutputStream.writeByte(in);
                     }

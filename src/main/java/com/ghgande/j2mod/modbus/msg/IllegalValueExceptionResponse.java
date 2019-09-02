@@ -25,12 +25,16 @@ import com.ghgande.j2mod.modbus.Modbus;
 public class IllegalValueExceptionResponse extends ExceptionResponse {
 
     /**
-     *
+     * Raised when the value of a register isn't valid
      */
     public IllegalValueExceptionResponse() {
         super(0, Modbus.ILLEGAL_VALUE_EXCEPTION);
     }
 
+    /**
+     * Raised when the value of a register isn't valid
+     * @param function Function used for the register
+     */
     public IllegalValueExceptionResponse(int function) {
         super(function, Modbus.ILLEGAL_VALUE_EXCEPTION);
     }
@@ -39,6 +43,7 @@ public class IllegalValueExceptionResponse extends ExceptionResponse {
      * Sets the function code
      * @param fc Function code
      */
+    @Override
     public void setFunctionCode(int fc) {
         super.setFunctionCode(fc | Modbus.EXCEPTION_OFFSET);
     }

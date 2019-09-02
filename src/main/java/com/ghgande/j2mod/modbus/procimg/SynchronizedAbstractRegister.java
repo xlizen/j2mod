@@ -32,7 +32,7 @@ public abstract class SynchronizedAbstractRegister implements Register {
      */
     protected byte[] register = new byte[2];
 
-    synchronized public int getValue() {
+    public synchronized int getValue() {
         if (register == null) {
             throw new IllegalAddressException();
         }
@@ -41,11 +41,7 @@ public abstract class SynchronizedAbstractRegister implements Register {
     }
 
     public int toUnsignedShort() {
-        if (register == null) {
-            throw new IllegalAddressException();
-        }
-
-        return ((register[0] & 0xff) << 8 | (register[1] & 0xff));
+        return getValue();
     }
 
     public short toShort() {

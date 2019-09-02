@@ -106,7 +106,7 @@ public class WriteMultipleCoilsRequest extends ModbusRequest {
     @Override
     public ModbusResponse createResponse(AbstractModbusListener listener) {
         WriteMultipleCoilsResponse response;
-        DigitalOut douts[];
+        DigitalOut[] douts;
 
         // 1. get process image
         ProcessImage procimg = listener.getProcessImage(getUnitID());
@@ -244,7 +244,7 @@ public class WriteMultipleCoilsRequest extends ModbusRequest {
 
     public byte[] getMessage() {
         int len = coils.byteSize() + 5;
-        byte result[] = new byte[len];
+        byte[] result = new byte[len];
 
         result[0] = (byte)((reference >> 8) & 0xff);
         result[1] = (byte)(reference & 0xff);

@@ -152,7 +152,7 @@ public class ReadWriteMultipleResponse extends ModbusResponse {
      * Sets the entire block of registers for this response
      * @param registers Array of registers
      */
-    public void setRegisters(InputRegister[] registers) {
+    public synchronized void setRegisters(InputRegister[] registers) {
         byteCount = registers.length * 2;
         setDataLength(byteCount + 1);
 
@@ -180,7 +180,7 @@ public class ReadWriteMultipleResponse extends ModbusResponse {
     }
 
     public byte[] getMessage() {
-        byte result[];
+        byte[] result;
 
         result = new byte[getWordCount() * 2 + 1];
 

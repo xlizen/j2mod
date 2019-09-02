@@ -94,8 +94,6 @@ public class ReadSerialDiagnosticsRequest extends ModbusRequest {
      *
      * @param index - Unused, must be 0.
      * @return Data at index 0
-     *
-     * @deprecated
      */
     public int getData(int index) {
         if (index != 0) {
@@ -109,8 +107,6 @@ public class ReadSerialDiagnosticsRequest extends ModbusRequest {
      *
      * @param index - Unused, must be 0.
      * @param value - Optional data value for function.
-     *
-     * @deprecated
      */
     public void setData(int index, int value) {
         if (index != 0) {
@@ -156,7 +152,7 @@ public class ReadSerialDiagnosticsRequest extends ModbusRequest {
      * @return Response as byte array
      */
     public byte[] getMessage() {
-        byte result[] = new byte[4];
+        byte[] result = new byte[4];
 
         result[0] = (byte)(function >> 8);
         result[1] = (byte)(function & 0xFF);

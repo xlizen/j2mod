@@ -21,8 +21,6 @@ import com.ghgande.j2mod.modbus.io.ModbusSerialTransaction;
 import com.ghgande.j2mod.modbus.net.AbstractSerialConnection;
 import com.ghgande.j2mod.modbus.net.SerialConnection;
 import com.ghgande.j2mod.modbus.util.SerialParameters;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Modbus/Serial Master facade.
@@ -34,7 +32,6 @@ import org.slf4j.LoggerFactory;
  */
 public class ModbusSerialMaster extends AbstractModbusMaster {
 
-    private static final Logger logger = LoggerFactory.getLogger(ModbusSerialMaster.class);
     private AbstractSerialConnection connection;
     private int transDelay = Modbus.DEFAULT_TRANSMIT_DELAY;
 

@@ -73,11 +73,13 @@ public class FastByteArrayInputStream extends InputStream {
         return (pos < count) ? (buf[pos++] & 0xff) : (-1);
     }
 
+    @Override
     public int read(byte[] toBuf) throws IOException {
         logger.debug("read(byte[])");
         return read(toBuf, 0, toBuf.length);
     }
 
+    @Override
     public int read(byte[] toBuf, int offset, int length) throws IOException {
         logger.debug("read(byte[],int,int)");
         int avail = count - pos;
@@ -93,6 +95,7 @@ public class FastByteArrayInputStream extends InputStream {
         return length;
     }
 
+    @Override
     public long skip(long count) {
         int myCount = (int)count;
         if (myCount + pos > this.count) {
@@ -102,6 +105,7 @@ public class FastByteArrayInputStream extends InputStream {
         return myCount;
     }
 
+    @Override
     public int available() {
         return count - pos;
     }
@@ -110,18 +114,21 @@ public class FastByteArrayInputStream extends InputStream {
         return count;
     }
 
-    public void mark(int readlimit) {
+    @Override
+    public synchronized void mark(int readlimit) {
         logger.debug("mark()");
         mark = pos;
         logger.debug("mark={} pos={}", mark, pos);
     }
 
-    public void reset() {
+    @Override
+    public synchronized void reset() {
         logger.debug("reset()");
         pos = mark;
         logger.debug("mark={} pos={}", mark, pos);
     }
 
+    @Override
     public boolean markSupported() {
         return true;
     }

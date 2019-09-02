@@ -66,6 +66,7 @@ public class ModbusUDPTransport extends AbstractModbusTransport {
 
     @Override
     public void close() throws IOException {
+        // Not used
     }
 
     @Override
@@ -139,7 +140,7 @@ public class ModbusUDPTransport extends AbstractModbusTransport {
                 int len = msg.getOutputLength();
                 byteOutputStream.reset();
                 msg.writeTo(byteOutputStream);
-                byte data[] = byteOutputStream.getBuffer();
+                byte[] data = byteOutputStream.getBuffer();
                 data = Arrays.copyOf(data, len);
                 terminal.sendMessage(data);
             }

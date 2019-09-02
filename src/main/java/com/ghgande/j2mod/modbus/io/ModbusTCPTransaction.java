@@ -80,7 +80,7 @@ public class ModbusTCPTransaction extends ModbusTransaction {
      *
      * @param con a <tt>TCPMasterConnection</tt>.
      */
-    public void setConnection(TCPMasterConnection con) {
+    public synchronized void setConnection(TCPMasterConnection con) {
         connection = con;
         transport = con.getModbusTransport();
     }
@@ -126,12 +126,12 @@ public class ModbusTCPTransaction extends ModbusTransaction {
             // Automatically connect if we aren't already connected
             if (!connection.isConnected()) {
                 try {
-                    logger.debug("Connecting to: {}:{}", connection.getAddress().toString(), connection.getPort());
+                    logger.debug("Connecting to: {}:{}", connection.getAddress(), connection.getPort());
                     connection.connect();
                     transport = connection.getModbusTransport();
                 }
                 catch (Exception ex) {
-                    throw new ModbusIOException("Connection failed for %s:%d", connection.getAddress().toString(), connection.getPort(), ex.getMessage());
+                    throw new ModbusIOException("Connection failed for %s:%d", connection.getAddress(), connection.getPort(), ex.getMessage());
                 }
             }
 
@@ -141,12 +141,12 @@ public class ModbusTCPTransaction extends ModbusTransaction {
             try {
 
                 // Write the message to the endpoint
-                logger.debug("Writing request: {} (try: {}) request transaction ID = {} to {}:{}", request.getHexMessage(), retryCounter, request.getTransactionID(), connection.getAddress().toString(), connection.getPort());
+                logger.debug("Writing request: {} (try: {}) request transaction ID = {} to {}:{}", request.getHexMessage(), retryCounter, request.getTransactionID(), connection.getAddress(), connection.getPort());
                 transport.writeRequest(request);
 
                 // Read the response
                 response = transport.readResponse();
-                logger.debug("Read response: {} (try: {}) response transaction ID = {} from {}:{}", response.getHexMessage(), retryCounter, response.getTransactionID(), connection.getAddress().toString(), connection.getPort());
+                logger.debug("Read response: {} (try: {}) response transaction ID = {} from {}:{}", response.getHexMessage(), retryCounter, response.getTransactionID(), connection.getAddress(), connection.getPort());
                 keepTrying = false;
 
                 // The slave may have returned an exception -- check for that.
@@ -154,7 +154,7 @@ public class ModbusTCPTransaction extends ModbusTransaction {
                     throw new ModbusSlaveException(((ExceptionResponse)response).getExceptionCode());
                 }
 
-                // We need to keep retrying if;
+                // We need to keep retrying if: -
                 //   a) the response is empty OR
                 //   b) we have been told to check the validity and the request/response transaction IDs don't match AND
                 //   c) we haven't exceeded the maximum retry count
@@ -188,7 +188,7 @@ public class ModbusTCPTransaction extends ModbusTransaction {
                 }
 
                 // If this has happened, then we should close and re-open the connection before re-trying
-                logger.debug("Failed request {} (try: {}) request transaction ID = {} - {} closing and re-opening connection {}:{}", request.getHexMessage(), retryCounter, request.getTransactionID(), ex.getMessage(), connection.getAddress().toString(), connection.getPort());
+                logger.debug("Failed request {} (try: {}) request transaction ID = {} - {} closing and re-opening connection {}:{}", request.getHexMessage(), retryCounter, request.getTransactionID(), ex.getMessage(), connection.getAddress(), connection.getPort());
                 connection.close();
             }
 

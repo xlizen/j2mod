@@ -97,13 +97,13 @@ public class WriteHoldingRegisterTest {
                 }
 
                 if (transport instanceof ModbusTCPTransport) {
-                    String parts[] = args[0].split(" *: *");
+                    String[] parts = args[0].split(" *: *");
                     if (parts.length >= 4) {
                         unit = Integer.parseInt(parts[3]);
                     }
                 }
                 else if (transport instanceof ModbusRTUTransport) {
-                    String parts[] = args[0].split(" *: *");
+                    String[] parts = args[0].split(" *: *");
                     if (parts.length >= 3) {
                         unit = Integer.parseInt(parts[2]);
                     }
