@@ -192,11 +192,11 @@ public class WriteFileRecordRequest extends ModbusRequest {
                 throw new IOException();
             }
 
-            if (record < 0 || record >= 10000) {
+            if (record >= 10000) {
                 throw new IOException();
             }
 
-            if (count < 0 || count >= 126) {
+            if (count >= 126) {
                 throw new IOException();
             }
 

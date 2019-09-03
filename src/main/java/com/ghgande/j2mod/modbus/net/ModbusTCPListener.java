@@ -151,32 +151,44 @@ public class ModbusTCPListener extends AbstractModbusListener {
             // Initialise the message handling pool
             threadPool.initPool(threadName);
 
-            // Infinite loop, taking care of resources in case of a lot of
-            // parallel logins
-            while (listening) {
-                Socket incoming;
-                try {
-                    incoming = serverSocket.accept();
-                }
-                catch (SocketTimeoutException e) {
-                    continue;
-                }
-                logger.debug("Making new connection {}", incoming);
-                if (listening) {
-                    TCPSlaveConnection slave = new TCPSlaveConnection(incoming, useRtuOverTcp);
-                    slave.setTimeout(timeout);
-                    threadPool.execute(new TCPConnectionHandler(this, slave));
-                }
-                else {
-                    incoming.close();
-                }
-            }
+            // Listen and manage each incoming connection
+            listenForConnections();
+
         }
         catch (IOException e) {
             error = String.format("Problem starting listener - %s", e.getMessage());
         }
         finally {
             threadPool.close();
+        }
+    }
+
+    /**
+     * Listen for incoming connections on the port and launch a thread handler from the pool to
+     * service the request
+     *
+     * @throws IOException If a problem occurs
+     */
+    private void listenForConnections() throws IOException {
+        // Infinite loop, taking care of resources in case of a lot of
+        // parallel logins
+        while (listening) {
+            Socket incoming;
+            try {
+                incoming = serverSocket.accept();
+            }
+            catch (SocketTimeoutException e) {
+                continue;
+            }
+            logger.debug("Making new connection {}", incoming);
+            if (listening) {
+                TCPSlaveConnection slave = new TCPSlaveConnection(incoming, useRtuOverTcp);
+                slave.setTimeout(timeout);
+                threadPool.execute(new TCPConnectionHandler(this, slave));
+            }
+            else {
+                incoming.close();
+            }
         }
     }
 

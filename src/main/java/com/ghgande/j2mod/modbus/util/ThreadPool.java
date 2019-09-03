@@ -60,7 +60,7 @@ public class ThreadPool {
                 taskPool.put(task);
             }
             catch (InterruptedException ex) {
-                //FIXME: Handle!?
+                logger.debug("Error occurred during thread pool executor - {}", ex.getMessage());
             }
         }
     }

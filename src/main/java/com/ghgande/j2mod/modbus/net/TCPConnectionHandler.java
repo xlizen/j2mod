@@ -57,7 +57,9 @@ public class TCPConnectionHandler implements Runnable {
         try {
             do {
                 listener.handleRequest(transport, listener);
-            } while (!Thread.currentThread().isInterrupted());
+            }
+            while (!Thread.currentThread().isInterrupted());
+            logger.debug("Slave request completed");
         }
         catch (ModbusIOException ex) {
             if (!ex.isEOF()) {
