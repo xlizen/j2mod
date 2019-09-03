@@ -213,7 +213,7 @@ public class TCPMasterConnection {
      *
      * @return the connection's <tt>ModbusTransport</tt>.
      */
-    public AbstractModbusTransport getModbusTransport() {
+    public synchronized AbstractModbusTransport getModbusTransport() {
         return transport;
     }
 
@@ -222,7 +222,7 @@ public class TCPMasterConnection {
      * <tt>TCPMasterConnection</tt>
      * @param trans associated transport
      */
-    public void setModbusTransport(ModbusTCPTransport trans) {
+    public synchronized void setModbusTransport(ModbusTCPTransport trans) {
         transport = trans;
     }
 

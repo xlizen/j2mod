@@ -87,7 +87,7 @@ public class UDPMasterConnection {
      *
      * @return the connection's <tt>ModbusTransport</tt>.
      */
-    public AbstractModbusTransport getModbusTransport() {
+    public synchronized AbstractModbusTransport getModbusTransport() {
         return terminal == null ? null : terminal.getTransport();
     }
 
