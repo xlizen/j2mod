@@ -179,3 +179,6 @@ _(**NOT BACKWARDS COMPATIBLE**)_
 
 ## Version 2.5.7
 * `ModbusTCPTransaction` Error message is not shown in a specific case #100
+
+## Version 2.5.8
+* Upgraded jserialcomm to v2.5.3
