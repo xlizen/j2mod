@@ -33,7 +33,7 @@ import com.ghgande.j2mod.modbus.util.BitVector;
  * @author Steve O'Hara (4NG)
  * @version 2.0 (March 2016)
  */
-abstract public class AbstractModbusMaster {
+public abstract class AbstractModbusMaster {
 
     private static final int DEFAULT_UNIT_ID = 1;
 
@@ -63,12 +63,12 @@ abstract public class AbstractModbusMaster {
      *
      * @throws Exception if the connection cannot be established.
      */
-    abstract public void connect() throws Exception;
+    public abstract void connect() throws Exception;
 
     /**
      * Disconnects this <tt>ModbusTCPMaster</tt> from the slave.
      */
-    abstract public void disconnect();
+    public abstract void disconnect();
 
     /**
      * Reads a given number of coil states from the slave.
@@ -86,7 +86,7 @@ abstract public class AbstractModbusMaster {
      * @throws ModbusException if an I/O error, a slave exception or
      *                         a transaction error occurs.
      */
-    public BitVector readCoils(int unitId, int ref, int count) throws ModbusException {
+    public synchronized BitVector readCoils(int unitId, int ref, int count) throws ModbusException {
         checkTransaction();
         if (readCoilsRequest == null) {
             readCoilsRequest = new ReadCoilsRequest();
@@ -113,7 +113,7 @@ abstract public class AbstractModbusMaster {
      * @throws ModbusException if an I/O error, a slave exception or
      *                         a transaction error occurs.
      */
-    public boolean writeCoil(int unitId, int ref, boolean state) throws ModbusException {
+    public synchronized boolean writeCoil(int unitId, int ref, boolean state) throws ModbusException {
         checkTransaction();
         if (writeCoilRequest == null) {
             writeCoilRequest = new WriteCoilRequest();
@@ -139,7 +139,7 @@ abstract public class AbstractModbusMaster {
      * @throws ModbusException if an I/O error, a slave exception or
      *                         a transaction error occurs.
      */
-    public void writeMultipleCoils(int unitId, int ref, BitVector coils) throws ModbusException {
+    public synchronized void writeMultipleCoils(int unitId, int ref, BitVector coils) throws ModbusException {
         checkTransaction();
         if (writeMultipleCoilsRequest == null) {
             writeMultipleCoilsRequest = new WriteMultipleCoilsRequest();
@@ -167,7 +167,7 @@ abstract public class AbstractModbusMaster {
      * @throws ModbusException if an I/O error, a slave exception or
      *                         a transaction error occurs.
      */
-    public BitVector readInputDiscretes(int unitId, int ref, int count) throws ModbusException {
+    public synchronized BitVector readInputDiscretes(int unitId, int ref, int count) throws ModbusException {
         checkTransaction();
         if (readInputDiscretesRequest == null) {
             readInputDiscretesRequest = new ReadInputDiscretesRequest();
@@ -197,7 +197,7 @@ abstract public class AbstractModbusMaster {
      * @throws ModbusException if an I/O error, a slave exception or
      *                         a transaction error occurs.
      */
-    public InputRegister[] readInputRegisters(int unitId, int ref, int count) throws ModbusException {
+    public synchronized InputRegister[] readInputRegisters(int unitId, int ref, int count) throws ModbusException {
         checkTransaction();
         if (readInputRegistersRequest == null) {
             readInputRegistersRequest = new ReadInputRegistersRequest();
@@ -225,7 +225,7 @@ abstract public class AbstractModbusMaster {
      * @throws ModbusException if an I/O error, a slave exception or
      *                         a transaction error occurs.
      */
-    public Register[] readMultipleRegisters(int unitId, int ref, int count) throws ModbusException {
+    public synchronized Register[] readMultipleRegisters(int unitId, int ref, int count) throws ModbusException {
         checkTransaction();
         if (readMultipleRegistersRequest == null) {
             readMultipleRegistersRequest = new ReadMultipleRegistersRequest();
@@ -251,7 +251,7 @@ abstract public class AbstractModbusMaster {
      * @throws ModbusException if an I/O error, a slave exception or
      *                         a transaction error occurs.
      */
-    public int writeSingleRegister(int unitId, int ref, Register register) throws ModbusException {
+    public synchronized int writeSingleRegister(int unitId, int ref, Register register) throws ModbusException {
         checkTransaction();
         if (writeSingleRegisterRequest == null) {
             writeSingleRegisterRequest = new WriteSingleRegisterRequest();
@@ -277,7 +277,7 @@ abstract public class AbstractModbusMaster {
      * @throws ModbusException if an I/O error, a slave exception or
      *                         a transaction error occurs.
      */
-    public int writeMultipleRegisters(int unitId, int ref, Register[] registers) throws ModbusException {
+    public synchronized int writeMultipleRegisters(int unitId, int ref, Register[] registers) throws ModbusException {
         checkTransaction();
         if (writeMultipleRegistersRequest == null) {
             writeMultipleRegistersRequest = new WriteMultipleRegistersRequest();
@@ -303,7 +303,7 @@ abstract public class AbstractModbusMaster {
      * @throws ModbusException if an I/O error, a slave exception or
      *                         a transaction error occurs.
      */
-    public boolean maskWriteRegister(int unitId, int ref, int andMask, int orMask) throws ModbusException {
+    public synchronized boolean maskWriteRegister(int unitId, int ref, int andMask, int orMask) throws ModbusException {
         checkTransaction();
         if (maskWriteRegisterRequest == null) {
             maskWriteRegisterRequest = new MaskWriteRegisterRequest();
@@ -525,7 +525,7 @@ abstract public class AbstractModbusMaster {
      *
      * @param retries the amount of retries as <tt>int</tt>.
      */
-    synchronized public void setRetries(int retries) {
+    public synchronized void setRetries(int retries) {
         if (transaction != null) {
             transaction.setRetries(retries);
         }
@@ -537,7 +537,7 @@ abstract public class AbstractModbusMaster {
      *
      * @param b true if checking validity, false otherwise.
      */
-    synchronized public void setCheckingValidity(boolean b) {
+    public synchronized void setCheckingValidity(boolean b) {
         if (transaction != null) {
             transaction.setCheckingValidity(b);
         }

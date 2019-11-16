@@ -161,6 +161,7 @@ public class MaskWriteRegisterRequest extends ModbusRequest {
      * writeData -- output this Modbus message to dout.
      * @throws java.io.IOException If the data cannot be written from the socket/port
      */
+    @Override
     public void writeData(DataOutput dout) throws IOException {
         dout.write(getMessage());
     }
@@ -169,6 +170,7 @@ public class MaskWriteRegisterRequest extends ModbusRequest {
      * readData -- dummy function.  There is no data with the request.
      * @throws java.io.IOException If the data cannot be read from the socket/port
      */
+    @Override
     public void readData(DataInput din) throws IOException {
         reference = din.readUnsignedShort();
         andMask = din.readUnsignedShort();
@@ -180,8 +182,9 @@ public class MaskWriteRegisterRequest extends ModbusRequest {
      * this request.
      * @return message payload
      */
+    @Override
     public byte[] getMessage() {
-        byte results[] = new byte[6];
+        byte[] results = new byte[6];
 
         results[0] = (byte)(reference >> 8);
         results[1] = (byte)(reference & 0xFF);

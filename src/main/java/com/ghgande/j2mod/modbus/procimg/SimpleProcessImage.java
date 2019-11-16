@@ -95,6 +95,7 @@ public class SimpleProcessImage implements ProcessImageImplementation {
         return unitID;
     }
 
+    @Override
     public DigitalOut[] getDigitalOutRange(int ref, int count) {
         // ensure valid reference range
         if (ref < 0 || ref + count > digitalOuts.size()) {
@@ -109,6 +110,7 @@ public class SimpleProcessImage implements ProcessImageImplementation {
         }
     }
 
+    @Override
     public DigitalOut getDigitalOut(int ref) throws IllegalAddressException {
         try {
             DigitalOut result = digitalOuts.elementAt(ref);
@@ -122,10 +124,12 @@ public class SimpleProcessImage implements ProcessImageImplementation {
         }
     }
 
+    @Override
     public int getDigitalOutCount() {
         return digitalOuts.size();
     }
 
+    @Override
     public DigitalIn[] getDigitalInRange(int ref, int count) {
         // ensure valid reference range
         if (ref < 0 || ref + count > digitalIns.size()) {
@@ -140,6 +144,7 @@ public class SimpleProcessImage implements ProcessImageImplementation {
         }
     }
 
+    @Override
     public DigitalIn getDigitalIn(int ref) throws IllegalAddressException {
         try {
             DigitalIn result = digitalIns.elementAt(ref);
@@ -153,10 +158,12 @@ public class SimpleProcessImage implements ProcessImageImplementation {
         }
     }
 
+    @Override
     public int getDigitalInCount() {
         return digitalIns.size();
     }
 
+    @Override
     public InputRegister[] getInputRegisterRange(int ref, int count) {
         // ensure valid reference range
         if (ref < 0 || ref + count > inputRegisters.size()) {
@@ -171,6 +178,7 @@ public class SimpleProcessImage implements ProcessImageImplementation {
         return iregs;
     }
 
+    @Override
     public InputRegister getInputRegister(int ref) throws IllegalAddressException {
         try {
             InputRegister result = inputRegisters.elementAt(ref);
@@ -185,10 +193,12 @@ public class SimpleProcessImage implements ProcessImageImplementation {
         }
     }
 
+    @Override
     public int getInputRegisterCount() {
         return inputRegisters.size();
     }
 
+    @Override
     public Register[] getRegisterRange(int ref, int count) {
         if (ref < 0 || ref + count > registers.size()) {
             throw new IllegalAddressException();
@@ -202,6 +212,7 @@ public class SimpleProcessImage implements ProcessImageImplementation {
         }
     }
 
+    @Override
     public Register getRegister(int ref) throws IllegalAddressException {
         try {
             Register result = registers.elementAt(ref);
@@ -216,10 +227,12 @@ public class SimpleProcessImage implements ProcessImageImplementation {
         }
     }
 
+    @Override
     public int getRegisterCount() {
         return registers.size();
     }
 
+    @Override
     public File getFile(int fileNumber) {
         try {
             File result = files.elementAt(fileNumber);
@@ -234,6 +247,7 @@ public class SimpleProcessImage implements ProcessImageImplementation {
         }
     }
 
+    @Override
     public File getFileByNumber(int ref) {
         if (ref < 0 || ref >= 10000 || files == null) {
             throw new IllegalAddressException();
@@ -250,10 +264,12 @@ public class SimpleProcessImage implements ProcessImageImplementation {
         throw new IllegalAddressException();
     }
 
+    @Override
     public int getFileCount() {
         return files.size();
     }
 
+    @Override
     public FIFO getFIFO(int fifoNumber) {
         try {
             FIFO result = fifos.elementAt(fifoNumber);
@@ -268,6 +284,7 @@ public class SimpleProcessImage implements ProcessImageImplementation {
         }
     }
 
+    @Override
     public FIFO getFIFOByAddress(int ref) {
         for (FIFO fifo : fifos) {
             if (fifo.getAddress() == ref) {
@@ -278,6 +295,7 @@ public class SimpleProcessImage implements ProcessImageImplementation {
         return null;
     }
 
+    @Override
     public int getFIFOCount() {
         if (fifos == null) {
             return 0;
@@ -286,13 +304,14 @@ public class SimpleProcessImage implements ProcessImageImplementation {
         return fifos.size();
     }
 
-    public void setDigitalOut(int ref, DigitalOut _do) throws IllegalAddressException {
+    @Override
+    public void setDigitalOut(int ref, DigitalOut out) throws IllegalAddressException {
         if (!isLocked()) {
             try {
                 if (digitalOuts.get(ref) == null) {
                     throw new IllegalAddressException();
                 }
-                digitalOuts.setElementAt(_do, ref);
+                digitalOuts.setElementAt(out, ref);
             }
             catch (IndexOutOfBoundsException ex) {
                 throw new IllegalAddressException();
@@ -300,12 +319,14 @@ public class SimpleProcessImage implements ProcessImageImplementation {
         }
     }
 
-    public void addDigitalOut(DigitalOut _do) {
+    @Override
+    public void addDigitalOut(DigitalOut out) {
         if (!isLocked()) {
-            digitalOuts.addElement(_do);
+            digitalOuts.addElement(out);
         }
     }
 
+    @Override
     public void addDigitalOut(int ref, DigitalOut dout) {
         if (ref < 0 || ref >= 65536) {
             throw new IllegalArgumentException();
@@ -323,12 +344,14 @@ public class SimpleProcessImage implements ProcessImageImplementation {
         }
     }
 
-    public void removeDigitalOut(DigitalOut _do) {
+    @Override
+    public void removeDigitalOut(DigitalOut out) {
         if (!isLocked()) {
-            digitalOuts.removeElement(_do);
+            digitalOuts.removeElement(out);
         }
     }
 
+    @Override
     public void setDigitalIn(int ref, DigitalIn di) throws IllegalAddressException {
         if (!isLocked()) {
             try {
@@ -343,12 +366,14 @@ public class SimpleProcessImage implements ProcessImageImplementation {
         }
     }
 
+    @Override
     public void addDigitalIn(DigitalIn di) {
         if (!isLocked()) {
             digitalIns.addElement(di);
         }
     }
 
+    @Override
     public void addDigitalIn(int ref, DigitalIn d1) {
         if (ref < 0 || ref >= 65536) {
             throw new IllegalArgumentException();
@@ -366,12 +391,14 @@ public class SimpleProcessImage implements ProcessImageImplementation {
         }
     }
 
+    @Override
     public void removeDigitalIn(DigitalIn di) {
         if (!isLocked()) {
             digitalIns.removeElement(di);
         }
     }
 
+    @Override
     public void setInputRegister(int ref, InputRegister reg) throws IllegalAddressException {
         if (!isLocked()) {
             try {
@@ -387,12 +414,14 @@ public class SimpleProcessImage implements ProcessImageImplementation {
         }
     }
 
+    @Override
     public void addInputRegister(InputRegister reg) {
         if (!isLocked()) {
             inputRegisters.addElement(reg);
         }
     }
 
+    @Override
     public void addInputRegister(int ref, InputRegister inReg) {
         if (ref < 0 || ref >= 65536) {
             throw new IllegalArgumentException();
@@ -410,12 +439,14 @@ public class SimpleProcessImage implements ProcessImageImplementation {
         }
     }
 
+    @Override
     public void removeInputRegister(InputRegister reg) {
         if (!isLocked()) {
             inputRegisters.removeElement(reg);
         }
     }
 
+    @Override
     public void setRegister(int ref, Register reg) throws IllegalAddressException {
         if (!isLocked()) {
             try {
@@ -431,12 +462,14 @@ public class SimpleProcessImage implements ProcessImageImplementation {
         }
     }
 
+    @Override
     public void addRegister(Register reg) {
         if (!isLocked()) {
             registers.addElement(reg);
         }
     }
 
+    @Override
     public void addRegister(int ref, Register reg) {
         if (ref < 0 || ref >= 65536) {
             throw new IllegalArgumentException();
@@ -454,12 +487,14 @@ public class SimpleProcessImage implements ProcessImageImplementation {
         }
     }
 
+    @Override
     public void removeRegister(Register reg) {
         if (!isLocked()) {
             registers.removeElement(reg);
         }
     }
 
+    @Override
     public void setFile(int fileNumber, File file) {
         if (!isLocked()) {
             try {
@@ -475,12 +510,14 @@ public class SimpleProcessImage implements ProcessImageImplementation {
         }
     }
 
+    @Override
     public void addFile(File newFile) {
         if (!isLocked()) {
             files.add(newFile);
         }
     }
 
+    @Override
     public void addFile(int ref, File newFile) {
         if (ref < 0 || ref >= 65536) {
             throw new IllegalArgumentException();
@@ -498,12 +535,14 @@ public class SimpleProcessImage implements ProcessImageImplementation {
         }
     }
 
+    @Override
     public void removeFile(File oldFile) {
         if (!isLocked()) {
             files.removeElement(oldFile);
         }
     }
 
+    @Override
     public void setFIFO(int fifoNumber, FIFO fifo) {
         if (!isLocked()) {
             try {
@@ -519,12 +558,14 @@ public class SimpleProcessImage implements ProcessImageImplementation {
         }
     }
 
+    @Override
     public void addFIFO(FIFO fifo) {
         if (!isLocked()) {
             fifos.add(fifo);
         }
     }
 
+    @Override
     public void addFIFO(int ref, FIFO newFIFO) {
         if (ref < 0 || ref >= 65536) {
             throw new IllegalArgumentException();
@@ -542,6 +583,7 @@ public class SimpleProcessImage implements ProcessImageImplementation {
         }
     }
 
+    @Override
     public void removeFIFO(FIFO oldFIFO) {
         if (!isLocked()) {
             fifos.removeElement(oldFIFO);

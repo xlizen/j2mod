@@ -39,7 +39,7 @@ public class ReadWriteMultipleRequest extends ModbusRequest {
     private int readCount;
     private int writeReference;
     private int writeCount;
-    private Register registers[];
+    private Register[] registers;
 
     /**
      * Constructs a new <tt>Read/Write Multiple Registers Request</tt> instance.
@@ -200,7 +200,7 @@ public class ReadWriteMultipleRequest extends ModbusRequest {
      *
      * @param registers the registers to be written as <tt>Register[]</tt>.
      */
-    public void setRegisters(Register[] registers) {
+    public synchronized void setRegisters(Register[] registers) {
         writeCount = registers != null ? registers.length : 0;
         this.registers = registers != null ? Arrays.copyOf(registers, registers.length) : null;
     }
@@ -310,6 +310,7 @@ public class ReadWriteMultipleRequest extends ModbusRequest {
     /**
      * writeData -- output this Modbus message to dout.
      */
+    @Override
     public void writeData(DataOutput dout) throws IOException {
         dout.write(getMessage());
     }
@@ -318,6 +319,7 @@ public class ReadWriteMultipleRequest extends ModbusRequest {
      * readData -- read the values of the registers to be written, along with
      * the reference and count for the registers to be read.
      */
+    @Override
     public void readData(DataInput input) throws IOException {
         readReference = input.readUnsignedShort();
         readCount = input.readUnsignedShort();
@@ -326,7 +328,7 @@ public class ReadWriteMultipleRequest extends ModbusRequest {
         int byteCount = input.readUnsignedByte();
 
         if (nonWordDataHandler == null) {
-            byte buffer[] = new byte[byteCount];
+            byte[] buffer = new byte[byteCount];
             input.readFully(buffer, 0, byteCount);
 
             int offset = 0;
@@ -346,8 +348,9 @@ public class ReadWriteMultipleRequest extends ModbusRequest {
      * getMessage -- return a prepared message.
      * @return prepared message
      */
+    @Override
     public byte[] getMessage() {
-        byte results[] = new byte[9 + 2 * getWriteWordCount()];
+        byte[] results = new byte[9 + 2 * getWriteWordCount()];
 
         results[0] = (byte)(readReference >> 8);
         results[1] = (byte)(readReference & 0xFF);

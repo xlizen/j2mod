@@ -64,8 +64,8 @@ class UDPSlaveTerminal extends AbstractUDPTerminal {
                 port = socket.getLocalPort();
                 address = socket.getLocalAddress();
             }
-            logger.debug("UDPSlaveTerminal::haveSocket():{}", socket.toString());
-            logger.debug("UDPSlaveTerminal::addr=:{}:port={}", address.toString(), port);
+            logger.debug("UDPSlaveTerminal::haveSocket():{}", socket);
+            logger.debug("UDPSlaveTerminal::addr=:{}:port={}", address, port);
 
             socket.setReceiveBufferSize(1024);
             socket.setSendBufferSize(1024);
@@ -156,6 +156,7 @@ class UDPSlaveTerminal extends AbstractUDPTerminal {
         /**
          * Thread loop that sends messages
          */
+        @Override
         public void run() {
             closed = false;
             thread = Thread.currentThread();
@@ -219,6 +220,7 @@ class UDPSlaveTerminal extends AbstractUDPTerminal {
         /**
          * Background thread for reading UDP messages
          */
+        @Override
         public void run() {
             closed = false;
             do {

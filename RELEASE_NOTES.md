@@ -173,3 +173,14 @@ _(**NOT BACKWARDS COMPATIBLE**)_
 
 ## Version 2.5.5
 * Upgraded jserialcomm to v2.5.1
+
+## Version 2.5.6
+* Added a finally block to ensure that `afterMessageWrite` event handler is invoked, even if the message fails to write
+
+## Version 2.5.7
+* `ModbusTCPTransaction` Error message is not shown in a specific case #100
+
+## Version 2.5.8
+* Upgraded jserialcomm to v2.5.3
+* ClassCastException when timeout?? #96 - made all Master facade methods thread safe
+* Code cleanup to lower Sonar score

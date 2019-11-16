@@ -19,8 +19,6 @@ import com.ghgande.j2mod.modbus.ModbusException;
 import com.ghgande.j2mod.modbus.net.AbstractModbusListener;
 import com.ghgande.j2mod.modbus.util.ModbusUtil;
 import com.ghgande.j2mod.modbus.util.SerialParameters;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.net.InetAddress;
 import java.util.ArrayList;
@@ -37,8 +35,12 @@ import java.util.Map;
  */
 public class ModbusSlaveFactory {
 
-    private static final Logger logger = LoggerFactory.getLogger(ModbusSlaveFactory.class);
     private static Map<String, ModbusSlave> slaves = new HashMap<String, ModbusSlave>();
+
+    /**
+     * Prevent instantiation
+     */
+    private ModbusSlaveFactory() {}
 
     /**
      * Creates a TCP modbus slave or returns the one already allocated to this port

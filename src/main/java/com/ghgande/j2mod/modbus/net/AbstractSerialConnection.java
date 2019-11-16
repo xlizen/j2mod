@@ -49,11 +49,11 @@ public abstract class AbstractSerialConnection {
     /**
      * Timeout
      */
-    static final public int TIMEOUT_NONBLOCKING = SerialPort.TIMEOUT_NONBLOCKING;
-   	static final public int TIMEOUT_READ_SEMI_BLOCKING = SerialPort.TIMEOUT_READ_SEMI_BLOCKING;
-   	static final public int TIMEOUT_READ_BLOCKING = SerialPort.TIMEOUT_READ_BLOCKING;
-   	static final public int TIMEOUT_WRITE_BLOCKING = SerialPort.TIMEOUT_WRITE_BLOCKING;
-   	static final public int TIMEOUT_SCANNER = SerialPort.TIMEOUT_SCANNER;
+    public static final int TIMEOUT_NONBLOCKING = SerialPort.TIMEOUT_NONBLOCKING;
+   	public static final int TIMEOUT_READ_SEMI_BLOCKING = SerialPort.TIMEOUT_READ_SEMI_BLOCKING;
+   	public static final int TIMEOUT_READ_BLOCKING = SerialPort.TIMEOUT_READ_BLOCKING;
+   	public static final int TIMEOUT_WRITE_BLOCKING = SerialPort.TIMEOUT_WRITE_BLOCKING;
+   	public static final int TIMEOUT_SCANNER = SerialPort.TIMEOUT_SCANNER;
 
     /**
      * Returns the <tt>ModbusTransport</tt> instance to be used for receiving

@@ -130,7 +130,7 @@ public abstract class ModbusTransaction {
      * getTransactionID -- get the next transaction ID to use.
      * @return next transaction ID to use
      */
-    synchronized public int getTransactionID() {
+    public synchronized int getTransactionID() {
         /*
          * Ensure that the transaction ID is in the valid range between
          * 0 and MAX_TRANSACTION_ID (65534).  If not, the value will be forced

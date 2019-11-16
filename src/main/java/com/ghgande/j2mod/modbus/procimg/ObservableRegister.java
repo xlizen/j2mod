@@ -26,44 +26,53 @@ import com.ghgande.j2mod.modbus.util.Observable;
  */
 public class ObservableRegister extends Observable implements Register {
 
+    private static final String VALUE = "value";
+
     /**
      * The word holding the content of this register.
      */
     protected short register;
 
-    synchronized public int getValue() {
+    @Override
+    public synchronized int getValue() {
         return register & 0xFFFF;
     }
 
+    @Override
     public int toUnsignedShort() {
         return register & 0xFFFF;
     }
 
+    @Override
     public short toShort() {
         return register;
     }
 
+    @Override
     public synchronized byte[] toBytes() {
         return new byte[]{(byte)(register >> 8), (byte)(register & 0xFF)};
     }
 
+    @Override
     public synchronized void setValue(short s) {
         register = s;
-        notifyObservers("value");
+        notifyObservers(VALUE);
     }
 
+    @Override
     public synchronized void setValue(byte[] bytes) {
         if (bytes.length < 2) {
             throw new IllegalArgumentException();
         }
         else {
-            register = (short)(((short)((bytes[0] << 8))) | (((short)(bytes[1])) & 0xFF));
-            notifyObservers("value");
+            register = (short)(((short)(bytes[0] << 8)) | (((short)(bytes[1])) & 0xFF));
+            notifyObservers(VALUE);
         }
     }
 
+    @Override
     public synchronized void setValue(int v) {
         register = (short)v;
-        notifyObservers("value");
+        notifyObservers(VALUE);
     }
 }

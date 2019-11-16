@@ -110,6 +110,7 @@ public class FastByteArrayOutputStream extends OutputStream {
         count = 0;
     }
 
+    @Override
     public void write(int b) throws IOException {
         if (count + 1 > buf.length) {
             bump(1);
@@ -117,6 +118,7 @@ public class FastByteArrayOutputStream extends OutputStream {
         buf[count++] = (byte)b;
     }
 
+    @Override
     public void write(byte[] fromBuf) throws IOException {
         int needed = count + fromBuf.length - buf.length;
         if (needed > 0) {
@@ -127,6 +129,7 @@ public class FastByteArrayOutputStream extends OutputStream {
         }
     }
 
+    @Override
     public void write(byte[] fromBuf, int offset, int length) throws IOException {
 
         int needed = count + length - buf.length;
@@ -186,9 +189,6 @@ public class FastByteArrayOutputStream extends OutputStream {
     public byte[] toByteArray() {
         byte[] toBuf = new byte[count];
         System.arraycopy(buf, 0, toBuf, 0, count);
-        //for (int i = 0; i < count; i++) {
-        //  toBuf[i] = buf[i];
-        //}
         return toBuf;
     }
 

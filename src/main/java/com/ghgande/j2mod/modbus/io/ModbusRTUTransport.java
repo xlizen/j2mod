@@ -55,7 +55,7 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
      */
     private void readRequestData(int byteCount, BytesOutputStream out) throws IOException {
         byteCount += 2;
-        byte inpBuf[] = new byte[byteCount];
+        byte[] inpBuf = new byte[byteCount];
         readBytes(inpBuf, byteCount);
         out.write(inpBuf, 0, byteCount);
     }
@@ -68,7 +68,7 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
      */
     private void getRequest(int function, BytesOutputStream out) throws IOException {
         int byteCount;
-        byte inpBuf[] = new byte[256];
+        byte[] inpBuf = new byte[256];
         try {
             if ((function & 0x80) == 0) {
                 switch (function) {
@@ -140,7 +140,7 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
      * @throws IOException If data cannot be read from the port
      */
     private void getResponse(int function, BytesOutputStream out) throws IOException {
-        byte inpBuf[] = new byte[256];
+        byte[] inpBuf = new byte[256];
         try {
             if ((function & 0x80) == 0) {
                 switch (function) {
@@ -183,7 +183,8 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
                         break;
 
                     case Modbus.READ_FIFO_QUEUE:
-                        int b1, b2;
+                        int b1;
+                        int b2;
                         b1 = (byte) (readByte() & 0xFF);
                         out.write(b1);
                         b2 = (byte) (readByte() & 0xFF);
@@ -200,7 +201,8 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
                         }
                         out.write(sc);
                         // next few bytes are just copied.
-                        int id, fieldCount;
+                        int id;
+                        int fieldCount;
                         readBytes(inpBuf, 5);
                         out.write(inpBuf, 0, 5);
                         fieldCount = (int) inpBuf[4];
@@ -242,6 +244,7 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
      * @param msg a <code>ModbusMessage</code> value
      * @throws ModbusIOException If an error occurred bundling the message
      */
+    @Override
     protected void writeMessageOut(ModbusMessage msg) throws ModbusIOException {
         try {
             int len;
@@ -403,6 +406,7 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
      *
      * @throws com.ghgande.j2mod.modbus.ModbusIOException If the response cannot be read from the socket/port
      */
+    @Override
     protected ModbusResponse readResponseIn() throws ModbusIOException {
         boolean done;
         ModbusResponse response;

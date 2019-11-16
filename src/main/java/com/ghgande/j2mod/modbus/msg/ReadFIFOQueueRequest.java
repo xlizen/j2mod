@@ -102,6 +102,7 @@ public class ReadFIFOQueueRequest extends ModbusRequest {
      * writeData -- output this Modbus message to dout.
      * @throws java.io.IOException If cannot write
      */
+    @Override
     public void writeData(DataOutput dout) throws IOException {
         dout.write(getMessage());
     }
@@ -110,6 +111,7 @@ public class ReadFIFOQueueRequest extends ModbusRequest {
      * readData -- read the reference word.
      * @throws java.io.IOException If cannot read
      */
+    @Override
     public void readData(DataInput din) throws IOException {
         reference = din.readUnsignedShort();
     }
@@ -118,8 +120,9 @@ public class ReadFIFOQueueRequest extends ModbusRequest {
      * getMessage
      * @return an empty array as there is no data for this request
      */
+    @Override
     public byte[] getMessage() {
-        byte results[] = new byte[2];
+        byte[] results = new byte[2];
 
         results[0] = (byte)(reference >> 8);
         results[1] = (byte)(reference & 0xFF);

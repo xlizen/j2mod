@@ -56,7 +56,7 @@ public interface NonWordDataHandler {
      * @throws IOException  if I/O fails.
      * @throws EOFException if the stream ends before all data is read.
      */
-    void readData(DataInput in, int reference, int count) throws IOException, EOFException;
+    void readData(DataInput in, int reference, int count) throws IOException;
 
     /**
      * Returns the word count of the data. Note that this should be the length

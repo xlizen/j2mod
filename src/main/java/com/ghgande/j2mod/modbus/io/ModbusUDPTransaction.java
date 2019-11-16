@@ -41,7 +41,6 @@ public class ModbusUDPTransaction extends ModbusTransaction {
 
     //instance attributes and associations
     private AbstractUDPTerminal terminal;
-    private final Object MUTEX = new Object();
 
     /**
      * Constructs a new <tt>ModbusUDPTransaction</tt>
@@ -123,7 +122,7 @@ public class ModbusUDPTransaction extends ModbusTransaction {
             try {
                 //3. write request, and read response,
                 //   while holding the lock on the IO object
-                synchronized (MUTEX) {
+                synchronized (this) {
                     //write request message
                     transport.writeRequest(request);
                     //read response message

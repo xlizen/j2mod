@@ -35,7 +35,7 @@ public class ThreadPool {
 
     private LinkedBlockingQueue<Runnable> taskPool;
     private List<PoolThread> threadPool = new ArrayList<PoolThread>();
-    private int size = 1;
+    private int size;
     private boolean running;
 
     /**
@@ -108,11 +108,12 @@ public class ThreadPool {
          * This method will infinitely loop, picking
          * up available tasks from the <tt>LinkedQueue</tt>.
          */
+        @Override
         public void run() {
             logger.debug("Running PoolThread");
             do {
                 try {
-                    logger.debug(this.toString());
+                    logger.debug("{}", this);
                     taskPool.take().run();
                 }
                 catch (Exception ex) {

@@ -96,7 +96,7 @@ public class WriteFileRecordResponse extends ModbusResponse {
             records = new RecordResponse[1];
         }
         else {
-            RecordResponse old[] = records;
+            RecordResponse[] old = records;
             records = new RecordResponse[old.length + 1];
 
             System.arraycopy(old, 0, records, 0, old.length);
@@ -106,10 +106,12 @@ public class WriteFileRecordResponse extends ModbusResponse {
         setDataLength(getResponseSize());
     }
 
+    @Override
     public void writeData(DataOutput dout) throws IOException {
         dout.write(getMessage());
     }
 
+    @Override
     public void readData(DataInput din) throws IOException {
         int byteCount = din.readUnsignedByte();
 
@@ -135,12 +137,12 @@ public class WriteFileRecordResponse extends ModbusResponse {
                 throw new IOException();
             }
 
-            short registers[] = new short[count];
+            short[] registers = new short[count];
             for (int j = 0; j < count; j++) {
                 registers[j] = din.readShort();
                 offset += 2;
             }
-            RecordResponse dummy[] = new RecordResponse[records.length + 1];
+            RecordResponse[] dummy = new RecordResponse[records.length + 1];
             if (records.length > 0) {
                 System.arraycopy(records, 0, dummy, 0, records.length);
             }
@@ -150,8 +152,9 @@ public class WriteFileRecordResponse extends ModbusResponse {
         }
     }
 
+    @Override
     public byte[] getMessage() {
-        byte results[] = new byte[getResponseSize()];
+        byte[] results = new byte[getResponseSize()];
 
         results[0] = (byte)(getResponseSize() - 1);
 
@@ -167,7 +170,7 @@ public class WriteFileRecordResponse extends ModbusResponse {
         private int fileNumber;
         private int recordNumber;
         private int wordCount;
-        private byte data[];
+        private byte[] data;
 
         public RecordResponse(int file, int record, short[] values) {
             fileNumber = file;

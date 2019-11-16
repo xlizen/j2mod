@@ -125,7 +125,7 @@ public class ModbusSlave {
 
         // Create the listener
 
-        logger.debug("Creating {} listener", this.type.toString());
+        logger.debug("Creating {} listener", this.type);
         if (this.type.is(ModbusSlaveType.UDP)) {
             listener = new ModbusUDPListener();
         }

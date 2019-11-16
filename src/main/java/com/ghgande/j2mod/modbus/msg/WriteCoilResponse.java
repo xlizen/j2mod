@@ -100,12 +100,14 @@ public class WriteCoilResponse extends ModbusResponse {
         reference = ref;
     }
 
+    @Override
     public void writeData(DataOutput dout) throws IOException {
         dout.write(getMessage());
     }
 
+    @Override
     public void readData(DataInput din) throws IOException {
-        byte data[] = new byte[4];
+        byte[] data = new byte[4];
         din.readFully(data);
 
         setReference(((data[0] << 8) | (data[1] & 0xff)));
@@ -114,8 +116,9 @@ public class WriteCoilResponse extends ModbusResponse {
         setDataLength(4);
     }
 
+    @Override
     public byte[] getMessage() {
-        byte result[] = new byte[4];
+        byte[] result = new byte[4];
 
         result[0] = (byte)((reference >> 8) & 0xff);
         result[1] = (byte)(reference & 0xff);

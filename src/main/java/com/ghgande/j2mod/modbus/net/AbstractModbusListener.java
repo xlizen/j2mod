@@ -47,12 +47,6 @@ public abstract class AbstractModbusListener implements Runnable {
     protected String threadName;
 
     /**
-     * Main execution loop for this Modbus interface listener - this is called by
-     * starting the main listening thread
-     */
-    public abstract void run();
-
-    /**
      * Stop the listener thread for this <tt>ModbusListener</tt> instance.
      */
     public abstract void stop();

@@ -359,7 +359,7 @@ public class ModbusTCPTransport extends AbstractModbusTransport {
             if (logger.isDebugEnabled()) {
                 logger.debug("Sending: {}", msg.getHexMessage());
             }
-            byte message[] = msg.getMessage();
+            byte[] message = msg.getMessage();
 
             byteOutputStream.reset();
             if (!headless) {

@@ -29,29 +29,35 @@ public abstract class AbstractRegister implements Register {
      */
     protected byte[] register = new byte[2];
 
+    @Override
     public int getValue() {
         return ((register[0] & 0xff) << 8 | (register[1] & 0xff));
     }
 
+    @Override
     public int toUnsignedShort() {
         return ((register[0] & 0xff) << 8 | (register[1] & 0xff));
     }
 
+    @Override
     public short toShort() {
         return (short)((register[0] << 8) | (register[1] & 0xff));
     }
 
+    @Override
     public synchronized byte[] toBytes() {
         byte[] dest = new byte[register.length];
         System.arraycopy(register, 0, dest, 0, dest.length);
         return dest;
     }
 
+    @Override
     public void setValue(short s) {
         register[0] = (byte)(0xff & (s >> 8));
         register[1] = (byte)(0xff & s);
     }
 
+    @Override
     public void setValue(byte[] bytes) {
         if (bytes.length < 2) {
             throw new IllegalArgumentException();
@@ -62,6 +68,7 @@ public abstract class AbstractRegister implements Register {
         }
     }
 
+    @Override
     public void setValue(int v) {
         register[0] = (byte)(0xff & (v >> 8));
         register[1] = (byte)(0xff & v);

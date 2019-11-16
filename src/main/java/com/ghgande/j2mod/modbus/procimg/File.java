@@ -15,9 +15,6 @@
  */
 package com.ghgande.j2mod.modbus.procimg;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * @author Julie
  *
@@ -28,15 +25,13 @@ import org.slf4j.LoggerFactory;
  */
 public class File {
 
-    private static final Logger logger = LoggerFactory.getLogger(File.class);
-
     private int fileNumber;
-    private int record_Count;
-    private Record records[];
+    private int recordCount;
+    private Record[] records;
 
     public File(int fileNumber, int records) {
         this.fileNumber = fileNumber;
-        record_Count = records;
+        recordCount = records;
         this.records = new Record[records];
     }
 
@@ -45,11 +40,11 @@ public class File {
     }
 
     public int getRecordCount() {
-        return record_Count;
+        return recordCount;
     }
 
     public Record getRecord(int i) {
-        if (i < 0 || i >= record_Count) {
+        if (i < 0 || i >= recordCount) {
             throw new IllegalAddressException();
         }
 
@@ -57,7 +52,7 @@ public class File {
     }
 
     public File setRecord(int i, Record record) {
-        if (i < 0 || i >= record_Count) {
+        if (i < 0 || i >= recordCount) {
             throw new IllegalAddressException();
         }
 

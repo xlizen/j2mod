@@ -126,12 +126,12 @@ public class ModbusTCPTransaction extends ModbusTransaction {
             // Automatically connect if we aren't already connected
             if (!connection.isConnected()) {
                 try {
-                    logger.debug("Connecting to: {}:{}", connection.getAddress().toString(), connection.getPort());
+                    logger.debug("Connecting to: {}:{}", connection.getAddress(), connection.getPort());
                     connection.connect();
                     transport = connection.getModbusTransport();
                 }
                 catch (Exception ex) {
-                    throw new ModbusIOException("Connection failed for %s:%d", connection.getAddress().toString(), connection.getPort(), ex.getMessage());
+                    throw new ModbusIOException("Connection failed for %s:%d %s", connection.getAddress().toString(), connection.getPort(), ex.getMessage());
                 }
             }
 
@@ -141,12 +141,16 @@ public class ModbusTCPTransaction extends ModbusTransaction {
             try {
 
                 // Write the message to the endpoint
-                logger.debug("Writing request: {} (try: {}) request transaction ID = {} to {}:{}", request.getHexMessage(), retryCounter, request.getTransactionID(), connection.getAddress().toString(), connection.getPort());
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Writing request: {} (try: {}) request transaction ID = {} to {}:{}", request.getHexMessage(), retryCounter, request.getTransactionID(), connection.getAddress(), connection.getPort());
+                }
                 transport.writeRequest(request);
 
                 // Read the response
                 response = transport.readResponse();
-                logger.debug("Read response: {} (try: {}) response transaction ID = {} from {}:{}", response.getHexMessage(), retryCounter, response.getTransactionID(), connection.getAddress().toString(), connection.getPort());
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Read response: {} (try: {}) response transaction ID = {} from {}:{}", response.getHexMessage(), retryCounter, response.getTransactionID(), connection.getAddress(), connection.getPort());
+                }
                 keepTrying = false;
 
                 // The slave may have returned an exception -- check for that.

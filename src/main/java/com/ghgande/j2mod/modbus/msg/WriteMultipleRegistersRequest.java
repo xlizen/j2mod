@@ -173,7 +173,7 @@ public class WriteMultipleRegistersRequest extends ModbusRequest {
      *
      * @param registers the registers to be written as <tt>Register[]</tt>.
      */
-    public void setRegisters(Register[] registers) {
+    public synchronized void setRegisters(Register[] registers) {
         if (registers == null) {
             this.registers = null;
             setDataLength(5);
@@ -262,17 +262,19 @@ public class WriteMultipleRegistersRequest extends ModbusRequest {
         nonWordDataHandler = dhandler;
     }
 
+    @Override
     public void writeData(DataOutput output) throws IOException {
         output.write(getMessage());
     }
 
+    @Override
     public void readData(DataInput input) throws IOException {
         reference = input.readUnsignedShort();
         int registerCount = input.readUnsignedShort();
         int byteCount = input.readUnsignedByte();
 
         if (nonWordDataHandler == null) {
-            byte buffer[] = new byte[byteCount];
+            byte[] buffer = new byte[byteCount];
             input.readFully(buffer, 0, byteCount);
 
             int offset = 0;
@@ -288,6 +290,7 @@ public class WriteMultipleRegistersRequest extends ModbusRequest {
         }
     }
 
+    @Override
     public byte[] getMessage() {
         int len = 5;
 
@@ -295,7 +298,7 @@ public class WriteMultipleRegistersRequest extends ModbusRequest {
             len += registers.length * 2;
         }
 
-        byte result[] = new byte[len];
+        byte[] result = new byte[len];
         int registerCount = registers != null ? registers.length : 0;
 
         result[0] = (byte)((reference >> 8) & 0xff);
@@ -308,14 +311,14 @@ public class WriteMultipleRegistersRequest extends ModbusRequest {
 
         if (nonWordDataHandler == null) {
             for (int i = 0; i < registerCount; i++) {
-                byte bytes[] = registers[i].toBytes();
+                byte[] bytes = registers[i].toBytes();
                 result[offset++] = bytes[0];
                 result[offset++] = bytes[1];
             }
         }
         else {
             nonWordDataHandler.prepareData(reference, registerCount);
-            byte bytes[] = nonWordDataHandler.getData();
+            byte[] bytes = nonWordDataHandler.getData();
             if (bytes != null) {
                 int nonWordBytes = bytes.length;
                 if (nonWordBytes > registerCount * 2) {
