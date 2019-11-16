@@ -31,7 +31,7 @@ public class ObservableRegister extends Observable implements Register {
      */
     protected short register;
 
-    synchronized public int getValue() {
+    public synchronized int getValue() {
         return register & 0xFFFF;
     }
 

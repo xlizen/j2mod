@@ -130,7 +130,7 @@ public class ModbusTCPMaster extends AbstractModbusMaster {
      *
      * @throws Exception if the connection cannot be established.
      */
-    public void connect() throws Exception {
+    public synchronized void connect() throws Exception {
         if (connection != null && !connection.isConnected()) {
             connection.connect(useRtuOverTcp);
             transaction = connection.getModbusTransport().createTransaction();
@@ -142,7 +142,7 @@ public class ModbusTCPMaster extends AbstractModbusMaster {
     /**
      * Disconnects this <tt>ModbusTCPMaster</tt> from the slave.
      */
-    public void disconnect() {
+    public synchronized void disconnect() {
         if (connection != null && connection.isConnected()) {
             connection.close();
             transaction = null;
@@ -176,7 +176,7 @@ public class ModbusTCPMaster extends AbstractModbusMaster {
     }
 
     @Override
-    public void setTimeout(int timeout) {
+    public synchronized void setTimeout(int timeout) {
         super.setTimeout(timeout);
         if (connection != null) {
             connection.setTimeout(timeout);

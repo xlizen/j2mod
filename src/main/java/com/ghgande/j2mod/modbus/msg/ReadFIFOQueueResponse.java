@@ -56,7 +56,7 @@ public class ReadFIFOQueueResponse extends ModbusResponse {
      *
      * @return Word count int
      */
-    synchronized public int getWordCount() {
+    public synchronized int getWordCount() {
         return count;
     }
 
@@ -72,7 +72,7 @@ public class ReadFIFOQueueResponse extends ModbusResponse {
         count = ref;
     }
 
-    synchronized public int[] getRegisters() {
+    public synchronized int[] getRegisters() {
         int values[] = new int[count];
 
         for (int i = 0; i < count; i++) {

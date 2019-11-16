@@ -77,11 +77,11 @@ public class AbstractTestModbusTCPMaster extends AbstractTestModbus {
      *
      * @throws IOException If slave cannot be created
      */
-    public static ModbusSlave createTCPSlave() throws Exception {
+    static ModbusSlave createTCPSlave() throws Exception {
         ModbusSlave slave;
         try {
             // Create a TCP slave on the 'all interfaces' address 0.0.0.0
-            slave = ModbusSlaveFactory.createTCPSlave(PORT, 5);
+            slave = ModbusSlaveFactory.createTCPSlave(PORT, 20);
             slave.addProcessImage(UNIT_ID, getSimpleProcessImage());
             slave.open();
         }
@@ -138,7 +138,7 @@ public class AbstractTestModbusTCPMaster extends AbstractTestModbus {
             return trans.getResponse();
         }
         catch (Exception e) {
-            logger.info("Got error for request to {}:{} (FC:{}, Reg:{}, Cnt:{}) - {}", LOCALHOST, PORT, functionCode, register, count, e.getMessage());
+            logger.error("Got error for request to {}:{} (FC:{}, Reg:{}, Cnt:{}) - {}", LOCALHOST, PORT, functionCode, register, count, e.getMessage());
         }
         finally {
             if (transport != null) {

@@ -32,7 +32,7 @@ public abstract class SynchronizedAbstractRegister implements Register {
      */
     protected byte[] register = new byte[2];
 
-    synchronized public int getValue() {
+    public synchronized int getValue() {
         if (register == null) {
             throw new IllegalAddressException();
         }
