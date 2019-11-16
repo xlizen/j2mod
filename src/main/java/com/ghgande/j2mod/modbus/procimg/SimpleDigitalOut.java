@@ -46,10 +46,12 @@ public class SimpleDigitalOut implements DigitalOut {
         set(b);
     }
 
+    @Override
     public boolean isSet() {
         return set;
     }
 
+    @Override
     public void set(boolean b) {
         set = b;
     }

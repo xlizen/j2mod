@@ -15,9 +15,6 @@
  */
 package com.ghgande.j2mod.modbus.util;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.Vector;
 
 /**
@@ -28,8 +25,6 @@ import java.util.Vector;
  * @version 2.0 (March 2016)
  */
 public class Observable {
-
-    private static final Logger logger = LoggerFactory.getLogger(Observable.class);
 
     private Vector<Observer> observers;
 

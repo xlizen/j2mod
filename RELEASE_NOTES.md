@@ -183,3 +183,4 @@ _(**NOT BACKWARDS COMPATIBLE**)_
 ## Version 2.5.8
 * Upgraded jserialcomm to v2.5.3
 * ClassCastException when timeout?? #96 - made all Master facade methods thread safe
+* Code cleanup to lower Sonar score

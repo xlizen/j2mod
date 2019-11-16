@@ -79,6 +79,7 @@ public class IllegalFunctionRequest extends ModbusRequest {
         return createExceptionResponse(Modbus.ILLEGAL_FUNCTION_EXCEPTION);
     }
 
+    @Override
     public void writeData(DataOutput dout) throws IOException {
         throw new RuntimeException();
     }
@@ -89,6 +90,7 @@ public class IllegalFunctionRequest extends ModbusRequest {
      * needs to be read.
      * @throws java.io.IOException If the data cannot be read from the socket/port
      */
+    @Override
     public void readData(DataInput din) throws IOException {
         // skip all following bytes
         int length = getDataLength();
@@ -97,6 +99,7 @@ public class IllegalFunctionRequest extends ModbusRequest {
         }
     }
 
+    @Override
     public byte[] getMessage() {
         return null;
     }

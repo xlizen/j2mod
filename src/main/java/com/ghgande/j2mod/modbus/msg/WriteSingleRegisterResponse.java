@@ -105,13 +105,14 @@ public class WriteSingleRegisterResponse
      */
     private void setReference(int ref) {
         reference = ref;
-        //setChanged(true);
     }
 
+    @Override
     public void writeData(DataOutput dout) throws IOException {
         dout.write(getMessage());
     }
 
+    @Override
     public void readData(DataInput din) throws IOException {
         setReference(din.readUnsignedShort());
         setRegisterValue(din.readUnsignedShort());
@@ -119,8 +120,9 @@ public class WriteSingleRegisterResponse
         setDataLength(4);
     }
 
+    @Override
     public byte[] getMessage() {
-        byte result[] = new byte[4];
+        byte[] result = new byte[4];
 
         result[0] = (byte)((reference >> 8) & 0xff);
         result[1] = (byte)(reference & 0xff);

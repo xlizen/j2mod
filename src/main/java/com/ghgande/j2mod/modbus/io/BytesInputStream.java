@@ -117,66 +117,82 @@ public class BytesInputStream
         return dest;
     }
 
+    @Override
     public int getBufferLength() {
         return buf.length;
     }
 
-    public void readFully(byte b[]) throws IOException {
+    @Override
+    public void readFully(byte[] b) throws IOException {
         dataInputStream.readFully(b);
     }
 
-    public void readFully(byte b[], int off, int len) throws IOException {
+    @Override
+    public void readFully(byte[] b, int off, int len) throws IOException {
         dataInputStream.readFully(b, off, len);
     }
 
+    @Override
     public int skipBytes(int n) throws IOException {
         return dataInputStream.skipBytes(n);
     }
 
+    @Override
     public boolean readBoolean() throws IOException {
         return dataInputStream.readBoolean();
     }
 
+    @Override
     public byte readByte() throws IOException {
         return dataInputStream.readByte();
     }
 
+    @Override
     public int readUnsignedByte() throws IOException {
         return dataInputStream.readUnsignedByte();
     }
 
+    @Override
     public short readShort() throws IOException {
         return dataInputStream.readShort();
     }
 
+    @Override
     public int readUnsignedShort() throws IOException {
         return dataInputStream.readUnsignedShort();
     }
 
+    @Override
     public char readChar() throws IOException {
         return dataInputStream.readChar();
     }
 
+    @Override
     public int readInt() throws IOException {
         return dataInputStream.readInt();
     }
 
+    @Override
     public long readLong() throws IOException {
         return dataInputStream.readLong();
     }
 
+    @Override
     public float readFloat() throws IOException {
         return dataInputStream.readFloat();
     }
 
+    @Override
     public double readDouble() throws IOException {
         return dataInputStream.readDouble();
     }
 
+    @Override
     public String readLine() throws IOException {
         throw new IOException("Not supported");
     }
 
+    @Override
     public String readUTF() throws IOException {
         return dataInputStream.readUTF();
     }

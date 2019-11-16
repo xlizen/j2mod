@@ -140,18 +140,21 @@ public class ReadMultipleRegistersRequest extends ModbusRequest {
         wordCount = count;
     }
 
+    @Override
     public void writeData(DataOutput dout) throws IOException {
         dout.writeShort(reference);
         dout.writeShort(wordCount);
     }
 
+    @Override
     public void readData(DataInput din) throws IOException {
         reference = din.readUnsignedShort();
         wordCount = din.readUnsignedShort();
     }
 
+    @Override
     public byte[] getMessage() {
-        byte result[] = new byte[4];
+        byte[] result = new byte[4];
 
         result[0] = (byte)((reference >> 8) & 0xff);
         result[1] = (byte)(reference & 0xff);

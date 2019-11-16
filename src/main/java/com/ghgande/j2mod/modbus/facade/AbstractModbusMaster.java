@@ -33,7 +33,7 @@ import com.ghgande.j2mod.modbus.util.BitVector;
  * @author Steve O'Hara (4NG)
  * @version 2.0 (March 2016)
  */
-abstract public class AbstractModbusMaster {
+public abstract class AbstractModbusMaster {
 
     private static final int DEFAULT_UNIT_ID = 1;
 
@@ -63,12 +63,12 @@ abstract public class AbstractModbusMaster {
      *
      * @throws Exception if the connection cannot be established.
      */
-    abstract public void connect() throws Exception;
+    public abstract void connect() throws Exception;
 
     /**
      * Disconnects this <tt>ModbusTCPMaster</tt> from the slave.
      */
-    abstract public void disconnect();
+    public abstract void disconnect();
 
     /**
      * Reads a given number of coil states from the slave.

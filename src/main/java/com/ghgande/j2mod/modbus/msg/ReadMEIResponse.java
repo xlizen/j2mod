@@ -40,8 +40,8 @@ public class ReadMEIResponse extends ModbusResponse {
     private int fieldLevel = 0;
     private int conformity = 1;
     private int fieldCount = 0;
-    private String fields[] = new String[64];
-    private int fieldIds[] = new int[64];
+    private String[] fields = new String[64];
+    private int[] fieldIds = new int[64];
     private boolean moreFollows = false;
     private int nextFieldId;
 
@@ -124,10 +124,12 @@ public class ReadMEIResponse extends ModbusResponse {
         fieldCount++;
     }
 
+    @Override
     public void writeData(DataOutput dout) throws IOException {
         dout.write(getMessage());
     }
 
+    @Override
     public void readData(DataInput din) throws IOException {
         int byteCount;
 
@@ -152,7 +154,7 @@ public class ReadMEIResponse extends ModbusResponse {
             for (int i = 0; i < fieldCount; i++) {
                 fieldIds[i] = din.readUnsignedByte();
                 int len = din.readUnsignedByte();
-                byte data[] = new byte[len];
+                byte[] data = new byte[len];
                 din.readFully(data);
                 fields[i] = new String(data, "UTF-8");
 
@@ -165,6 +167,7 @@ public class ReadMEIResponse extends ModbusResponse {
         }
     }
 
+    @Override
     public byte[] getMessage() {
         int size = 6;
 
@@ -178,7 +181,7 @@ public class ReadMEIResponse extends ModbusResponse {
             size += fields[i].length();
         }
 
-        byte result[] = new byte[size];
+        byte[] result = new byte[size];
         int offset = 0;
 
         result[offset++] = 0x0E;

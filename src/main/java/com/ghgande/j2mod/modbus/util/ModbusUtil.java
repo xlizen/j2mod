@@ -37,7 +37,7 @@ public class ModbusUtil {
     private static final Logger logger = LoggerFactory.getLogger(ModbusUtil.class);
 
     /* Table of CRC values for high-order byte */
-    private final static short[] auchCRCHi = {
+    private static final short[] auchCRCHi = {
             0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41, 0x01, 0xC0,
             0x80, 0x41, 0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41,
             0x00, 0xC1, 0x81, 0x40, 0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0,
@@ -66,7 +66,7 @@ public class ModbusUtil {
             0x80, 0x41, 0x00, 0xC1, 0x81, 0x40
     };
     /* Table of CRC values for low-order byte */
-    private final static short[] auchCRCLo = {
+    private static final short[] auchCRCLo = {
             0x00, 0xC0, 0xC1, 0x01, 0xC3, 0x03, 0x02, 0xC2, 0xC6, 0x06,
             0x07, 0xC7, 0x05, 0xC5, 0xC4, 0x04, 0xCC, 0x0C, 0x0D, 0xCD,
             0x0F, 0xCF, 0xCE, 0x0E, 0x0A, 0xCA, 0xCB, 0x0B, 0xC9, 0x09,
@@ -94,6 +94,11 @@ public class ModbusUtil {
             0x44, 0x84, 0x85, 0x45, 0x87, 0x47, 0x46, 0x86, 0x82, 0x42,
             0x43, 0x83, 0x41, 0x81, 0x80, 0x40
     };
+
+    /**
+     * Prevent instantiation
+     */
+    private ModbusUtil() {}
 
     /**
      * Converts a <tt>ModbusMessage</tt> instance into
@@ -338,14 +343,14 @@ public class ModbusUtil {
      * @return a long value.
      */
     public static long registersToLong(byte[] bytes) {
-        return ((((long)(bytes[0] & 0xff) << 56) |
+        return (((long)(bytes[0] & 0xff) << 56) |
                 ((long)(bytes[1] & 0xff) << 48) |
                 ((long)(bytes[2] & 0xff) << 40) |
                 ((long)(bytes[3] & 0xff) << 32) |
                 ((long)(bytes[4] & 0xff) << 24) |
                 ((long)(bytes[5] & 0xff) << 16) |
                 ((long)(bytes[6] & 0xff) << 8) |
-                ((long)(bytes[7] & 0xff)))
+                ((long)(bytes[7] & 0xff))
         );
     }
 
@@ -403,7 +408,7 @@ public class ModbusUtil {
      * @return a double value.
      */
     public static double registersToDouble(byte[] bytes) {
-        return Double.longBitsToDouble(((((long)(bytes[0] & 0xff) << 56) |
+        return Double.longBitsToDouble((((long)(bytes[0] & 0xff) << 56) |
                 ((long)(bytes[1] & 0xff) << 48) |
                 ((long)(bytes[2] & 0xff) << 40) |
                 ((long)(bytes[3] & 0xff) << 32) |
@@ -411,7 +416,7 @@ public class ModbusUtil {
                 ((long)(bytes[5] & 0xff) << 16) |
                 ((long)(bytes[6] & 0xff) << 8) |
                 ((long)(bytes[7] & 0xff)))
-        ));
+        );
     }
 
     /**

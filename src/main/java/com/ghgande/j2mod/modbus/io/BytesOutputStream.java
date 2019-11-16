@@ -65,42 +65,52 @@ public class BytesOutputStream extends FastByteArrayOutputStream implements Data
         return dest;
     }
 
+    @Override
     public void reset() {
         count = 0;
     }
 
+    @Override
     public void writeBoolean(boolean v) throws IOException {
         dataOutputStream.writeBoolean(v);
     }
 
+    @Override
     public void writeByte(int v) throws IOException {
         dataOutputStream.writeByte(v);
     }
 
+    @Override
     public void writeShort(int v) throws IOException {
         dataOutputStream.writeShort(v);
     }
 
+    @Override
     public void writeChar(int v) throws IOException {
         dataOutputStream.writeChar(v);
     }
 
+    @Override
     public void writeInt(int v) throws IOException {
         dataOutputStream.writeInt(v);
     }
 
+    @Override
     public void writeLong(long v) throws IOException {
         dataOutputStream.writeLong(v);
     }
 
+    @Override
     public void writeFloat(float v) throws IOException {
         dataOutputStream.writeFloat(v);
     }
 
+    @Override
     public void writeDouble(double v) throws IOException {
         dataOutputStream.writeDouble(v);
     }
 
+    @Override
     public void writeBytes(String s) throws IOException {
         int len = s.length();
         for (int i = 0; i < len; i++) {
@@ -108,10 +118,12 @@ public class BytesOutputStream extends FastByteArrayOutputStream implements Data
         }
     }
 
+    @Override
     public void writeChars(String s) throws IOException {
         dataOutputStream.writeChars(s);
     }
 
+    @Override
     public void writeUTF(String str) throws IOException {
         dataOutputStream.writeUTF(str);
     }

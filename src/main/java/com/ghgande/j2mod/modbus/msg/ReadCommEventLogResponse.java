@@ -158,6 +158,7 @@ public class ReadCommEventLogResponse extends ModbusResponse {
      * writeData -- output the completed Modbus message to dout
      * @throws java.io.IOException If the data cannot be written
      */
+    @Override
     public void writeData(DataOutput dout) throws IOException {
         dout.write(getMessage());
     }
@@ -167,6 +168,7 @@ public class ReadCommEventLogResponse extends ModbusResponse {
      * such as for Modbus/TCP, it will have been read already.
      * @throws java.io.IOException If the data cannot be read
      */
+    @Override
     public void readData(DataInput din) throws IOException {
         byteCount = din.readByte();
         status = din.readUnsignedShort();
@@ -184,10 +186,12 @@ public class ReadCommEventLogResponse extends ModbusResponse {
      * getMessage -- format the message into a byte array.
      * @return Response as byte array
      */
+    @Override
     public byte[] getMessage() {
-        byte result[] = new byte[events.length + 7];
+        byte[] result = new byte[events.length + 7];
 
-        result[0] = (byte)(byteCount = events.length + 6);
+        byteCount = events.length + 6;
+        result[0] = (byte)(byteCount);
         result[1] = (byte)(status >> 8);
         result[2] = (byte)(status & 0xFF);
         result[3] = (byte)(eventCount >> 8);

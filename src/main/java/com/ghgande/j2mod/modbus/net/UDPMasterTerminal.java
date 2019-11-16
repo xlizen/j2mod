@@ -55,8 +55,8 @@ class UDPMasterTerminal extends AbstractUDPTerminal {
             if (socket == null) {
                 socket = new DatagramSocket();
             }
-            logger.debug("UDPMasterTerminal::haveSocket():{}", socket.toString());
-            logger.debug("UDPMasterTerminal::raddr=:{}:rport:{}", address.toString(), port);
+            logger.debug("UDPMasterTerminal::haveSocket():{}", socket);
+            logger.debug("UDPMasterTerminal::raddr=:{}:rport:{}", address, port);
 
             socket.setReceiveBufferSize(1024);
             socket.setSendBufferSize(1024);

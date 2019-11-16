@@ -21,8 +21,6 @@ import com.ghgande.j2mod.modbus.io.ModbusSerialTransaction;
 import com.ghgande.j2mod.modbus.net.AbstractSerialConnection;
 import com.ghgande.j2mod.modbus.net.SerialConnection;
 import com.ghgande.j2mod.modbus.util.SerialParameters;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Modbus/Serial Master facade.
@@ -34,9 +32,8 @@ import org.slf4j.LoggerFactory;
  */
 public class ModbusSerialMaster extends AbstractModbusMaster {
 
-    private static final Logger logger = LoggerFactory.getLogger(ModbusSerialMaster.class);
     private AbstractSerialConnection connection;
-    private int transDelay = Modbus.DEFAULT_TRANSMIT_DELAY;
+    private int transDelay;
 
     /**
      * Constructs a new master facade instance for communication
@@ -91,6 +88,7 @@ public class ModbusSerialMaster extends AbstractModbusMaster {
      *
      * @throws Exception if the connection cannot be established.
      */
+    @Override
     public synchronized void connect() throws Exception {
         if (connection != null && !connection.isOpen()) {
             connection.open();
@@ -103,6 +101,7 @@ public class ModbusSerialMaster extends AbstractModbusMaster {
     /**
      * Disconnects this <tt>ModbusSerialMaster</tt> from the slave.
      */
+    @Override
     public synchronized void disconnect() {
         if (connection != null && connection.isOpen()) {
             connection.close();

@@ -89,12 +89,7 @@ public class ModbusSerialListener extends AbstractModbusListener {
         try {
             AbstractModbusTransport transport = serialCon.getModbusTransport();
             while (listening) {
-                try {
-                    handleRequest(transport, this);
-                }
-                catch (ModbusIOException ex) {
-                    logger.debug(ex.getMessage());
-                }
+                safeHandleRequest(transport);
             }
         }
         catch (Exception e) {
@@ -103,6 +98,20 @@ public class ModbusSerialListener extends AbstractModbusListener {
         finally {
             listening = false;
             serialCon.close();
+        }
+    }
+
+    /**
+     * Handles the request and swallows any exceptions
+     *
+     * @param transport Transport to use
+     */
+    private void safeHandleRequest(AbstractModbusTransport transport) {
+        try {
+            handleRequest(transport, this);
+        }
+        catch (ModbusIOException ex) {
+            logger.debug(ex.getMessage());
         }
     }
 

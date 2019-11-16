@@ -159,6 +159,7 @@ public class ReadWriteMultipleResponse extends ModbusResponse {
         this.registers = Arrays.copyOf(registers, registers.length);
     }
 
+    @Override
     public void writeData(DataOutput dout) throws IOException {
         dout.writeByte(byteCount);
 
@@ -167,6 +168,7 @@ public class ReadWriteMultipleResponse extends ModbusResponse {
         }
     }
 
+    @Override
     public void readData(DataInput din) throws IOException {
         byteCount = din.readUnsignedByte();
 
@@ -179,8 +181,9 @@ public class ReadWriteMultipleResponse extends ModbusResponse {
         setDataLength(byteCount + 1);
     }
 
+    @Override
     public byte[] getMessage() {
-        byte result[];
+        byte[] result;
 
         result = new byte[getWordCount() * 2 + 1];
 

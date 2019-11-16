@@ -83,6 +83,7 @@ public class ExceptionResponse extends ModbusResponse {
         return exceptionCode;
     }
 
+    @Override
     public void writeData(DataOutput dout) throws IOException {
         dout.writeByte(getExceptionCode());
     }
@@ -93,6 +94,7 @@ public class ExceptionResponse extends ModbusResponse {
      * read the single byte of data, which is the exception code.
      * @throws java.io.IOException If the data cannot be read from the socket/port
      */
+    @Override
     public void readData(DataInput din) throws IOException {
         exceptionCode = din.readUnsignedByte();
     }
@@ -104,8 +106,9 @@ public class ExceptionResponse extends ModbusResponse {
      *
      * @return -- byte array containing the 1 byte exception code.
      */
+    @Override
     public byte[] getMessage() {
-        byte result[] = new byte[1];
+        byte[] result = new byte[1];
         result[0] = (byte)getExceptionCode();
         return result;
     }

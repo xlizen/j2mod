@@ -139,8 +139,9 @@ public class ReadMEIRequest extends ModbusRequest {
         fieldId = id;
     }
 
+    @Override
     public void writeData(DataOutput dout) throws IOException {
-        byte results[] = new byte[3];
+        byte[] results = new byte[3];
 
         results[0] = (byte)subCode;
         results[1] = (byte)fieldLevel;
@@ -149,12 +150,14 @@ public class ReadMEIRequest extends ModbusRequest {
         dout.write(results);
     }
 
+    @Override
     public void readData(DataInput din) throws IOException {
         subCode = din.readUnsignedByte();
 
         if (subCode != 0xE) {
             try {
                 while (din.readByte() >= 0) {
+                    // noop
                 }
             }
             catch (EOFException x) {
@@ -166,8 +169,9 @@ public class ReadMEIRequest extends ModbusRequest {
         fieldId = din.readUnsignedByte();
     }
 
+    @Override
     public byte[] getMessage() {
-        byte results[] = new byte[3];
+        byte[] results = new byte[3];
 
         results[0] = (byte)subCode;
         results[1] = (byte)fieldLevel;

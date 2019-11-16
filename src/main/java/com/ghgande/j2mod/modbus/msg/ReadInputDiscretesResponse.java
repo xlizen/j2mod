@@ -127,11 +127,13 @@ public class ReadInputDiscretesResponse extends ModbusResponse {
         discretes.setBit(index, b);
     }
 
+    @Override
     public void writeData(DataOutput dout) throws IOException {
         dout.writeByte(discretes.byteSize());
         dout.write(discretes.getBytes(), 0, discretes.byteSize());
     }
 
+    @Override
     public void readData(DataInput din) throws IOException {
 
         int count = din.readUnsignedByte();
@@ -150,8 +152,9 @@ public class ReadInputDiscretesResponse extends ModbusResponse {
         setDataLength(count + 1);
     }
 
+    @Override
     public byte[] getMessage() {
-        byte result[];
+        byte[] result;
         int len = 1 + discretes.byteSize();
 
         result = new byte[len];

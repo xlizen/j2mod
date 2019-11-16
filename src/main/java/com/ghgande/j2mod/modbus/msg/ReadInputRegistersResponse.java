@@ -142,12 +142,13 @@ public class ReadInputRegistersResponse extends ModbusResponse {
      * Sets the entire block of registers for this response
      * @param registers Array of registers
      */
-    public void setRegisters(InputRegister[] registers) {
+    public synchronized void setRegisters(InputRegister[] registers) {
         setDataLength(registers == null ? 0 : (registers.length * 2 + 1));
         this.registers = registers == null ? null : Arrays.copyOf(registers, registers.length);
         byteCount = registers == null ? 0 : (registers.length * 2);
     }
 
+    @Override
     public void writeData(DataOutput dout) throws IOException {
         dout.writeByte(byteCount);
 
@@ -156,24 +157,26 @@ public class ReadInputRegistersResponse extends ModbusResponse {
         }
     }
 
+    @Override
     public void readData(DataInput din) throws IOException {
         byteCount = din.readUnsignedByte();
 
-        InputRegister[] registers = new InputRegister[getWordCount()];
+        InputRegister[] inputRegisters = new InputRegister[getWordCount()];
         for (int k = 0; k < getWordCount(); k++) {
-            registers[k] = new SimpleInputRegister(din.readByte(), din.readByte());
+            inputRegisters[k] = new SimpleInputRegister(din.readByte(), din.readByte());
         }
-        this.registers = registers;
+        registers = inputRegisters;
 
         setDataLength(byteCount);
     }
 
+    @Override
     public byte[] getMessage() {
-        byte result[] = new byte[registers.length * 2 + 1];
+        byte[] result = new byte[registers.length * 2 + 1];
         result[0] = (byte)(registers.length * 2);
 
         for (int i = 0; i < registers.length; i++) {
-            byte value[] = registers[i].toBytes();
+            byte[] value = registers[i].toBytes();
 
             result[1 + i * 2] = value[0];
             result[2 + i * 2] = value[1];

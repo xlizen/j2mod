@@ -114,10 +114,12 @@ public class WriteMultipleRegistersResponse extends ModbusResponse {
         wordCount = count;
     }
 
+    @Override
     public void writeData(DataOutput dout) throws IOException {
         dout.write(getMessage());
     }
 
+    @Override
     public void readData(DataInput din) throws IOException {
         setReference(din.readUnsignedShort());
         setWordCount(din.readUnsignedShort());
@@ -125,8 +127,9 @@ public class WriteMultipleRegistersResponse extends ModbusResponse {
         setDataLength(4);
     }
 
+    @Override
     public byte[] getMessage() {
-        byte result[] = new byte[4];
+        byte[] result = new byte[4];
 
         result[0] = (byte)((reference >> 8) & 0xff);
         result[1] = (byte)(reference & 0xff);

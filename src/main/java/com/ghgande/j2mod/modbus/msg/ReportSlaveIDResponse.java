@@ -33,10 +33,10 @@ import java.io.IOException;
 public class ReportSlaveIDResponse extends ModbusResponse {
 
     // Message fields.
-    int m_length;
-    byte m_data[];
-    int m_status;
-    int m_slaveId;
+    int length;
+    byte[] data;
+    int status;
+    int slaveId;
 
     /**
      * Constructs a new <tt>ReportSlaveIDResponse</tt>
@@ -52,7 +52,7 @@ public class ReportSlaveIDResponse extends ModbusResponse {
      * @return slave identifier field
      */
     public int getSlaveID() {
-        return m_slaveId;
+        return slaveId;
     }
 
     /**
@@ -61,7 +61,7 @@ public class ReportSlaveIDResponse extends ModbusResponse {
      * @param unitID UnitID of the slave
      */
     public void setSlaveID(int unitID) {
-        m_slaveId = unitID;
+        slaveId = unitID;
     }
 
     /**
@@ -70,7 +70,7 @@ public class ReportSlaveIDResponse extends ModbusResponse {
      * @return boolean
      */
     public boolean getStatus() {
-        return m_status != 0;
+        return status != 0;
     }
 
     /**
@@ -80,7 +80,7 @@ public class ReportSlaveIDResponse extends ModbusResponse {
      * @param b Status value
      */
     public void setStatus(boolean b) {
-        m_status = b ? 0xff : 0x00;
+        status = b ? 0xff : 0x00;
     }
 
     /**
@@ -89,8 +89,8 @@ public class ReportSlaveIDResponse extends ModbusResponse {
      * @return byte array
      */
     public byte[] getData() {
-        byte[] result = new byte[m_length - 2];
-        System.arraycopy(m_data, 0, result, 0, m_length - 2);
+        byte[] result = new byte[length - 2];
+        System.arraycopy(data, 0, result, 0, length - 2);
 
         return result;
     }
@@ -105,8 +105,8 @@ public class ReportSlaveIDResponse extends ModbusResponse {
         // There are always two bytes of payload in the message -- the
         // slave ID and the run status indicator.
         if (data == null) {
-            m_length = 2;
-            m_data = new byte[0];
+            length = 2;
+            this.data = new byte[0];
 
             return;
         }
@@ -115,16 +115,17 @@ public class ReportSlaveIDResponse extends ModbusResponse {
             throw new IllegalArgumentException("data length limit exceeded");
         }
 
-        m_length = data.length + 2;
+        length = data.length + 2;
 
-        m_data = new byte[data.length];
-        System.arraycopy(data, 0, m_data, 0, data.length);
+        this.data = new byte[data.length];
+        System.arraycopy(data, 0, this.data, 0, data.length);
     }
 
     /**
      * writeData -- output the completed Modbus message to dout
      * @throws java.io.IOException If the data cannot be written
      */
+    @Override
     public void writeData(DataOutput dout) throws IOException {
         dout.write(getMessage());
     }
@@ -135,26 +136,27 @@ public class ReportSlaveIDResponse extends ModbusResponse {
      * already.
      * @throws java.io.IOException If the data cannot be read
      */
+    @Override
     public void readData(DataInput din) throws IOException {
 
         // Get the size of any device-specific data.
-        m_length = din.readUnsignedByte();
-        if (m_length < 2 || m_length > 255) {
+        length = din.readUnsignedByte();
+        if (length < 2 || length > 255) {
             return;
         }
 
         // Get the run status and device identifier.
-        m_slaveId = din.readUnsignedByte();
-        m_status = din.readUnsignedByte();
+        slaveId = din.readUnsignedByte();
+        status = din.readUnsignedByte();
 
         /*
          * The device-specific data is two bytes shorter than the
          * length read previously.  That length includes the run status
          * and slave ID.
          */
-        m_data = new byte[m_length - 2];
-        if (m_length > 2) {
-            din.readFully(m_data, 0, m_length - 2);
+        data = new byte[length - 2];
+        if (length > 2) {
+            din.readFully(data, 0, length - 2);
         }
     }
 
@@ -162,15 +164,16 @@ public class ReportSlaveIDResponse extends ModbusResponse {
      * getMessage -- format the message into a byte array.
      * @return Byte array of message
      */
+    @Override
     public byte[] getMessage() {
-        byte result[] = new byte[3 + m_length];
+        byte[] result = new byte[3 + length];
         int offset = 0;
 
-        result[offset++] = (byte)(m_length + 2);
-        result[offset++] = (byte)m_slaveId;
-        result[offset++] = (byte)m_status;
-        if (m_length > 0) {
-            System.arraycopy(m_data, 0, result, offset, m_length - 2);
+        result[offset++] = (byte)(length + 2);
+        result[offset++] = (byte) slaveId;
+        result[offset++] = (byte) status;
+        if (length > 0) {
+            System.arraycopy(data, 0, result, offset, length - 2);
         }
 
         return result;

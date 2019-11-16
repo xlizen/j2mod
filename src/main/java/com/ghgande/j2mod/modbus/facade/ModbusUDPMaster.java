@@ -18,8 +18,6 @@ package com.ghgande.j2mod.modbus.facade;
 import com.ghgande.j2mod.modbus.Modbus;
 import com.ghgande.j2mod.modbus.io.AbstractModbusTransport;
 import com.ghgande.j2mod.modbus.net.UDPMasterConnection;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -32,8 +30,6 @@ import java.net.UnknownHostException;
  * @version 2.0 (March 2016)
  */
 public class ModbusUDPMaster extends AbstractModbusMaster {
-
-    private static final Logger logger = LoggerFactory.getLogger(ModbusUDPMaster.class);
 
     private UDPMasterConnection connection;
 
@@ -87,6 +83,7 @@ public class ModbusUDPMaster extends AbstractModbusMaster {
      *
      * @throws Exception if the connection cannot be established.
      */
+    @Override
     public synchronized void connect() throws Exception {
         if (connection != null && !connection.isConnected()) {
             connection.connect();
@@ -98,6 +95,7 @@ public class ModbusUDPMaster extends AbstractModbusMaster {
     /**
      * Disconnects this <tt>ModbusTCPMaster</tt> from the slave.
      */
+    @Override
     public synchronized void disconnect() {
         if (connection != null && connection.isConnected()) {
             connection.close();

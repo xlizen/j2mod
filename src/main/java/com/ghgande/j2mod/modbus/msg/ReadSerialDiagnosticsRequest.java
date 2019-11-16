@@ -97,6 +97,7 @@ public class ReadSerialDiagnosticsRequest extends ModbusRequest {
      *
      * @deprecated
      */
+    @Deprecated
     public int getData(int index) {
         if (index != 0) {
             throw new IndexOutOfBoundsException();
@@ -112,6 +113,7 @@ public class ReadSerialDiagnosticsRequest extends ModbusRequest {
      *
      * @deprecated
      */
+    @Deprecated
     public void setData(int index, int value) {
         if (index != 0) {
             throw new IndexOutOfBoundsException();
@@ -138,6 +140,7 @@ public class ReadSerialDiagnosticsRequest extends ModbusRequest {
      * writeData -- output the completed Modbus message to dout
      * @throws java.io.IOException If the data cannot be written
      */
+    @Override
     public void writeData(DataOutput dout) throws IOException {
         dout.write(getMessage());
     }
@@ -146,6 +149,7 @@ public class ReadSerialDiagnosticsRequest extends ModbusRequest {
      * readData -- Read the function code and data value
      * @throws java.io.IOException If the data cannot be read
      */
+    @Override
     public void readData(DataInput din) throws IOException {
         function = din.readUnsignedShort();
         data = (short)(din.readShort() & 0xFFFF);
@@ -155,8 +159,9 @@ public class ReadSerialDiagnosticsRequest extends ModbusRequest {
      * getMessage -- Create the DIAGNOSTICS message paylaod.
      * @return Response as byte array
      */
+    @Override
     public byte[] getMessage() {
-        byte result[] = new byte[4];
+        byte[] result = new byte[4];
 
         result[0] = (byte)(function >> 8);
         result[1] = (byte)(function & 0xFF);

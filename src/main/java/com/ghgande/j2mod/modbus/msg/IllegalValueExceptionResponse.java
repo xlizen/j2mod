@@ -39,6 +39,7 @@ public class IllegalValueExceptionResponse extends ExceptionResponse {
      * Sets the function code
      * @param fc Function code
      */
+    @Override
     public void setFunctionCode(int fc) {
         super.setFunctionCode(fc | Modbus.EXCEPTION_OFFSET);
     }

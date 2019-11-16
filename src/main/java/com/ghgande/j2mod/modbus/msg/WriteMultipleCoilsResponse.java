@@ -105,6 +105,7 @@ public class WriteMultipleCoilsResponse extends ModbusResponse {
      * buffer.
      * @throws java.io.IOException If the data cannot be written
      */
+    @Override
     public void writeData(DataOutput dout) throws IOException {
 
         dout.writeShort(reference);
@@ -116,14 +117,16 @@ public class WriteMultipleCoilsResponse extends ModbusResponse {
      * input buffer.
      * @throws java.io.IOException If the data cannot be read
      */
+    @Override
     public void readData(DataInput din) throws IOException {
 
         reference = din.readUnsignedShort();
         bitCount = din.readUnsignedShort();
     }
 
+    @Override
     public byte[] getMessage() {
-        byte results[] = new byte[4];
+        byte[] results = new byte[4];
 
         results[0] = (byte)((reference >> 8) & 0xff);
         results[1] = (byte)(reference & 0xff);

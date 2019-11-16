@@ -99,7 +99,7 @@ public class ReadFileRecordRequest extends ModbusRequest {
             records = new RecordRequest[1];
         }
         else {
-            RecordRequest old[] = records;
+            RecordRequest[] old = records;
             records = new RecordRequest[old.length + 1];
 
             System.arraycopy(old, 0, records, 0, old.length);
@@ -141,7 +141,7 @@ public class ReadFileRecordRequest extends ModbusRequest {
                     return createExceptionResponse(Modbus.ILLEGAL_ADDRESS_EXCEPTION);
                 }
 
-                short data[] = new short[registers];
+                short[] data = new short[registers];
                 for (int j = 0; j < registers; j++) {
                     Register register = record.getRegister(j);
                     if (register == null) {
@@ -164,6 +164,7 @@ public class ReadFileRecordRequest extends ModbusRequest {
      * writeData -- output this Modbus message to dout.
      * @throws java.io.IOException If the data cannot be written
      */
+    @Override
     public void writeData(DataOutput dout) throws IOException {
         dout.write(getMessage());
     }
@@ -172,6 +173,7 @@ public class ReadFileRecordRequest extends ModbusRequest {
      * readData -- read all the data for this request.
      * @throws java.io.IOException If the data cannot be read
      */
+    @Override
     public void readData(DataInput din) throws IOException {
         int byteCount = din.readUnsignedByte();
 
@@ -199,8 +201,9 @@ public class ReadFileRecordRequest extends ModbusRequest {
      * getMessage
      * @return the PDU message
      */
+    @Override
     public byte[] getMessage() {
-        byte request[] = new byte[1 + 7 * records.length];
+        byte[] request = new byte[1 + 7 * records.length];
 
         int offset = 0;
         request[offset++] = (byte)(request.length - 1);
