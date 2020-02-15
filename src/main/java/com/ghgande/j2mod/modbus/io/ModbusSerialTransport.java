@@ -130,7 +130,7 @@ public abstract class ModbusSerialTransport extends AbstractModbusTransport {
                     Thread.currentThread().setPriority(priority);
                 }
                 else {
-                    Thread.sleep((int) (delayMilliSeconds * 1.4), (int) delayNanoSeconds);
+                    Thread.sleep((int) (delayMilliSeconds * 1.7), (int) (delayNanoSeconds * 1.5));
                 }
             }
             catch (Exception e) {
