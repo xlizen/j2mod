@@ -358,16 +358,6 @@ public abstract class ModbusSerialTransport extends AbstractModbusTransport {
     }
 
     /**
-     * <code>setBaudRate</code> - Change the serial port baud rate
-     *
-     * @param baud - an <code>int</code> value
-     */
-    public void setBaudRate(int baud) {
-        commPort.setBaudRate(baud);
-        logger.debug("baud rate is now {}", commPort.getBaudRate());
-    }
-
-    /**
      * Reads the own message echo produced in RS485 Echo Mode
      * within the given time frame.
      *

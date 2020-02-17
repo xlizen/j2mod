@@ -97,13 +97,6 @@ public abstract class AbstractSerialConnection {
     public abstract int bytesAvailable();
 
     /**
-     * Sets the connection parameters to the setting in the parameters object.
-     * If set fails return the parameters object to original settings and throw
-     * exception.
-     */
-    public abstract void setConnectionParameters();
-
-    /**
      * Close the port and clean up associated elements.
      */
     public abstract void close();
@@ -114,13 +107,6 @@ public abstract class AbstractSerialConnection {
      * @return Baud rate
      */
     public abstract int getBaudRate();
-
-    /**
-     * Set new baud rate
-     *
-     * @param newBaudRate Baud rate
-     */
-    public abstract void setBaudRate(int newBaudRate);
 
     /**
      * Returns current data bits value
@@ -144,7 +130,14 @@ public abstract class AbstractSerialConnection {
     public abstract int getParity();
 
     /**
-     * Returns a descriptive name of the current port
+     * Returns a name of the port
+     *
+     * @return a <tt>String</tt> instance.
+     */
+    public abstract String getPortName();
+
+    /**
+     * Returns a descriptive name of the  port
      *
      * @return a <tt>String</tt> instance.
      */

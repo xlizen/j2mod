@@ -81,12 +81,6 @@ public class ReadCommEventCounterTest {
 
                 if (transport instanceof ModbusSerialTransport) {
                     transport.setTimeout(500);
-                    if (System.getProperty("com.ghgande.j2mod.modbus.baud") != null) {
-                        ((ModbusSerialTransport)transport).setBaudRate(Integer.parseInt(System.getProperty("com.ghgande.j2mod.modbus.baud")));
-                    }
-                    else {
-                        ((ModbusSerialTransport)transport).setBaudRate(19200);
-                    }
                 }
 
                 // There are a number of devices which won't initialize immediately

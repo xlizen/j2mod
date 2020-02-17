@@ -52,17 +52,21 @@ public class ModbusMasterFactory {
         if (parts.length < 2) {
             throw new IllegalArgumentException("missing connect+ion information");
         }
+        int baudRate = 9600;
+        if (System.getProperty("com.ghgande.j2mod.modbus.baud") != null) {
+            baudRate = Integer.parseInt(System.getProperty("com.ghgande.j2mod.modbus.baud"));
+        }
 
         if (parts[0].equalsIgnoreCase("device")) {
             /*
              * Create a ModbusSerialListener with the default Modbus values of
-             * 19200 baud, no parity, using the specified device. If there is an
+             * 9600 baud, no parity, using the specified device. If there is an
              * additional part after the device name, it will be used as the
              * Modbus unit number.
              */
             SerialParameters parms = new SerialParameters();
             parms.setPortName(parts[1]);
-            parms.setBaudRate(9600);
+            parms.setBaudRate(baudRate);
             parms.setDatabits(8);
             parms.setParity(AbstractSerialConnection.NO_PARITY);
             parms.setStopbits(1);

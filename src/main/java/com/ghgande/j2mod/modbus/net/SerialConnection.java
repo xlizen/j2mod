@@ -21,6 +21,7 @@ import com.ghgande.j2mod.modbus.io.AbstractModbusTransport;
 import com.ghgande.j2mod.modbus.io.ModbusASCIITransport;
 import com.ghgande.j2mod.modbus.io.ModbusRTUTransport;
 import com.ghgande.j2mod.modbus.io.ModbusSerialTransport;
+import com.ghgande.j2mod.modbus.util.ModbusUtil;
 import com.ghgande.j2mod.modbus.util.SerialParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,6 +43,8 @@ import java.util.TreeSet;
 public class SerialConnection extends AbstractSerialConnection {
 
     private static final Logger logger = LoggerFactory.getLogger(SerialConnection.class);
+    public static final int CONNECT_RETRY_DELAY = 100;
+    public static final int CONNECT_RETRIES = 3;
 
     private SerialParameters parameters;
     private ModbusSerialTransport transport;
@@ -53,7 +56,6 @@ public class SerialConnection extends AbstractSerialConnection {
      * Default constructor
      */
     public SerialConnection() {
-
     }
 
     /**
@@ -85,16 +87,16 @@ public class SerialConnection extends AbstractSerialConnection {
     }
 
     @Override
-    public void open() throws IOException {
+    public synchronized void open() throws IOException {
         if (serialPort == null) {
             serialPort = SerialPort.getCommPort(parameters.getPortName());
             if (serialPort.getDescriptivePortName().contains("Bad Port")) {
-                serialPort = null;
+                close();
                 throw new IOException(String.format("Port %s is not a valid name for a port on this platform", parameters.getPortName()));
             }
         }
         serialPort.closePort();
-        setConnectionParameters();
+        applyConnectionParameters();
 
         if (Modbus.SERIAL_ENCODING_ASCII.equals(parameters.getEncoding())) {
             transport = new ModbusASCIITransport();
@@ -113,9 +115,15 @@ public class SerialConnection extends AbstractSerialConnection {
         // open, close the port before throwing an exception.
         transport.setCommPort(this);
 
-        // Open the port so that we can get it's input stream.
-        if (!serialPort.openPort(parameters.getOpenDelay())) {
-            close();
+        // Open the port so that we can get it's input stream
+        int attempts = 0;
+        while (!serialPort.openPort(parameters.getOpenDelay()) && attempts < CONNECT_RETRIES) {
+            serialPort.closePort();
+            ModbusUtil.sleep(CONNECT_RETRY_DELAY);
+            attempts++;
+            logger.debug("Retrying to open port [{}] - attempt [{}}", parameters.getPortName(), attempts);
+        }
+        if (!serialPort.isOpen()) {
             Set<String> ports = getCommPorts();
             StringBuilder portList = new StringBuilder("<NONE>");
             if (!ports.isEmpty()) {
@@ -124,13 +132,15 @@ public class SerialConnection extends AbstractSerialConnection {
                     portList.append(portList.length() == 0 ? "" : ",").append(port);
                 }
             }
-            throw new IOException(String.format("Port [%s] cannot be opened or does not exist - Valid ports are: [%s]", parameters.getPortName(), portList.toString()));
+            throw new IOException(String.format("Port [%s] cannot be opened after [%d] attempts - valid ports are: [%s]", parameters.getPortName(), attempts, portList.toString()));
         }
         inputStream = serialPort.getInputStream();
     }
 
-    @Override
-    public void setConnectionParameters() {
+    /**
+     * Applies the serial parameters to the actual hardware
+     */
+    private void applyConnectionParameters() {
 
         // Set connection parameters, if set fails return parameters object
         // to original state
@@ -142,9 +152,9 @@ public class SerialConnection extends AbstractSerialConnection {
     }
 
     @Override
-    public void close() {
-        // Check to make sure serial port has reference to avoid a NPE
+    public synchronized void close() {
 
+        // Check to make sure serial port has reference to avoid a NPE
         if (serialPort != null) {
             try {
                 if (inputStream != null) {
@@ -163,7 +173,7 @@ public class SerialConnection extends AbstractSerialConnection {
     }
 
     @Override
-    public boolean isOpen() {
+    public synchronized boolean isOpen() {
         return serialPort != null && serialPort.isOpen();
     }
 
@@ -182,47 +192,47 @@ public class SerialConnection extends AbstractSerialConnection {
 
     @Override
     public int readBytes(byte[] buffer, long bytesToRead) {
-        return serialPort.readBytes(buffer, bytesToRead);
+        return serialPort == null ? 0 : serialPort.readBytes(buffer, bytesToRead);
     }
 
     @Override
     public int writeBytes(byte[] buffer, long bytesToWrite) {
-        return serialPort.writeBytes(buffer, bytesToWrite);
+        return serialPort == null ? 0 : serialPort.writeBytes(buffer, bytesToWrite);
     }
 
     @Override
     public int bytesAvailable() {
-        return serialPort.bytesAvailable();
+        return serialPort == null ? 0 : serialPort.bytesAvailable();
     }
 
     @Override
     public int getBaudRate() {
-        return serialPort.getBaudRate();
-    }
-
-    @Override
-    public void setBaudRate(int newBaudRate) {
-        serialPort.setBaudRate(newBaudRate);
+        return parameters.getBaudRate();
     }
 
     @Override
     public int getNumDataBits() {
-        return serialPort.getNumDataBits();
+        return parameters.getDatabits();
     }
 
     @Override
     public int getNumStopBits() {
-        return serialPort.getNumStopBits();
+        return parameters.getStopbits();
     }
 
     @Override
     public int getParity() {
-        return serialPort.getParity();
+        return parameters.getParity();
+    }
+
+    @Override
+    public String getPortName() {
+        return parameters.getPortName();
     }
 
     @Override
     public String getDescriptivePortName() {
-        return serialPort == null ? "" : serialPort.getDescriptivePortName();
+        return serialPort == null ? parameters.getPortName() : serialPort.getDescriptivePortName();
     }
 
     @Override

@@ -184,3 +184,14 @@ _(**NOT BACKWARDS COMPATIBLE**)_
 * Upgraded jserialcomm to v2.5.3
 * ClassCastException when timeout?? #96 - made all Master facade methods thread safe
 * Code cleanup to lower Sonar score
+
+## Version 2.5.9
+* Desensitised the serial writes to allow more time to send
+
+## Version 2.6.0
+* Sanitised the `setBaudRate` method to make it part of the serial parameters only
+* Removed all the redundant test data for the old command test
+* Made the default `SerialConnection` more resilient to the connection not yet being open
+* Added retries to the serial port connection with a retry delay
+* Fixed a serious synchronisation problem with the ope/close methods in the use of SerialPort
+* Added a modpoll style command line interface to test serial connections

@@ -78,12 +78,6 @@ public class WriteHoldingRegisterTest {
 
                 if (transport instanceof ModbusSerialTransport) {
                     transport.setTimeout(500);
-                    if (System.getProperty("com.ghgande.j2mod.modbus.baud") != null) {
-                        ((ModbusSerialTransport)transport).setBaudRate(Integer.parseInt(System.getProperty("com.ghgande.j2mod.modbus.baud")));
-                    }
-                    else {
-                        ((ModbusSerialTransport)transport).setBaudRate(19200);
-                    }
 
                     // Some serial devices are slow to wake up.
                     Thread.sleep(2000);
@@ -106,11 +100,6 @@ public class WriteHoldingRegisterTest {
                     String parts[] = args[0].split(" *: *");
                     if (parts.length >= 3) {
                         unit = Integer.parseInt(parts[2]);
-                    }
-
-                    String baud = System.getProperty("com.ghgande.j2mod.modbus.baud");
-                    if (baud != null) {
-                        ((ModbusRTUTransport)transport).setBaudRate(Integer.parseInt(baud));
                     }
                 }
             }
