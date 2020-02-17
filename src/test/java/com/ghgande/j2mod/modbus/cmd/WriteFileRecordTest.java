@@ -76,9 +76,7 @@ public class WriteFileRecordTest {
             transport = ModbusMasterFactory.createModbusMaster(args[0]);
             if (transport instanceof ModbusSerialTransport) {
                 transport.setTimeout(500);
-                ((ModbusSerialTransport)transport).setBaudRate(19200);
                 isSerial = true;
-
                 Thread.sleep(2000);
             }
             unit = Integer.parseInt(args[1]);

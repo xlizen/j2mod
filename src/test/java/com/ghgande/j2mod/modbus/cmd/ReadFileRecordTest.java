@@ -71,13 +71,6 @@ public class ReadFileRecordTest {
             transport = ModbusMasterFactory.createModbusMaster(args[0]);
             if (transport instanceof ModbusSerialTransport) {
                 transport.setTimeout(500);
-                if (System.getProperty("com.ghgande.j2mod.modbus.baud") != null) {
-                    ((ModbusSerialTransport)transport).setBaudRate(Integer.parseInt(System.getProperty("com.ghgande.j2mod.modbus.baud")));
-                }
-                else {
-                    ((ModbusSerialTransport)transport).setBaudRate(19200);
-                }
-
                 Thread.sleep(2000);
             }
             unit = Integer.parseInt(args[1]);

@@ -130,7 +130,7 @@ public abstract class ModbusSerialTransport extends AbstractModbusTransport {
                     Thread.currentThread().setPriority(priority);
                 }
                 else {
-                    Thread.sleep((int) (delayMilliSeconds * 1.4), (int) delayNanoSeconds);
+                    Thread.sleep((int) (delayMilliSeconds * 1.7), (int) (delayNanoSeconds * 1.5));
                 }
             }
             catch (Exception e) {
@@ -355,16 +355,6 @@ public abstract class ModbusSerialTransport extends AbstractModbusTransport {
      */
     public void setEcho(boolean b) {
         this.echo = b;
-    }
-
-    /**
-     * <code>setBaudRate</code> - Change the serial port baud rate
-     *
-     * @param baud - an <code>int</code> value
-     */
-    public void setBaudRate(int baud) {
-        commPort.setBaudRate(baud);
-        logger.debug("baud rate is now {}", commPort.getBaudRate());
     }
 
     /**
