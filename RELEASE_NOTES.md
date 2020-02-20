@@ -195,3 +195,6 @@ _(**NOT BACKWARDS COMPATIBLE**)_
 * Added retries to the serial port connection with a retry delay
 * Fixed a serious synchronisation problem with the ope/close methods in the use of SerialPort
 * Added a modpoll style command line interface to test serial connections
+
+## Version 2.6.1
+* Upgraded to jSerialComm 2.6.0
