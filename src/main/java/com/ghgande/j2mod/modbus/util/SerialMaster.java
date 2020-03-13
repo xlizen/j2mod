@@ -13,7 +13,7 @@ import com.ghgande.j2mod.modbus.procimg.InputRegister;
 import com.ghgande.j2mod.modbus.procimg.Register;
 
 /**
- *
+ * This class mimics ModPoll for serial connections
  */
 public class SerialMaster {
 

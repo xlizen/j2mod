@@ -198,3 +198,6 @@ _(**NOT BACKWARDS COMPATIBLE**)_
 
 ## Version 2.6.1
 * Upgraded to jSerialComm 2.6.0
+
+## Version 2.6.2
+* Upgraded log4j to prevent security issue
