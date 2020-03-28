@@ -204,3 +204,6 @@ _(**NOT BACKWARDS COMPATIBLE**)_
 * Upgraded log4j to prevent security issue
 * added ModPoll class to mirror ModPoll exe capabilities
 * Created fat executable jar for testing ModPoll features
+
+## Version 2.6.3
+* Fix missing logging properties in assembly

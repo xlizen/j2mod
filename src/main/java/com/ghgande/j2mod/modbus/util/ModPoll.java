@@ -58,7 +58,7 @@ public class ModPoll {
      *
      * @param params Arguments
      */
-    private static void mainSerial(CommandLineParams params) throws ModbusException {
+    private static void mainSerial(CommandLineParams params) {
 
         ModbusSerialMaster master;
         SerialParameters parameters = new SerialParameters();
@@ -83,7 +83,7 @@ public class ModPoll {
      *
      * @param params Arguments
      */
-    private static void mainTCP(CommandLineParams params) throws ModbusException {
+    private static void mainTCP(CommandLineParams params) {
 
         ModbusTCPMaster master = new ModbusTCPMaster(params.portname, params.port, CommandLineParams.MODE_ENC.equalsIgnoreCase(params.mode));
         execute(params, master);
@@ -166,7 +166,7 @@ public class ModPoll {
         System.out.println("              COM1, COM2 ...                on Windows");
         System.out.println("              /dev/ttyS0, /dev/ttyS1 ...    on Linux");
         System.out.println("HOST          Host name or dotted IP address when using MODBUS/TCP protocol");
-        System.out.println("");
+        System.out.println();
         System.out.println("General options:");
         System.out.println("-m ascii      Modbus ASCII protocol");
         System.out.println("-m rtu        Modbus RTU protocol (default if SERIALPORT contains /, \\ or COM)");
@@ -192,10 +192,10 @@ public class ModPoll {
         System.out.println("-1            Poll only once only, otherwise every poll rate interval");
         System.out.println("-l            Poll rate in ms, (1000 is default)");
         System.out.println("-o #          Time-out in seconds (0.01 - 10.0, 1.0 s is default)");
-        System.out.println("");
+        System.out.println();
         System.out.println("Options for MODBUS/TCP, UDP and RTU over TCP:");
         System.out.println("-p #          IP protocol port number (502 is default)");
-        System.out.println("");
+        System.out.println();
         System.out.println("Options for Modbus ASCII and Modbus RTU:");
         System.out.println("-b #          Baudrate (e.g. 9600, 19200, ...) (19200 is default)");
         System.out.println("-d #          Databits (7 or 8 for ASCII protocol, 8 for RTU)");
