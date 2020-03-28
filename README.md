@@ -10,11 +10,11 @@ For instructions on how to use the library, visit the wiki [here](https://github
 # Releases
 Stable releases can be downloaded here 
 
-https://search.maven.org/search?q=g:com.ghgande
+https://mvnrepository.com/artifact/com.ghgande/j2mod
 
 Snapshot releases can be downloaded here 
 
-https://oss.sonatype.org/content/repositories/snapshots/com/ghgande/j2mod
+https://oss.sonatype.org/content/repositories/snapshots/com/ghgande/j2mod/
 
 # Known Issues
 

@@ -200,4 +200,7 @@ _(**NOT BACKWARDS COMPATIBLE**)_
 * Upgraded to jSerialComm 2.6.0
 
 ## Version 2.6.2
+* Downgraded jSerialComm until https://github.com/Fazecast/jSerialComm/issues/277 is resolved
 * Upgraded log4j to prevent security issue
+* added ModPoll class to mirror ModPoll exe capabilities
+* Created fat executable jar for testing ModPoll features
