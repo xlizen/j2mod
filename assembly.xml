@@ -14,9 +14,18 @@
             <unpack>true</unpack>
             <scope>test</scope>
             <excludes>
-              <exclude>org.apache.commons:commons-exec</exclude>
-              <exclude>junit:junit</exclude>
+                <exclude>org.apache.commons:commons-exec</exclude>
+                <exclude>junit:junit</exclude>
             </excludes>
         </dependencySet>
     </dependencySets>
+    <fileSets>
+        <fileSet>
+            <directory>src/test/resources</directory>
+            <outputDirectory>/</outputDirectory>
+            <includes>
+                <include>log4j.properties</include>
+            </includes>
+        </fileSet>
+    </fileSets>
 </assembly>
