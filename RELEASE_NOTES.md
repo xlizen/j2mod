@@ -207,3 +207,4 @@ _(**NOT BACKWARDS COMPATIBLE**)_
 
 ## Version 2.6.3
 * Fix missing logging properties in assembly
+* Fixed the release so that it isn't the fat jar that is released (2.6.2 error)
