@@ -212,7 +212,7 @@
                         <descriptor>assembly.xml</descriptor>
                     </descriptors>
                     <finalName>${project.build.finalName}-with-dependencies</finalName>
-                    <appendAssemblyId>false</appendAssemblyId>
+                    <appendAssemblyId>true</appendAssemblyId>
                     <archive>
                         <manifest>
                             <mainClass>com.ghgande.j2mod.modbus.util.ModPoll</mainClass>
