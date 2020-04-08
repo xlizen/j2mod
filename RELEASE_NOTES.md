@@ -214,3 +214,4 @@ _(**NOT BACKWARDS COMPATIBLE**)_
 
 ## Version 2.6.5
 * Upgraded to jSeralcomm 2.6.1 that contains fix for [jSerialComm #277](https://github.com/Fazecast/jSerialComm/issues/277)
+* Commented out the assembly stage to stop publishing incorrect artifact
