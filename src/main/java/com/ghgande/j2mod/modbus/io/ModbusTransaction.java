@@ -41,7 +41,7 @@ public abstract class ModbusTransaction {
     protected ModbusResponse response;
     boolean validityCheck = Modbus.DEFAULT_VALIDITYCHECK;
     int retries = Modbus.DEFAULT_RETRIES;
-    private Random random = new Random(System.nanoTime());
+    private final Random random = new Random(System.nanoTime());
     static int transactionID = Modbus.DEFAULT_TRANSACTION_ID;
 
     /**

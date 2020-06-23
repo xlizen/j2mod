@@ -33,9 +33,9 @@ public class ThreadPool {
 
     private static final Logger logger = LoggerFactory.getLogger(ThreadPool.class);
 
-    private LinkedBlockingQueue<Runnable> taskPool;
-    private List<PoolThread> threadPool = new ArrayList<PoolThread>();
-    private int size;
+    private final LinkedBlockingQueue<Runnable> taskPool;
+    private final List<PoolThread> threadPool = new ArrayList<PoolThread>();
+    private final int size;
     private boolean running;
 
     /**

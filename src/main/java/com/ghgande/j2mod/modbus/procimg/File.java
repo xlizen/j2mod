@@ -25,9 +25,9 @@ package com.ghgande.j2mod.modbus.procimg;
  */
 public class File {
 
-    private int fileNumber;
-    private int recordCount;
-    private Record[] records;
+    private final int fileNumber;
+    private final int recordCount;
+    private final Record[] records;
 
     public File(int fileNumber, int records) {
         this.fileNumber = fileNumber;

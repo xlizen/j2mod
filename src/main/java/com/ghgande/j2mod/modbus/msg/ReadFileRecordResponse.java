@@ -158,8 +158,8 @@ public class ReadFileRecordResponse extends ModbusResponse {
     }
 
     public static class RecordResponse {
-        private int wordCount;
-        private byte[] data;
+        private final int wordCount;
+        private final byte[] data;
 
         public RecordResponse(short[] data) {
             wordCount = data.length;

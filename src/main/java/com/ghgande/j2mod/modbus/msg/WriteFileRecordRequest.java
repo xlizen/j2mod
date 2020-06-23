@@ -236,10 +236,10 @@ public class WriteFileRecordRequest extends ModbusRequest {
     }
 
     public static class RecordRequest {
-        private int fileNumber;
-        private int recordNumber;
-        private int wordCount;
-        private byte[] data;
+        private final int fileNumber;
+        private final int recordNumber;
+        private final int wordCount;
+        private final byte[] data;
 
         public RecordRequest(int file, int record, short[] values) {
             fileNumber = file;

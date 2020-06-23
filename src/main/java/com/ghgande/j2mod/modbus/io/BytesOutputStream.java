@@ -29,7 +29,7 @@ import java.io.IOException;
  */
 public class BytesOutputStream extends FastByteArrayOutputStream implements DataOutput {
 
-    private DataOutputStream dataOutputStream;
+    private final DataOutputStream dataOutputStream;
 
     /**
      * Constructs a new <tt>BytesOutputStream</tt> instance with

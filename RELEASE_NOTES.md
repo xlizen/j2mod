@@ -204,13 +204,18 @@ _(**NOT BACKWARDS COMPATIBLE**)_
 * Upgraded log4j to prevent security issue
 * added ModPoll class to mirror ModPoll exe capabilities
 * Created fat executable jar for testing ModPoll features
+* **SHOULD NOT BE USED**
 
 ## Version 2.6.3
 * Fix missing logging properties in assembly
 * Fixed the release so that it isn't the fat jar that is released (2.6.2 error)
+* **SHOULD NOT BE USED**
 
 ## Version 2.6.4
 * Fixed the release so that it isn't the fat jar that is released (2.6.3 error)
+* **SHOULD NOT BE USED**
 
 ## Version 2.6.5
-* Upgraded to jSeralcomm 2.6.1 that contains fix for [jSerialComm #277](https://github.com/Fazecast/jSerialComm/issues/277)
+* Upgraded to jSeralcomm 2.6.2 that contains fix for [jSerialComm #277](https://github.com/Fazecast/jSerialComm/issues/277)
+* Added some code cleanups as suggested by Sonar
+* Fixed issue where slave listeners (TCP/UDP/Serial) fail silently if they cannot bind to a port

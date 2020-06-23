@@ -38,9 +38,9 @@ public class ModbusTCPListener extends AbstractModbusListener {
     private static final Logger logger = LoggerFactory.getLogger(ModbusTCPListener.class);
 
     private ServerSocket serverSocket = null;
-    private ThreadPool threadPool;
+    private final ThreadPool threadPool;
     private Thread listener;
-    private boolean useRtuOverTcp;
+    private final boolean useRtuOverTcp;
 
     /**
      * Constructs a ModbusTCPListener instance.<br>
@@ -139,7 +139,7 @@ public class ModbusTCPListener extends AbstractModbusListener {
 
         // Catch any fatal errors and set the listening flag to false to indicate an error
         catch (Exception e) {
-            error = String.format("Cannot start TCP listener - %s", e.getMessage());
+            error = String.format("Cannot start TCP listener on port %d - %s", port, e.getMessage());
             listening = false;
             return;
         }

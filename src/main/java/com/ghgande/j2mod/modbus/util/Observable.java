@@ -26,7 +26,7 @@ import java.util.Vector;
  */
 public class Observable {
 
-    private Vector<Observer> observers;
+    private final Vector<Observer> observers;
 
     /**
      * Constructs a new Observable instance.

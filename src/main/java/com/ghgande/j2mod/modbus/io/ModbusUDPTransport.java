@@ -41,7 +41,7 @@ public class ModbusUDPTransport extends AbstractModbusTransport {
     private static final Logger logger = LoggerFactory.getLogger(ModbusUDPTransport.class);
 
     //instance attributes
-    private AbstractUDPTerminal terminal;
+    private final AbstractUDPTerminal terminal;
     private final BytesOutputStream byteOutputStream = new BytesOutputStream(Modbus.MAX_MESSAGE_LENGTH);
     private final BytesInputStream byteInputStream = new BytesInputStream(Modbus.MAX_MESSAGE_LENGTH);
 

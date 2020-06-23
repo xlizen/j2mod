@@ -32,8 +32,8 @@ import com.ghgande.j2mod.modbus.util.SerialParameters;
  */
 public class ModbusSerialMaster extends AbstractModbusMaster {
 
-    private AbstractSerialConnection connection;
-    private int transDelay;
+    private final AbstractSerialConnection connection;
+    private final int transDelay;
 
     /**
      * Constructs a new master facade instance for communication

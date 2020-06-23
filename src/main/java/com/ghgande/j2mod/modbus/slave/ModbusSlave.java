@@ -40,14 +40,14 @@ public class ModbusSlave {
 
     private static final Logger logger = LoggerFactory.getLogger(ModbusSlave.class);
 
-    private ModbusSlaveType type;
-    private int port;
-    private SerialParameters serialParams;
-    private AbstractModbusListener listener;
+    private final ModbusSlaveType type;
+    private final int port;
+    private final SerialParameters serialParams;
+    private final AbstractModbusListener listener;
     private boolean isRunning;
     private Thread listenerThread;
 
-    private Map<Integer, ProcessImage> processImages = new HashMap<Integer, ProcessImage>();
+    private final Map<Integer, ProcessImage> processImages = new HashMap<Integer, ProcessImage>();
 
     /**
      * Creates a TCP modbus slave
@@ -116,9 +116,8 @@ public class ModbusSlave {
      * @param poolSize      Pool size for TCP slaves
      * @param serialParams  Serial parameters for serial type slaves
      * @param useRtuOverTcp True if the RTU protocol should be used over TCP
-     * @throws ModbusException If a problem occurs e.g. port already in use
      */
-    private ModbusSlave(ModbusSlaveType type, InetAddress address, int port, int poolSize, SerialParameters serialParams, boolean useRtuOverTcp) throws ModbusException {
+    private ModbusSlave(ModbusSlaveType type, InetAddress address, int port, int poolSize, SerialParameters serialParams, boolean useRtuOverTcp) {
         this.type = type == null ? ModbusSlaveType.TCP : type;
         this.port = port;
         this.serialParams = serialParams;
@@ -136,7 +135,6 @@ public class ModbusSlave {
             listener = new ModbusSerialListener(serialParams);
         }
 
-        listener.setListening(true);
         listener.setAddress(address);
         listener.setPort(port);
         listener.setTimeout(0);
@@ -208,11 +206,19 @@ public class ModbusSlave {
     public void open() throws ModbusException {
 
         // Start the listener if it isn' already running
-
         if (!isRunning) {
             try {
                 listenerThread = new Thread(listener);
                 listenerThread.start();
+
+                // Need to check that there isn't an issue with the port or some other reason why we can't
+                // actually start listening
+                while (!listener.isListening() && listener.getError() == null) {
+                    ModbusUtil.sleep(50);
+                }
+                if (!listener.isListening()) {
+                    throw new ModbusException(listener.getError());
+                }
                 isRunning = true;
             }
             catch (Exception x) {

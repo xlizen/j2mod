@@ -37,8 +37,8 @@ class UDPSlaveTerminal extends AbstractUDPTerminal {
 
     private static final Logger logger = LoggerFactory.getLogger(UDPSlaveTerminal.class);
     protected Hashtable<Integer, DatagramPacket> requests = new Hashtable<Integer, DatagramPacket>(342);
-    private LinkedBlockingQueue<byte[]> sendQueue = new LinkedBlockingQueue<byte[]>();
-    private LinkedBlockingQueue<byte[]> receiveQueue = new LinkedBlockingQueue<byte[]>();
+    private final LinkedBlockingQueue<byte[]> sendQueue = new LinkedBlockingQueue<byte[]>();
+    private final LinkedBlockingQueue<byte[]> receiveQueue = new LinkedBlockingQueue<byte[]>();
     private PacketSender packetSender;
     private PacketReceiver packetReceiver;
 
@@ -130,7 +130,7 @@ class UDPSlaveTerminal extends AbstractUDPTerminal {
         private boolean running;
         private boolean closed;
         private Thread thread;
-        private DatagramSocket socket;
+        private final DatagramSocket socket;
 
         /**
          * Constructs a sender with th socket
@@ -194,7 +194,7 @@ class UDPSlaveTerminal extends AbstractUDPTerminal {
 
         private boolean running;
         private boolean closed;
-        private DatagramSocket socket;
+        private final DatagramSocket socket;
 
         /**
          * A receiver thread for reception of UDP messages

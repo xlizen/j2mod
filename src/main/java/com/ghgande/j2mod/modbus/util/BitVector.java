@@ -35,7 +35,7 @@ public class BitVector {
     private static final int[] STRAIGHT_OFFSETS = {7, 5, 3, 1};
     //instance attributes
     private int size;
-    private byte[] data;
+    private final byte[] data;
     private boolean msbAccess = false;
 
     /**

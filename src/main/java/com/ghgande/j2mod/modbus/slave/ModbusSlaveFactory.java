@@ -35,7 +35,7 @@ import java.util.Map;
  */
 public class ModbusSlaveFactory {
 
-    private static Map<String, ModbusSlave> slaves = new HashMap<String, ModbusSlave>();
+    private static final Map<String, ModbusSlave> slaves = new HashMap<String, ModbusSlave>();
 
     /**
      * Prevent instantiation

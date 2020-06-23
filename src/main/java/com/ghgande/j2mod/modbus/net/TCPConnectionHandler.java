@@ -31,9 +31,9 @@ public class TCPConnectionHandler implements Runnable {
 
     private static final Logger logger = LoggerFactory.getLogger(TCPConnectionHandler.class);
 
-    private TCPSlaveConnection connection;
-    private AbstractModbusTransport transport;
-    private AbstractModbusListener listener;
+    private final TCPSlaveConnection connection;
+    private final AbstractModbusTransport transport;
+    private final AbstractModbusListener listener;
 
     /**
      * Constructs a new <tt>TCPConnectionHandler</tt> instance.

@@ -32,7 +32,7 @@ import java.net.UnknownHostException;
  */
 public class ModbusTCPMaster extends AbstractModbusMaster {
 
-    private TCPMasterConnection connection;
+    private final TCPMasterConnection connection;
     private boolean reconnecting = false;
     private boolean useRtuOverTcp = false;
 

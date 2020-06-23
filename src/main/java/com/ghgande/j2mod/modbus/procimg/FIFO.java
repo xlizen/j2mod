@@ -31,9 +31,9 @@ import java.util.Vector;
  */
 public class FIFO {
 
-    private int address;
+    private final int address;
     private int registerCount;
-    private Vector<Register> registers;
+    private final Vector<Register> registers;
 
     public FIFO(int address) {
         this.address = address;

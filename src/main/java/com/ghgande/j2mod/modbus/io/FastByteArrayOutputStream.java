@@ -54,7 +54,7 @@ public class FastByteArrayOutputStream extends OutputStream {
     /**
      * Increment of the output buffer size on overflow.
      */
-    private int bumpLen;
+    private final int bumpLen;
 
     /**
      * Output buffer <tt>byte[]</tt>.
