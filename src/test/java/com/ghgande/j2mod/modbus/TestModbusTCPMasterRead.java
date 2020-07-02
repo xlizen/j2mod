@@ -171,7 +171,6 @@ public class TestModbusTCPMasterRead extends AbstractTestModbusTCPMaster {
         }
     }
 
-
     @Test
     public void testReadDiscreteExtremeRequest() {
         try {
@@ -180,6 +179,11 @@ public class TestModbusTCPMasterRead extends AbstractTestModbusTCPMaster {
         catch (Exception e) {
             fail("Request for 65535 should be fine - " + e.getMessage());
         }
+    }
+
+    @Test
+    public void testIsConnected() {
+        assertTrue("Connected to TCP master", master.isConnected());
     }
 
 }

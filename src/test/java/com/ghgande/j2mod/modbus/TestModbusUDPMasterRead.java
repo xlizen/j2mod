@@ -101,4 +101,9 @@ public class TestModbusUDPMasterRead extends AbstractTestModbusUDPMaster {
         assertEquals("Failed to read multiple holding register 5 length 5", 4444, res.getRegisterValue(4));
     }
 
+    @Test
+    public void testIsConnected() {
+        assertTrue("Connected to UDP master", master.isConnected());
+    }
+
 }

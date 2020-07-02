@@ -34,7 +34,7 @@ public class ModbusTCPMaster extends AbstractModbusMaster {
 
     private final TCPMasterConnection connection;
     private boolean reconnecting = false;
-    private boolean useRtuOverTcp = false;
+    private boolean useRtuOverTcp;
 
     /**
      * Constructs a new master facade instance for communication
@@ -188,5 +188,10 @@ public class ModbusTCPMaster extends AbstractModbusMaster {
     @Override
     public AbstractModbusTransport getTransport() {
         return connection == null ? null : connection.getModbusTransport();
+    }
+
+    @Override
+    public boolean isConnected() {
+        return connection != null && connection.isConnected();
     }
 }

@@ -122,4 +122,9 @@ public class ModbusSerialMaster extends AbstractModbusMaster {
     public AbstractModbusTransport getTransport() {
         return connection == null ? null : connection.getModbusTransport();
     }
+
+    @Override
+    public boolean isConnected() {
+        return connection != null && connection.isOpen();
+    }
 }

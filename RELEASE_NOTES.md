@@ -219,3 +219,5 @@ _(**NOT BACKWARDS COMPATIBLE**)_
 * Upgraded to jSeralcomm 2.6.2 that contains fix for [jSerialComm #277](https://github.com/Fazecast/jSerialComm/issues/277)
 * Added some code cleanups as suggested by Sonar
 * Fixed issue where slave listeners (TCP/UDP/Serial) fail silently if they cannot bind to a port
+* Bumped log4j version for testing
+* Added `isConnected()` method for al master facade classes #103
