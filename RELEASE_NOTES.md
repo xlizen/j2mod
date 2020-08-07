@@ -221,3 +221,6 @@ _(**NOT BACKWARDS COMPATIBLE**)_
 * Fixed issue where slave listeners (TCP/UDP/Serial) fail silently if they cannot bind to a port
 * Bumped log4j version for testing
 * Added `isConnected()` method for al master facade classes #103
+
+## Version 2.7.0
+* TCP Connection idle timeout #108 thankyou akochubey2004

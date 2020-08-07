@@ -97,6 +97,15 @@ public class TCPSlaveConnection {
         return transport;
     }
 
+    /** 
+     * @return last activity timestamp of a connection
+     * @see ModbusTCPTransport#getLastActivityTimestamp()
+     * @see System#nanoTime() 
+     */
+    public long getLastActivityTimestamp() {
+        return transport.getLastActivityTimestamp();
+    }
+    
     /**
      * Prepares the associated <tt>ModbusTransport</tt> of this
      * <tt>TCPMasterConnection</tt> for use.
@@ -146,7 +155,7 @@ public class TCPSlaveConnection {
             socket.setSoTimeout(timeout);
         }
         catch (IOException ex) {
-            logger.warn("Could not set timeout to " + timeout, ex);
+            logger.warn("Could not set timeout to {}", timeout, ex);
         }
     }
 

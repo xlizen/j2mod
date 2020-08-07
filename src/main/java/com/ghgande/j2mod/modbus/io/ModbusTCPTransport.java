@@ -50,11 +50,13 @@ public class ModbusTCPTransport extends AbstractModbusTransport {
     protected Socket socket = null;
     protected TCPMasterConnection master = null;
     private boolean headless = false; // Some TCP implementations are.
+    private long lastActivityTimestamp;  // System.nanoTime() of last transportation
 
     /**
      * Default constructor
      */
     public ModbusTCPTransport() {
+        lastActivityTimestamp = System.nanoTime();
     }
 
     /**
@@ -65,6 +67,8 @@ public class ModbusTCPTransport extends AbstractModbusTransport {
      * @param socket the <tt>Socket</tt> used for message transport.
      */
     public ModbusTCPTransport(Socket socket) {
+        lastActivityTimestamp = System.nanoTime();
+        
         try {
             setSocket(socket);
             socket.setSoTimeout(timeout);
@@ -127,9 +131,17 @@ public class ModbusTCPTransport extends AbstractModbusTransport {
                 socket.setSoTimeout(time);
             }
             catch (SocketException e) {
-                logger.warn("Socket exception occurred while setting timeout to " + time, e);
+                logger.warn("Socket exception occurred while setting timeout to {}", time, e);
             }
         }
+    }
+
+    /** 
+     * @return last activity timestamp for the transport (System.nanoTime() timestamp)
+     * @see System#nanoTime() 
+     */
+    public long getLastActivityTimestamp() {
+        return lastActivityTimestamp;
     }
 
     @Override
@@ -161,6 +173,8 @@ public class ModbusTCPTransport extends AbstractModbusTransport {
 
     @Override
     public ModbusRequest readRequest(AbstractModbusListener listener) throws ModbusIOException {
+        lastActivityTimestamp = System.nanoTime();
+        
         ModbusRequest req;
         try {
             byteInputStream.reset();
@@ -240,6 +254,8 @@ public class ModbusTCPTransport extends AbstractModbusTransport {
 
     @Override
     public ModbusResponse readResponse() throws ModbusIOException {
+        lastActivityTimestamp = System.nanoTime();
+        
         try {
             ModbusResponse response;
 
@@ -355,6 +371,8 @@ public class ModbusTCPTransport extends AbstractModbusTransport {
      *                           this <tt>ModbusTransport</tt>.
      */
     void writeMessage(ModbusMessage msg, boolean useRtuOverTcp) throws ModbusIOException {
+        lastActivityTimestamp = System.nanoTime();
+        
         try {
             if (logger.isDebugEnabled()) {
                 logger.debug("Sending: {}", msg.getHexMessage());

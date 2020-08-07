@@ -77,7 +77,7 @@ public class TestModbusTCPMasterMultiThreadedReadWrite extends AbstractTestModbu
                         logger.error("Incorrect value for register 0");
                     }
                     else {
-                        logger.info("Successful read " + id);
+                        logger.info("Successful read {}", id);
                     }
                 }
                 else if (type == TaskType.WRITE) {
@@ -86,7 +86,7 @@ public class TestModbusTCPMasterMultiThreadedReadWrite extends AbstractTestModbu
                         logger.error("No write response");
                     }
                     else {
-                        logger.info("Successful write " + id);
+                        logger.info("Successful write {}", id);
                     }
                 }
             }
