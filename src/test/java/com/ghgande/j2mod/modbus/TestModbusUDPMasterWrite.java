@@ -34,7 +34,7 @@ public class TestModbusUDPMasterWrite extends AbstractTestModbusUDPMaster {
         try {
             boolean before = master.readCoils(UNIT_ID, 1, 1).getBit(0);
             master.writeCoil(UNIT_ID, 1, !before);
-            assertTrue("Incorrect status for coil 1", !before);
+            assertFalse("Incorrect status for coil 1", before);
             master.writeCoil(UNIT_ID, 1, before);
         }
         catch (Exception e) {

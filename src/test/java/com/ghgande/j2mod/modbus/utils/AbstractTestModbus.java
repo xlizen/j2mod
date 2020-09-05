@@ -34,7 +34,7 @@ public class AbstractTestModbus {
     public static ModbusSlave slave = null;
     public static final int UNIT_ID = 15;
     public static final int PORT = 2502;
-    public static final String LOCALHOST = "localhost";
+    public static final String LOCALHOST = "127.0.0.1";
 
     private static Observer observer = new ObserverMonitor();
     protected static Observable updatedRegister;

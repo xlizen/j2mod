@@ -224,3 +224,4 @@ _(**NOT BACKWARDS COMPATIBLE**)_
 
 ## Version 2.7.0
 * TCP Connection idle timeout #108 thankyou akochubey2004
+* Changed tests to use 127.0.0.1 rather than localhost
