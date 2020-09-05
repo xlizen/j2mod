@@ -216,9 +216,9 @@ public class ReadFileRecordRequest extends ModbusRequest {
     }
 
     public static class RecordRequest {
-        private int fileNumber;
-        private int recordNumber;
-        private int wordCount;
+        private final int fileNumber;
+        private final int recordNumber;
+        private final int wordCount;
 
         public RecordRequest(int file, int record, int count) {
             fileNumber = file;

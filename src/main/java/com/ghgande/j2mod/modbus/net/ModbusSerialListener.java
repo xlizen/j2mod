@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
 public class ModbusSerialListener extends AbstractModbusListener {
 
     private static final Logger logger = LoggerFactory.getLogger(ModbusSerialListener.class);
-    private AbstractSerialConnection serialCon;
+    private final AbstractSerialConnection serialCon;
 
     /**
      * Constructs a new <tt>ModbusSerialListener</tt> instance.
@@ -80,7 +80,7 @@ public class ModbusSerialListener extends AbstractModbusListener {
         }
         // Catch any fatal errors and set the listening flag to false to indicate an error
         catch (Exception e) {
-            error = String.format("Cannot start Serial listener - %s", e.getMessage());
+            error = String.format("Cannot start Serial listener on port %s - %s", serialCon.getPortName(), e.getMessage());
             listening = false;
             return;
         }

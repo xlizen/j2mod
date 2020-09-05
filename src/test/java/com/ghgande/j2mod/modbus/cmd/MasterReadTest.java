@@ -9,13 +9,15 @@ package com.ghgande.j2mod.modbus.cmd;
 import com.ghgande.j2mod.modbus.facade.ModbusTCPMaster;
 import com.ghgande.j2mod.modbus.procimg.Register;
 
+import static com.ghgande.j2mod.modbus.utils.AbstractTestModbus.LOCALHOST;
+
 /**
  *
  */
 public class MasterReadTest {
 
     public static void main(String[] args) {
-        ModbusTCPMaster master = new ModbusTCPMaster("localhost", 502, 1000, true, true);
+        ModbusTCPMaster master = new ModbusTCPMaster(LOCALHOST, 502, 1000, true, true);
         try {
             master.connect();
             for (int i = 0; i < 10; i++) {

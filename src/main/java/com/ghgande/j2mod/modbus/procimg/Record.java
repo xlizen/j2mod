@@ -24,9 +24,9 @@ package com.ghgande.j2mod.modbus.procimg;
  * @version 2.0 (March 2016)
  */
 public class Record {
-    private int recordNumber;
-    private int registerCount;
-    private Register[] registers;
+    private final int recordNumber;
+    private final int registerCount;
+    private final Register[] registers;
 
     public Record(int recordNumber, int registers) {
         this.recordNumber = recordNumber;

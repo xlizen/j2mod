@@ -40,14 +40,14 @@ public class ModbusSlave {
 
     private static final Logger logger = LoggerFactory.getLogger(ModbusSlave.class);
 
-    private ModbusSlaveType type;
-    private int port;
-    private SerialParameters serialParams;
-    private AbstractModbusListener listener;
+    private final ModbusSlaveType type;
+    private final int port;
+    private final SerialParameters serialParams;
+    private final AbstractModbusListener listener;
     private boolean isRunning;
     private Thread listenerThread;
 
-    private Map<Integer, ProcessImage> processImages = new HashMap<Integer, ProcessImage>();
+    private final Map<Integer, ProcessImage> processImages = new HashMap<Integer, ProcessImage>();
 
     /**
      * Creates a TCP modbus slave
@@ -58,7 +58,7 @@ public class ModbusSlave {
      * @throws ModbusException If a problem occurs e.g. port already in use
      */
     protected ModbusSlave(int port, int poolSize, boolean useRtuOverTcp) throws ModbusException {
-        this(ModbusSlaveType.TCP, null, port, poolSize, null, useRtuOverTcp);
+        this(ModbusSlaveType.TCP, null, port, poolSize, null, useRtuOverTcp, 0);
     }
 
     /**
@@ -70,8 +70,8 @@ public class ModbusSlave {
      * @param useRtuOverTcp True if the RTU protocol should be used over TCP
      * @throws ModbusException If a problem occurs e.g. port already in use
      */
-    protected ModbusSlave(InetAddress address, int port, int poolSize, boolean useRtuOverTcp) throws ModbusException {
-        this(ModbusSlaveType.TCP, address, port, poolSize, null, useRtuOverTcp);
+    protected ModbusSlave(InetAddress address, int port, int poolSize, boolean useRtuOverTcp, int maxIdleSeconds) throws ModbusException {
+        this(ModbusSlaveType.TCP, address, port, poolSize, null, useRtuOverTcp, maxIdleSeconds);
     }
 
     /**
@@ -82,7 +82,7 @@ public class ModbusSlave {
      * @throws ModbusException If a problem occurs e.g. port already in use
      */
     protected ModbusSlave(int port, boolean useRtuOverTcp) throws ModbusException {
-        this(ModbusSlaveType.UDP, null, port, 0, null, useRtuOverTcp);
+        this(ModbusSlaveType.UDP, null, port, 0, null, useRtuOverTcp, 0);
     }
 
     /**
@@ -94,7 +94,7 @@ public class ModbusSlave {
      * @throws ModbusException If a problem occurs e.g. port already in use
      */
     protected ModbusSlave(InetAddress address, int port, boolean useRtuOverTcp) throws ModbusException {
-        this(ModbusSlaveType.UDP, address, port, 0, null, useRtuOverTcp);
+        this(ModbusSlaveType.UDP, address, port, 0, null, useRtuOverTcp, 0);
     }
 
     /**
@@ -104,21 +104,21 @@ public class ModbusSlave {
      * @throws ModbusException If a problem occurs e.g. port already in use
      */
     protected ModbusSlave(SerialParameters serialParams) throws ModbusException {
-        this(ModbusSlaveType.SERIAL, null, 0, 0, serialParams, false);
+        this(ModbusSlaveType.SERIAL, null, 0, 0, serialParams, false, 0);
     }
 
     /**
      * Creates an appropriate type of listener
      *
-     * @param type          Type of slave to create
-     * @param address       IP address to listen on
-     * @param port          Port to listen on if IP type
-     * @param poolSize      Pool size for TCP slaves
-     * @param serialParams  Serial parameters for serial type slaves
-     * @param useRtuOverTcp True if the RTU protocol should be used over TCP
-     * @throws ModbusException If a problem occurs e.g. port already in use
+     * @param type           Type of slave to create
+     * @param address        IP address to listen on
+     * @param port           Port to listen on if IP type
+     * @param poolSize       Pool size for TCP slaves
+     * @param serialParams   Serial parameters for serial type slaves
+     * @param useRtuOverTcp  True if the RTU protocol should be used over TCP
+     * @param maxIdleSeconds Maximum idle seconds for TCP connection
      */
-    private ModbusSlave(ModbusSlaveType type, InetAddress address, int port, int poolSize, SerialParameters serialParams, boolean useRtuOverTcp) throws ModbusException {
+    private ModbusSlave(ModbusSlaveType type, InetAddress address, int port, int poolSize, SerialParameters serialParams, boolean useRtuOverTcp, int maxIdleSeconds) {
         this.type = type == null ? ModbusSlaveType.TCP : type;
         this.port = port;
         this.serialParams = serialParams;
@@ -130,13 +130,14 @@ public class ModbusSlave {
             listener = new ModbusUDPListener();
         }
         else if (this.type.is(ModbusSlaveType.TCP)) {
-            listener = new ModbusTCPListener(poolSize, useRtuOverTcp);
+            ModbusTCPListener tcpListener = new ModbusTCPListener(poolSize, useRtuOverTcp);
+            tcpListener.setMaxIdleSeconds(maxIdleSeconds);
+            listener = tcpListener;
         }
         else {
             listener = new ModbusSerialListener(serialParams);
         }
 
-        listener.setListening(true);
         listener.setAddress(address);
         listener.setPort(port);
         listener.setTimeout(0);
@@ -183,7 +184,7 @@ public class ModbusSlave {
     /**
      * Adds a process image for the given Unit ID
      *
-     * @param unitId Unit ID to associate with this image
+     * @param unitId       Unit ID to associate with this image
      * @param processImage Process image to add
      * @return Process image
      */
@@ -208,11 +209,19 @@ public class ModbusSlave {
     public void open() throws ModbusException {
 
         // Start the listener if it isn' already running
-
         if (!isRunning) {
             try {
                 listenerThread = new Thread(listener);
                 listenerThread.start();
+
+                // Need to check that there isn't an issue with the port or some other reason why we can't
+                // actually start listening
+                while (!listener.isListening() && listener.getError() == null) {
+                    ModbusUtil.sleep(50);
+                }
+                if (!listener.isListening()) {
+                    throw new ModbusException(listener.getError());
+                }
                 isRunning = true;
             }
             catch (Exception x) {
@@ -273,6 +282,7 @@ public class ModbusSlave {
 
     /**
      * Gets the name of the thread used by the listener
+     *
      * @return Name of thread or null if not assigned
      */
     public String getThreadName() {
@@ -281,6 +291,7 @@ public class ModbusSlave {
 
     /**
      * Sets the name of the thread used by the listener
+     *
      * @param threadName Name to use for the thread
      */
     public void setThreadName(String threadName) {

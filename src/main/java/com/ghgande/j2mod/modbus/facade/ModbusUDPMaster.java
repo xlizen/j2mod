@@ -31,7 +31,7 @@ import java.net.UnknownHostException;
  */
 public class ModbusUDPMaster extends AbstractModbusMaster {
 
-    private UDPMasterConnection connection;
+    private final UDPMasterConnection connection;
 
     /**
      * Constructs a new master facade instance for communication
@@ -115,5 +115,10 @@ public class ModbusUDPMaster extends AbstractModbusMaster {
     @Override
     public AbstractModbusTransport getTransport() {
         return connection == null ? null : connection.getModbusTransport();
+    }
+
+    @Override
+    public boolean isConnected() {
+        return connection != null && connection.isConnected();
     }
 }

@@ -550,4 +550,11 @@ public abstract class AbstractModbusMaster {
      */
     public abstract AbstractModbusTransport getTransport();
 
+    /**
+     * Returns true if the master is connected
+     *
+     * @return True if connected
+     */
+    public abstract boolean isConnected();
+
 }

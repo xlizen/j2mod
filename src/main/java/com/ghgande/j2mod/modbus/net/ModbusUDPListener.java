@@ -96,7 +96,7 @@ public class ModbusUDPListener extends AbstractModbusListener {
 
         // Catch any fatal errors and set the listening flag to false to indicate an error
         catch (Exception e) {
-            error = String.format("Cannot start UDP listener - %s", e.getMessage());
+            error = String.format("Cannot start UDP listener on port %d - %s", port, e.getMessage());
             listening = false;
             return;
         }

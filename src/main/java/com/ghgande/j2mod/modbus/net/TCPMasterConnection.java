@@ -249,7 +249,7 @@ public class TCPMasterConnection {
             }
         }
         catch (IOException ex) {
-            logger.warn("Could not set timeout to value " + timeout, ex);
+            logger.warn("Could not set timeout to value {}", timeout, ex);
         }
     }
 

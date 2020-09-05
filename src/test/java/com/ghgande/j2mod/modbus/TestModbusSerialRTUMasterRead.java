@@ -228,6 +228,11 @@ public class TestModbusSerialRTUMasterRead extends AbstractTestModbusSerialRTUMa
         ((ModbusSerialTransport) master.getTransport()).removeListener(eventListener);
     }
 
+    @Test
+    public void testIsConnected() {
+        assertTrue("Connected to serial master", master.isConnected());
+    }
+
     private class EventListener extends AbstractSerialTransportListener {
         int step;
 
@@ -269,5 +274,4 @@ public class TestModbusSerialRTUMasterRead extends AbstractTestModbusSerialRTUMa
             step++;
         }
     }
-
 }
