@@ -524,12 +524,12 @@ public class SerialParameters {
     }
 
     /**
-     * Sets the sleep time tat occurs just prior to opening a coms port
+     * Sets the sleep time that occurs just prior to opening a comms port
      * Some OS don't like to have their comms ports opened/closed in very quick succession
      * particularly, virtual ports. This delay is a rather crude way of stopping the problem that
      * a comms port doesn't re-appear immediately after a close
      *
-     * @param openDelay Sleep time in millieseconds
+     * @param openDelay Sleep time in milliseconds
      */
     public void setOpenDelay(String openDelay) {
         this.openDelay = Integer.parseInt(openDelay);
