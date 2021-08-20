@@ -229,3 +229,4 @@ _(**NOT BACKWARDS COMPATIBLE**)_
 ## Version 3.0.0
 * Fixed some stray documentation
 * Add support for explicitly configuring RS-485 mode #117 thanks sirhcel
+* Removed checks on readInputDiscretes #114 thanks kazuyatada

@@ -34,7 +34,7 @@ public class ModbusTCPMaster extends AbstractModbusMaster {
 
     private final TCPMasterConnection connection;
     private boolean reconnecting = false;
-    private boolean useRtuOverTcp;
+    private final boolean useRtuOverTcp;
 
     /**
      * Constructs a new master facade instance for communication
