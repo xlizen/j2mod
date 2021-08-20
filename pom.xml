@@ -52,9 +52,9 @@
         <developer>
             <id>sohara</id>
             <name>Steve O'Hara</name>
-            <email>steve.ohara@4energy.co.uk</email>
-            <organization>4energy</organization>
-            <organizationUrl>http://www.4energy.co.uk</organizationUrl>
+            <email>steve.ohara@4ng.co.uk</email>
+            <organization>4NG</organization>
+            <organizationUrl>http://www.4ng.co.uk</organizationUrl>
             <roles>
                 <role>developer</role>
             </roles>
@@ -239,6 +239,12 @@
                         <goals>
                             <goal>sign</goal>
                         </goals>
+                        <configuration>
+                            <gpgArguments>
+                                <arg>--pinentry-mode</arg>
+                                <arg>loopback</arg>
+                            </gpgArguments>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
