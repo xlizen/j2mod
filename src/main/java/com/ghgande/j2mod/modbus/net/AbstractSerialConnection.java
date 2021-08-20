@@ -56,8 +56,7 @@ public abstract class AbstractSerialConnection {
    	public static final int TIMEOUT_SCANNER = SerialPort.TIMEOUT_SCANNER;
 
     /**
-     * Returns the <tt>ModbusTransport</tt> instance to be used for receiving
-     * and sending messages.
+     * Opens the port and throws an error if it cannot for some reason
      *
      * @throws IOException If the port is not available or cannot be opened
      */
@@ -67,7 +66,7 @@ public abstract class AbstractSerialConnection {
      * Returns the <tt>ModbusTransport</tt> instance to be used for receiving
      * and sending messages.
      *
-     * @return a <tt>ModbusTransport</tt> instance.
+     * @return a <tt>ModbusTransport</tt> instance
      */
     public abstract AbstractModbusTransport getModbusTransport();
 
@@ -76,7 +75,7 @@ public abstract class AbstractSerialConnection {
      *
      * @param buffer      Buffer to recieve bytes from the port
      * @param bytesToRead Number of bytes to read
-     * @return number of currently bytes read.
+     * @return number of currently bytes read
      */
     public abstract int readBytes(byte[] buffer, long bytesToRead);
 
@@ -97,7 +96,7 @@ public abstract class AbstractSerialConnection {
     public abstract int bytesAvailable();
 
     /**
-     * Close the port and clean up associated elements.
+     * Close the port and clean up associated elements
      */
     public abstract void close();
 
@@ -132,14 +131,14 @@ public abstract class AbstractSerialConnection {
     /**
      * Returns a name of the port
      *
-     * @return a <tt>String</tt> instance.
+     * @return a <tt>String</tt> instance
      */
     public abstract String getPortName();
 
     /**
-     * Returns a descriptive name of the  port
+     * Returns a descriptive name of the port
      *
-     * @return a <tt>String</tt> instance.
+     * @return a <tt>String</tt> instance
      */
     public abstract String getDescriptivePortName();
 
@@ -147,29 +146,29 @@ public abstract class AbstractSerialConnection {
      * Set port timeouts
      *
      * @param newTimeoutMode  Timeout mode
-     * @param newReadTimeout  Read timeout
-     * @param newWriteTimeout Write timeout
+     * @param newReadTimeout  Read timeout (milliseconds)
+     * @param newWriteTimeout Write timeout (milliseconds)
      */
     public abstract void setComPortTimeouts(int newTimeoutMode, int newReadTimeout, int newWriteTimeout);
 
     /**
-     * Reports the open status of the port.
+     * Reports the open status of the port
      *
-     * @return true if port is open, false if port is closed.
+     * @return true if port is open, false if port is closed
      */
     public abstract boolean isOpen();
 
     /**
-     * Returns the timeout for this <tt>UDPMasterConnection</tt>.
+     * Returns the timeout for this connection
      *
-     * @return the timeout as <tt>int</tt>.
+     * @return the timeout as <tt>int</tt> milliseconds
      */
     public abstract int getTimeout();
 
     /**
-     * Sets the timeout for this <tt>UDPMasterConnection</tt>.
+     * Sets the timeout for this connection.
      *
-     * @param timeout the timeout as <tt>int</tt>.
+     * @param timeout the timeout as <tt>int</tt> milliseconds
      */
     public abstract void setTimeout(int timeout);
 

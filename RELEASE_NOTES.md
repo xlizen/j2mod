@@ -225,3 +225,9 @@ _(**NOT BACKWARDS COMPATIBLE**)_
 ## Version 2.7.0
 * TCP Connection idle timeout #108 thankyou akochubey2004
 * Changed tests to use 127.0.0.1 rather than localhost
+
+## Version 3.0.0
+* Fixed some stray documentation
+* Add support for explicitly configuring RS-485 mode #117 thanks sirhcel
+* Removed checks on readInputDiscretes #114 thanks kazuyatada
+* Switched to scheduled executor service instead of timer #115 thanks mkurt
