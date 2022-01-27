@@ -234,4 +234,6 @@ _(**NOT BACKWARDS COMPATIBLE**)_
 
 ## Version 3.1.0
 * Updated to latest version of jserialcomm and fixed log4j version 
+
+## Version 3.1.1
 * Add remaining RS-485 configuration parameters for Linux #118
