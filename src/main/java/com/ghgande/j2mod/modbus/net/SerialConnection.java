@@ -132,7 +132,7 @@ public class SerialConnection extends AbstractSerialConnection {
                     portList.append(portList.length() == 0 ? "" : ",").append(port);
                 }
             }
-            throw new IOException(String.format("Port [%s] cannot be opened after [%d] attempts - valid ports are: [%s]", parameters.getPortName(), attempts, portList.toString()));
+            throw new IOException(String.format("Port [%s] cannot be opened after [%d] attempts - valid ports are: [%s]", parameters.getPortName(), attempts, portList));
         }
         inputStream = serialPort.getInputStream();
     }
@@ -142,13 +142,11 @@ public class SerialConnection extends AbstractSerialConnection {
      */
     private void applyConnectionParameters() {
 
-        // Set connection parameters, if set fails return parameters object
-        // to original state
-
+        // Set connection parameters, if set fails return parameters object to original state
         if (serialPort != null) {
             serialPort.setComPortParameters(parameters.getBaudRate(), parameters.getDatabits(), parameters.getStopbits(), parameters.getParity());
             serialPort.setFlowControl(parameters.getFlowControlIn() | parameters.getFlowControlOut());
-            serialPort.setRs485ModeParameters(parameters.getRs485Mode(), parameters.getRs485TxEnableActiveHigh(), parameters.getRs485DelayBeforeTxMicroseconds(), parameters.getRs485DelayAfterTxMicroseconds());
+            serialPort.setRs485ModeParameters(parameters.getRs485Mode(), parameters.getRs485TxEnableActiveHigh(), parameters.getRs485EnableTermination(), parameters.getRs485RxDuringTx(), parameters.getRs485DelayBeforeTxMicroseconds(), parameters.getRs485DelayAfterTxMicroseconds());
         }
     }
 
@@ -245,7 +243,7 @@ public class SerialConnection extends AbstractSerialConnection {
 
     @Override
     public Set<String> getCommPorts() {
-        Set<String> returnValue = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
+        Set<String> returnValue = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
         SerialPort[] ports = SerialPort.getCommPorts();
         if (ports != null && ports.length > 0) {
             for (SerialPort port : ports) {

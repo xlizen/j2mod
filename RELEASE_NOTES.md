@@ -231,3 +231,9 @@ _(**NOT BACKWARDS COMPATIBLE**)_
 * Add support for explicitly configuring RS-485 mode #117 thanks sirhcel
 * Removed checks on readInputDiscretes #114 thanks kazuyatada
 * Switched to scheduled executor service instead of timer #115 thanks mkurt
+
+## Version 3.1.0
+* Updated to latest version of jserialcomm and fixed log4j version 
+
+## Version 3.1.1
+* Add remaining RS-485 configuration parameters for Linux #118
